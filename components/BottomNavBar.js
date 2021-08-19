@@ -1,17 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Home from '../screens/Home';
 import Restaurant from '../screens/Restaurant';
 import Task from '../screens/Task';
 import Calendar from '../screens/Calendar';
+import { BottomNavigation, Text } from 'react-native-paper';
 
-export default function App() {
+
+export default function MyTabs() {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'home', title: 'Home', icon: 'home' },
+    { key: 'task', title: 'Tarefas', icon: 'clipboard-text' },
+    { key: 'calendar', title: 'Calendário', icon: "calendar-range" },
+    { key: 'restaurant', title: 'Restaurante', icon: 'silverware-fork-knife' },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    home: Home,
+    task: Task,
+    calendar: Calendar,
+    restaurant: Restaurant
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   );
 }
 

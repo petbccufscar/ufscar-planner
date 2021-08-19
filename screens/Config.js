@@ -1,16 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import SideBar from './components/SideBar';
-import BottomNavBar from './components/BottomNavBar';
 
-import { NavigationContainer } from '@react-navigation/native';
-export default function App() {
+export default function Config() {
   return (
-    <NavigationContainer>
-      <SideBar/>
-    </NavigationContainer>
-    
+    <View style={styles.container}>
+      <Text>Config</Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 

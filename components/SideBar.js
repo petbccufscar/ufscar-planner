@@ -1,13 +1,65 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import BottomNavBar from './BottomNavBar';
+import FAQ from '../screens/FAQ';
+import Progress from '../screens/Progress';
+import Home from '../screens/Home';
+import AboutUs from '../screens/AboutUs';
+import Config from '../screens/Config';
+import { Drawer as PaperDrawer } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
+const Drawer = createDrawerNavigator();
 
-export default function App() {
+export default function SideBar() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+
+    <Drawer.Navigator initialRouteName="Home">
+
+      <Drawer.Screen
+        name="Home"
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <MaterialIcons name="home" size={size} color="black" />
+          ),
+        }}
+        component={BottomNavBar} />
+      <Drawer.Screen
+        name="Progresso"
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <MaterialIcons name="hourglass-bottom" size={size} color="black" />
+          ),
+        }}
+        component={Progress} />
+      <Drawer.Screen
+        name="Configurações"
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <MaterialIcons name="settings" size={size} color="black" />
+          ),
+        }}
+        component={Config} />
+
+      <Drawer.Screen
+        name="Contato"
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <MaterialIcons name="group" size={size} color="black" />
+          ),
+        }}
+        component={AboutUs} />
+      <Drawer.Screen
+        name="FAQ"
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <MaterialIcons name="help" size={size} color="black" />
+          ),
+        }}
+        component={FAQ} />
+    </Drawer.Navigator>
   );
 }
 
