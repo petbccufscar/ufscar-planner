@@ -2,13 +2,14 @@ import { View, StyleSheet, ScrollView, Text,TouchableOpacity } from "react-nativ
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import React, { Fragment } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { IconButton, Colors } from 'react-native-paper';
 
 
 // Esse será o componente principal, que vai gerenciar qual modo de calendário
 export function CalendarComponent(props) {
     const tasks = [
 
-        [{ color: "#400", initTime: { hour: 3, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' },
+        [{ color: "#400", initTime: { hour: 3, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Organização e Recuperação da Informação e muito mais informação", local: 'AT5 - xx' },
         { color: "#ef1", initTime: { hour: 21, minute: 0 }, endTime: { hour: 23, minute: 1 }, name: "Matéria X", local: 'AT5 - xx' }],
         [{ color: "#444", initTime: { hour: 1, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' },
         { color: "#ef1", initTime: { hour: 20, minute: 0 }, endTime: { hour: 21, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' }],
@@ -39,8 +40,10 @@ const weekBallColor = "#f00";
 const hourWidth = wp('12.5%');
 const dividerHeight = 1;
 const dividerColor = 'rgba(1, 1, 1, 0.4)';
+const cardLineWidth = 2;
 const timeWidth = wp("100%") - 7 * hourWidth;
 let bgColor = "#F8F8F8";
+let cinza = '#ddd';
 const subjectWidth = hourWidth * 0.9
 
 
@@ -63,7 +66,7 @@ function CalendarDay(props) {
                     {() =><CardsTimeline tasks={tasks[3]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Qui"  >
-                    {() =><CardsTimeline tasks={tasks[5]}/>}
+                    {() =><CardsTimeline tasks={tasks[4]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Sex"  >
                     {() =><CardsTimeline tasks={tasks[5]}/>}
@@ -263,6 +266,23 @@ function thinkFiller0(divider) {
     return result;
 }
 
+function CardsTimeline(props){
+    
+    const last = props.tasks.length -1
+    const first = props.tasks.length > 0? props.tasks[0].initTime : null;
+    return (
+    <View style={{marginTop: 10}}>
+    <HorarioLivre final={first}/>
+    {props.tasks.map((task, index)=>{
+        return(
+        <View key={index}>
+        <Card task={task} key={index}/>
+        <HorarioLivre initial={task.endTime} final={index< last? props.tasks[index+1].initTime: null}/>
+        </View>)
+    })}
+    </View>)
+}
+
 function HorarioLivre(props){
     let inicio = {hour: 0, minute: 0}, final = {hour: 23, minute: 59};
     if(props.initial != null){
@@ -277,47 +297,66 @@ function HorarioLivre(props){
         }
     }
     if(props.final != null){
-        if(props.final.minute == 0 && props.initial.hour == 0){
+        if(props.final.minute == 0 && props.final.hour == 0){
             return (<></>);
         }else if(props.final.minute == 0){
             final.minute = 59;
-            final.hour = props.initial.hour -1;
+            final.hour = props.final.hour -1;
         }else{
-            final.minute = props.initial.minute -1;
-            final.hour = props.initial.hour;
+            final.minute = props.final.minute -1;
+            final.hour = props.final.hour;
         }
     }
+    const finalStr = final.hour.toString().padStart(2, '0')+"h"+final.minute.toString().padStart(2, '0');
+    const inicioStr = inicio.hour.toString().padStart(2, '0')+"h"+inicio.minute.toString().padStart(2, '0');
     return (
-        <>
-            <Text>{inicio.hour}h{inicio.minute}</Text>
-            <Text>{final.hour}h{final.minute}</Text>
-        </>
+        <View style={{flexDirection:'row', height: wp('17%'), borderBottomWidth:1, borderBottomColor:cinza, backgroundColor: bgColor}}>
+            <View style={{width:wp('17%'), justifyContent:'center', alignItems:'center', borderRightWidth:cardLineWidth, borderRightColor:cinza}}>
+            <Text style={{fontSize: 17,padding:5}}>{inicioStr}</Text>
+            <Text style={{fontSize: 13}}>{finalStr}</Text>
+            </View>
+            <View style={{justifyContent:'center', flex:1, padding:10}}>
+                <Text >Horário Livre</Text>
+            </View>
+            <View style={{alignItems: 'flex-end', justifyContent:'flex-end'}}>
+            <IconButton
+                icon="plus-circle"
+                color={'#616161'}
+                size={20}
+                onPress={() => console.log('Adicionar evento')}
+            />
+            </View>
+        </View>
     )
 }
 
-function CardsTimeline(props){
-    
-    const last = props.tasks.length -1
-    console.log(props.tasks)
-    return (
-    <>
-    <HorarioLivre/>
-    {props.tasks.map((task, index)=>{
-        return(
-        <View key={index}>
-        <Card task={task} key={index}/>
-        <HorarioLivre initial={task.endTime} final={index< last? props.tasks[index+1].initTime: null}/>
-        </View>)
-    })}
-    </>)
-}
+
 
 function Card(props){
+    const finalStr = props.task.endTime.hour.toString().padStart(2, '0')+"h"+props.task.endTime.minute.toString().padStart(2, '0');
+    const inicioStr = props.task.initTime.hour.toString().padStart(2, '0')+"h"+props.task.initTime.minute.toString().padStart(2, '0');
+    const cor = props.task.color == null? cinza : props.task.color;
     return (
     <>
-        <Text>{props.task.name}</Text>
-        <Text>{props.task.initTime.hour}h{props.task.initTime.minute}</Text>
-        <Text>{props.task.endTime.hour}h{props.task.endTime.minute}</Text>
+        <View style={{flexDirection:'row', height: wp('17%'), borderBottomWidth:1, borderBottomColor:cinza, backgroundColor: bgColor}}>
+            <View style={{width:wp('17%'), justifyContent:'center', alignItems:'center', borderRightWidth:cardLineWidth, borderRightColor:cor}}>
+            <Text style={{fontSize: 17,padding:5}}>{inicioStr}</Text>
+            <Text style={{fontSize: 13}}>{finalStr}</Text>
+            </View>
+            <View style={{justifyContent:'center', height: wp('17%'), flex:1, padding:10}}>
+                <Text style={{height:wp('17%') - 30,overflow:"hidden", flexWrap:'wrap', textAlignVertical:'center'}} >{props.task.name}</Text>
+                <Text style={{height:30}}>{props.task.local}</Text>
+            </View>
+            <View style={{alignItems: 'flex-end', justifyContent:'flex-end'}}>
+            <IconButton
+                icon="chevron-right"
+                color={'#616161'}
+                size={20}
+                onPress={() => console.log('Editar evento')}
+            />
+            </View>
+        </View>
+        
     </>);
 }
 // É basicamente uma linha em branco, com ou sem hora, com ou sem divisor
