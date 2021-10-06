@@ -20,15 +20,146 @@ export function CalendarComponent(props) {
         [],
         // [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },],
         [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },],
-        [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },],
-    ];
+        [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },]];
+        
+        const events = [
+            {
+              "id": 0,
+              "weekly": false,
+              "details": [
+            {
+              "datetime_init": "1995-12-17T03:24:00-03:00",
+              "datetime_end": "1995-12-17T04:02:00-03:00",
+              "local": "ava2",
+              "day": 0
+            },
+            {
+              "datetime_init": "1995-12-17T03:24:00-03:00",
+              "datetime_end": "1995-12-17T04:02:00-03:00",
+              "local": "ava2.3",
+              "day": 6
+            },
+            {
+              "datetime_init": "1995-12-17T03:24:00-03:00",
+              "datetime_end": "1995-12-17T04:02:00-03:00",
+              "local": "ava5",
+              "day": 1
+            }
+          ],
+          "name": "Questionário AED3",
+          "subject": "AED3",
+          "notification": [
+            120,
+            60,
+            5
+          ],
+          "description": "10 exercicios no runcodes",
+          "color": "#0f0",
+          "is_subject": false,
+          "mean": null,
+          "grade": null,
+          "frequence": null
+        },
+        {
+          "id": 1,
+          "weekly": true,
+          "details": [
+            {
+              "datetime_init": "1995-12-17T02:24:00-03:00",
+              "datetime_end": "1995-12-17T04:02:00-03:00",
+              "local": "ava2",
+              "day": 0
+            },
+            {
+              "datetime_init": "1995-12-17T03:24:00-03:00",
+              "datetime_end": "1995-12-17T06:02:00-03:00",
+              "local": "at-19",
+              "day": 6
+            },
+            {
+              "datetime_init": "1995-12-17T08:24:00-03:00",
+              "datetime_end": "1995-12-17T09:02:00-03:00",
+              "local": "at-05",
+              "day": 1
+            }
+          ],
+          "name": "AED3",
+          "subject": "AED3",
+          "notification": [
+            120,
+            60,
+            5
+          ],
+          "description": "aula do fulano",
+          "color": "#f00",
+          "is_subject": true,
+          "mean": "(P0 + P1 + P2)/3",
+          "grade": {
+            "P0": 0,
+            "P1": 5,
+            "P2": null
+          },
+          "frequence": {}
+        },
+        {
+            "id": 2,
+            "weekly": true,
+            "details": [
+              {
+                "datetime_init": "1995-12-17T02:24:00-03:00",
+                "datetime_end": "1995-12-17T04:02:00-03:00",
+                "local": "ava2",
+                "day": 4
+              },
+              {
+                "datetime_init": "1995-12-17T03:24:00-03:00",
+                "datetime_end": "1995-12-17T08:02:00-03:00",
+                "local": "at-19",
+                "day": 5
+              },
+              {
+                "datetime_init": "1995-12-17T09:24:00-03:00",
+                "datetime_end": "1995-12-17T10:02:00-03:00",
+                "local": "at-05",
+                "day": 1
+              },
+              {
+                "datetime_init": "1995-12-17T00:24:00-03:00",
+                "datetime_end": "1995-12-17T09:30:00-03:00",
+                "local": "at-05",
+                "day": 2
+              }
+            ],
+            "name": "AED4",
+            "subject": "AED4",
+            "notification": [
+              120,
+              60,
+              5
+            ],
+            "description": "aula do fulano",
+            "color": "#00f",
+            "is_subject": true,
+            "mean": "(P0 + P1 + P2)/3",
+            "grade": {
+              "P0": 0,
+              "P1": 5,
+              "P2": null
+            },
+            "frequence": {}
+          }
+      ];
+
+
+    
+
     switch (props.mode) {
         case 0:
-            return (<CalendarWeek tasks={tasks} />);
+            return (<CalendarWeek tasks={events} />);
         case 1:
             return (<CalendarDay tasks={tasks}/>);
         default:
-            return (<CalendarWeek tasks={tasks} />);
+            return (<CalendarMonth tasks={events} />);
     }
 }
 
@@ -45,6 +176,10 @@ const timeWidth = wp("100%") - 7 * hourWidth;
 let bgColor = "#F8F8F8";
 let cinza = '#ddd';
 const subjectWidth = hourWidth * 0.9
+
+const dayComponentWidth = wp('14.28%');
+const dayComponentHeight = wp('14.28%');
+
 
 
 const WeekTab = createMaterialTopTabNavigator();
@@ -78,6 +213,21 @@ function CalendarDay(props) {
         </View>
     );
 }
+
+
+function CalendarMonth(){
+    return(<View/>);
+}
+
+function DayComponent(props){
+    let current = props.day;
+    
+    <Text  style={{position: 'absolute',
+    }}  taskColor >{monthDay}</Text>
+}
+
+
+
 function MyTabBar({ state, descriptors, navigation }) {
     return (
       <View style={{ flexDirection: 'row',backgroundColor:bgColor,height:50,justifyContent:"center",alignItems:"center" }}>
@@ -149,7 +299,12 @@ function WeekDay(props){
 function CalendarWeek(props) {
 
     let tasks = props.tasks
-    const days = { begin: 20, end: 26, today: 23 };
+
+    const today = new Date()
+    const first = new Date(today.getTime() - (today.getDay() * 24 * 60 * 60 * 1000));
+    const last = new Date(today.getTime() + ((7-today.getDay()) * 24 * 60 * 60 * 1000));
+
+    const days = { begin: first.getDate(), end: last.getDate(), today: today.getDate() };
 
 
     return (
@@ -164,13 +319,7 @@ function CalendarWeek(props) {
 
                     <ColunaHora />
                     <Grid />
-                    <Coluna tasks={tasks[0]} columnIndex={0} />
-                    <Coluna tasks={tasks[1]} columnIndex={1} />
-                    <Coluna tasks={tasks[2]} columnIndex={2} />
-                    <Coluna tasks={tasks[3]} columnIndex={3} />
-                    <Coluna tasks={tasks[4]} columnIndex={4} />
-                    <Coluna tasks={tasks[5]} columnIndex={5} />
-                    <Coluna tasks={tasks[5]} columnIndex={6} />
+                    <Coluna tasks={tasks}/>
                 </View>
             </ScrollView>
         </>
@@ -215,7 +364,11 @@ function Coluna(props) {
             <View style={styles.column, { position: "absolute", top: 13 }}>
                 {
                     tasks.map((task, i) => {
-                        return (<Task task={task} columnIndex={props.columnIndex} key={i} />)
+
+
+                        return (<Task task={task} key={i} />)
+                    
+                    
                     })}
             </View>
         );
@@ -407,19 +560,31 @@ function Space(props) {
 
 // Card das Tarefas
 function Task(props) {
+
     const task = props.task;
 
-    const posmin = task.initTime.hour * 60 + task.initTime.minute;
+    if (!task["weekly"]) return (<></>);
 
-    const minutes = (task.endTime.hour * 60 + task.endTime.minute) - posmin;
-    const size = (minutes / 60) * hourHeight;
+    const details = task["details"];
+    
+    return (
+    
+    <>
+    {
+    details.map((detail, i) => {
 
-    const index = props.columnIndex;
-    return (<View
+        const initTime =  new Date(detail["datetime_init"]);
+        const endTime =  new Date(detail["datetime_end"]);
+        const posmin = initTime.getHours() * 60 + initTime.getMinutes();
+        const minutes = ((endTime - initTime)/1000) /60;
+        const size = (minutes / 60) * hourHeight;
+        const index = detail['day']
+        // console.log(initTime,endTime, size, minutes, index, endTime.getHours(), initTime.getHours(), initTime.getMinutes(), endTime.getMinutes())
+        return (<View key={i}
         style={{
             height: size,
             width: subjectWidth,
-            backgroundColor: task.color,
+            backgroundColor: task["color"],
             borderRadius: 5,
             padding: 0,
             justifyContent: "center",
@@ -428,14 +593,15 @@ function Task(props) {
             alignSelf: "center",
             position: "absolute",
             zIndex: 2,
-            left: timeWidth + hourWidth * ( props.columnIndex),
+            left: timeWidth + hourWidth * ( index),
             top: (posmin / 60) * hourHeight
         }}
     >
         <Text style={{ color: BWFont(task.color), margin: 2, fontSize: 14, textAlign: "justify", padding: 0 }}>
-            {task.name}
+            {task["name"]}
         </Text>
-    </View>);
+    </View>)})}
+    </>);
 }
 
 // Estilo
