@@ -157,7 +157,7 @@ export function CalendarComponent(props) {
         case 0:
             return (<CalendarWeek tasks={events} />);
         case 1:
-            return (<CalendarDay tasks={tasks}/>);
+            return (<CalendarDay tasks={events}/>);
         default:
             return (<CalendarMonth tasks={events} />);
     }
@@ -185,29 +185,46 @@ const dayComponentHeight = wp('14.28%');
 const WeekTab = createMaterialTopTabNavigator();
 function CalendarDay(props) {
     let tasks = props.tasks;
+    let tasksList = [[],[],[],[],[],[],[]]
+    
+    for (const i in tasks) {
+        const task = tasks[i]
+        if (task["weekly"]){
+            for(const j in task["details"]){
+                const detail = task["details"][j];
+                tasksList[detail["day"]].push({
+                    ...task,
+                    "details":[detail]
+                })
+            }
+        }
+      }
+      for (let l in tasksList){
+        tasksList[l].sort((a,b) => { return new Date(a["details"][0]["datetime_init"]) - new Date(b["details"][0]["datetime_init"])})
+      }
     return (
         <View style={{backgroundColor:"#000", width: wp("100%"), flexGrow:1}}>
             <WeekTab.Navigator initialRouteName="Dom" tabBar={props => <MyTabBar {...props} />}>
                 <WeekTab.Screen name="Dom" >
-                    {() =><CardsTimeline tasks={tasks[0]}/>}
+                    {() =><CardsTimeline tasks={tasksList[0]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Seg" >
-                    {() =><CardsTimeline tasks={tasks[1]}/>}
+                    {() =><CardsTimeline tasks={tasksList[1]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Ter" >
-                    {() =><CardsTimeline tasks={tasks[2]}/>}
+                    {() =><CardsTimeline tasks={tasksList[2]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Qua" >
-                    {() =><CardsTimeline tasks={tasks[3]}/>}
+                    {() =><CardsTimeline tasks={tasksList[3]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Qui"  >
-                    {() =><CardsTimeline tasks={tasks[4]}/>}
+                    {() =><CardsTimeline tasks={tasksList[4]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Sex"  >
-                    {() =><CardsTimeline tasks={tasks[5]}/>}
+                    {() =><CardsTimeline tasks={tasksList[5]}/>}
                 </WeekTab.Screen>
                 <WeekTab.Screen name="Sáb"  >
-                    {() =><CardsTimeline tasks={tasks[6]}/>}
+                    {() =><CardsTimeline tasks={tasksList[6]}/>}
                 </WeekTab.Screen>
             </WeekTab.Navigator>
         </View>
@@ -267,7 +284,7 @@ function MyTabBar({ state, descriptors, navigation }) {
               onLongPress={onLongPress}
               style={{ flex: 1, alignItems:"center" }}
             >
-                <WeekDay label={label} active={isFocused}/>
+                <WeekDay label={label} active={isFocused} today={index == (new Date()).getDay()}/>
             </TouchableOpacity>
           );
         })}
@@ -288,7 +305,7 @@ function WeekDay(props){
     </Text>
     </View>);
     else
-        return(<View style={{  width: weekDayBall, height: weekDayBall, alignItems:"center", justifyContent:"center"}}>
+    return(<View style={{width: weekDayBall, height: weekDayBall, alignItems:"center", justifyContent:"center"}, props.today == true? {borderRadius:100,borderWidth:1, borderColor:weekBallColor, width: weekDayBall, height: weekDayBall, alignItems:"center", justifyContent:"center"}:{}}>
         <Text style={{ color: '#000' }}>
           {props.label}
         </Text>
@@ -422,7 +439,8 @@ function thinkFiller0(divider) {
 function CardsTimeline(props){
     
     const last = props.tasks.length -1
-    const first = props.tasks.length > 0? props.tasks[0].initTime : null;
+    const first = props.tasks.length > 0? props.tasks[0]["details"][0]["datetime_init"] : null;
+
     return (
     <View style={{marginTop: 10}}>
     <HorarioLivre final={first}/>
@@ -430,7 +448,7 @@ function CardsTimeline(props){
         return(
         <View key={index}>
         <Card task={task} key={index}/>
-        <HorarioLivre initial={task.endTime} final={index< last? props.tasks[index+1].initTime: null}/>
+        <HorarioLivre initial={task["details"][0]["datetime_end"]} final={index< last? props.tasks[index+1]["details"][0]["datetime_init"]: null}/>
         </View>)
     })}
     </View>)
@@ -439,25 +457,28 @@ function CardsTimeline(props){
 function HorarioLivre(props){
     let inicio = {hour: 0, minute: 0}, final = {hour: 23, minute: 59};
     if(props.initial != null){
-        if(props.initial.minute == 59 && props.initial.hour == 23){
+        const initialDate = new Date(props.initial)
+        if(initialDate.getMinutes() == 59 && initialDate.getHours() == 23){
             return (<></>);
-        }else if(props.initial.minute == 59){
+        }else if(initialDate.getMinutes() == 59){
             inicio.minute = 0;
-            inicio.hour = props.initial.hour + 1;
+            inicio.hour = initialDate.getHours() + 1;
         }else{
-            inicio.minute = props.initial.minute + 1;
-            inicio.hour = props.initial.hour;
+            inicio.minute = initialDate.getMinutes() + 1;
+            inicio.hour = initialDate.getHours();
         }
     }
     if(props.final != null){
-        if(props.final.minute == 0 && props.final.hour == 0){
+        
+        const finalDate = new Date(props.final)
+        if(finalDate.getMinutes() == 0 && finalDate.getHours() == 0){
             return (<></>);
-        }else if(props.final.minute == 0){
+        }else if(finalDate.getMinutes() == 0){
             final.minute = 59;
-            final.hour = props.final.hour -1;
+            final.hour = finalDate.getHours() -1;
         }else{
-            final.minute = props.final.minute -1;
-            final.hour = props.final.hour;
+            final.minute = finalDate.getMinutes() - 1;
+            final.hour = finalDate.getHours();
         }
     }
     const finalStr = final.hour.toString().padStart(2, '0')+"h"+final.minute.toString().padStart(2, '0');
@@ -483,12 +504,12 @@ function HorarioLivre(props){
     )
 }
 
-
-
 function Card(props){
-    const finalStr = props.task.endTime.hour.toString().padStart(2, '0')+"h"+props.task.endTime.minute.toString().padStart(2, '0');
-    const inicioStr = props.task.initTime.hour.toString().padStart(2, '0')+"h"+props.task.initTime.minute.toString().padStart(2, '0');
-    const cor = props.task.color == null? cinza : props.task.color;
+    const endTime = new Date(props.task["details"][0]["datetime_end"]);
+    const initTime = new Date(props.task["details"][0]["datetime_init"]);
+    const finalStr = endTime.getHours().toString().padStart(2, '0')+"h"+endTime.getMinutes().toString().padStart(2, '0');
+    const inicioStr = initTime.getHours().toString().padStart(2, '0')+"h"+initTime.getMinutes().toString().padStart(2, '0');
+    const cor = props.task["color"] == null? cinza : props.task["color"];
     return (
     <>
         <View style={{flexDirection:'row', height: wp('17%'), borderBottomWidth:1, borderBottomColor:cinza, backgroundColor: bgColor}}>
@@ -497,8 +518,8 @@ function Card(props){
             <Text style={{fontSize: 13}}>{finalStr}</Text>
             </View>
             <View style={{justifyContent:'center', height: wp('17%'), flex:1, padding:10}}>
-                <Text style={{height:wp('17%') - 30,overflow:"hidden", flexWrap:'wrap', textAlignVertical:'center'}} >{props.task.name}</Text>
-                <Text style={{height:30}}>{props.task.local}</Text>
+                <Text style={{height:wp('17%') - 30,overflow:"hidden", flexWrap:'wrap', textAlignVertical:'center'}} >{props.task["name"]}</Text>
+                <Text style={{height:30}}>{props.task["details"][0]["local"]}</Text>
             </View>
             <View style={{alignItems: 'flex-end', justifyContent:'flex-end'}}>
             <IconButton
@@ -512,6 +533,7 @@ function Card(props){
         
     </>);
 }
+
 // É basicamente uma linha em branco, com ou sem hora, com ou sem divisor
 function Space(props) {
 
@@ -579,7 +601,6 @@ function Task(props) {
         const minutes = ((endTime - initTime)/1000) /60;
         const size = (minutes / 60) * hourHeight;
         const index = detail['day']
-        // console.log(initTime,endTime, size, minutes, index, endTime.getHours(), initTime.getHours(), initTime.getMinutes(), endTime.getMinutes())
         return (<View key={i}
         style={{
             height: size,
