@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, Text, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import React, { Fragment,useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { IconButton, Colors } from 'react-native-paper';
 import { ceil } from "react-native-reanimated";
@@ -8,20 +8,6 @@ import { ceil } from "react-native-reanimated";
 
 // Esse será o componente principal, que vai gerenciar qual modo de calendário
 export function CalendarComponent(props) {
-    const tasks = [
-
-        [{ color: "#400", initTime: { hour: 3, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Organização e Recuperação da Informação e muito mais informação", local: 'AT5 - xx' },
-        { color: "#ef1", initTime: { hour: 21, minute: 0 }, endTime: { hour: 23, minute: 1 }, name: "Matéria X", local: 'AT5 - xx' }],
-        [{ color: "#444", initTime: { hour: 1, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' },
-        { color: "#ef1", initTime: { hour: 20, minute: 0 }, endTime: { hour: 21, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' }],
-        [{ color: "#444", initTime: { hour: 1, minute: 0 }, endTime: { hour: 4, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' },
-        { color: "#ef1", initTime: { hour: 20, minute: 0 }, endTime: { hour: 23, minute: 0 }, name: "Matéria X", local: 'AT5 - xx' }],
-        [{ color: "#400", initTime: { hour: 2, minute: 0 }, endTime: { hour: 3, minute: 0 }, name: "Matéria ", local: 'AT5 - xx' },
-        { color: "#ef1", initTime: { hour: 22, minute: 0 }, endTime: { hour: 22, minute: 50 }, name: "Matéria H", local: 'AT5 - xx' }],
-        [],
-        // [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },],
-        [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },],
-        [{ color: "#f00", initTime: { hour: 0, minute: 0 }, endTime: { hour: 23, minute: 59 }, name: "Matéria X", local: 'AT5 - xx' },]];
 
     const events = [
         {
@@ -29,20 +15,20 @@ export function CalendarComponent(props) {
             "weekly": false,
             "details": [
                 {
-                    "datetime_init": "1995-12-17T03:24:00-03:00",
-                    "datetime_end": "1995-12-17T04:02:00-03:00",
+                    "datetime_init": "2021-10-08T03:24:00-03:00",
+                    "datetime_end": "2021-10-09T03:24:00-03:00",
                     "local": "ava2",
                     "day": 0
                 },
                 {
-                    "datetime_init": "1995-12-17T03:24:00-03:00",
-                    "datetime_end": "1995-12-17T04:02:00-03:00",
+                    "datetime_init": "2021-10-08T04:24:00-03:00",
+                    "datetime_end": "2021-10-10T03:24:00-03:00",
                     "local": "ava2.3",
                     "day": 6
                 },
                 {
-                    "datetime_init": "1995-12-17T03:24:00-03:00",
-                    "datetime_end": "1995-12-17T04:02:00-03:00",
+                    "datetime_init": "2021-10-07T04:24:00-03:00",
+                    "datetime_end": "2021-10-09T04:24:00-03:00",
                     "local": "ava5",
                     "day": 1
                 }
@@ -183,6 +169,7 @@ const dayComponentWidth = (wp('100%') - 2 * dayComponentMargin) / 7;
 const dayComponentHeight = wp('100%') / 7;
 
 
+function compareEvents(a, b) { return new Date(a["details"][0]["datetime_init"]) - new Date(b["details"][0]["datetime_init"]) };
 
 const WeekTab = createMaterialTopTabNavigator();
 function CalendarDay(props) {
@@ -202,7 +189,7 @@ function CalendarDay(props) {
         }
     }
     for (let l in tasksList) {
-        tasksList[l].sort((a, b) => { return new Date(a["details"][0]["datetime_init"]) - new Date(b["details"][0]["datetime_init"]) })
+        tasksList[l].sort((a,b) => compareEvents(a,b))
     }
     return (
         <View style={{ backgroundColor: "#000", width: wp("100%"), flexGrow: 1 }}>
@@ -241,15 +228,49 @@ function CalendarMonth(props) {
     const [activedDate, setActive] = useState(new Date());
     const today = new Date()
     const firstDayOfMonth = new Date(today.getTime() - ((today.getDate() - 1) * 24 * 60 * 60 * 1000));
-    let current = new Date(firstDayOfMonth.getTime() - (firstDayOfMonth.getDay() * 24 * 60 * 60 * 1000));
+    const firstDay = new Date(firstDayOfMonth.getTime() - (firstDayOfMonth.getDay() * 24 * 60 * 60 * 1000));
+    let current = firstDay;
     let month = []
     let i = 0;
+    let filtered = props.tasks.filter(task => task.weekly == false);
+    let listActived = {}
+    for (const i in filtered) {
+        const task = filtered[i];
+        for (const j in task['details']) {
+            //todo ver melhor essa parte, se eventos terão inicio e fim, ou só uma hora
+            const detail = task['details'][j]
+            if (detail['datetime_end'] != null) {
+                const key = getDateStr(new Date(detail['datetime_end']));
+                if (listActived[key] == null) listActived[key] = [];
+                listActived[key].push({
+                    ...task,
+                    "name": "fim de " + task['name'],
+                    "details": [{
+                        ...detail,
+                        "datetime_init": detail['datetime_end'],
+                        "datetime_end": detail['datetime_end']
+                    }]
+                })
+            }
+            if (detail['datetime_init'] != null) {
+                const key = getDateStr(new Date(detail['datetime_init']));
+                if (listActived[key] == null) listActived[key] = [];
+                listActived[key].push({
+                    ...task,
+                    "name": "inicio de " + task['name'],
+                    "details": [{ ...detail, "datetime_end": detail['datetime_init'] }]
+                })
+            }
+        }
+    }
+
     do {
         if (i == 0) month.push([]);
-        month[month.length - 1].push({ date: current, thisMonth: (current.getMonth() == today.getMonth()), active: sameDay(current, activedDate), today: sameDay(current, today)})
+        month[month.length - 1].push({ date: current, thisMonth: (current.getMonth() == today.getMonth()), active: sameDay(current, activedDate), today: sameDay(current, today) })
         current = new Date(current.getTime() + (24 * 60 * 60 * 1000))
         i = (i + 1) % 7
     } while (current.getMonth() == today.getMonth() || current.getDay() != 0);
+
 
     return (<>
         <Days height={dayComponentHeight} width={dayComponentWidth} />
@@ -268,41 +289,53 @@ function CalendarMonth(props) {
                         flexDirection: "row"
                     }}>
                         {week.map((day, j) => {
-                            return (<DayComponent set={()=>setActive(day.date)} day={day.date} today={day.today} active={activedDate} key={j} thisMonth={day.thisMonth}/>);
+                            return (<DayComponent set={() => setActive(day.date)} day={day.date} event={listActived[getDateStr(day.date)]} today={day.today} active={activedDate} key={j} thisMonth={day.thisMonth} />);
                         })}
                     </View>);
 
                 })
             }</View>
+        {
+            (listActived[getDateStr(activedDate)] ?? []).sort((a,b) => compareEvents(a,b)).map((event, index) => (<Card task={event} key={index} />))
+        }
     </>);
+}
+
+function getDateStr(date) {
+    return date.getDate().toString() + "-" + date.getMonth().toString() + "-" + date.getYear().toString()
 }
 
 function DayComponent(props) {
     let current = props.day;
-    const dayCircleSize = 2*dayComponentWidth/3
-    const notificationCircleSize = dayComponentWidth/8
-    const borderWidth = props.today == true? 1: 0;
+    const dayCircleSize = 2 * dayComponentWidth / 3
+    const notificationCircleSize = dayComponentWidth / 8
+    const borderWidth = props.today == true ? 1 : 0;
     const isActive = sameDay(current, props.active) == true;
-    const bgColor = isActive ? "#f00": "transparent";
-    const textColor = isActive? "#fff": props.thisMonth == true ? "#FB8C00" : "#000";
-    const hasEvent = current.getDate() % 6 == 0;
+    const bgColor = isActive ? "#f00" : "transparent";
+    const textColor = isActive ? "#fff" : props.thisMonth == true ? "#FB8C00" : "#000";
+    const hasEvent = props.event;
 
-    return (<View style={{width: dayComponentWidth, height: dayComponentHeight, alignItems:"center"
+    return (<View style={{
+        width: dayComponentWidth, height: dayComponentHeight, alignItems: "center"
     }}>
-        <TouchableOpacity style={{borderRadius:100,backgroundColor: bgColor,borderColor:"#f00",borderWidth:borderWidth,justifyContent:"center",
-            width: dayCircleSize, height: dayCircleSize}} onPress={props.set}>
-        <Text style={{
-            textAlign: "center",
-            color:textColor
-        }}>
-            
-            {current.getDate()}
-        </Text>   
-        <View style={{borderRadius:100, backgroundColor:hasEvent?"#0f0":"transparent",alignSelf:"flex-end",position:"absolute",
-            width: notificationCircleSize, height: notificationCircleSize, right:dayCircleSize/2, bottom:dayCircleSize/20}}/>     
+        <TouchableOpacity style={{
+            borderRadius: 100, backgroundColor: bgColor, borderColor: "#f00", borderWidth: borderWidth, justifyContent: "center",
+            width: dayCircleSize, height: dayCircleSize
+        }} onPress={props.set}>
+            <Text style={{
+                textAlign: "center",
+                color: textColor
+            }}>
+
+                {current.getDate()}
+            </Text>
+            <View style={{
+                borderRadius: 100, backgroundColor: hasEvent ? "#0f0" : "transparent", alignSelf: "flex-end", position: "absolute",
+                width: notificationCircleSize, height: notificationCircleSize, right: dayCircleSize / 2, bottom: dayCircleSize / 20
+            }} />
         </TouchableOpacity>
-        
-        </View>)
+
+    </View>)
 }
 
 function sameDay(a, b) {
@@ -592,12 +625,13 @@ function Card(props) {
     const finalStr = endTime.getHours().toString().padStart(2, '0') + "h" + endTime.getMinutes().toString().padStart(2, '0');
     const inicioStr = initTime.getHours().toString().padStart(2, '0') + "h" + initTime.getMinutes().toString().padStart(2, '0');
     const cor = props.task["color"] == null ? cinza : props.task["color"];
+    const endTextColor = inicioStr == finalStr? "transparent" : "#000";
     return (
         <>
             <View style={{ flexDirection: 'row', height: wp('17%'), borderBottomWidth: 1, borderBottomColor: cinza, backgroundColor: bgColor }}>
                 <View style={{ width: wp('17%'), justifyContent: 'center', alignItems: 'center', borderRightWidth: cardLineWidth, borderRightColor: cor }}>
                     <Text style={{ fontSize: 17, padding: 5 }}>{inicioStr}</Text>
-                    <Text style={{ fontSize: 13 }}>{finalStr}</Text>
+                    <Text style={{ fontSize: 13, color:endTextColor}}>{finalStr}</Text>
                 </View>
                 <View style={{ justifyContent: 'center', height: wp('17%'), flex: 1, padding: 10 }}>
                     <Text style={{ height: wp('17%') - 30, overflow: "hidden", flexWrap: 'wrap', textAlignVertical: 'center' }} >{props.task["name"]}</Text>
