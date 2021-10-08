@@ -1,8 +1,8 @@
 import React from 'react';
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View,TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { bgColor, BWFont, Days, dividerColor, hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
-
+import { bgColor, BWFont, Days, dividerColor, getDateStr, getEvents , hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 // Calendário modo semana
 export function CalendarWeek(props) {
@@ -14,16 +14,45 @@ export function CalendarWeek(props) {
     const last = new Date(today.getTime() + ((7 - today.getDay()) * 24 * 60 * 60 * 1000));
 
     const days = { begin: first.getDate(), end: last.getDate(), today: today.getDate() };
-
+    let listActived = getEvents(props.tasks)
+    let current = first;
+    let hasEvent = false;
+    let weekList = [];
+    do {
+        let list = listActived[getDateStr(current)]??[];
+        weekList.push(list);
+        if (!hasEvent) hasEvent = (list.length > 0);
+        current = new Date(current.getTime() + (24 * 60 * 60 * 1000));
+    } while(current == first || current.getDay() > 0); 
 
     return (
         <>
             <View style={styles.semana}>
                 <View style={styles.dias, { width: timeWidth }} />
                 <Days days={days} />
-
             </View>
             <ScrollView style={styles.scroll} scrollEnabled={true} >
+                {hasEvent?(<View style={{
+                backgroundColor: bgColor,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection:'row',
+                alignSelf: "center"}}>
+                <View style={styles.dias, { width: timeWidth }} />
+                {
+                    weekList.map((listEvents, index) => {
+                        if (listEvents.length == 0){
+                            return (<View style={{ alignItems: "center", width: hourWidth}} key={index}/>)
+                        } else {
+                            //todo exibir modal
+                            return (<TouchableOpacity style={{ alignItems: "center", width: hourWidth}} key={index}>
+                                <MaterialIcons name="assignment-late" size={24} color="black" />
+                            </TouchableOpacity>);
+                        }
+                    })
+                }
+            </View>):(<></>)
+            }
                 <View style={styles.planilha}>
 
                     <ColunaHora />

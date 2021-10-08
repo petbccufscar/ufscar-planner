@@ -159,6 +159,44 @@ export function DayComponent(props) {
 }
 
 
+export function getEvents(filtered){
+    let listActived = {}
+    for (const i in filtered) {
+        const task = filtered[i];
+        for (const j in task['details']) {
+            //todo ver melhor essa parte, se eventos terão inicio e fim, ou só uma hora
+            const detail = task['details'][j]
+            if (detail['datetime_end'] != null) {
+                const key = getDateStr(new Date(detail['datetime_end']));
+                if (listActived[key] == null) listActived[key] = [];
+                listActived[key].push({
+                    ...task,
+                    "name": "fim de " + task['name'],
+                    "details": [{
+                        ...detail,
+                        "datetime_init": detail['datetime_end'],
+                        "datetime_end": detail['datetime_end']
+                    }]
+                })
+            }
+            if (detail['datetime_init'] != null) {
+                const key = getDateStr(new Date(detail['datetime_init']));
+                if (listActived[key] == null) listActived[key] = [];
+                listActived[key].push({
+                    ...task,
+                    "name": "inicio de " + task['name'],
+                    "details": [{ ...detail, "datetime_end": detail['datetime_init'] }]
+                })
+            }
+        }
+    }
+    return listActived;
+}
+
+export function getDateStr(date) {
+    return date.getDate().toString() + "-" + date.getMonth().toString() + "-" + date.getYear().toString()
+}
+
 export function sameDay(a, b) {
     return a.getMonth() == b.getMonth() && a.getDate() == b.getDate() && a.getYear() == b.getYear();
 }

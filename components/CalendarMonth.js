@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from "react-native";
-import { Card, compareEvents, DayComponent, dayComponentHeight, dayComponentWidth, Days, sameDay } from "./CalendarHelper";
+import { Card, compareEvents, DayComponent, dayComponentHeight, getDateStr, dayComponentWidth,getEvents, Days, sameDay } from "./CalendarHelper";
 
 
 export function CalendarMonth(props) {
@@ -15,37 +15,7 @@ export function CalendarMonth(props) {
     let month = []
     let i = 0;
     let filtered = props.tasks.filter(task => task.weekly == false);
-    let listActived = {}
-    for (const i in filtered) {
-        const task = filtered[i];
-        for (const j in task['details']) {
-            //todo ver melhor essa parte, se eventos terão inicio e fim, ou só uma hora
-            const detail = task['details'][j]
-            if (detail['datetime_end'] != null) {
-                const key = getDateStr(new Date(detail['datetime_end']));
-                if (listActived[key] == null) listActived[key] = [];
-                listActived[key].push({
-                    ...task,
-                    "name": "fim de " + task['name'],
-                    "details": [{
-                        ...detail,
-                        "datetime_init": detail['datetime_end'],
-                        "datetime_end": detail['datetime_end']
-                    }]
-                })
-            }
-            if (detail['datetime_init'] != null) {
-                const key = getDateStr(new Date(detail['datetime_init']));
-                if (listActived[key] == null) listActived[key] = [];
-                listActived[key].push({
-                    ...task,
-                    "name": "inicio de " + task['name'],
-                    "details": [{ ...detail, "datetime_end": detail['datetime_init'] }]
-                })
-            }
-        }
-    }
-
+    let listActived = getEvents(filtered);
     do {
         if (i == 0) month.push([]);
         month[month.length - 1].push({ date: current, thisMonth: (current.getMonth() == today.getMonth()), active: sameDay(current, activedDate), today: sameDay(current, today) })
@@ -83,6 +53,3 @@ export function CalendarMonth(props) {
     </>);
 }
 
-function getDateStr(date) {
-    return date.getDate().toString() + "-" + date.getMonth().toString() + "-" + date.getYear().toString()
-}
