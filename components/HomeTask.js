@@ -7,9 +7,9 @@ const Task = (props) => {
       <View style={styles.square}></View>
       <View style={styles.itemLeft}>
         <Text style={styles.itemTaskSubject}>
-          {props.subject}: {props.task}
+          {props.name}: {props.subject}
         </Text>
-        <Text style={styles.itemDate}>Data: {props.date}</Text>
+        <Text style={styles.itemDate}>Data: {props.datetime_init}</Text>
       </View>
     </View>
   )

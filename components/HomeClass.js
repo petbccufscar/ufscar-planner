@@ -8,7 +8,7 @@ const Class = (props) => {
       <View style={styles.itemLeft}>
         <Text style={styles.itemClass}>{props.subject}</Text>
         <Text style={styles.itemLocal}>Local: {props.local}</Text>
-        <Text style={styles.itemTime}>Horário: {props.time}h</Text>
+        <Text style={styles.itemTime}>Horário: {props.datetime_init}h</Text>
       </View>
     </View>
   )

@@ -69,22 +69,22 @@ export default function App() {
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {'fulan@'}!</Text>
-            <Text style={styles.sectionTitle}>Proxima Tarefa</Text>
+            <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
             <View style={styles.items}>
               <Task
                 subject={'Construção de Algoritmos e Programação'}
-                task={'Prova 1'}
-                date={'25/09'}
+                name={'Prova 1'}
+                datetime_init={'25/09'}
               />
               <Task
                 subject={'Construção de Algoritmos e Programação'}
-                task={'Trabalho de implementação 1'}
-                date={'25/10'}
+                name={'Trabalho de implementação 1'}
+                datetime_init={'25/10'}
               />
               <Task
                 subject={'Cálculo 1'}
-                task={'Questionário 1'}
-                date={'25/11'}
+                name={'Questionário 1'}
+                datetime_init={'25/11'}
               />
               {/* This is where the tasks will go! */}
               {taskItems.map((task, index) => {
@@ -106,9 +106,13 @@ export default function App() {
             <Class
               subject={'Construção de Algoritmos e Programação'}
               local={'AT-7'}
-              time={'14:00'}
+              datetime_init={'14:00'}
             />
-            <Class subject={'Cálculo 1'} local={'AT-5'} time={'16:00'} />
+            <Class
+              subject={'Cálculo 1'}
+              local={'AT-5'}
+              datetime_init={'16:00'}
+            />
             <Text style={styles.sectionTitle}>Cardápio</Text>
             <Menu
               mealTime={'Almoço'}
@@ -171,11 +175,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    padding: 15,
+    padding: 10,
     color: '#607D8B',
   },
   items: {
-    marginTop: 30,
+    marginTop: 10,
   },
   writeTaskWrapper: {
     position: 'absolute',
