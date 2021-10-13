@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from "react-native";
-import { Card, compareEvents, DayComponent, dayComponentHeight, getDateStr, dayComponentWidth,getEvents, Days, sameDay } from "./CalendarHelper";
+import { Card, compareEvents, DayComponent, AddButton, dayComponentHeight, getDateStr, dayComponentWidth,getEvents, Days, sameDay } from "./CalendarHelper";
 
 
 export function CalendarMonth(props) {
@@ -50,6 +50,7 @@ export function CalendarMonth(props) {
         {
             (listActived[getDateStr(activedDate)] ?? []).sort((a,b) => compareEvents(a,b)).map((event, index) => (<Card task={event} key={index} />))
         }
+        <AddButton/>
     </>);
 }
 

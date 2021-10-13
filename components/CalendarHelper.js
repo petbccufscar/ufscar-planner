@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-
+import { Entypo, Feather } from '@expo/vector-icons'
 
 //Para importar tudo desse arquivo:
 //import {hourHeight, weekHeight, weekBall, weekDayBall, weekBallColor, WeekDay, hourWidth, dividerHeight, dividerColor, cardLineWidth, timeWidth, bgColor, cinza, subjectWidth, dayComponentMargin, dayComponentWidth, dayComponentHeight, Days, Card, DayComponent, sameDay, compareEvents, Random, styles, BWFont} from "./CalendarHelper" ;
@@ -72,6 +72,21 @@ export function Days(props) {
     }
 }
 
+export function AddButton(props){
+    return (<TouchableOpacity style={{
+        borderRadius: 60,
+        backgroundColor: "red",
+        width: wp('18%'),
+        height: wp('18%'),
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom: 10,
+        right: 10
+    }}>
+        <Entypo name='plus' size={60} color={'#fff'} />
+    </TouchableOpacity>);
+}
 
 export function WeekDay(props) {
 

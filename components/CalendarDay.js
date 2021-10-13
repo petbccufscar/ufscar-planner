@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, FlatList } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { bgColor, Card, cardLineWidth, cinza, compareEvents, WeekDay } from "./CalendarHelper";
@@ -66,16 +66,18 @@ function CardsTimeline(props) {
     const first = props.tasks.length > 0 ? props.tasks[0]["details"][0]["datetime_init"] : null;
 
     return (
-        <View style={{ marginTop: 10 }}>
-            <HorarioLivre final={first} />
-            {props.tasks.map((task, index) => {
-                return (
-                    <View key={index}>
-                        <Card task={task} key={index} />
-                        <HorarioLivre initial={task["details"][0]["datetime_end"]} final={index < last ? props.tasks[index + 1]["details"][0]["datetime_init"] : null} />
-                    </View>)
-            })}
-        </View>)
+        <FlatList
+            style={{ marginTop: 10 }}
+            ListHeaderComponent={<HorarioLivre final={first} />}
+            data={props.tasks}
+            renderItem={(item) => { 
+                return(
+                <View>
+                    <Card task={item.item}/>
+                    <HorarioLivre initial={item.item["details"][0]["datetime_end"]} final={item.index < last ? props.tasks[item.index + 1]["details"][0]["datetime_init"] : null} />
+                </View>);}}
+            keyExtractor={(item, index) => index.toString()}
+        />)
 }
 
 

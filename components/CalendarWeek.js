@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, Text, View,TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { bgColor, BWFont, Days, dividerColor, getDateStr, getEvents , hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
+import { bgColor, BWFont, Days, dividerColor, getDateStr, AddButton, getEvents , hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 // Calendário modo semana
@@ -60,6 +60,7 @@ export function CalendarWeek(props) {
                     <Coluna tasks={tasks} />
                 </View>
             </ScrollView>
+            <AddButton/>
         </>
     );
 }
