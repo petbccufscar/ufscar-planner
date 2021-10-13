@@ -8,11 +8,14 @@ import { CalendarComponent } from '../components/CalendarParts';
 
 export default function Calendar() {
   const [mode, setMode] = useState(0);
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+  const hoje = new Date();
+  let titulo = mode == 2? `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}` :"Calendário"
   return (
     <>
         <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
           <Appbar.Action  icon="menu" onPress={()=>{}} />
-          <Appbar.Content title="Calendário" />
+          <Appbar.Content title={titulo} />
           <Appbar.Action  icon="calendar" onPress={()=>{
             setMode((mode+1)%3);
             // console.log(modo);
