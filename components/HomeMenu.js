@@ -44,7 +44,11 @@ const Menu = (props) => {
           </React.Fragment>
         ) : null}
         <Text style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
-          Mais detalhes
+          {shouldShow ? (
+            <Text> Menos detalhes</Text>
+          ) : (
+            <Text> Mais detalhes</Text>
+          )}
         </Text>
       </View>
     </View>

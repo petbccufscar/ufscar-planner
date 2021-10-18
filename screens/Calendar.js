@@ -1,9 +1,9 @@
-import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {useState} from 'react';
+import Constants from 'expo-constants';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import { CalendarComponent } from '../components/CalendarParts';
+import {CalendarComponent} from '../components/CalendarParts'
 
 
 export default function Calendar(props) {
