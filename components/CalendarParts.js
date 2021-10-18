@@ -133,14 +133,13 @@ export function CalendarComponent(props) {
             "frequence": {}
         }
     ];
-
     switch (props.mode) {
         case 0:
-            return (<CalendarWeek tasks={events} />);
+            return (<CalendarWeek tasks={events} navigation={props.navigation}/>);
         case 1:
             return (<CalendarDay tasks={events} />); 
         default:
-            return (<CalendarMonth tasks={events} />); 
+            return (<CalendarMonth tasks={events} navigation={props.navigation}/>); 
     }
 
 }

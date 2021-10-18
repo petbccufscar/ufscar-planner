@@ -6,7 +6,7 @@ import { Appbar } from 'react-native-paper';
 import { CalendarComponent } from '../components/CalendarParts';
 
 
-export default function Calendar() {
+export default function Calendar(props) {
   const [mode, setMode] = useState(0);
   const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
   const hoje = new Date();
@@ -24,7 +24,7 @@ export default function Calendar() {
     <View style={styles.container}>
 
       <StatusBar style="light" />
-      <CalendarComponent mode={mode}/>
+      <CalendarComponent mode={mode} navigation={props.navigation}/>
     </View>
     </>
   );

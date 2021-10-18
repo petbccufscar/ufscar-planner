@@ -60,7 +60,7 @@ export function CalendarWeek(props) {
                     <Coluna tasks={tasks} />
                 </View>
             </ScrollView>
-            <AddButton/>
+            <AddButton navigation={props.navigation}/>
         </>
     );
 }

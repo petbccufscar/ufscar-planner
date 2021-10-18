@@ -5,10 +5,13 @@ import Home from '../screens/Home';
 import Restaurant from '../screens/Restaurant';
 import Task from '../screens/Task';
 import Calendar from '../screens/Calendar';
-import { BottomNavigation, Text } from 'react-native-paper';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
 
 
-export default function MyTabs() {
+export default function MyTabs(props) {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'home', title: 'Home', icon: 'home' },
@@ -17,21 +20,38 @@ export default function MyTabs() {
     { key: 'restaurant', title: 'Restaurante', icon: 'silverware-fork-knife' },
   ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    home: Home,
-    task: Task,
-    calendar: Calendar,
-    restaurant: Restaurant
-  });
 
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={Home} options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" size={size} color={color} />
+          ),
+        }}/>
+      <Tab.Screen name="Task" component={Task} options={{
+          tabBarLabel: 'Updates',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="clipboard-text" size={size} color={color} />
+
+          ),
+        }}/>
+      <Tab.Screen name="Calendar" component={Calendar} options={{
+          tabBarLabel: 'Calendário',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="calendar-range" size={size} color={color} />
+          ),
+        }}/>
+      <Tab.Screen name="Restaurant" component={Restaurant} options={{
+          tabBarLabel: 'Restaurante',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="silverware-fork-knife" size={size} color={color} />
+          ),
+        }}/>
+    </Tab.Navigator>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

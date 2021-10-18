@@ -50,7 +50,7 @@ export function CalendarMonth(props) {
         {
             (listActived[getDateStr(activedDate)] ?? []).sort((a,b) => compareEvents(a,b)).map((event, index) => (<Card task={event} key={index} />))
         }
-        <AddButton/>
+        <AddButton navigation={props.navigation}/>
     </>);
 }
 

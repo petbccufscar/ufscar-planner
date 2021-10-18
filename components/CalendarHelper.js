@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Entypo, Feather } from '@expo/vector-icons'
-
+import { EditEvent } from './EditEvent';
 //Para importar tudo desse arquivo:
 //import {hourHeight, weekHeight, weekBall, weekDayBall, weekBallColor, WeekDay, hourWidth, dividerHeight, dividerColor, cardLineWidth, timeWidth, bgColor, cinza, subjectWidth, dayComponentMargin, dayComponentWidth, dayComponentHeight, Days, Card, DayComponent, sameDay, compareEvents, Random, styles, BWFont} from "./CalendarHelper" ;
 
@@ -83,7 +83,9 @@ export function AddButton(props){
         justifyContent: 'center',
         bottom: 10,
         right: 10
-    }}>
+    }}
+    onPress={() => props.navigation.navigate('EditEvent')}
+    >
         <Entypo name='plus' size={60} color={'#fff'} />
     </TouchableOpacity>);
 }
