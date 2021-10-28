@@ -107,10 +107,10 @@ function ColunaHora(props) {
 
 // Constrói o campo de linhas que fica no fundo
 function Grid(props) {
-    let initialTime = { hour: 0, minute: 0 };
-    let finalTime = { hour: 23, minute: 59 };
+    let initialTime = { hour: 1, minute: 0 };
+    let finalTime = { hour: 24, minute: 0 };
 
-    let fillers = thinkFiller0(initialTime, finalTime, true);
+    let fillers = thinkFiller0(true);
     return (
         <View style={styles.column, { zIndex: 1, backgroundColor: bgColor, top: 0, paddingTop: 13, }}>
             {fillers.map((space, i) => { return (<Space space={space} width={wp("100%")} key={i} hasDivider={true} />) })}
@@ -122,7 +122,7 @@ function Grid(props) {
 // Função que decide o tamanho de cada space e o que tem nele
 function thinkFiller0(divider) {
     let result = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 1; i < 25; i++) {
         result.push({
             size: hourHeight,
             divider: divider,
@@ -148,13 +148,13 @@ function Space(props) {
                         backgroundColor: props.transparent ? 'transparent' : bgColor,
                         height: size - 1,
                         width: width,
-                        alignItems: "flex-start",
-                        justifyContent: "flex-start",
-                        padding: 0,
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                        padding: 0
                     }
                 }>
 
-                    <Text style={{ justifyContent: 'center', position: "absolute", top: -13 }}>
+                    <Text style={{ justifyContent: 'center'}}>
                         {props.text}
                     </Text>
                 </View>
