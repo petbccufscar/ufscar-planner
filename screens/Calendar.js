@@ -14,7 +14,7 @@ export default function Calendar(props) {
   return (
     <>
         <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-          <Appbar.Action  icon="menu" onPress={()=>{}} />
+          <Appbar.Action  icon="menu" onPress={()=>{props.navigation.openDrawer();}} />
           <Appbar.Content title={titulo} />
           <Appbar.Action  icon="calendar" onPress={()=>{
             setMode((mode+1)%3);

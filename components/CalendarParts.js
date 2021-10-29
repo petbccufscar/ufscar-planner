@@ -12,8 +12,8 @@ export function CalendarComponent(props) {
             "weekly": false,
             "details": [
                 {
-                    "datetime_init": "2021-10-08T03:24:00-03:00",
-                    "datetime_end": "2021-10-09T03:24:00-03:00",
+                    "datetime_init": "2021-10-29T03:24:00-03:00",
+                    "datetime_end": "2021-10-29T03:25:00-03:00",
                     "local": "ava2",
                     "day": 0
                 },
