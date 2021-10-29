@@ -56,8 +56,9 @@ export function CalendarWeek(props) {
                 <View style={styles.planilha}>
 
                     <ColunaHora />
-                    <Grid />
-                    <Coluna tasks={tasks} />
+                    <Coluna tasks={tasks}  style={{zIndex:3}} />
+                    
+                    <Grid style={{zIndex:1}}/>
                 </View>
             </ScrollView>
             <AddButton navigation={props.navigation}/>
@@ -71,14 +72,10 @@ function Coluna(props) {
     const tasks = props.tasks;
     if (tasks.length != 0) {
         return (
-            <View style={styles.column, { position: "absolute", top: 13 }}>
+            <View style={styles.column, { position: "absolute", top: 13,  zIndex:3}}>
                 {
                     tasks.map((task, i) => {
-
-
                         return (<Task task={task} key={i} />)
-
-
                     })}
             </View>
         );
@@ -90,26 +87,17 @@ function Coluna(props) {
 
 // É a coluna da hora
 function ColunaHora(props) {
-
-    let initialTime = { hour: 0, minute: 0 };
-    let finalTime = { hour: 23, minute: 59 };
-
-    let fillers = thinkFiller0(initialTime, finalTime, false);
+    let fillers = thinkFiller0(true);
     return (
         <View style={styles.column, { paddingTop: 13 }}>
             {fillers.map((space, i) => { return (<Space space={space} width={timeWidth} text={space.hour + "h00"} key={i} hasDivider={false} transparent={true} />) })}
         </View>
     )
-
-
 }
 
 
 // Constrói o campo de linhas que fica no fundo
 function Grid(props) {
-    let initialTime = { hour: 1, minute: 0 };
-    let finalTime = { hour: 24, minute: 0 };
-
     let fillers = thinkFiller0(true);
     return (
         <View style={styles.column, { zIndex: 1, backgroundColor: bgColor, top: 0, paddingTop: 13, }}>
@@ -142,13 +130,14 @@ function Space(props) {
 
     if (divider) {
         return (
-            <View style={styles.column, { borderTopWidth: props.hasDivider == null ? 0 : 1, borderColor: dividerColor, }}>
+            <View style={styles.column, { borderTopWidth: props.hasDivider == null ? 0 : 1, borderColor: dividerColor, zIndex:1}}>
                 <View style={
                     {
                         backgroundColor: props.transparent ? 'transparent' : bgColor,
                         height: size - 1,
                         width: width,
                         alignItems: "center",
+                        zIndex: 1,
                         justifyContent: "flex-end",
                         padding: 0
                     }
@@ -213,7 +202,7 @@ function Task(props) {
                             alignContent: "center",
                             alignSelf: "center",
                             position: "absolute",
-                            zIndex: 2,
+                            zIndex: 3,
                             left: timeWidth + hourWidth * (index),
                             top: (posmin / 60) * hourHeight
                         }}
