@@ -51,7 +51,7 @@ export function Days(props) {
                             <Text>
                                 {day.title}
                             </Text>
-                            <View style={{ alignItems: "center", width: width, height: height, borderRadius: 100, backgroundColor: day.today ? weekBallColor : "tansparent" }}>
+                            <View style={{ alignItems: "center", justifyContent:"center",alignContent:"center", width: width, height: height, borderRadius: 100, backgroundColor: day.today ? weekBallColor : "tansparent" }}>
                                 <Text style={{ color: day.today ? BWFont(weekBallColor) : '#000' }}>
                                     {day.day}
                                 </Text>
@@ -257,7 +257,7 @@ export const styles = StyleSheet.create({
     },
     dias: {
         width: hourWidth,
-        height: weekHeight,
+        height: hourHeight,
         backgroundColor: bgColor,
         alignItems: 'center',
         justifyContent: 'center',
