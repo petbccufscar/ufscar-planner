@@ -36,18 +36,23 @@ export function Days(props) {
     const week = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     if (props.days != null) {
 
-        for (let i = props.days['begin']; i <= props.days['end']; i++) {
+        let i = props.days['begin'];
+        // Percorrendo os dias da semana
+        do{
             days.push({
-                title: week[i - props.days['begin']],
-                day: i,
-                today: props.days['today'] == i,
+                title: week[i.getDay()],
+                day: i.getDate(),
+                today: props.days['today'].getDay() == i.getDay(),
             })
-        }
+            i = new Date(i.getTime() + 24 * 60 * 60 * 1000)
+        }while((i.getDay() != props.days['end'].getDay()))
+
+
         return (
             <>{
                 days.map((day, i) => {
                     return (
-                        <View style={styles.dias} key={i}>
+                        <View style={{...styles.dias}} key={i}>
                             <Text>
                                 {day.title}
                             </Text>
@@ -56,13 +61,14 @@ export function Days(props) {
                                     {day.day}
                                 </Text>
                             </View>
-                        </View>)
+                        </View>
+                        )
                 })
             }</>);
     } else {
         return (
             //todo arrumar isso para deixar igual a outra barra
-            <View style={{ ...styles.semana, justifyContent: "center", height: height }}>{
+            <View style={{ ...styles.semana, justifyContent: "center", height: height, backgroundColor:'red' }}>{
                 week.map((weekDay, i) => {
                     return (
                         <WeekDay label={weekDay} height={height} width={width} key={i} active={false} today={false} />

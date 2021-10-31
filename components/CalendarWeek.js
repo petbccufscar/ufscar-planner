@@ -13,7 +13,7 @@ export function CalendarWeek(props) {
     const first = new Date(today.getTime() - (today.getDay() * 24 * 60 * 60 * 1000));
     const last = new Date(today.getTime() + ((7 - today.getDay()) * 24 * 60 * 60 * 1000));
 
-    const days = { begin: first.getDate(), end: last.getDate(), today: today.getDate() };
+    const days = { begin: first, end: last, today: today };
     let listActived = getEvents(props.tasks)
     let current = first;
     let hasEvent = false;
@@ -24,7 +24,6 @@ export function CalendarWeek(props) {
         if (!hasEvent) hasEvent = (list.length > 0);
         current = new Date(current.getTime() + (24 * 60 * 60 * 1000));
     } while(current == first || current.getDay() > 0); 
-
     return (
         <>
             <View style={styles.semana}>
