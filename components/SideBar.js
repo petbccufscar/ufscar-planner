@@ -13,9 +13,8 @@ import { Drawer as PaperDrawer } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 const Drawer = createDrawerNavigator();
 
-export default function SideBar() {
+export default function SideBar(props) {
   return (
-
     <Drawer.Navigator initialRouteName="Home">
 
       <Drawer.Screen

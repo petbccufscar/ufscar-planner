@@ -6,13 +6,16 @@ import { Appbar } from 'react-native-paper';
 import {CalendarComponent} from '../components/CalendarParts'
 
 
-export default function Calendar() {
+export default function Calendar(props) {
   const [mode, setMode] = useState(0);
+  const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+  const hoje = new Date();
+  let titulo = mode == 2? `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}` :"Calendário"
   return (
     <>
         <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-          <Appbar.Action  icon="menu" onPress={()=>{}} />
-          <Appbar.Content title="Calendário" />
+          <Appbar.Action  icon="menu" onPress={()=>{props.navigation.openDrawer();}} />
+          <Appbar.Content title={titulo} />
           <Appbar.Action  icon="calendar" onPress={()=>{
             setMode((mode+1)%3);
             // console.log(modo);
@@ -21,7 +24,7 @@ export default function Calendar() {
     <View style={styles.container}>
 
       <StatusBar style="light" />
-      <CalendarComponent mode={mode}/>
+      <CalendarComponent mode={mode} navigation={props.navigation}/>
     </View>
     </>
   );

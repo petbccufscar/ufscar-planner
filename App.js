@@ -3,12 +3,22 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import SideBar from './components/SideBar';
 import BottomNavBar from './components/BottomNavBar';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import EditEvent from './components/EditEvent';
 import { NavigationContainer } from '@react-navigation/native';
+
+const HomeStackRoutes = createStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
-      <SideBar/>
+      <HomeStackRoutes.Navigator screenOptions={{headerShown:false}}>
+        
+        <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
+        <HomeStackRoutes.Screen name="EditEvent" component={EditEvent} />
+      
+        </HomeStackRoutes.Navigator>
+      
     </NavigationContainer>
     
   );
