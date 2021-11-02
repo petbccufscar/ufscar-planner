@@ -38,37 +38,37 @@ export function Days(props) {
 
         let i = props.days['begin'];
         // Percorrendo os dias da semana
-        do{
+        do {
             days.push({
                 title: week[i.getDay()],
                 day: i.getDate(),
                 today: props.days['today'].getDay() == i.getDay(),
             })
             i = new Date(i.getTime() + 24 * 60 * 60 * 1000)
-        }while((i.getDay() != props.days['end'].getDay()))
+        } while ((i.getDay() != props.days['end'].getDay()))
 
 
         return (
             <>{
                 days.map((day, i) => {
                     return (
-                        <View style={{...styles.dias}} key={i}>
+                        <View style={{ ...styles.dias }} key={i}>
                             <Text>
                                 {day.title}
                             </Text>
-                            <View style={{ alignItems: "center", justifyContent:"center",alignContent:"center", width: width, height: height, borderRadius: 100, backgroundColor: day.today ? weekBallColor : "tansparent" }}>
+                            <View style={{ alignItems: "center", justifyContent: "center", alignContent: "center", width: width, height: height, borderRadius: 100, backgroundColor: day.today ? weekBallColor : "tansparent" }}>
                                 <Text style={{ color: day.today ? BWFont(weekBallColor) : '#000' }}>
                                     {day.day}
                                 </Text>
                             </View>
                         </View>
-                        )
+                    )
                 })
             }</>);
     } else {
         return (
             //todo arrumar isso para deixar igual a outra barra
-            <View style={{ ...styles.semana, justifyContent: "center", height: height, backgroundColor:'red' }}>{
+            <View style={{ ...styles.semana, justifyContent: "center", height: height }}>{
                 week.map((weekDay, i) => {
                     return (
                         <WeekDay label={weekDay} height={height} width={width} key={i} active={false} today={false} />
@@ -78,7 +78,7 @@ export function Days(props) {
     }
 }
 
-export function AddButton(props){
+export function AddButton({ navigation }) {
     return (<TouchableOpacity style={{
         borderRadius: 60,
         backgroundColor: "red",
@@ -90,7 +90,7 @@ export function AddButton(props){
         bottom: 10,
         right: 10
     }}
-    onPress={() => props.navigation.navigate('EditEvent')}
+        onPress={() => navigation.navigate('EditEvent')}
     >
         <Entypo name='plus' size={60} color={'#fff'} />
     </TouchableOpacity>);
@@ -121,13 +121,13 @@ export function Card(props) {
     const finalStr = endTime.getHours().toString().padStart(2, '0') + "h" + endTime.getMinutes().toString().padStart(2, '0');
     const inicioStr = initTime.getHours().toString().padStart(2, '0') + "h" + initTime.getMinutes().toString().padStart(2, '0');
     const cor = props.task["color"] == null ? cinza : props.task["color"];
-    const endTextColor = inicioStr == finalStr? "transparent" : "#000";
+    const endTextColor = inicioStr == finalStr ? "transparent" : "#000";
     return (
         <>
             <View style={{ flexDirection: 'row', height: wp('17%'), borderBottomWidth: 1, borderBottomColor: cinza, backgroundColor: bgColor }}>
                 <View style={{ width: wp('17%'), justifyContent: 'center', alignItems: 'center', borderRightWidth: cardLineWidth, borderRightColor: cor }}>
                     <Text style={{ fontSize: 17, padding: 5 }}>{inicioStr}</Text>
-                    <Text style={{ fontSize: 13, color:endTextColor}}>{finalStr}</Text>
+                    <Text style={{ fontSize: 13, color: endTextColor }}>{finalStr}</Text>
                 </View>
                 <View style={{ justifyContent: 'center', height: wp('17%'), flex: 1, padding: 10 }}>
                     <Text style={{ height: wp('17%') - 30, overflow: "hidden", flexWrap: 'wrap', textAlignVertical: 'center' }} >{props.task["name"]}</Text>
@@ -182,7 +182,7 @@ export function DayComponent(props) {
 }
 
 
-export function getEvents(filtered){
+export function getEvents(filtered) {
     let listActived = {}
     for (const i in filtered) {
         const task = filtered[i];
