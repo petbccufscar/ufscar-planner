@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 
 const Menu = (props) => {
-  const [shouldShow, setShouldShow] = useState(false)
+  const [shouldShow, setShouldShow] = useState(props.shouldShow)
   return (
     <View style={styles.item}>
       <View style={styles.itemLeft}>
