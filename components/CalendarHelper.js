@@ -4,6 +4,7 @@ import { IconButton } from 'react-native-paper';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Entypo, Feather } from '@expo/vector-icons'
 import { EditEvent } from './EditEvent';
+import { useNavigation } from '@react-navigation/core';
 //Para importar tudo desse arquivo:
 //import {hourHeight, weekHeight, weekBall, weekDayBall, weekBallColor, WeekDay, hourWidth, dividerHeight, dividerColor, cardLineWidth, timeWidth, bgColor, cinza, subjectWidth, dayComponentMargin, dayComponentWidth, dayComponentHeight, Days, Card, DayComponent, sameDay, compareEvents, Random, styles, BWFont} from "./CalendarHelper" ;
 
@@ -78,7 +79,8 @@ export function Days(props) {
     }
 }
 
-export function AddButton({ navigation }) {
+export function AddButton() {
+    const navigation = useNavigation();
     return (<TouchableOpacity style={{
         borderRadius: 60,
         backgroundColor: "red",

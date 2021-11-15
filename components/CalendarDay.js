@@ -8,7 +8,8 @@ import { bgColor, Card, cardLineWidth, cinza, compareEvents, WeekDay } from "./C
 
 const WeekTab = createMaterialTopTabNavigator();
 
-export function CalendarDay(props) {
+export function CalendarDay({route}) {
+    const props = route.params;
     let tasks = props.tasks;
     let tasksList = [[], [], [], [], [], [], []]
 

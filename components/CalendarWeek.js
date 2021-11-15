@@ -5,7 +5,7 @@ import { bgColor, BWFont, Days, dividerColor, getDateStr, AddButton, getEvents, 
 import { MaterialIcons } from '@expo/vector-icons';
 
 // Calendário modo semana
-export function CalendarWeek({ navigation, route }) {
+export function CalendarWeek({ route }) {
     const props = route.params;
     let tasks = props.tasks
 
@@ -61,7 +61,7 @@ export function CalendarWeek({ navigation, route }) {
                     <Grid style={{ zIndex: 1 }} />
                 </View>
             </ScrollView>
-            <AddButton navigation={navigation} />
+            <AddButton/>
         </>
     );
 }

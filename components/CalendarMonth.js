@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Card, compareEvents, DayComponent, AddButton, dayComponentHeight, getDateStr, dayComponentWidth, getEvents, Days, sameDay } from "./CalendarHelper";
 
 
-export function CalendarMonth({ route, navigation }) {
+export function CalendarMonth({ route}) {
     const props = route.params;
     const pivot = props.pivot ?? new Date();
 
@@ -51,7 +51,7 @@ export function CalendarMonth({ route, navigation }) {
         {
             (listActived[getDateStr(activedDate)] ?? []).sort((a, b) => compareEvents(a, b)).map((event, index) => (<Card task={event} key={index} />))
         }
-        <AddButton navigation={navigation} />
+        <AddButton />
     </>);
 }
 
