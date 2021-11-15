@@ -3,8 +3,7 @@ import { View } from "react-native";
 import { Card, compareEvents, DayComponent, AddButton, dayComponentHeight, getDateStr, dayComponentWidth, getEvents, Days, sameDay } from "./CalendarHelper";
 
 
-export function CalendarMonth({ route}) {
-    const props = route.params;
+export function CalendarMonth(props) {
     const pivot = props.pivot ?? new Date();
 
 

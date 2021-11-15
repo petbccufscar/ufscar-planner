@@ -5,8 +5,7 @@ import { bgColor, BWFont, Days, dividerColor, getDateStr, AddButton, getEvents, 
 import { MaterialIcons } from '@expo/vector-icons';
 
 // Calendário modo semana
-export function CalendarWeek({ route }) {
-    const props = route.params;
+export function CalendarWeek(props) {
     let tasks = props.tasks
 
     const today = new Date()

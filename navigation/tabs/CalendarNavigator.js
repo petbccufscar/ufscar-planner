@@ -20,7 +20,7 @@ export default function CalendarNavigator() {
         <calendarStack.Navigator screenOptions={{
             presentation: 'containedTransparentModal', animation: "fade"
         }}>
-            <calendarStack.Screen name="CalendarDay" component={CalendarDay} options={({ navigation }) => ({
+            <calendarStack.Screen name="CalendarDay" options={({ navigation }) => ({
                 title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
                 headerRight: () => (
                     <IconButton
@@ -32,8 +32,11 @@ export default function CalendarNavigator() {
                         }}
                     />
                 ),
-            })} />
-            <calendarStack.Screen name="CalendarMonth" component={CalendarMonth} options={({ navigation }) => ({
+            })}>
+                {props => <CalendarDay {...props} tasks={events}/>}
+            </calendarStack.Screen>
+
+            <calendarStack.Screen name="CalendarMonth" options={({ navigation }) => ({
                 title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
                 headerRight: () => (
                     <IconButton
@@ -45,8 +48,11 @@ export default function CalendarNavigator() {
                         }}
                     />
                 ),
-            })} />
-            <calendarStack.Screen name="CalendarWeek" component={CalendarWeek} options={({ navigation }) => ({
+            })}>
+                {props => <CalendarMonth {...props} tasks={events}/>}
+            </calendarStack.Screen>
+
+            <calendarStack.Screen name="CalendarWeek" options={({ navigation }) => ({
                 title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
                 headerRight: () => (
                     <IconButton
@@ -58,7 +64,9 @@ export default function CalendarNavigator() {
                         }}
                     />
                 ),
-            })} />
+            })}>
+                    {props => <CalendarWeek {...props} tasks={events}/>}
+            </calendarStack.Screen>
         </calendarStack.Navigator>
     );
 }

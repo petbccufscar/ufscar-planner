@@ -8,8 +8,7 @@ import { bgColor, Card, cardLineWidth, cinza, compareEvents, WeekDay } from "./C
 
 const WeekTab = createMaterialTopTabNavigator();
 
-export function CalendarDay({route}) {
-    const props = route.params;
+export function CalendarDay(props) {
     let tasks = props.tasks;
     let tasksList = [[], [], [], [], [], [], []]
 
@@ -29,7 +28,7 @@ export function CalendarDay({route}) {
         tasksList[l].sort((a,b) => compareEvents(a,b))
     }
     const today = (new Date()).getDay()
-    routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
+    let routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
     return (
         <View style={{ backgroundColor: "#000", width: wp("100%"), flexGrow: 1 }}>
             <WeekTab.Navigator initialRouteName={routes[today]} tabBar={props => <MyTabBar {...props} />}>
