@@ -28,7 +28,7 @@ export function CalendarDay(props) {
         tasksList[l].sort((a,b) => compareEvents(a,b))
     }
     const today = (new Date()).getDay()
-    routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
+    let routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
     return (
         <View style={{ backgroundColor: "#000", width: wp("100%"), flexGrow: 1 }}>
             <WeekTab.Navigator initialRouteName={routes[today]} tabBar={props => <MyTabBar {...props} />}>

@@ -1,12 +1,11 @@
 import React from 'react';
-import { ScrollView, Text, View,TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { bgColor, BWFont, Days, dividerColor, getDateStr, AddButton, getEvents , hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
-import { MaterialIcons } from '@expo/vector-icons'; 
+import { bgColor, BWFont, Days, dividerColor, getDateStr, AddButton, getEvents, hourHeight, hourWidth, styles, subjectWidth, timeWidth } from "./CalendarHelper";
+import { MaterialIcons } from '@expo/vector-icons';
 
 // Calendário modo semana
 export function CalendarWeek(props) {
-
     let tasks = props.tasks
 
     const today = new Date()
@@ -19,11 +18,11 @@ export function CalendarWeek(props) {
     let hasEvent = false;
     let weekList = [];
     do {
-        let list = listActived[getDateStr(current)]??[];
+        let list = listActived[getDateStr(current)] ?? [];
         weekList.push(list);
         if (!hasEvent) hasEvent = (list.length > 0);
         current = new Date(current.getTime() + (24 * 60 * 60 * 1000));
-    } while(current == first || current.getDay() > 0); 
+    } while (current == first || current.getDay() > 0);
     return (
         <>
             <View style={styles.semana}>
@@ -31,36 +30,37 @@ export function CalendarWeek(props) {
                 <Days days={days} />
             </View>
             <ScrollView style={styles.scroll} scrollEnabled={true} >
-                {hasEvent?(<View style={{
-                backgroundColor: bgColor,
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection:'row',
-                alignSelf: "center"}}>
-                <View style={styles.dias, { width: timeWidth }} />
-                {
-                    weekList.map((listEvents, index) => {
-                        if (listEvents.length == 0){
-                            return (<View style={{ alignItems: "center", width: hourWidth}} key={index}/>)
-                        } else {
-                            //todo exibir modal
-                            return (<TouchableOpacity style={{ alignItems: "center", width: hourWidth}} key={index}>
-                                <MaterialIcons name="assignment-late" size={24} color="black" />
-                            </TouchableOpacity>);
-                        }
-                    })
+                {hasEvent ? (<View style={{
+                    backgroundColor: bgColor,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    alignSelf: "center"
+                }}>
+                    <View style={styles.dias, { width: timeWidth }} />
+                    {
+                        weekList.map((listEvents, index) => {
+                            if (listEvents.length == 0) {
+                                return (<View style={{ alignItems: "center", width: hourWidth }} key={index} />)
+                            } else {
+                                //todo exibir modal
+                                return (<TouchableOpacity style={{ alignItems: "center", width: hourWidth }} key={index}>
+                                    <MaterialIcons name="assignment-late" size={24} color="black" />
+                                </TouchableOpacity>);
+                            }
+                        })
+                    }
+                </View>) : (<></>)
                 }
-            </View>):(<></>)
-            }
                 <View style={styles.planilha}>
 
                     <ColunaHora />
-                    <Coluna tasks={tasks}  style={{zIndex:3}} />
-                    
-                    <Grid style={{zIndex:1}}/>
+                    <Coluna tasks={tasks} style={{ zIndex: 3 }} />
+
+                    <Grid style={{ zIndex: 1 }} />
                 </View>
             </ScrollView>
-            <AddButton navigation={props.navigation}/>
+            <AddButton/>
         </>
     );
 }
@@ -71,7 +71,7 @@ function Coluna(props) {
     const tasks = props.tasks;
     if (tasks.length != 0) {
         return (
-            <View style={styles.column, { position: "absolute", top: 13,  zIndex:3}}>
+            <View style={styles.column, { position: "absolute", top: 13, zIndex: 3 }}>
                 {
                     tasks.map((task, i) => {
                         return (<Task task={task} key={i} />)
@@ -129,7 +129,7 @@ function Space(props) {
 
     if (divider) {
         return (
-            <View style={styles.column, { borderTopWidth: props.hasDivider == null ? 0 : 1, borderColor: dividerColor, zIndex:1}}>
+            <View style={styles.column, { borderTopWidth: props.hasDivider == null ? 0 : 1, borderColor: dividerColor, zIndex: 1 }}>
                 <View style={
                     {
                         backgroundColor: props.transparent ? 'transparent' : bgColor,
@@ -142,7 +142,7 @@ function Space(props) {
                     }
                 }>
 
-                    <Text style={{ justifyContent: 'center'}}>
+                    <Text style={{ justifyContent: 'center' }}>
                         {props.text}
                     </Text>
                 </View>

@@ -15,7 +15,9 @@ const Drawer = createDrawerNavigator();
 
 export default function SideBar(props) {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator initialRouteName="Home" screenOptions={{
+      headerShown: false,
+    }}>
 
       <Drawer.Screen
         name="Home"

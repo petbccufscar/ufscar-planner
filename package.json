@@ -8,29 +8,39 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/metro-config": "^0.2.6",
+    "@react-native-async-storage/async-storage": "^1.15.11",
+    "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-community/masked-view": "0.1.10",
-    "@react-navigation/bottom-tabs": "^5.x",
-    "@react-navigation/drawer": "^5.12.5",
-    "@react-navigation/material-top-tabs": "^5.x",
-    "@react-navigation/native": "^5.9.4",
-    "@react-navigation/stack": "^5.x",
+    "@react-navigation/bottom-tabs": "^6.x",
+    "@react-navigation/drawer": "^6.x",
+    "@react-navigation/material-top-tabs": "^6.x",
+    "@react-navigation/native": "^6.x",
+    "@react-navigation/native-stack": "^6.x",
+    "@react-navigation/stack": "^6.x",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-modal-datetime-picker": "^13.0.0",
     "react-native-paper": "^4.9.2",
     "react-native-reanimated": "~2.2.0",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
+    "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^2.x",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "react-native-svg-transformer": "^0.14.3"
   },
   "private": true
 }
