@@ -6,13 +6,13 @@
     "config": {
       "theme": "black",
       "font_size": 14
-    }
+    },
+    "money": 20
   },
   "semester": {
     "init": "1995-12-18T03:02:00",
     "end": "1995-12-18T03:04:00"
   },
-  "money": 20,
   "events": [
     {
       "id": 0,

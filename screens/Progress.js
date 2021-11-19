@@ -6,57 +6,65 @@ import Constants from 'expo-constants';
 import { Appbar } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Calendar from '../assets/icons/calendar.svg';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateSemester } from '../redux/actions/semesterActions';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function Progress() {
+  const dispatch = useDispatch();
+  const semester = useSelector((state) => state.semester).semester;
   const currentDate = new Date();
-  const [begginingSemester, setBegginingSemester] = useState(currentDate);
-  const [endingSemester, setEndingSemester] = useState(currentDate);
-  const [progress, setProgress] = useState(0);
-  const [daysLeft, setDaysLeft] = useState(0);
-  const [vacationDays, setVacationDays] = useState(0);
-  const [showBegginingDatePicker, setShowBegginingDatePicker] = useState(false);
-  const [showEndingDatePicker, setShowEndingDatePicker] = useState(false);
-  const [message, setMessage] = useState();
+  const [showInitDatePicker, setShowInitDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  let message = '';
+  let progress = 0;
+  calculateProgress();
 
-  function calculateProgress() {
-    if (begginingSemester < endingSemester) {
-      let auxProgress = (currentDate - begginingSemester) / (endingSemester - begginingSemester);
-      auxProgress = auxProgress > 1 ? 1 : auxProgress < 0 ? 0 : auxProgress;
+  function handleSemesterInitiChange(date){
+    setShowInitDatePicker(false);
+    semester.init = date.toString();
+    dispatch(updateSemester(semester));
+  }
 
-      let auxDaysLeft = Math.round((endingSemester - currentDate) / (24 * 60 * 60 * 1000));
-      auxDaysLeft = auxDaysLeft < 0 ? 0 : auxDaysLeft;
-
-      if (currentDate < begginingSemester) {
-        let auxVacationDays = Math.round(Math.abs((begginingSemester - currentDate) / (24 * 60 * 60 * 1000)));
-        auxVacationDays = auxVacationDays < 0 ? 0 : auxVacationDays;
-
-        setVacationDays(auxVacationDays);
-        setMessage(`Você ainda tem ${auxVacationDays} dia${auxVacationDays != 0 ? "s" : ""} de férias!`)
-      }
-      else {
-        if (auxDaysLeft <= 0) {
-          setMessage(`As férias chegaram!`);
-        }
-        else {
-          setMessage(`Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`);
-        }
-      }
-      setProgress(auxProgress);
-      setDaysLeft(auxDaysLeft);
-
-    } else {
-      setMessage("Selecione datas válidas de início e término do seu semestre!");
-      setProgress(0);
-      setDaysLeft(0);
-      setVacationDays(0);
-    }
+  function handleSemesterEndChange(date){
+      setShowEndDatePicker(false);
+      semester.end = date.toString();
+      dispatch(updateSemester(semester));
   }
 
   useEffect(() => {
     calculateProgress();
-  }, [begginingSemester, endingSemester])
+  } , [semester]);
+
+  function calculateProgress() {
+    if (new Date(semester.init) < new Date(semester.end)) {
+      let auxProgress = (currentDate - new Date(semester.init)) / (new Date(semester.end) - new Date(semester.init));
+      auxProgress = auxProgress > 1 ? 1 : auxProgress < 0 ? 0 : auxProgress;
+
+      let auxDaysLeft = Math.round((new Date(semester.end) - currentDate) / (24 * 60 * 60 * 1000));
+      auxDaysLeft = auxDaysLeft < 0 ? 0 : auxDaysLeft;
+
+      if (currentDate < new Date(semester.init)) {
+        let auxVacationDays = Math.round(Math.abs((new Date(semester.init) - currentDate) / (24 * 60 * 60 * 1000)));
+        auxVacationDays = auxVacationDays < 0 ? 0 : auxVacationDays;
+
+        message = `Você ainda tem ${auxVacationDays} dia${auxVacationDays != 0 ? "s" : ""} de férias!`;
+      }
+      else {
+        if (auxDaysLeft <= 0) {
+          message = `As férias chegaram!`;
+        }
+        else {
+          message = `Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`;
+        }
+      }
+      progress = auxProgress;
+    } else {
+      message = "Selecione datas válidas de início e término do seu semestre!";
+      progress = 0;
+    }
+  }
 
   const formatDate = dataFormatar => {
     const data = new Date(dataFormatar);
@@ -82,29 +90,28 @@ export default function Progress() {
         </View>
         <View style={styles.datas}>
           <View style={styles.spacingDate}>
-            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowBegginingDatePicker(true)}>
+            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowInitDatePicker(true)}>
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>{formatDate(begginingSemester)}</Text>
+              <Text style={styles.data}>{formatDate(new Date(semester.init))}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.spacingDate}>
-            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowEndingDatePicker(true)}>
+            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowEndDatePicker(true)}>
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>{formatDate(endingSemester)}</Text>
+              <Text style={styles.data}>{formatDate(new Date(semester.end))}</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
       <DateTimePickerModal
-        isVisible={showBegginingDatePicker}
+        isVisible={showInitDatePicker}
         mode={"date"}
-        value={begginingSemester}
-        date={begginingSemester}
-        onCancel={() => setShowBegginingDatePicker(false)}
-        onHide={() => setShowBegginingDatePicker(false)}
+        value={new Date(semester.init)}
+        date={new Date(semester.init)}
+        onCancel={() => setShowInitDatePicker(false)}
+        onHide={() => setShowInitDatePicker(false)}
         onConfirm={(date) => {
-          setBegginingSemester(date);
-          setShowBegginingDatePicker(false);
+          handleSemesterInitiChange(date);
         }}
 
         cancelTextIOS={'Cancelar'}
@@ -112,15 +119,14 @@ export default function Progress() {
         headerTextIOS={'Escolha uma data'}
       />
       <DateTimePickerModal
-        isVisible={showEndingDatePicker}
+        isVisible={showEndDatePicker}
         mode={"date"}
-        value={endingSemester}
-        date={endingSemester}
-        onCancel={() => setShowEndingDatePicker(false)}
-        onHide={() => setShowEndingDatePicker(false)}
+        value={new Date(semester.end)}
+        date={new Date(semester.end)}
+        onCancel={() => setShowEndDatePicker(false)}
+        onHide={() => setShowEndDatePicker(false)}
         onConfirm={(date) => {
-          setEndingSemester(date);
-          setShowEndingDatePicker(false);
+          handleSemesterEndChange(date);
         }}
 
         cancelTextIOS={'Cancelar'}

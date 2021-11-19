@@ -2,9 +2,6 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, Text, View, Pre, Pressable, TextInput } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { Appbar } from 'react-native-paper'
-import Constants from 'expo-constants'
-import RestaurantMenu from '../screens/RestaurantMenu'
 
 export default class Wallet extends React.Component {
   state = {
@@ -39,7 +36,7 @@ export default class Wallet extends React.Component {
   formatReal = (num) => {
     num = parseFloat(num)
     return (
-      'R$ ' +
+      'R$' +
       num
         .toFixed(2)
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1;')
@@ -57,16 +54,6 @@ export default class Wallet extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-          <Appbar.Action
-            icon='menu'
-            onPress={() => {
-              props.navigation.openDrawer()
-            }}
-          />
-          <Appbar.Content title={'Restaurante Universitário'} />
-          <Appbar.Action icon='food' onPress={() => {}} />
-        </Appbar.Header>
         <View style={styles.title}>
           <Pressable onPress={() => this.setShouldShow(!this.state.shouldShow)}>
             <Text style={styles.balanceTitle}>Saldo Carteirinha</Text>
