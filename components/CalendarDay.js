@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View, FlatList, Alert } from "react-native";
 import { IconButton } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { bgColor, Card, cardLineWidth, cinza, compareEvents, WeekDay } from "./CalendarHelper";
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Calendar, CalendarList, Agenda, ExpandableCalendar, AgendaList} from 'react-native-calendars';
 import { useSelector, useDispatch } from 'react-redux';
 import {Task as CalendarTask} from './CalendarTask'
 import {LocaleConfig} from 'react-native-calendars';
@@ -55,6 +55,11 @@ const offsetDate = (date, days) => {
 const floorDate = (data) => {
     return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0') )) ;
 }
+
+const compare = (e, f) => {
+    return Date.parse(e.detail.datetime_init) - Date.parse(f.detail.datetime_init)
+}
+
 
 const EventsScreen = () => {
 
@@ -108,6 +113,24 @@ const EventsScreen = () => {
                 }
             }
         }
+        const keys = Object.keys(items)
+        for (let i = 0; i < keys.length; i++){
+            items[keys[i]].sort(compare)
+        }
+
+        let datei = offsetDate(new Date(), -offset)
+        const datef = offsetDate(new Date(), offset)
+
+        while (datei.getTime() <= datef.getTime()){
+            const date = floorDate(datei)
+            if( items[date] == null){
+                items[date] = []
+            } 
+               
+            datei = offsetDate(datei, 1)
+        }
+
+
         setStMarked(marked)
         setStItems(items)
     }
