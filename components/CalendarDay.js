@@ -41,7 +41,7 @@ export function CalendarDay(props) {
     const today = (new Date()).getDay()
     let routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
     return (
-        <View style={{ backgroundColor: "#000", width: wp("100%"), height: hp("50%") }}>
+        <View style={{ backgroundColor: "#000", flex: 1}}>
                 <EventsScreen/>
         </View>
     );
@@ -159,6 +159,7 @@ const EventsScreen = () => {
           renderEmptyDate={renderEmptyDate}
           rowHasChanged={rowHasChanged}
           markedDates={stMarked}
+
         />
     );
   };
