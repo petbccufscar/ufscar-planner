@@ -1,11 +1,22 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import React from 'react';
-import { Text, TouchableOpacity, View, FlatList } from "react-native";
+import React, {useState} from 'react';
+import { Text, TouchableOpacity, View, FlatList, Alert } from "react-native";
 import { IconButton } from 'react-native-paper';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { bgColor, Card, cardLineWidth, cinza, compareEvents, WeekDay } from "./CalendarHelper";
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { useSelector, useDispatch } from 'react-redux';
+import {Task as CalendarTask} from './CalendarTask'
+import {LocaleConfig} from 'react-native-calendars';
 
-
+LocaleConfig.locales['pt'] = {
+  monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outobro','Novembro','Dezembro'],
+  monthNamesShort: ['Jan.','Fev.','Mar','Abril','Mai','Jun','Jul','Agos','Set','Out','Nov','Dez.'],
+  dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+  dayNamesShort: ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
+  today: 'Hoje'
+};
+LocaleConfig.defaultLocale = 'pt';
 const WeekTab = createMaterialTopTabNavigator();
 
 export function CalendarDay(props) {
@@ -30,35 +41,104 @@ export function CalendarDay(props) {
     const today = (new Date()).getDay()
     let routes = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"]
     return (
-        <View style={{ backgroundColor: "#000", width: wp("100%"), flexGrow: 1 }}>
-            <WeekTab.Navigator initialRouteName={routes[today]} tabBar={props => <MyTabBar {...props} />}>
-                <WeekTab.Screen name="Dom" >
-                    {() => <CardsTimeline tasks={tasksList[0]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Seg" >
-                    {() => <CardsTimeline tasks={tasksList[1]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Ter" >
-                    {() => <CardsTimeline tasks={tasksList[2]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Qua" >
-                    {() => <CardsTimeline tasks={tasksList[3]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Qui"  >
-                    {() => <CardsTimeline tasks={tasksList[4]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Sex"  >
-                    {() => <CardsTimeline tasks={tasksList[5]} />}
-                </WeekTab.Screen>
-                <WeekTab.Screen name="Sáb"  >
-                    {() => <CardsTimeline tasks={tasksList[6]} />}
-                </WeekTab.Screen>
-            </WeekTab.Navigator>
+        <View style={{ backgroundColor: "#000", width: wp("100%"), height: hp("50%") }}>
+                <EventsScreen/>
         </View>
     );
 }
 
 
+const offsetDate = (date, days) => {
+    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+const floorDate = (data) => {
+    return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0') )) ;
+}
+
+const EventsScreen = () => {
+
+
+    const offset = 40;
+    const events = useSelector(state => state.events.events);
+    let items = {}
+    let marked = {}
+    const [stMarked, setStMarked] = useState({});
+    const [stItems, setStItems] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    const repeat = (event) => {
+        let datei = offsetDate(new Date(), -offset)
+        const datef = offsetDate(new Date(), offset)
+        let toDay = new Date(event.detail.datetime_init).getDay() - event.detail.day
+        if (toDay < 0){
+            toDay += 7
+        }
+        datei = offsetDate(datei, toDay)
+
+        while (datei.getTime() <= datef.getTime()){
+            const date = floorDate(datei)
+            if( items[date] == null){
+                items[date] = [event]
+            } else { 
+                items[date].push(event)
+            }
+            datei = offsetDate(datei, 7)
+        }
+
+    }
+    const setup = async () => {
+        for (let i = 0; i < events.length; i++){
+            for (let j = 0; j < events[i].details.length; j++){
+                const obj = {
+                    ...events[i],
+                    detail: events[i].details[j]
+                }
+                const aux = new Date(obj.detail.datetime_init)
+                const date = floorDate(aux)
+                if (events[i].weekly){
+                    repeat(obj)
+                }else{
+                    if( items[date] == null){
+                        items[date] = [obj]
+                    } else { 
+                        items[date].push(obj)
+                    }
+                    marked[date] = {marked:true}
+                }
+            }
+        }
+        setStMarked(marked)
+        setStItems(items)
+    }
+    if (loading){
+        setLoading(false)
+        setup();
+    }
+
+    const renderItem = item => (
+        <CalendarTask task={item}></CalendarTask>
+    );
+  
+    const renderEmptyDate = () => {
+      return (
+        <View style={{backgroundColor: 'transparent', width:100, height:100}}>
+        </View>
+      );
+    };
+
+    const rowHasChanged = (r1, r2) => r1.name !== r2.name;
+    return (
+        <Agenda
+          items={stItems}
+          selected={new Date()}
+          renderItem={renderItem}
+          renderEmptyDate={renderEmptyDate}
+          rowHasChanged={rowHasChanged}
+          markedDates={stMarked}
+        />
+    );
+  };
 
 function CardsTimeline(props) {
 
