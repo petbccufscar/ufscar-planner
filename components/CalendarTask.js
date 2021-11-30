@@ -1,10 +1,18 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet} from 'react-native'
+import { useNavigation } from '@react-navigation/core';
+
 
 export function Task (props) {
   const task = props.task
+  const navigation = useNavigation();
+  
+  const edit = () => {
+    navigation.navigate('EditEvent', {task: task})
+  }
+
   return (
-    <View style={styles.item}>
+    <TouchableOpacity style={styles.item} onPress={edit}>
       <View style={{...styles.square, backgroundColor: task.color}}></View>
       <View style={styles.itemLeft}>
         <Text style={styles.itemTaskSubject}>
@@ -14,7 +22,7 @@ export function Task (props) {
         no {task.detail.local}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

@@ -17,9 +17,11 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <HomeStackRoutes.Navigator screenOptions={{ headerShown: false }}>
-            <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
-            <HomeStackRoutes.Screen name="EditEvent" component={EditEvent} />
+          <HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
+              <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
+              </HomeStackRoutes.Group>
+            <HomeStackRoutes.Screen name="EditEvent" component={EditEvent}/>
           </HomeStackRoutes.Navigator>
         </NavigationContainer>
       </PersistGate>
