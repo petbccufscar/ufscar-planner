@@ -7,23 +7,47 @@ import {
   Alert,
   StyleSheet,
   LayoutAnimation,
+  TextInput,
+  CheckBox
 } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import {updateEvent} from '../redux/actions/eventActions'
-
-
+import Dialog from "react-native-dialog";
+import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
 
 export default function Event({ route, navigation }) {
   const originalTask = route.params.task;
   let task = {...originalTask}
   task = useSelector(state => state.events).events.find(e => e.id == task.id)
-  const [editMode, setEditMode] = useState(false);
-  const [details, setDetails] = useState(task.details);
+
+  //boleano
+  const [isSubject, setIsSubject] = useState(task.is_subject);
+  const [weekly, setWeekly] = useState(task.weekly);
+
+  //todo
+  const [subject, setSubject] = useState(task.subject);
+  const [color, setColor] = useState(task.color);
+
+  
+  // tela separada
+  const [grade, setGrade] = useState(task.grade);
   const [frequency, setFrequency] = useState(task.frequency);
   const [mean, setMean] = useState(task.mean);
+  
+  const [name, setName] = useState(task.name);
+  const [editMode, setEditMode] = useState(false);
+  const [details, setDetails] = useState(task.details);
   const [notifications, setNotifications] = useState(task.notification);
   const [description, setDescription] = useState(task.description);
+
+  //dialog
+  const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
+  const [openNameDialog, setOpenNameDialog] = useState(false);
+  const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
+  const [openColorDialog, setOpenColorDialog] = useState(false);
+
+
   const dispatch = useDispatch();
 
   const week = [
@@ -40,17 +64,18 @@ export default function Event({ route, navigation }) {
     task = {
       ...task,
       // TODO implementar edição desses atributos
-      // "name": ,
-      // "subject": "AED3",
-      // "color": "#0f0",
-      // "is_subject": false,
-      // "grade": grade,
+      "name": name,
+      "is_subject": isSubject,
+      "subject": subject,
+      "color":  color,
+      "grade": grade,
       "details": details,
       "notification": notifications,
       "description": description,
       "mean": mean,
       "frequence": frequency
     }
+
     dispatch(updateEvent(task));
   }
 
@@ -58,12 +83,14 @@ export default function Event({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: task.name,
+      headerTitle: name,
+      headerTintColor: BWFont(color),
+      headerStyle: {backgroundColor: color},
       headerRight: () => (
         <IconButton
           icon={editMode ? "check" : "pencil"}
-          color="white"
           size={24}
+          color={BWFont(color)}
           onPress={() => {
             LayoutAnimation.configureNext({
               duration: 200,
@@ -83,7 +110,7 @@ export default function Event({ route, navigation }) {
         />
       ),
     });
-  }, [route.params, editMode, details, frequency, mean, notifications, description ]);
+  }, [route.params, editMode, details, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
 
   function getTime(totalMinutes) {
     const days = parseInt(totalMinutes / 60 / 24);
@@ -123,13 +150,147 @@ export default function Event({ route, navigation }) {
     );
   }
 
+
+  function SimpleDialog(props){
+    const fun = props.fun
+    const old = props.old || ""
+    const setOpen = props.setOpen
+    const open = props.open
+    const [texto, setTexto] = useState(old)
+    let novo = ""
+
+    return (
+    <Dialog.Container visible={open}>
+      <Dialog.Title>Alterar</Dialog.Title>
+      <Dialog.Description>
+      </Dialog.Description>
+      <Dialog.Input value={texto} onChangeText={setTexto}>
+
+      </Dialog.Input>
+      <Dialog.Button label="Cancel" onPress={() => setOpen(false)}/>
+      <Dialog.Button label="Ok" onPress={() => {
+        fun(texto)
+        setOpen(false)}}/>
+    </Dialog.Container>)
+  }
+  
+
+  function ColorDialog(){
+    let aux = color
+    return (
+    <Dialog.Container visible={openColorDialog}>
+      <Dialog.Title>Alterar</Dialog.Title>
+      <Dialog.Description>
+      </Dialog.Description>
+      <ColorPicker
+      
+        onColorChange={color => aux = color}
+        defaultColor={aux}
+        style={{width: 300, height: 300}}
+      />
+      <Dialog.Button label="Cancel" onPress={() => setOpenColorDialog(false)}/>
+      <Dialog.Button label="Ok" onPress={() => {
+        setColor(fromHsv(aux))
+        setOpenColorDialog(false)}}/>
+    </Dialog.Container>)
+  }
+
+
   return (
     <ScrollView style={styles.container}>
+
+<View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="tag" color="#007cc1" size={30} />
+        </View>
+        <View style={styles.description}>
+          <Text>Nome: {name}</Text>
+        </View>
+        {editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="pencil"
+                  color="black"
+                  onPress={() => 
+                    {if (editMode) setOpenNameDialog(true)}}
+                  size={18}
+                />
+              )}
+      </View>
+      <View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="notebook" color="#007cc1" size={30} />
+        </View>
+        
+        <View style={styles.description}>
+          <Text>É matéria </Text>
+        </View>
+        <CheckBox
+        value={isSubject}
+        onValueChange={setIsSubject}
+        disabled={!editMode}
+      />
+      
+      </View>
+      <View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="calendar-refresh" color="#007cc1" size={30} />
+        </View>
+        
+        <View style={styles.description}>
+          <Text>É semanal </Text>
+        </View>
+        <CheckBox
+        value={weekly}
+        onValueChange={setWeekly}
+        disabled={!editMode}
+      />
+      
+      </View>
+      {!isSubject && (<View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="book" color="#007cc1" size={30} />
+        </View>
+        
+        <View style={styles.description}>
+          <Text>Matéria: {subject}</Text>
+        </View>
+        {editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="pencil"
+                  color="black"
+                  onPress={() => 
+                    {if (editMode) setOpenSubjectDialog(true)}}
+                  size={18}
+                />
+              )}
+      </View>)
+    }
+      <View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="square" color={color} size={30} />
+        </View>
+        <View style={styles.description}>
+          <Text>Cor: {color}</Text>
+        </View>
+        {editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="pencil"
+                  color="black"
+                  onPress={() => 
+                    {if (editMode) setOpenColorDialog(true)}}
+                  size={18}
+                />
+              )}
+      </View>
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="calendar" color="#007cc1" size={30} />
         </View>
         <View style={styles.details}>
+          <Text>Horários: </Text>
           {details.sort(sortDetails).map((detail, index) => (
             <View key={index} style={styles.detail}>
               <View>
@@ -167,7 +328,7 @@ export default function Event({ route, navigation }) {
           )}
         </View>
       </View>
-
+      {isSubject && (
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="book-open" color="#007cc1" size={30} />
@@ -176,13 +337,14 @@ export default function Event({ route, navigation }) {
           <Text>Média = {mean}</Text>
           <Text>Frequência = {frequency}</Text>
         </View>
-      </View>
+      </View>)}
 
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="bell-ring" color="#007cc1" size={30} />
         </View>
         <View style={styles.reminder}>
+          <Text>Notificações: </Text>
           {notifications.map((notification, index) => (
             <View key={index} style={styles.notification}>
               <Text>{getTime(notification)}</Text>
@@ -203,7 +365,7 @@ export default function Event({ route, navigation }) {
           {editMode && (
             <View style={styles.action}>
               <Button
-                onPress={() => {}}
+                onPress={() => {se}}
                 labelStyle={styles.actionButtonLabel}
                 style={styles.actionButton}
               >
@@ -213,29 +375,76 @@ export default function Event({ route, navigation }) {
           )}
         </View>
       </View>
-
+      <SimpleDialog fun={setName} old={name} open={openNameDialog} setOpen={setOpenNameDialog}/>
+      <SimpleDialog fun={setDescription} old={description} open={openDescriptionDialog} setOpen={setOpenDescriptionDialog}/>
+      <SimpleDialog fun={setSubject} old={subject} open={openSubjectDialog} setOpen={setOpenSubjectDialog}/>
+      <ColorDialog/>
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="comment-text" color="#007cc1" size={30} />
         </View>
         <View style={styles.description}>
-          <Text>{description}</Text>
+          <Text>Descrição: {description}</Text>
         </View>
+        {editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="pencil"
+                  color="black"
+                  onPress={() => 
+                    {if (editMode) setOpenDescriptionDialog(true)}}
+                  size={18}
+                />
+              )}
       </View>
       {editMode && (
         <View style={styles.action}>
           <Button
-            onPress={() => {}}
+            onPress={() => {
+
+
+            }}
             labelStyle={styles.actionButtonLabel}
             style={[styles.actionButton, styles.deleteButton]}
           >
-            Deletar Matéria
+            Deletar Evento
           </Button>
         </View>
       )}
     </ScrollView>
   );
 }
+
+
+function BWFont(backgroundColor) {
+  let r = 0,
+    g = 0,
+    b = 0;
+
+  // Converte cor em hex para decimal
+  if (backgroundColor.length == 4) {
+    r = parseInt(
+      "0x" + backgroundColor.substring(1, 2) + backgroundColor.substring(1, 2)
+    );
+    g = parseInt(
+      "0x" + backgroundColor.substring(2, 3) + backgroundColor.substring(2, 3)
+    );
+    b = parseInt(
+      "0x" + backgroundColor.substring(3, 4) + backgroundColor.substring(3, 4)
+    );
+  }
+  if (backgroundColor.length == 7) {
+    r = parseInt("0x" + backgroundColor.substring(1, 3));
+    g = parseInt("0x" + backgroundColor.substring(3, 5));
+    b = parseInt("0x" + backgroundColor.substring(5, 7));
+  }
+
+  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) return "#000000";
+  else return "#ffffff";
+}
+
+
+
 
 const styles = StyleSheet.create({
   container: {

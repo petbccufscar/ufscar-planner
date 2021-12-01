@@ -23,7 +23,7 @@ export const eventReducer = (state = initialState, action) => {
                 ...state,
                 events: state.events.map(event => event.id === action.payload.id ? action.payload : event)
             }
-
+            // console.log(action.payload.color)
             return aux
         case ActionsTypes.INCREMENT_NEXT_ID:
             return {

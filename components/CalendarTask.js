@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
@@ -10,9 +10,16 @@ export function Task(props) {
     navigation.navigate("Event", { task: task });
   };
 
+  
+
+  //TODO DESCOBRIR PQ ELE NÃO ATUALIZA A COR
+  function Sqre (props){
+    return (<View style={{...styles.square, backgroundColor: props.cor}}></View>)
+  }
+
   return (
     <TouchableOpacity style={styles.item} onPress={edit}>
-      <View style={{ ...styles.square, backgroundColor: task.color }}></View>
+      <Sqre cor={task.color}/>
       <View style={styles.itemLeft}>
         <Text style={styles.itemTaskSubject}>{task.name}</Text>
         <Text style={styles.itemDate}>
@@ -24,6 +31,7 @@ export function Task(props) {
       </View>
     </TouchableOpacity>
   );
+
 }
 
 const styles = StyleSheet.create({
