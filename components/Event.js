@@ -8,16 +8,24 @@ import {
   StyleSheet,
   LayoutAnimation,
 } from "react-native";
+import { useSelector, useDispatch } from 'react-redux';
+import {updateEvent} from '../redux/actions/eventActions'
+
+
 import { Button, IconButton } from "react-native-paper";
 
 export default function Event({ route, navigation }) {
-  const { task } = route.params;
+  const originalTask = route.params.task;
+  let task = {...originalTask}
+  task = useSelector(state => state.events).events.find(e => e.id == task.id)
   const [editMode, setEditMode] = useState(false);
   const [details, setDetails] = useState(task.details);
   const [frequency, setFrequency] = useState(task.frequency);
   const [mean, setMean] = useState(task.mean);
   const [notifications, setNotifications] = useState(task.notification);
   const [description, setDescription] = useState(task.description);
+  const dispatch = useDispatch();
+
   const week = [
     "Domingo",
     "Segunda",
@@ -28,7 +36,25 @@ export default function Event({ route, navigation }) {
     "Sábado",
   ];
 
-  console.log(route.params);
+  const sendData = () => {
+    task = {
+      ...task,
+      // TODO implementar edição desses atributos
+      // "name": ,
+      // "subject": "AED3",
+      // "color": "#0f0",
+      // "is_subject": false,
+      // "grade": grade,
+      "details": details,
+      "notification": notifications,
+      "description": description,
+      "mean": mean,
+      "frequence": frequency
+    }
+    dispatch(updateEvent(task));
+  }
+
+
 
   useEffect(() => {
     navigation.setOptions({
@@ -49,12 +75,15 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
+            if (editMode){
+              sendData()
+            }
             setEditMode(!editMode);
           }}
         />
       ),
     });
-  }, [route.params, editMode]);
+  }, [route.params, editMode, details, frequency, mean, notifications, description ]);
 
   function getTime(totalMinutes) {
     const days = parseInt(totalMinutes / 60 / 24);
@@ -114,7 +143,12 @@ export default function Event({ route, navigation }) {
                   style={styles.xButton}
                   icon="close"
                   color="black"
-                  onPress={() => {}}
+                  onPress={() => {
+
+                    let newDetails = details.filter((d) => d != detail)
+                    setDetails([...newDetails])
+
+                  }}
                   size={18}
                 />
               )}
@@ -157,7 +191,10 @@ export default function Event({ route, navigation }) {
                   style={styles.xButton}
                   icon="close"
                   color="black"
-                  onPress={() => {}}
+                  onPress={() => {
+                    let newNotifications = notifications.filter((e) => e != notification)
+                    setNotifications([...newNotifications])
+                  }}
                   size={18}
                 />
               )}
@@ -183,15 +220,6 @@ export default function Event({ route, navigation }) {
         </View>
         <View style={styles.description}>
           <Text>{description}</Text>
-          {editMode && (
-            <IconButton
-              style={styles.xButton}
-              icon="close"
-              color="black"
-              onPress={() => {}}
-              size={18}
-            />
-          )}
         </View>
       </View>
       {editMode && (

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { InteractionManager, View } from "react-native";
 import { Agenda } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
 import { Task as CalendarTask } from './CalendarTask';
@@ -30,16 +30,17 @@ const compare = (e, f) => {
 }
 
 
-const EventsScreen = () => {
+function EventsScreen(){
 
 
     const offset = 80;
-    const events = useSelector(state => state.events.events);
+    const events = useSelector(state => state.events).events;
     let items = {}
     let marked = {}
-    const [stMarked, setStMarked] = useState({});
-    const [stItems, setStItems] = useState({});
-    const [loading, setLoading] = useState(true);
+    let stMarked ={};
+    let stItems = {};
+    let loading = true;
+    let cid = 0;
 
     const repeat = (event) => {
         let datei = offsetDate(new Date(), -offset)
@@ -55,12 +56,14 @@ const EventsScreen = () => {
             if( items[date] == null){
                 items[date] = [event]
             } else { 
-                items[date].push(event)
+                items[date].push({...event, cid: cid})
+                cid ++
             }
             datei = offsetDate(datei, 7)
         }
 
     }
+    
     const setup = async () => {
         for (let i = 0; i < events.length; i++){
             for (let j = 0; j < events[i].details.length; j++){
@@ -76,7 +79,8 @@ const EventsScreen = () => {
                     if( items[date] == null){
                         items[date] = [obj]
                     } else { 
-                        items[date].push(obj)
+                        items[date].push({...obj, cid:cid})
+                        cid ++
                     }
                     marked[date] = {marked:true}
                 }
@@ -100,11 +104,12 @@ const EventsScreen = () => {
         }
 
 
-        setStMarked(marked)
-        setStItems(items)
+        stMarked = marked
+        stItems = items
     }
+
     if (loading){
-        setLoading(false)
+        loading = false
         setup();
     }
 

@@ -19,10 +19,12 @@ export const eventReducer = (state = initialState, action) => {
                 events: state.events.filter(event => event.id !== action.payload)
             }
         case ActionsTypes.UPDATE_EVENT:
-            return {
+            const aux = {
                 ...state,
                 events: state.events.map(event => event.id === action.payload.id ? action.payload : event)
             }
+
+            return aux
         case ActionsTypes.INCREMENT_NEXT_ID:
             return {
                 ...state,

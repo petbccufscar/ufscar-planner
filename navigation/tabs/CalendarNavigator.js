@@ -1,9 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Colors, IconButton } from 'react-native-paper';
 // import { events } from '../../placeholder-data/data';
 import { useSelector } from 'react-redux';
 import {Calendar} from '../../components/Calendar'
+import {addEvent} from '../../redux/actions/eventActions'
+import { useDispatch } from 'react-redux';
 
 const calendarStack = createNativeStackNavigator();
 
@@ -14,7 +16,7 @@ let mode = 0;
 
 export default function CalendarNavigator() {
     const events = useSelector(state => state.events.events);
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     
     // useEffect(() => {
     //     const newEvent = {
