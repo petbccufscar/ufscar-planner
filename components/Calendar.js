@@ -26,7 +26,11 @@ const floorDate = (data) => {
 }
 
 const compare = (e, f) => {
-    return Date.parse(e.detail.datetime_init) - Date.parse(f.detail.datetime_init)
+    const a = new Date(e.detail.datetime_init)
+    const b = new Date(f.detail.datetime_init)
+    const av = 60*a.getHours() + a.getMinutes()
+    const bv = 60*b.getHours() + b.getMinutes()
+    return av - bv
 }
 
 
