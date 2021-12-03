@@ -117,6 +117,8 @@ function EventsScreen(){
         setup();
     }
 
+
+    
     const renderItem = item => (
         <CalendarTask task={item}></CalendarTask>
     );
@@ -128,7 +130,7 @@ function EventsScreen(){
       );
     };
 
-    const rowHasChanged = (r1, r2) => r1.name !== r2.name;
+    const rowHasChanged = (r1, r2) => r1 !== r2 ;
     return (
         <Agenda
           items={stItems}

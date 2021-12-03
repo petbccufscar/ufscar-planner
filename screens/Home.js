@@ -14,6 +14,7 @@ import Constants from 'expo-constants'
 import Task from '../components/HomeTask'
 import Class from '../components/HomeClass'
 import Menu from '../components/HomeMenu'
+import { useNavigation } from '@react-navigation/core'
 
 export default function App() {
   const [task, setTask] = useState()
@@ -51,10 +52,14 @@ export default function App() {
     setDateItems(itemsDateCopy)
   }
 
+
+  const navigation = useNavigation()
   return (
     <>
       <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-        <Appbar.Action icon='menu' onPress={() => {}} />
+        <Appbar.Action icon='menu' onPress={() => {
+          navigation.openDrawer()
+        }} />
         <Appbar.Content title='Home' />
         <Appbar.Action icon='home' onPress={() => {}} />
       </Appbar.Header>

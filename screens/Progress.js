@@ -8,6 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Calendar from '../assets/icons/calendar.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSemester } from '../redux/actions/semesterActions';
+import { useNavigation } from '@react-navigation/core'
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -70,10 +71,13 @@ export default function Progress() {
     const data = new Date(dataFormatar);
     return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear();
   }
+  const navigation = useNavigation()
 
   return (<>
     <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-      <Appbar.Action icon="menu" onPress={() => { }} />
+      <Appbar.Action icon="menu" onPress={() => {
+          navigation.openDrawer()
+      }} />
       <Appbar.Content title="Progresso" />
     </Appbar.Header>
     <View style={styles.content}>
