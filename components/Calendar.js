@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { InteractionManager, View } from "react-native";
+import { InteractionManager, View, StyleSheet } from "react-native";
 import { Agenda } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
 import { Task as CalendarTask } from './CalendarTask';
+import { FAB } from 'react-native-paper';
+import { useNavigation } from "@react-navigation/core";
 
 
 
@@ -129,9 +131,23 @@ function EventsScreen(){
         </View>
       );
     };
-
+    const navigation = useNavigation()
     const rowHasChanged = (r1, r2) => r1 !== r2 ;
+    const defaultTask = {
+        "weekly": true,
+        "details": [],
+        "name": "Novo Evento",
+        "subject": "",
+        "notification": [],
+        "description": "descrição",
+        "color": "#f00",
+        "is_subject": true,
+        "mean": "",
+        "grade": {},
+        "frequence": {}
+      }
     return (
+        <>
         <Agenda
           items={stItems}
           selected={new Date()}
@@ -141,5 +157,20 @@ function EventsScreen(){
           markedDates={stMarked}
 
         />
+          <FAB
+                style={styles.fab}
+                icon="plus"
+                onPress={() => navigation.navigate("Event", {task: defaultTask})}
+            />
+        </>
     );
   };
+
+  const styles = StyleSheet.create({
+    fab: {
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
+  })

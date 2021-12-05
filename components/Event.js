@@ -11,7 +11,7 @@ import {
   CheckBox
 } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
-import { updateEvent } from '../redux/actions/eventActions'
+import { updateEvent, addEvent} from '../redux/actions/eventActions'
 import Dialog from "react-native-dialog";
 import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
@@ -39,7 +39,8 @@ export default function Event({ route, navigation }) {
   const [mean, setMean] = useState(task.mean);
 
   const [name, setName] = useState(task.name);
-  const [editMode, setEditMode] = useState(false);
+  const firstTime = task.id == null || task.id == undefined
+  const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
   const [notifications, setNotifications] = useState(task.notification);
   const [description, setDescription] = useState(task.description);
@@ -70,7 +71,7 @@ export default function Event({ route, navigation }) {
   const sendData = () => {
     task = {
       ...task,
-      // TODO implementar edição desses atributos
+      // TODO implementar edição desses atributos: grade, frequence, mean
       "name": name,
       "is_subject": isSubject,
       "subject": subject,
@@ -82,8 +83,12 @@ export default function Event({ route, navigation }) {
       "mean": mean,
       "frequence": frequency
     }
-
-    dispatch(updateEvent(task));
+    
+    if (task.id != undefined && task.id != null){
+      dispatch(updateEvent(task));
+    } else {
+      dispatch(addEvent(task));
+    }
   }
 
 
@@ -222,12 +227,14 @@ export default function Event({ route, navigation }) {
         }} />
       </Dialog.Container>)
   }
+
   const formatDate = dataFormatar => {
     const data = new Date(dataFormatar);
     return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " "+("0" + data.getHours()).slice(-2) +
     "h" +
     ("0" + data.getMinutes()).slice(-2);
   }
+
   function HorarioDialog(props) {
   const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
     const [showPicker, setShowPicker] = useState(false)
@@ -594,7 +601,7 @@ export default function Event({ route, navigation }) {
           />
         )}
       </View>
-      {editMode && (
+      {editMode && !firstTime && (
         <View style={styles.action}>
           <Button
             onPress={() => {
