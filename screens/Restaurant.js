@@ -5,70 +5,70 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Appbar } from 'react-native-paper'
 import Constants from 'expo-constants'
 import RestaurantMenu from '../screens/RestaurantMenu'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
 
-export default class Wallet extends React.Component {
-  state = {
-    value: 0,
-    mealValue: 4.2,
-    shouldShow: false,
-    setShouldShow: false,
+const incrementValue = (value, setValue, mealValue) => {
+  parseFloat(value) + parseFloat(mealValue) <= 9999.99
+    ? setValue(value + mealValue)
+    : setValue(9999.99)
+}
+
+const decrementValue = (value, setValue, mealValue) => {
+  if (parseFloat(value) - parseFloat(mealValue) >= 0) {
+    setValue(value - mealValue)
   }
+}
 
-  incrementValue = () => {
-    this.setState({
-      value: parseFloat(this.state.value) + parseFloat(this.state.mealValue),
-    })
+const editValue = (setValue, newValue) => {
+  // Valores entre 0 e 9999.99
+  if (parseFloat(newValue) >= 0 && parseFloat(newValue) <= 9999.99) {
+    setValue(newValue)
   }
-
-  decrementValue = () => {
-    if (parseFloat(this.state.value) - parseFloat(this.state.mealValue) >= 0) {
-      this.setState({
-        value: parseFloat(this.state.value) - parseFloat(this.state.mealValue),
-      })
-    }
+  // Valores acima de 9999.99 seta pra 9999.99
+  else if (parseFloat(newValue) >= 9999.99) {
+    setValue(9999.99)
   }
-
-  editValue = (newValue) => {
-    if (parseFloat(newValue) >= 0) {
-      this.setState({
-        value: parseFloat(newValue),
-      })
-    }
+  // caso o input esteja vazio pra não ficar o ultimo valor digitado seta pra 0
+  else {
+    setValue(0)
   }
+}
 
-  formatReal = (num) => {
-    num = parseFloat(num)
-    return (
-      'R$ ' +
-      num
-        .toFixed(2)
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1;')
-        .replace('.', ',')
-        .replace(';', '.')
-    )
-  }
+const formatReal = (num) => {
+  num = parseFloat(num)
+  return (
+    'R$ ' +
+    num
+      .toFixed(2)
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1;')
+      .replace('.', ',')
+      .replace(';', '.')
+  )
+}
 
-  setShouldShow = () => {
-    this.setState({
-      shouldShow: !this.state.shouldShow,
-    })
-  }
+export default function Wallet() {
+  const [value, setValue] = React.useState(0)
+  const mealValue = 4.2
+  const [shouldShow, setShouldShow] = React.useState(false)
 
-  render() {
-    return (
+  return (
+    <>
       <View style={styles.container}>
         <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
           <Appbar.Action
             icon='menu'
             onPress={() => {
-              props.navigation.openDrawer()
+              navigation.openDrawer()
             }}
           />
           <Appbar.Content title={'Restaurante Universitário'} />
           <Appbar.Action icon='food' onPress={() => {}} />
         </Appbar.Header>
         <View style={styles.title}>
-          <Pressable onPress={() => this.setShouldShow(!this.state.shouldShow)}>
+          <Pressable onPress={() => setShouldShow(!shouldShow)}>
             <Text style={styles.balanceTitle}>Saldo Carteirinha</Text>
             <MaterialIcons
               name='edit'
@@ -77,25 +77,25 @@ export default class Wallet extends React.Component {
               style={styles.edit}
             />
           </Pressable>
-          {this.state.shouldShow ? (
+          {shouldShow ? (
             <React.Fragment>
               <TextInput
                 style={styles.input}
-                onChangeText={this.editValue}
+                onChangeText={(newValue) => editValue(setValue, newValue)}
                 keyboardType='numeric'
                 placeholder='Editar o saldo da Carteirinha'
-                onEndEditing={() => this.setShouldShow(!this.state.shouldShow)}
+                onEndEditing={() => setShouldShow(!shouldShow)}
               />
             </React.Fragment>
           ) : null}
         </View>
         <View style={styles.line} />
-        <Text style={styles.balance}>{this.formatReal(this.state.value)}</Text>
+        <Text style={styles.balance}>{formatReal(value)}</Text>
         <StatusBar style='auto' />
         <View style={styles.changeValue}>
           <View style={styles.line} />
           <Pressable
-            onPress={this.incrementValue}
+            onPress={() => incrementValue(value, setValue, mealValue)}
             title='+ ADICIONAR CRÉDITO'
             style={styles.pressable}
           >
@@ -103,7 +103,7 @@ export default class Wallet extends React.Component {
           </Pressable>
           <View style={styles.line} />
           <Pressable
-            onPress={this.decrementValue}
+            onPress={() => decrementValue(value, setValue, mealValue)}
             title='- DEBITAR REFEIÇAÕ'
             style={styles.pressable}
           >
@@ -111,8 +111,8 @@ export default class Wallet extends React.Component {
           </Pressable>
         </View>
       </View>
-    )
-  }
+    </>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -134,15 +134,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   balance: {
-    flex: 4,
-    fontSize: 75,
-    paddingTop: 60,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontSize: 60,
+    paddingTop: hp('13%'),
     fontWeight: 'bold',
     color: '#373737',
-    width: '100%',
-    textAlign: 'center',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    width: wp('95%'),
+    height: hp('30%'),
   },
   changeValue: {
     flex: 2,
@@ -159,10 +159,12 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   textPessable: {
-    fontSize: 40,
+    fontSize: 35,
     color: '#E8243C',
     textAlign: 'left',
     marginLeft: '5%',
+    width: wp('100%'),
+    height: hp('10%'),
   },
   line: {
     borderBottomColor: '#C4C4C4',
@@ -174,13 +176,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   input: {
-    height: 75,
-    width: '75%',
+    width: wp('70%'),
+    height: hp('8%'),
     borderWidth: 1,
     marginTop: 20,
     alignItems: 'center',
     alignSelf: 'center',
-    fontSize: 24,
+    fontSize: 18,
+    textAlign: 'center',
     padding: 10,
   },
 })
