@@ -11,6 +11,7 @@ import {persistReducer, persistCombineReducers} from 'redux-persist';
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
+    whitelist: ["events","user", "semester"]
 }
 
 const combined = combineReducers({

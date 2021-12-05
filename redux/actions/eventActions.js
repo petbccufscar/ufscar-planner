@@ -33,3 +33,11 @@ export const setNextId = (nextId) => {
       payload: nextId,
     };
 }
+
+
+export const loadEvents = (events) => {
+    return {
+      type: ActionsTypes.LOAD_EVENTS,
+      payload: events,
+    };
+}

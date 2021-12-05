@@ -28,7 +28,8 @@ const initialState = {
     items: initalSetup(),
     marked: {},
     cid: 0,
-    nextId: 42
+    nextId: 42,
+    load : false
 }
 
 
@@ -158,6 +159,64 @@ export const calendarReducer = (state = initialState, action) => {
         }
     }
 
+    const setup = (st) => {
+
+        let marked = {}
+        let items = {}
+        let cid = 0
+        let events = action.payload
+        
+        for (let i = 0; i < events.length; i++){
+            for (let j = 0; j < events[i].details.length; j++){
+                const obj = {
+                    ...events[i],
+                    detail: events[i].details[j]
+                }
+                console.log(obj.name, obj.weekly, obj.detail)
+                const aux = new Date(obj.detail.datetime_init)
+                const date = floorDate(aux)
+                if (events[i].weekly){
+                    const aux4 = repeatPayload(obj, items, cid, {})
+                    items = {...aux4.items}
+                    cid = aux4.cid
+                }else{
+                    if( items[date] == null){
+                        items[date] = [obj]
+                    } else { 
+                        items[date].push({...obj, cid:cid})
+                        cid ++
+                    }
+                    marked[date] = {marked:true}
+                }
+            }
+        }
+        const keys = Object.keys(items)
+        for (let i = 0; i < keys.length; i++){
+            items[keys[i]].sort(compare)
+        }
+
+        let datei = offsetDate(new Date(), -offset)
+        const datef = offsetDate(new Date(), offset)
+
+        while (datei.getTime() <= datef.getTime()){
+            const date = floorDate(datei)
+            if( items[date] == null){
+                items[date] = []
+            } 
+               
+            datei = offsetDate(datei, 1)
+        }
+        return {
+            ...st,
+            items: items,
+            marked: marked,
+            cid: cid,
+            load: true
+        }
+
+    }
+
+
     let aux;
     switch (action.type) {
         case ActionsTypes.ADD_EVENT:
@@ -169,6 +228,17 @@ export const calendarReducer = (state = initialState, action) => {
             
         case ActionsTypes.UPDATE_EVENT:
             return {...state, ...insertPayload(removePayload(state))}
+
+        
+        case ActionsTypes.LOAD_EVENTS:
+            console.log(state.load)
+            if (state.load)
+                return state
+            aux = setup(state)
+            return aux
+
+
+
         default:
             return state;
     }

@@ -88,14 +88,6 @@ function EventsScreen(){
     //         datei = offsetDate(datei, 1)
     //     }
 
-
-    //     stMarked = marked
-    //     stItems = items
-    // }
-
-    // if (loading){
-    //     loading = false
-    //     setup();
     // }
 
 
