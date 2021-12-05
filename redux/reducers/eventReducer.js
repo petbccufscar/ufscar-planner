@@ -2,7 +2,7 @@ import {events} from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
 
 const initialState = {
-    events: events,
+    events: [],
     nextId: 42
 }
 

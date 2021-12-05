@@ -11,7 +11,7 @@ import {
   CheckBox
 } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
-import { updateEvent, addEvent} from '../redux/actions/eventActions'
+import { updateEvent, addEvent, removeEvent} from '../redux/actions/eventActions'
 import Dialog from "react-native-dialog";
 import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
@@ -80,6 +80,7 @@ export default function Event({ route, navigation }) {
       "details": details,
       "notification": notifications,
       "description": description,
+      "weekly": weekly,
       "mean": mean,
       "frequence": frequency
     }
@@ -89,6 +90,7 @@ export default function Event({ route, navigation }) {
     } else {
       dispatch(addEvent(task));
     }
+    
   }
 
 
@@ -114,10 +116,14 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
-            if (editMode) {
-              sendData()
+            if (editMode && details.length == 0){
+              //TODO mostrar aviso para a pessoa não fazer isso
+            } else {
+              if (editMode) {
+                sendData()
+              }
+              setEditMode(!editMode);
             }
-            setEditMode(!editMode);
           }}
         />
       ),
@@ -605,8 +611,8 @@ export default function Event({ route, navigation }) {
         <View style={styles.action}>
           <Button
             onPress={() => {
-
-
+              dispatch(removeEvent(task));
+              navigation.pop(1)
             }}
             labelStyle={styles.actionButtonLabel}
             style={[styles.actionButton, styles.deleteButton]}
