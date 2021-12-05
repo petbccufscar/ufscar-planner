@@ -49,7 +49,7 @@ function EventsScreen(){
     const repeat = (event) => {
         let datei = offsetDate(new Date(), -offset)
         const datef = offsetDate(new Date(), offset)
-        let toDay = new Date(event.detail.datetime_init).getDay() - event.detail.day
+        let toDay = event.detail.day - datei.getDay()
         if (toDay < 0){
             toDay += 7
         }

@@ -205,16 +205,19 @@ export default function Event({ route, navigation }) {
   }
 
   function NotificationDialog() {
+    const [n, setN] = useState(1);
+    const [mult, setMult] = useState(1)
+    const multList = [1, 60, 60*24]
     return (
       <Dialog.Container visible={openNotificationDialog}>
         <Dialog.Title >Quando Notificar?</Dialog.Title>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Roleta n={60} />
-          <Roleta list={['minutos antes', 'horas antes', 'dias antes']} width={100} />
+          <Roleta n={90} fun={setN}/>
+          <Roleta list={['minutos antes', 'horas antes', 'dias antes']} width={100} fun={setMult}/>
         </View>
         <Dialog.Button label="Cancel" onPress={() => setOpenNotificationDialog(false)} />
         <Dialog.Button label="Ok" onPress={() => {
-  
+          setNotifications([...notifications, n*multList[mult]])
           setOpenNotificationDialog(false)
         }} />
       </Dialog.Container>)
@@ -368,6 +371,8 @@ export default function Event({ route, navigation }) {
     const list = props.list || range(props.n || 60)
     const width = props.width || props.size || 60
     const height = props.height || props.size || 60
+    const defun = () => {}
+    const fun = props.fun || defun 
     let p
     return (<View style={{ height: height * 3, width: width }}>
       <ScrollPicker
@@ -375,6 +380,7 @@ export default function Event({ route, navigation }) {
         dataSource={list}
         selectedIndex={1}
         onValueChange={(data, selectedIndex) => {
+          fun(selectedIndex)
         }}
         wrapperHeight={height * 3}
         wrapperBackground={'#FFFFFF'}
