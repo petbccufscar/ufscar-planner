@@ -172,7 +172,6 @@ export const calendarReducer = (state = initialState, action) => {
                     ...events[i],
                     detail: events[i].details[j]
                 }
-                console.log(obj.name, obj.weekly, obj.detail)
                 const aux = new Date(obj.detail.datetime_init)
                 const date = floorDate(aux)
                 if (events[i].weekly){
@@ -231,7 +230,6 @@ export const calendarReducer = (state = initialState, action) => {
 
         
         case ActionsTypes.LOAD_EVENTS:
-            console.log(state.load)
             if (state.load)
                 return state
             aux = setup(state)
