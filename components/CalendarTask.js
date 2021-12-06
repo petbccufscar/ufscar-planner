@@ -10,17 +10,17 @@ export function Task(props) {
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-
+  const text = task.is_subject? "" : task.subject+": " 
   return (
     <TouchableOpacity style={styles.item} onPress={edit}>
       <View style={{...styles.square, backgroundColor: task.color}}> 
     </View>
       <View style={styles.itemLeft}>
-        <Text style={styles.itemTaskSubject}>{task.name}</Text>
+        <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
         <Text style={styles.itemDate}>
           {" "}
-          {new Date(task.detail.datetime_init).getHours()}h até{" "}
-          {new Date(task.detail.datetime_end).getHours()}h no{" "}
+          {new Date(task.detail.datetime_init).getHours()}h{new Date(task.detail.datetime_init).getMinutes()} até{" "}
+          {new Date(task.detail.datetime_end).getHours()}h{new Date(task.detail.datetime_end).getMinutes()} no{" "}
           {task.detail.local}
         </Text>
       </View>

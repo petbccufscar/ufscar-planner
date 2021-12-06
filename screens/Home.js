@@ -11,48 +11,32 @@ import {
 } from 'react-native'
 import { Appbar } from 'react-native-paper'
 import Constants from 'expo-constants'
-import Task from '../components/HomeTask'
-import Class from '../components/HomeClass'
+import { Task } from '../components/CalendarTask'
 import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
+import { Provider, useDispatch, useSelector } from "react-redux";
+
+const floorDate = (data) => {
+  return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0') )) ;
+}
+
 
 export default function App() {
-  const [task, setTask] = useState()
-  const [subject, setSubject] = useState()
-  const [date, setDate] = useState()
-  const [taskItems, setTaskItems] = useState([])
-  const [subjectItems, setSubjectItems] = useState([])
-  const [dateItems, setDateItems] = useState([])
-  let items = [[]]
 
-  const handleAddTask = () => {
-    Keyboard.dismiss()
-    setTaskItems([...taskItems, task])
-    setTask(null)
-    setSubjectItems([...subjectItems, subject])
-    setSubject(null)
-    setDateItems([...dateItems, date])
-    setDate(null)
+  const items = useSelector(state => state.cards).items
+
+  const today = floorDate(new Date()) 
+  const classes = items[today].filter((e) => e.is_subject);
+  let tasks = [];
+  const keys = Object.keys(items).sort()
+  const initial = keys.findIndex((e) => e == today)
+  for(let j = initial; j < keys.length && j >=0 ; j++){
+    tasks = [...tasks, ...(items[keys[j]].filter((e) => !(e.is_subject)))]
   }
-
-  const completeTask = (index) => {
-    // Apaga as task
-    let itemsTaskCopy = [...taskItems]
-    itemsTaskCopy.splice(index, 1)
-    setTaskItems(itemsTaskCopy)
-
-    // Apaga os subject
-    let itemsSubjectCopy = [...taskItems]
-    itemsSubjectCopy.splice(index, 1)
-    setSubjectItems(itemsSubjectCopy)
-
-    // Apaga as dates
-    let itemsDateCopy = [...dateItems]
-    itemsDateCopy.splice(index, 1)
-    setDateItems(itemsDateCopy)
-  }
-
-
+  // FIXME não da para apagar
+  // FIXME Desmarcar semanal não desmarca matéria.
+  // TODO Testar evento com mesmo começo e fim
+  const nome = useSelector(state => state.user).user.name
   const navigation = useNavigation()
   return (
     <>
@@ -63,6 +47,9 @@ export default function App() {
         <Appbar.Content title='Home' />
         <Appbar.Action icon='home' onPress={() => {}} />
       </Appbar.Header>
+
+
+
       <View style={styles.container}>
         {/* Added this scroll view to enable scrolling when list gets longer than the page */}
         <ScrollView
@@ -71,53 +58,27 @@ export default function App() {
           }}
           keyboardShouldPersistTaps='handled'
         >
+
+
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
-            <Text style={styles.sectionTitle}>Olá, {'fulan@'}!</Text>
-            <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
-            <View style={styles.items}>
-              <Task
-                subject={'Construção de Algoritmos e Programação'}
-                name={'Prova 1'}
-                datetime_init={'25/09'}
-              />
-              <Task
-                subject={'Construção de Algoritmos e Programação'}
-                name={'Trabalho de implementação 1'}
-                datetime_init={'25/10'}
-              />
-              <Task
-                subject={'Cálculo 1'}
-                name={'Questionário 1'}
-                datetime_init={'25/11'}
-              />
-              {/* This is where the tasks will go! */}
-              {taskItems.map((task, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => completeTask(index)}
-                  >
-                    <Task
-                      task={task}
-                      subject={subjectItems[index]}
-                      date={dateItems[index]}
-                    />
-                  </TouchableOpacity>
-                )
-              })}
-            </View>
+
+            <Text style={styles.sectionTitle}>Olá, {nome}!</Text>
+            
             <Text style={styles.sectionTitle}>Aulas do dia</Text>
-            <Class
-              subject={'Construção de Algoritmos e Programação'}
-              local={'AT-7'}
-              datetime_init={'14:00'}
-            />
-            <Class
-              subject={'Cálculo 1'}
-              local={'AT-5'}
-              datetime_init={'16:00'}
-            />
+
+
+            {classes.map((item, idx) => {
+
+              return (<Task
+                key={idx}
+                task={item}
+              />)
+              })
+
+            }
+
+
             <Text style={styles.sectionTitle}>Cardápio</Text>
             <Menu
               mealTime={'Almoço'}
@@ -130,39 +91,26 @@ export default function App() {
               drinks={'Nenhuma'}
               price={'RS 5,20'}
             ></Menu>
-          </View>
-        </ScrollView>
 
-        {/* Write a task */}
-        {/* Uses a keyboard avoiding view which ensures the keyboard does not cover the items on screen */}
-        {/* <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.writeTaskWrapper}
-        >
-          <TextInput
-            style={styles.input}
-            placeholder={'Tarefa'}
-            value={task}
-            onChangeText={(textTask) => setTask(textTask)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder={'Materia'}
-            value={subject}
-            onChangeText={(textSubject) => setSubject(textSubject)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder={'Data'}
-            value={date}
-            onChangeText={(textDate) => setDate(textDate)}
-          />
-          <TouchableOpacity onPress={() => handleAddTask()}>
-            <View style={styles.addWrapper}>
-              <Text style={styles.addText}>+</Text>
+          <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
+            <View style={styles.items}>
+
+
+              {tasks.map((item, idx) => {
+
+                return (<Task
+                  key={idx}
+                  task={item}
+                />)
+              })
+
+              }
+            
             </View>
-          </TouchableOpacity>
-        </KeyboardAvoidingView> */}
+          </View>
+
+          
+        </ScrollView>
       </View>
     </>
   )

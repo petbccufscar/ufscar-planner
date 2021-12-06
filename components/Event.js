@@ -121,6 +121,7 @@ export default function Event({ route, navigation }) {
             } else {
               if (editMode) {
                 sendData()
+                navigator.pop(1)
               }
               setEditMode(!editMode);
             }
@@ -249,7 +250,7 @@ export default function Event({ route, navigation }) {
     const [date, setDate] = useState(new Date())
     const [day, setDay] = useState(0)
     const [endTime, setEndTime] = useState(new Date())
-    const [text, setText] = useState("")
+    const [text, setText] = useState("local X")
     const minimum = (date) => {
       const td = new Date()
       return (new Date(td.getFullYear(),td.getMonth(),td.getDate(),date.getHours(),date.getMinutes()))
@@ -427,21 +428,7 @@ export default function Event({ route, navigation }) {
           />
         )}
       </View>
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="notebook" color="#007cc1" size={30} />
-        </View>
-
-        <View style={styles.description}>
-          <Text>É matéria </Text>
-        </View>
-        <CheckBox
-          value={isSubject}
-          onValueChange={setIsSubject}
-          disabled={!editMode}
-        />
-
-      </View>
+      
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="calendar-refresh" color="#007cc1" size={30} />
@@ -457,13 +444,29 @@ export default function Event({ route, navigation }) {
         />
         <HorarioDialog weekly={weekly}/>
       </View>
+
+      {weekly && <View style={styles.sectionContainer}>
+        <View style={styles.sectionIcon}>
+          <IconButton icon="notebook" color="#007cc1" size={30} />
+        </View>
+
+        <View style={styles.description}>
+          <Text>É matéria </Text>
+        </View>
+        <CheckBox
+          value={isSubject}
+          onValueChange={setIsSubject}
+          disabled={!editMode}
+        />
+
+      </View>}
       {!isSubject && (<View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="book" color="#007cc1" size={30} />
         </View>
 
         <View style={styles.description}>
-          <Text>Matéria: {subject}</Text>
+          <Text>Nome da Matéria: {subject}</Text>
         </View>
         {editMode && (
           <IconButton
