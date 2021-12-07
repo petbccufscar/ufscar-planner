@@ -24,8 +24,9 @@ const decrementValue = (value, setValue, mealValue) => {
 
 const editValue = (setValue, newValue) => {
   // Valores entre 0 e 9999.99
+  newValue = newValue.replace(",",".")
   if (parseFloat(newValue) >= 0 && parseFloat(newValue) <= 9999.99) {
-    setValue(newValue)
+    setValue(parseFloat(newValue))
   }
   // Valores acima de 9999.99 seta pra 9999.99
   else if (parseFloat(newValue) >= 9999.99) {
