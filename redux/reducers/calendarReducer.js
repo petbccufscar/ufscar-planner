@@ -45,6 +45,15 @@ const compare = (e, f) => {
     return av - bv
 }
 
+const copyTimeToDate = (date, time) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds())
+}
+
+const copyTimeStrToDate = (date, str) => {
+    const time = new Date(str)
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds())
+}
+
 export const calendarReducer = (state = initialState, action) => {
 
     const repeatPayload = (event, myItems, myCid, mykeys) => {
@@ -63,10 +72,15 @@ export const calendarReducer = (state = initialState, action) => {
     
         while (datei.getTime() <= datef.getTime()){
             const date = floorDate(datei)
+            const nevent = {...event, detail:{
+                ...event.detail,
+                datetime_init: copyTimeStrToDate(datei, event.detail.datetime_init).toISOString(),
+                datetime_end: copyTimeStrToDate(datei, event.detail.datetime_end).toISOString(),
+            }}
             if( items[date] == null){
-                items[date] = [event]
+                items[date] = [nevent]
             } else { 
-                items[date].push({...event, cid: cid})
+                items[date].push({...nevent, cid: cid})
                 cid ++
             }
             keys[date] = true
@@ -142,14 +156,36 @@ export const calendarReducer = (state = initialState, action) => {
         let newMarked = {...st.marked}
         let d;
 
-
-        for (let i = 0; i < event.details.length; i++){
-            d = floorDate(new Date(event.details[i].datetime_init))
-            newItems[d] = newItems[d].filter((e) => e.id != event.id)
-            if (!event.weekly){
+        // Percorre os detalhes caso o evento seja unico/ não semanal
+        if (!event.weekly){
+            for (let i = 0; i < event.details.length; i++){
+                d = floorDate(new Date(event.details[i].datetime_init))
+                // Filtra os itens
+                newItems[d] = newItems[d].filter((e) => e.id != event.id)
+                // ele verifica se a data continuará marcada
+                
                 if(newItems[d].filter((e) => !e.weekly).length == 0){
                     newMarked[d] = {marked: false}
                 }
+                
+            }
+        } else {
+            for (let i = 0; i < event.details.length; i++){
+                let datei = offsetDate(new Date(), -offset)
+                const datef = offsetDate(new Date(), offset)
+                let toDay = event.details[i].day - datei.getDay()
+                if (toDay < 0){
+                    toDay += 7
+                }
+                datei = offsetDate(datei, toDay)
+            
+                while (datei.getTime() <= datef.getTime()){
+                    const d = floorDate(datei)
+                    // Filtra os itens
+                    newItems[d] = newItems[d].filter((e) => e.id != event.id)
+                    datei = offsetDate(datei, 7)
+                }
+
             }
         }
         return {
@@ -222,7 +258,7 @@ export const calendarReducer = (state = initialState, action) => {
             aux = {...state, ...insertPayload(state), nextId: state.nextId + 1}
             return aux
         case ActionsTypes.REMOVE_EVENT:
-            aux = {...state, ...removePayload(state)}
+            aux = {...removePayload(state)}
             return aux
             
         case ActionsTypes.UPDATE_EVENT:

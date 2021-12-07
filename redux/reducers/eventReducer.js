@@ -17,7 +17,7 @@ export const eventReducer = (state = initialState, action) => {
         case ActionsTypes.REMOVE_EVENT:
             return {
                 ...state,
-                events: state.events.filter(event => event.id !== action.payload)
+                events: state.events.filter(event => event.id !== action.payload.id)
             }
         case ActionsTypes.UPDATE_EVENT:
             const aux = {

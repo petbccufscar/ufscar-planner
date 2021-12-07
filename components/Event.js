@@ -53,6 +53,15 @@ export default function Event({ route, navigation }) {
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
 
+  const changeWeekly = (e) => {
+    if (!e){
+      setWeekly(false)
+      setIsSubject(false)
+    }else{
+      setWeekly(true)
+    }
+    
+  }
 
 
 
@@ -121,7 +130,7 @@ export default function Event({ route, navigation }) {
             } else {
               if (editMode) {
                 sendData()
-                navigator.pop(1)
+                navigation.pop(1)
               }
               setEditMode(!editMode);
             }
@@ -439,7 +448,7 @@ export default function Event({ route, navigation }) {
         </View>
         <CheckBox
           value={weekly}
-          onValueChange={setWeekly}
+          onValueChange={changeWeekly}
           disabled={!editMode}
         />
         <HorarioDialog weekly={weekly}/>

@@ -33,9 +33,6 @@ export default function App() {
   for(let j = initial; j < keys.length && j >=0 ; j++){
     tasks = [...tasks, ...(items[keys[j]].filter((e) => !(e.is_subject)))]
   }
-  // FIXME não da para apagar
-  // FIXME Desmarcar semanal não desmarca matéria.
-  // TODO Testar evento com mesmo começo e fim
   const nome = useSelector(state => state.user).user.name
   const navigation = useNavigation()
   return (
