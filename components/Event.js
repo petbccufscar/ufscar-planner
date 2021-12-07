@@ -11,7 +11,7 @@ import {
   CheckBox
 } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
-import { updateEvent, addEvent, removeEvent} from '../redux/actions/eventActions'
+import { updateEvent, addEvent, removeEvent } from '../redux/actions/eventActions'
 import Dialog from "react-native-dialog";
 import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
@@ -54,13 +54,13 @@ export default function Event({ route, navigation }) {
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
 
   const changeWeekly = (e) => {
-    if (!e){
+    if (!e) {
       setWeekly(false)
       setIsSubject(false)
-    }else{
+    } else {
       setWeekly(true)
     }
-    
+
   }
 
 
@@ -93,13 +93,13 @@ export default function Event({ route, navigation }) {
       "mean": mean,
       "frequence": frequency
     }
-    
-    if (task.id != undefined && task.id != null){
+
+    if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
     } else {
       dispatch(addEvent(task));
     }
-    
+
   }
 
 
@@ -125,7 +125,7 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
-            if (editMode && details.length == 0){
+            if (editMode && details.length == 0) {
               //TODO mostrar aviso para a pessoa não fazer isso
             } else {
               if (editMode) {
@@ -228,17 +228,17 @@ export default function Event({ route, navigation }) {
   function NotificationDialog() {
     const [n, setN] = useState(1);
     const [mult, setMult] = useState(1)
-    const multList = [1, 60, 60*24]
+    const multList = [1, 60, 60 * 24]
     return (
       <Dialog.Container visible={openNotificationDialog}>
         <Dialog.Title >Quando Notificar?</Dialog.Title>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Roleta n={90} fun={setN}/>
-          <Roleta list={['minutos antes', 'horas antes', 'dias antes']} width={100} fun={setMult}/>
+          <Roleta n={90} fun={setN} />
+          <Roleta list={['minutos antes', 'horas antes', 'dias antes']} width={100} fun={setMult} />
         </View>
         <Dialog.Button label="Cancel" onPress={() => setOpenNotificationDialog(false)} />
         <Dialog.Button label="Ok" onPress={() => {
-          setNotifications([...notifications, n*multList[mult]])
+          setNotifications([...notifications, n * multList[mult]])
           setOpenNotificationDialog(false)
         }} />
       </Dialog.Container>)
@@ -246,13 +246,13 @@ export default function Event({ route, navigation }) {
 
   const formatDate = dataFormatar => {
     const data = new Date(dataFormatar);
-    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " "+("0" + data.getHours()).slice(-2) +
-    "h" +
-    ("0" + data.getMinutes()).slice(-2);
+    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " " + ("0" + data.getHours()).slice(-2) +
+      "h" +
+      ("0" + data.getMinutes()).slice(-2);
   }
 
   function HorarioDialog(props) {
-  const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+    const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
     const [showPicker, setShowPicker] = useState(false)
     const [showEndPicker, setShowEndPicker] = useState(false)
 
@@ -262,129 +262,137 @@ export default function Event({ route, navigation }) {
     const [text, setText] = useState("local X")
     const minimum = (date) => {
       const td = new Date()
-      return (new Date(td.getFullYear(),td.getMonth(),td.getDate(),date.getHours(),date.getMinutes()))
-    
+      return (new Date(td.getFullYear(), td.getMonth(), td.getDate(), date.getHours(), date.getMinutes()))
+
     }
 
-    function Bolinha(props){
+    function Bolinha(props) {
       const cor = props.index == day ? "red" : "gray";
-      return(
-      <TouchableOpacity style={{width:40, height: 40,margin: 3, backgroundColor:cor, borderRadius:100, justifyContent:'center', alignItems:'center'}} onPress={() => setDay(props.index)}>
-      <Text style={{color:BWFont(cor)}}>{props.text}</Text>
-      </TouchableOpacity>
-    )
+      return (
+        <TouchableOpacity style={{ width: 30, height: 30, margin: 3, backgroundColor: cor, borderRadius: 100, justifyContent: 'center', alignItems: 'center' }} onPress={() => setDay(props.index)}>
+          <Text style={{ color: BWFont(cor) }}>{props.text}</Text>
+        </TouchableOpacity>
+      )
     }
     return (
       <Dialog.Container visible={openHorarioDialog}>
         <Dialog.Title>Quando e onde será o evento?</Dialog.Title>
 
-        {props.weekly && 
-        (<>
-        <View style={{flexDirection:'row', height: 30, margin:5, marginBottom: 20}}>
-          {week.map((item, idx) => {
-            return (<Bolinha index={idx} text={item} key={idx}/>)
-          })}
-        </View>
-        <TouchableOpacity style={{...styles.dateAndDatepicker, margin:10}}  onPress={() => setShowPicker(true)}>
-          <Calendar style={styles.calendar} />
-          <Text style={styles.data}>Horario inicial: {formatHour(date)}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.dateAndDatepicker, margin:10}} onPress={() => setShowEndPicker(true)}>
-          <Calendar style={styles.calendar} />
-          <Text style={styles.data}>Hora final:{" "+formatHour(endTime)}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-        isVisible={showPicker}
-        mode={"time"}
-        value={new Date()}
-        date={new Date()}
-        onCancel={() => {setShowPicker(false)}}
-        onHide={() => {setShowPicker(false)}}
-        onConfirm={(date) => {
-          setShowPicker(false)
-          setDate(date)
-          if(minimum(date) > endTime.getTime()){
-            setEndTime(date)
-          }
-        }}
+        {props.weekly &&
+          (<>
+            <View style={{ flexDirection: 'row', height: 30, margin: 5, marginBottom: 20 }}>
+              {week.map((item, idx) => {
+                return (<Bolinha index={idx} text={item} key={idx} />)
+              })}
+            </View>
+            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowPicker(true)}>
+              <Calendar style={styles.calendar} />
+              <Text style={styles.data}>Horario inicial: {formatHour(date)}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowEndPicker(true)}>
+              <Calendar style={styles.calendar} />
+              <Text style={styles.data}>Hora final:{" " + formatHour(endTime)}</Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={showPicker}
+              mode={"time"}
+              value={new Date()}
+              date={new Date()}
+              onCancel={() => { setShowPicker(false) }}
+              onHide={() => { setShowPicker(false) }}
+              onConfirm={(date) => {
+                setShowPicker(false)
+                setDate(date)
+                if (minimum(date) > endTime.getTime()) {
+                  setEndTime(date)
+                }
+              }}
 
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma data'}
-      />
-      <DateTimePickerModal
-        isVisible={showEndPicker}
-        mode={"time"}
-        onCancel={() => {setShowEndPicker(false)}}
-        onHide={() => {setShowEndPicker(false)}}
-        onConfirm={(ndate) => {
-          setShowEndPicker(false)
-          setEndTime(ndate.getTime() < minimum(date)? minimum(date) : ndate)
-        }}
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma hora'}
-      />
-      
-        </>)}
-      {!props.weekly &&
-        (<>
-          <TouchableOpacity style={{...styles.dateAndDatepicker, margin:10}}  onPress={() => setShowPicker(true)}>
-          <Calendar style={styles.calendar} />
-          <Text style={styles.data}>Inicio: {formatDate(date)}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{...styles.dateAndDatepicker, margin:10}}  onPress={() => setShowEndPicker(true)}>
-          <Calendar style={styles.calendar} />
-          <Text style={styles.data}>Hora final:{" "+formatHour(endTime)}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-        isVisible={showPicker}
-        mode={"datetime"}
-        value={new Date()}
-        date={new Date()}
-        onCancel={() => {setShowPicker(false)}}
-        onHide={() => {setShowPicker(false)}}
-        onConfirm={(date) => {
-          setShowPicker(false)
-          setDate(date)
-          if(minimum(date) > endTime.getTime()){
-            setEndTime(date)
-          }
-        }}
+              cancelTextIOS={'Cancelar'}
+              confirmTextIOS={'Confirmar'}
+              headerTextIOS={'Escolha uma data'}
+            />
+            <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={showEndPicker}
+              mode={"time"}
+              onCancel={() => { setShowEndPicker(false) }}
+              onHide={() => { setShowEndPicker(false) }}
+              onConfirm={(ndate) => {
+                setShowEndPicker(false)
+                setEndTime(ndate.getTime() < minimum(date) ? minimum(date) : ndate)
+              }}
+              cancelTextIOS={'Cancelar'}
+              confirmTextIOS={'Confirmar'}
+              headerTextIOS={'Escolha uma hora'}
+            />
 
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma data'}
-      />
-      <DateTimePickerModal
-        isVisible={showEndPicker}
-        mode={"time"}
-        onCancel={() => {setShowEndPicker(false)}}
-        onHide={() => {setShowEndPicker(false)}}
-        onConfirm={(ndate) => {
-          setShowEndPicker(false)
-          setEndTime(ndate.getTime() < minimum(date)? minimum(date) : ndate)
-        }}
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma hora'}
-      />
-      
-      </>)}
+          </>)}
+        {!props.weekly &&
+          (<>
+            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowPicker(true)}>
+              <Calendar style={styles.calendar} />
+              <Text style={styles.data}>Inicio: {formatDate(date)}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowEndPicker(true)}>
+              <Calendar style={styles.calendar} />
+              <Text style={styles.data}>Hora final:{" " + formatHour(endTime)}</Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={showPicker}
+              mode={"datetime"}
+              value={new Date()}
+              date={new Date()}
+              onCancel={() => { setShowPicker(false) }}
+              onHide={() => { setShowPicker(false) }}
+              onConfirm={(date) => {
+                setShowPicker(false)
+                setDate(date)
+                if (minimum(date) > endTime.getTime()) {
+                  setEndTime(date)
+                }
+              }}
+
+              cancelTextIOS={'Cancelar'}
+              confirmTextIOS={'Confirmar'}
+              headerTextIOS={'Escolha uma data'}
+            />
+            <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={showEndPicker}
+              mode={"time"}
+              onCancel={() => { setShowEndPicker(false) }}
+              onHide={() => { setShowEndPicker(false) }}
+              onConfirm={(ndate) => {
+                setShowEndPicker(false)
+                setEndTime(ndate.getTime() < minimum(date) ? minimum(date) : ndate)
+              }}
+              cancelTextIOS={'Cancelar'}
+              confirmTextIOS={'Confirmar'}
+              headerTextIOS={'Escolha uma hora'}
+            />
+
+          </>)}
 
 
-        <Dialog.Button label="Cancel" onPress={() => {setOpenHorarioDialog(false)}} />
+        <Dialog.Button label="Cancel" onPress={() => { setOpenHorarioDialog(false) }} />
         <Dialog.Button label="Ok" onPress={() => {
           let detail = {
-              day: weekly? day : new Date(date).getDay(),
-              datetime_init: date.toUTCString(),
-              datetime_end: endTime.toUTCString(),
-              local: text
-            }
+            day: weekly ? day : new Date(date).getDay(),
+            datetime_init: date.toUTCString(),
+            datetime_end: endTime.toUTCString(),
+            local: text
+          }
           setDetails([...details, detail])
           setOpenHorarioDialog(false)
         }} />
-      <Dialog.Input label={"Local"} onChangeText={setText} accessibilityHint={"local"}></Dialog.Input>
+        <Dialog.Input label={"Local"} onChangeText={setText} accessibilityHint={"local"}></Dialog.Input>
       </Dialog.Container>)
   }
 
@@ -394,8 +402,8 @@ export default function Event({ route, navigation }) {
     const list = props.list || range(props.n || 60)
     const width = props.width || props.size || 60
     const height = props.height || props.size || 60
-    const defun = () => {}
-    const fun = props.fun || defun 
+    const defun = () => { }
+    const fun = props.fun || defun
     let p
     return (<View style={{ height: height * 3, width: width }}>
       <ScrollPicker
@@ -437,7 +445,7 @@ export default function Event({ route, navigation }) {
           />
         )}
       </View>
-      
+
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="calendar-refresh" color="#007cc1" size={30} />
@@ -451,7 +459,7 @@ export default function Event({ route, navigation }) {
           onValueChange={changeWeekly}
           disabled={!editMode}
         />
-        <HorarioDialog weekly={weekly}/>
+        <HorarioDialog weekly={weekly} />
       </View>
 
       {weekly && <View style={styles.sectionContainer}>

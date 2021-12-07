@@ -108,6 +108,8 @@ export default function Progress() {
         </View>
       </View>
       <DateTimePickerModal
+        style={{width: "100%"}}
+        textColor={"#000"}
         isVisible={showInitDatePicker}
         mode={"date"}
         value={new Date(semester.init)}
@@ -123,6 +125,8 @@ export default function Progress() {
         headerTextIOS={'Escolha uma data'}
       />
       <DateTimePickerModal
+        style={{width: "100%"}}
+        textColor={"#000"}
         isVisible={showEndDatePicker}
         mode={"date"}
         value={new Date(semester.end)}
