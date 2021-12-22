@@ -45,7 +45,7 @@ export default function SideBar(props) {
         component={Config} />
 
       <Drawer.Screen
-        name="Contato"
+        name="Sobre Nós"
         options={{
           drawerIcon: ({ focused, size }) => (
             <MaterialIcons name="group" size={size} color="black" />
