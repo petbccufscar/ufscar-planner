@@ -10,6 +10,7 @@ import { store } from "./redux/store";
 import {persistor} from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { loadEvents } from "./redux/actions/eventActions";
+import { Subject } from "./components/Subject";
 
 if (
   Platform.OS === "android" &&
@@ -43,6 +44,17 @@ function Loader(){
       <HomeStackRoutes.Screen
         name="Event"
         component={Event}
+        options={() => ({
+          headerStyle: {
+            backgroundColor: "#e8243c",
+          },
+          headerTintColor: "#fff",
+          headerTitleAlign: "center",
+        })}
+      />
+      <HomeStackRoutes.Screen
+        name="Subject"
+        component={Subject}
         options={() => ({
           headerStyle: {
             backgroundColor: "#e8243c",

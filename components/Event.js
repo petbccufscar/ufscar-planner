@@ -564,10 +564,10 @@ export default function Event({ route, navigation }) {
           <View style={styles.sectionIcon}>
             <IconButton icon="book-open" color="#007cc1" size={30} />
           </View>
-          <View style={styles.meanAndFrequency}>
+          <TouchableOpacity style={styles.meanAndFrequency} onPress={() => navigation.navigate("Subject")}>
             <Text>Média = {mean}</Text>
             <Text>Frequência = {frequency}</Text>
-          </View>
+          </TouchableOpacity>
         </View>)}
 
       <View style={styles.sectionContainer}>
