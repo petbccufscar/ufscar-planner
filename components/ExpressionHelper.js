@@ -56,3 +56,33 @@ export function getFrequency(task){
 // } catch(e){
 //     console.log("deu erro", e)
 // }
+
+
+export function BWFont(backgroundColor) {
+    let r = 0,
+      g = 0,
+      b = 0;
+  
+    // Converte cor em hex para decimal
+    if (backgroundColor.length == 4) {
+      r = parseInt(
+        "0x" + backgroundColor.substring(1, 2) + backgroundColor.substring(1, 2)
+      );
+      g = parseInt(
+        "0x" + backgroundColor.substring(2, 3) + backgroundColor.substring(2, 3)
+      );
+      b = parseInt(
+        "0x" + backgroundColor.substring(3, 4) + backgroundColor.substring(3, 4)
+      );
+    }
+    if (backgroundColor.length == 7) {
+      r = parseInt("0x" + backgroundColor.substring(1, 3));
+      g = parseInt("0x" + backgroundColor.substring(3, 5));
+      b = parseInt("0x" + backgroundColor.substring(5, 7));
+    }
+  
+    if (r * 0.299 + g * 0.587 + b * 0.114 > 186) return "#000000";
+    else return "#ffffff";
+  }
+  
+  

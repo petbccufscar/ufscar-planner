@@ -1,21 +1,74 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { View, Text, StyleSheet,
+  LayoutAnimation, } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { TextInput } from 'react-native-paper'
+import { TextInput, IconButton } from 'react-native-paper'
 import Dialog from "react-native-dialog";
-import { magic } from './ExpressionHelper';
+import { magic, BWFont } from './ExpressionHelper';
 
-export function Subject(props){
+export function Subject({ route, navigation }){
 
   //Média
-  const [meanExpression, setMeanExpression] = useState("")
+  const [meanExpression, setMeanExpression] = useState(route.params.task.mean ||"")
+  const [meanDict, setMeanDict] = useState(route.params.task.grade.mean || {})
   const [meanRes, setMeanRes] = useState("")
-  const [meanDict, setMeanDict] = useState({})
 
   //Frequência
-  const [freqExpression, setFreqExpression] = useState("")
+  const [freqExpression, setFreqExpression] = useState(route.params.task.frequency || "")
+  const [freqDict, setFreqDict] = useState(route.params.task.grade.frequency || {})
   const [freqRes, setFreqRes] = useState("")
-  const [freqDict, setFreqDict] = useState({})
+
+  const color = '#f00'
+
+  try {
+    const r = magic(freqDict, freqExpression)
+    if(r.result){
+      setFreqRes(result)
+    }
+  } 
+  catch(e){}
+
+  try {
+    const r = magic(meanDict, meanExpression)
+    if(r.result){
+      setMeanRes(result)
+    }
+  } 
+  catch(e){}
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Média e frequência",
+      headerTintColor: BWFont(color),
+      headerStyle: { backgroundColor: color },
+      headerRight: () => (
+        <IconButton
+          icon={"check"}
+          size={24}
+          color={BWFont(color)}
+          onPress={() => {
+            LayoutAnimation.configureNext({
+              duration: 200,
+              create: {
+                type: LayoutAnimation.Types.easeIn,
+                property: LayoutAnimation.Properties.opacity,
+              },
+              update: {
+                type: LayoutAnimation.Types.easeOut,
+              },
+            });
+            //do the magic
+            navigation.navigate({
+              name: 'Event',
+              params: { mean: meanExpression, frequency: freqExpression, grade: {"frequency": freqDict, "mean": meanDict}},
+              merge: true,
+          });
+          }}
+        />
+      ),
+    });
+  }, [meanExpression, freqExpression, freqDict, meanDict]);
+
 
 
   return (<>

@@ -86,9 +86,11 @@
       "is_subject": true,
       "mean": "(P0 + P1 + P2)/3",
       "grade": {
-        "P0": 0,
-        "P1": 5,
-        "P2": null
+          "mean":{
+            "P0": 0,
+            "P1": 5,
+            "P2": null
+            }
       },
       "frequence": {}
     }
