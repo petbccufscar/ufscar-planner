@@ -5,14 +5,35 @@ import { TextInput } from 'react-native-paper'
 import Dialog from "react-native-dialog";
 import { magic } from './ExpressionHelper';
 
-export function Subject (props) {
+export function Subject(props){
+
+  //Média
+  const [meanExpression, setMeanExpression] = useState("")
+  const [meanRes, setMeanRes] = useState("")
+  const [meanDict, setMeanDict] = useState({})
+
+  //Frequência
+  const [freqExpression, setFreqExpression] = useState("")
+  const [freqRes, setFreqRes] = useState("")
+  const [freqDict, setFreqDict] = useState({})
+
+
+  return (<>
+  <MeanLogic name={"Média"} res={[meanRes, setMeanRes]} expression={[meanExpression, setMeanExpression]} dict={[meanDict, setMeanDict]}/>
+  <MeanLogic name={"Frequência"}  res={[freqRes, setFreqRes]} expression={[freqExpression, setFreqExpression]} dict={[freqDict, setFreqDict]}/>
+  </>)
+}
+
+function MeanLogic (props) {
   
-    const [nem, setNem] = useState("")
-    const [res, setRes] = useState("")
+    const [expression, setExpression] = props.expression
+    const [res, setRes] = props.res
+    const [dict, setDict] = props.dict
+
+
     const [old, setOld] = useState("")
     const [key, setKey] = useState(null)
 
-    const [dict, setDict] = useState({})
     const [open, setOpen] = useState(false)
 
     const valid = (text) => {
@@ -30,12 +51,12 @@ export function Subject (props) {
         const fun = key? (t) => {
           let aux = {...dict}
           aux[key] = parseFloat(t)
-          const a = magic(aux, nem)
-          console.log(nem, key, aux, t, dict, a)
+          const a = magic(aux, expression)
+          console.log(expression, key, aux, t, dict, a)
           setDict(a.dict)
           setRes(a.result)
           }:(t) => {
-            setNem(t)
+            setExpression(t)
             const a = magic(dict,t)
             setDict(a.dict)
             setRes(a.result)
@@ -70,14 +91,14 @@ export function Subject (props) {
       }
     
   return (
-    <View style={{flex: 1}}>
+    <View style={{padding:30}}>
         <SimpleDialog open={open} setOpen={setOpen} old={old}/>
       <TouchableOpacity onPress={() => {
         setKey(null)
-        setOld(nem)
+        setOld(expression)
         setOpen(true)
         }}>
-          <Text>{"Media: "+nem+" = "+res}</Text>
+          <Text>{props.name+": "+expression+" = "+res}</Text>
       </TouchableOpacity>
 
       { Object.keys(dict).map((key, idx) => {
