@@ -19,6 +19,7 @@
     "@react-navigation/native-stack": "^6.x",
     "@react-navigation/stack": "^6.x",
     "expo": "~42.0.1",
+    "expo-notifications": "~0.12.3",
     "expo-status-bar": "~1.0.4",
     "mathjs": "^10.0.0",
     "react": "16.13.1",

@@ -13,6 +13,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/icon.png",
+          "color": "#ffffff",
+          "sounds": [
+          ]
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
