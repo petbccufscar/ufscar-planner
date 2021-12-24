@@ -103,9 +103,10 @@ function MeanLogic (props) {
         const old = props.old || ""
         const fun = key? (t) => {
           let aux = {...dict}
-          aux[key] = parseFloat(t)
+          delete aux[key]
+          const b = magic(aux, t)
+          aux[key] = b.result
           const a = magic(aux, expression)
-          console.log(expression, key, aux, t, dict, a)
           setDict(a.dict)
           setRes(a.result)
           }:(t) => {
