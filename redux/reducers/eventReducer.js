@@ -8,11 +8,17 @@ const initialState = {
 }
 
 
+function calculateDate(detail, minutes){
+    const d = new Date(detail.datetime_init)
+    d.setDate(d.getDate() + ((7 - d.getDay()) % 7 + detail.day) % 7)
+    return new Date(d.getTime() - minutes*60000)
+}
+
 async function loadNotifications(task) {
     for (let i = 0; i < task.details.length; i++) {
         if (task.weekly) {
             for (let j = 0; j < task.notification.length; j++) {
-                const timeAux = new Date(new Date(task.details[i].datetime_init).getTime() - task.notification[j] * 60000)
+                const timeAux = calculateDate(task.details[i], task.notification[j])
                 const id = await Notifications.scheduleNotificationAsync(
                     {
                         content: {
@@ -20,13 +26,12 @@ async function loadNotifications(task) {
                             body: 'Em breve',
                         },
                         trigger: {
-                            weekday: task.details[i].day + 1,
+                            weekday: timeAux.getDay() + 1,
                             hour: timeAux.getHours(),
                             minute: timeAux.getMinutes(),
                             repeats: true,
                         },
                     })
-                console.log("nova notificação : "+ task.name+ " "  + id)
             }
         } else {
             for (let j = 0; j < task.notification.length; j++) {
@@ -39,7 +44,6 @@ async function loadNotifications(task) {
                     trigger: timeAux,
                 }
                 )
-                console.log("nova notificação unica : "+ task.name+" " + id)
 
             }
         }
@@ -50,16 +54,11 @@ async function loadNotifications(task) {
 export const eventReducer = (state = initialState, action) => {
 
     async function refazerNotificações(st){
-        console.log("vou apagar tudo")
         await Notifications.cancelAllScheduledNotificationsAsync()
-        console.log("apaguei tudo")
-        console.log(st.events.length)
         for (let i = 0; i < st.events.length; i++ ){
             await loadNotifications(st.events[i])
         }
-        console.log("terminei de refazer")
         const l = await Notifications.getAllScheduledNotificationsAsync()
-        console.log(l)
     }
     let aux;
     switch (action.type) {
