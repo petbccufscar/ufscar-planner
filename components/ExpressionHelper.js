@@ -16,6 +16,25 @@ export function graphSearch(node){
 
 }
 
+export function getTime(totalMinutes) {
+  const days = parseInt(totalMinutes / 60 / 24);
+  const hours = parseInt((totalMinutes / 60) % 24);
+  const minutes = parseInt(totalMinutes % 60);
+
+  const daysLabel =
+    days > 0
+      ? days + " dia" + (days > 1 ? "s" : "") + (hours || minutes ? ", " : "")
+      : "";
+  const hoursLabel =
+    hours > 0
+      ? hours + " hora" + (hours > 1 ? "s" : "") + (minutes ? " e " : "")
+      : "";
+  const minutesLabel =
+    minutes > 0 ? minutes + " minuto" + (minutes > 1 ? "s" : "") : "";
+
+  return `${daysLabel}${hoursLabel}${minutesLabel}`;
+}
+
 
 export function magic(dict, s){
     let result;

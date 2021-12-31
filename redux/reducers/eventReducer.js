@@ -1,6 +1,7 @@
 import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
 import * as Notifications from "expo-notifications";
+import { getTime } from '../../components/ExpressionHelper';
 
 const initialState = {
     events: events,
@@ -14,6 +15,8 @@ function calculateDate(detail, minutes){
     return new Date(d.getTime() - minutes*60000)
 }
 
+
+
 async function loadNotifications(task) {
     for (let i = 0; i < task.details.length; i++) {
         if (task.weekly) {
@@ -22,8 +25,8 @@ async function loadNotifications(task) {
                 const id = await Notifications.scheduleNotificationAsync(
                     {
                         content: {
-                            title: task.name + " em " + task.notification[j] + " minutos",
-                            body: 'Em breve',
+                            title: task.name + " em " + getTime(task.notification[j]),
+                            body: 'Local: ' + task.details[i].local,
                         },
                         trigger: {
                             weekday: timeAux.getDay() + 1,
@@ -38,7 +41,7 @@ async function loadNotifications(task) {
                 const timeAux = new Date(new Date(task.details[i].datetime_init).getTime() - task.notification[j] * 60000)
                 const id = await Notifications.scheduleNotificationAsync({
                     content: {
-                        title: task.name + " em " + task.notification[j] + " minutos",
+                        title: task.name + " em "  + getTime(task.notification[j]),
                         body: 'Em breve',
                     },
                     trigger: timeAux,

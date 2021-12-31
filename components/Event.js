@@ -17,7 +17,7 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Calendar from '../assets/icons/calendar.svg';
-import { BWFont, magic } from './ExpressionHelper';
+import { BWFont, magic, getTime } from './ExpressionHelper';
 
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -150,25 +150,6 @@ export default function Event({ route, navigation }) {
 
 
 
-
-  function getTime(totalMinutes) {
-    const days = parseInt(totalMinutes / 60 / 24);
-    const hours = parseInt((totalMinutes / 60) % 24);
-    const minutes = parseInt(totalMinutes % 60);
-
-    const daysLabel =
-      days > 0
-        ? days + " dia" + (days > 1 ? "s" : "") + (hours || minutes ? ", " : "")
-        : "";
-    const hoursLabel =
-      hours > 0
-        ? hours + " hora" + (hours > 1 ? "s" : "") + (minutes ? " e " : "")
-        : "";
-    const minutesLabel =
-      minutes > 0 ? minutes + " minuto" + (minutes > 1 ? "s" : "") : "";
-
-    return `${daysLabel}${hoursLabel}${minutesLabel} antes`;
-  }
 
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
@@ -605,7 +586,7 @@ export default function Event({ route, navigation }) {
           <Text>Notificações: </Text>
           {notifications.map((notification, index) => (
             <View key={index} style={styles.notification}>
-              <Text>{getTime(notification)}</Text>
+              <Text>{getTime(notification) + " antes"}</Text>
               {editMode && (
                 <IconButton
                   style={styles.xButton}
