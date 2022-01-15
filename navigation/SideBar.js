@@ -16,12 +16,12 @@ const Drawer = createDrawerNavigator();
 export default function SideBar(props) {
   return (
     <Drawer.Navigator initialRouteName="Home" screenOptions={{
-      headerShown: false,
     }}>
 
       <Drawer.Screen
         name="Home"
         options={{
+          headerShown: false,
           drawerIcon: ({ focused, size }) => (
             <MaterialIcons name="home" size={size} color="black" />
           ),

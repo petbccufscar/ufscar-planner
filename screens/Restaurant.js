@@ -9,7 +9,6 @@ import {
   TextInput,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import RestaurantMenu from "../screens/RestaurantMenu";
 import {
@@ -67,7 +66,7 @@ export default function Wallet() {
   return (
     <>
       <View style={styles.container}>
-        <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
+        {/* <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
           <Appbar.Action
             icon="menu"
             onPress={() => {
@@ -79,7 +78,7 @@ export default function Wallet() {
             icon="food"
             onPress={() => navigation.navigate("RestaurantMenu")}
           />
-        </Appbar.Header>
+        </Appbar.Header> */}
         <View style={styles.title}>
           <Pressable onPress={() => setShouldShow(!shouldShow)}>
             <Text style={styles.balanceTitle}>Saldo Carteirinha</Text>

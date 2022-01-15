@@ -1,7 +1,5 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { Appbar } from 'react-native-paper'
-import Constants from 'expo-constants'
 import { useNavigation } from '@react-navigation/core'
 import {
   widthPercentageToDP as wp,
@@ -17,15 +15,6 @@ export default function AboutUs() {
 
   return (
     <>
-      <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-        <Appbar.Action
-          icon='menu'
-          onPress={() => {
-            navigation.openDrawer()
-          }}
-        />
-        <Appbar.Content title='Sobre Nós' />
-      </Appbar.Header>
       <ScrollView>
         <View style={styles.backPlain}>
           <View style={styles.container}>

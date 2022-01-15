@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
@@ -101,7 +101,7 @@ export default function Wallet(cash) {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
+      {/* <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
         <Appbar.Action
           icon="menu"
           onPress={() => {
@@ -115,10 +115,12 @@ export default function Wallet(cash) {
             navigation.navigate("Restaurant");
           }}
         />
-      </Appbar.Header>
+      </Appbar.Header> */}
       <View style={styles.title}>
         <Text style={styles.balanceTitle}>Cardápio</Text>
+        <TouchableOpacity onPress={() =>  navigation.navigate("Restaurant")}>
         <Text style={styles.cash}>{formatReal(cash)}</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.semana}>
         <View style={(styles.dias, { width: timeWidth })} />

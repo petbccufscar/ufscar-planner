@@ -9,7 +9,6 @@ import {
   Keyboard,
   ScrollView,
 } from 'react-native'
-import { Appbar } from 'react-native-paper'
 import Constants from 'expo-constants'
 import { Task } from '../components/CalendarTask'
 import Menu from '../components/HomeMenu'
@@ -37,16 +36,6 @@ export default function App() {
   const navigation = useNavigation()
   return (
     <>
-      <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-        <Appbar.Action icon='menu' onPress={() => {
-          navigation.openDrawer()
-        }} />
-        <Appbar.Content title='Home' />
-        <Appbar.Action icon='home' onPress={() => {}} />
-      </Appbar.Header>
-
-
-
       <View style={styles.container}>
         {/* Added this scroll view to enable scrolling when list gets longer than the page */}
         <ScrollView
