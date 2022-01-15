@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Pressable,
+} from "react-native";
 import { IconButton } from "react-native-paper";
 import {
   heightPercentageToDP as hp,
@@ -40,9 +46,10 @@ export function Days(props) {
     // Percorrendo os dias da semana
     do {
       days.push({
+        date: i,
         title: week[i.getDay()],
         day: i.getDate(),
-        today: props.days["today"].getDay() == i.getDay(),
+        today: props.selectedDay.getDay() == i.getDay(),
       });
       i = new Date(i.getTime() + 24 * 60 * 60 * 1000);
     } while (i.getDay() != props.days["end"].getDay());
@@ -51,7 +58,11 @@ export function Days(props) {
       <>
         {days.map((day, i) => {
           return (
-            <View style={{ ...styles.dias }} key={i}>
+            <Pressable
+              onPress={() => props.setSelectedDay(day.date)}
+              style={styles.dias}
+              key={day.day}
+            >
               <Text>{day.title}</Text>
               <View
                 style={{
@@ -61,7 +72,7 @@ export function Days(props) {
                   width: width,
                   height: height,
                   borderRadius: 100,
-                  backgroundColor: day.today ? weekBallColor : "tansparent",
+                  backgroundColor: day.today ? weekBallColor : "transparent",
                 }}
               >
                 <Text
@@ -70,7 +81,7 @@ export function Days(props) {
                   {day.day}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           );
         })}
       </>
