@@ -14,38 +14,43 @@ import Constants from 'expo-constants'
 import { Task } from '../components/CalendarTask'
 import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from 'react-redux'
 
 const floorDate = (data) => {
-  return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0') )) ;
+  return (
+    data.getFullYear() +
+    '-' +
+    (data.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    data.getDate().toString().padStart(2, '0')
+  )
 }
 
-
 export default function App() {
+  const items = useSelector((state) => state.cards).items
 
-  const items = useSelector(state => state.cards).items
-
-  const today = floorDate(new Date()) 
-  const classes = items[today].filter((e) => e.is_subject);
-  let tasks = [];
+  const today = floorDate(new Date())
+  const classes = items[today].filter((e) => e.is_subject)
+  let tasks = []
   const keys = Object.keys(items).sort()
   const initial = keys.findIndex((e) => e == today)
-  for(let j = initial; j < keys.length && j >=0 ; j++){
-    tasks = [...tasks, ...(items[keys[j]].filter((e) => !(e.is_subject)))]
+  for (let j = initial; j < keys.length && j >= 0; j++) {
+    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject)]
   }
-  const nome = useSelector(state => state.user).user.name
+  const nome = useSelector((state) => state.user).user.name
   const navigation = useNavigation()
   return (
     <>
       <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-        <Appbar.Action icon='menu' onPress={() => {
-          navigation.openDrawer()
-        }} />
+        <Appbar.Action
+          icon='menu'
+          onPress={() => {
+            navigation.openDrawer()
+          }}
+        />
         <Appbar.Content title='Home' />
         <Appbar.Action icon='home' onPress={() => {}} />
       </Appbar.Header>
-
-
 
       <View style={styles.container}>
         {/* Added this scroll view to enable scrolling when list gets longer than the page */}
@@ -55,30 +60,41 @@ export default function App() {
           }}
           keyboardShouldPersistTaps='handled'
         >
-
-
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
-
             <Text style={styles.sectionTitle}>Olá, {nome}!</Text>
-            
+
             <Text style={styles.sectionTitle}>Aulas do dia</Text>
 
-
             {classes.map((item, idx) => {
-
-              return (<Task
-                key={idx}
-                task={item}
-              />)
-              })
-
-            }
-
+              return <Task key={idx} task={item} />
+            })}
 
             <Text style={styles.sectionTitle}>Cardápio</Text>
             <Menu
+              day={2}
               mealTime={'Almoço'}
+              lunchStartTime={'11:15h'}
+              lunchEndTime={'13:30h'}
+              dinnerStartTime={'17:15h'}
+              dinnerEndTIme={'19:00h'}
+              mainMeal={'Frango Xadrez'}
+              garrison={'Batatas Cozidas'}
+              rice={'Arroz branco e integral'}
+              bean={'Feijão Preto'}
+              salad={'Alface e tomate'}
+              desert={'Paçoquinha'}
+              drinks={'Nenhuma'}
+              price={'RS 5,20'}
+            ></Menu>
+            {/* #TODO Fazer a integração da home com os dados do crawler e a lógica de não mostrar o jantar em sábado */}
+            <Menu
+              day={2}
+              mealTime={'Jantar'}
+              lunchStartTime={'11:15h'}
+              lunchEndTime={'13:30h'}
+              dinnerStartTime={'17:15h'}
+              dinnerEndTime={'19:00h'}
               mainMeal={'Frango Xadrez'}
               garrison={'Batatas Cozidas'}
               rice={'Arroz branco e integral'}
@@ -89,24 +105,13 @@ export default function App() {
               price={'RS 5,20'}
             ></Menu>
 
-          <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
+            <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
             <View style={styles.items}>
-
-
               {tasks.map((item, idx) => {
-
-                return (<Task
-                  key={idx}
-                  task={item}
-                />)
-              })
-
-              }
-            
+                return <Task key={idx} task={item} />
+              })}
             </View>
           </View>
-
-          
         </ScrollView>
       </View>
     </>
