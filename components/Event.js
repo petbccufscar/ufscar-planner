@@ -17,6 +17,8 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Calendar from '../assets/icons/calendar.svg';
+import { BWFont, magic, getTime } from './ExpressionHelper';
+
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -35,8 +37,8 @@ export default function Event({ route, navigation }) {
 
   // tela separada
   const [grade, setGrade] = useState(task.grade);
-  const [frequency, setFrequency] = useState(task.frequency);
-  const [mean, setMean] = useState(task.mean);
+  const [frequency, setFrequency] = useState(task.frequency || "0");
+  const [mean, setMean] = useState(task.mean || "0");
 
   const [name, setName] = useState(task.name);
   const firstTime = task.id == null || task.id == undefined
@@ -139,25 +141,15 @@ export default function Event({ route, navigation }) {
       ),
     });
   }, [route.params, editMode, details, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
+  
+  useEffect(() => {
+    if (route?.params?.grade) setGrade(route.params.grade);
+    if (route?.params?.frequency) setFrequency(route.params.frequency);
+    if (route?.params?.mean) setMean(route.params.mean);
+  }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
 
-  function getTime(totalMinutes) {
-    const days = parseInt(totalMinutes / 60 / 24);
-    const hours = parseInt((totalMinutes / 60) % 24);
-    const minutes = parseInt(totalMinutes % 60);
 
-    const daysLabel =
-      days > 0
-        ? days + " dia" + (days > 1 ? "s" : "") + (hours || minutes ? ", " : "")
-        : "";
-    const hoursLabel =
-      hours > 0
-        ? hours + " hora" + (hours > 1 ? "s" : "") + (minutes ? " e " : "")
-        : "";
-    const minutesLabel =
-      minutes > 0 ? minutes + " minuto" + (minutes > 1 ? "s" : "") : "";
 
-    return `${daysLabel}${hoursLabel}${minutesLabel} antes`;
-  }
 
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
@@ -425,6 +417,22 @@ export default function Event({ route, navigation }) {
 
   }
 
+
+
+  let resultMean = "";
+  let resultFreq = "";
+
+  try {
+    const meanRes = magic(grade.mean||{}, mean||"") 
+    resultMean = " = " + (meanRes.result || 0)
+  }catch(e) {}
+  
+  try {
+    const freqRes = magic(grade.frequency||{}, frequency||"") 
+    resultFreq = " = " + (freqRes.result || 0)
+  }catch(e) {}
+
+
   return (
     <ScrollView style={styles.container}>
 
@@ -560,15 +568,15 @@ export default function Event({ route, navigation }) {
       </View>
       <NotificationDialog />
       {isSubject && (
-        <View style={styles.sectionContainer}>
+        <TouchableOpacity style={styles.sectionContainer}  onPress={() => navigation.navigate("Subject", {task: {...task, grade: grade, frequency:frequency, mean: mean}})}>
           <View style={styles.sectionIcon}>
             <IconButton icon="book-open" color="#007cc1" size={30} />
           </View>
           <View style={styles.meanAndFrequency}>
-            <Text>Média = {mean}</Text>
-            <Text>Frequência = {frequency}</Text>
+            <Text>Média = {mean + resultMean}</Text>
+            <Text>Frequência = {frequency + resultFreq}</Text>
           </View>
-        </View>)}
+        </TouchableOpacity>)}
 
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
@@ -578,7 +586,7 @@ export default function Event({ route, navigation }) {
           <Text>Notificações: </Text>
           {notifications.map((notification, index) => (
             <View key={index} style={styles.notification}>
-              <Text>{getTime(notification)}</Text>
+              <Text>{getTime(notification) + " antes"}</Text>
               {editMode && (
                 <IconButton
                   style={styles.xButton}
@@ -644,37 +652,6 @@ export default function Event({ route, navigation }) {
     </ScrollView>
   );
 }
-
-
-function BWFont(backgroundColor) {
-  let r = 0,
-    g = 0,
-    b = 0;
-
-  // Converte cor em hex para decimal
-  if (backgroundColor.length == 4) {
-    r = parseInt(
-      "0x" + backgroundColor.substring(1, 2) + backgroundColor.substring(1, 2)
-    );
-    g = parseInt(
-      "0x" + backgroundColor.substring(2, 3) + backgroundColor.substring(2, 3)
-    );
-    b = parseInt(
-      "0x" + backgroundColor.substring(3, 4) + backgroundColor.substring(3, 4)
-    );
-  }
-  if (backgroundColor.length == 7) {
-    r = parseInt("0x" + backgroundColor.substring(1, 3));
-    g = parseInt("0x" + backgroundColor.substring(3, 5));
-    b = parseInt("0x" + backgroundColor.substring(5, 7));
-  }
-
-  if (r * 0.299 + g * 0.587 + b * 0.114 > 186) return "#000000";
-  else return "#ffffff";
-}
-
-
-
 
 const styles = StyleSheet.create({
   container: {

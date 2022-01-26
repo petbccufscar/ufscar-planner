@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Touchable, View, TouchableOpacity } from 'react-native';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Constants from 'expo-constants';
-import { Appbar } from 'react-native-paper';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Calendar from '../assets/icons/calendar.svg';
 import { useSelector, useDispatch } from 'react-redux';
@@ -74,12 +73,6 @@ export default function Progress() {
   const navigation = useNavigation()
 
   return (<>
-    <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-      <Appbar.Action icon="menu" onPress={() => {
-          navigation.openDrawer()
-      }} />
-      <Appbar.Content title="Progresso" />
-    </Appbar.Header>
     <View style={styles.content}>
       <View style={styles.container}>
         <Text style={styles.progressTitle}>Progresso do Semestre</Text>

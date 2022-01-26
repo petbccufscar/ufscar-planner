@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
@@ -118,24 +118,12 @@ export default function Wallet(cash) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-          <Appbar.Action
-            icon="menu"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          />
-          <Appbar.Content title={"Restaurante Universitário"} />
-          <Appbar.Action
-            icon="wallet"
-            onPress={() => {
-              navigation.navigate("Restaurant");
-            }}
-          />
-        </Appbar.Header>
+
         <View style={styles.title}>
-          <Text style={styles.balanceTitle}>Cardápio</Text>
-          <Text style={styles.cash}>{formatReal(cash)}</Text>
+          <Text style={styles.balanceTitle}>Cardápio</Text> 
+        <TouchableOpacity onPress={() =>  navigation.navigate("Restaurant")}>
+        <Text style={styles.cash}>{formatReal(cash)}</Text>
+        </TouchableOpacity>
         </View>
         <View style={styles.semana}>
           <View style={(styles.dias, { width: timeWidth })} />

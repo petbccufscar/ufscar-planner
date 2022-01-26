@@ -14,7 +14,7 @@ const hoje = new Date();
 let mode = 0;
 
 
-export default function CalendarNavigator() {
+export default function CalendarNavigator({navigation}) {
     const events = useSelector(state => state.events.events);
     const dispatch = useDispatch();
     
@@ -51,12 +51,16 @@ export default function CalendarNavigator() {
 
     //     dispatch(addEvent(newEvent));
     // }, [])
+    useEffect(() => {
+        navigation.setOptions({
+    title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,})},[])
+
     return (
         <calendarStack.Navigator screenOptions={{
             presentation: 'containedTransparentModal', animation: "fade"
         }}>
             <calendarStack.Screen name="Calendar" options={({ navigation }) => ({
-                title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
+                headerShown: false
             })}>
                 {props => <Calendar/>}
             </calendarStack.Screen>
