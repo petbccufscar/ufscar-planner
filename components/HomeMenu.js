@@ -8,6 +8,24 @@ const Menu = (props) => {
       <View style={styles.itemLeft}>
         <Text style={styles.title}>{props.mealTime}</Text>
         <View style={{ flexDirection: "row" }}>
+          <Text style={styles.subtitle}>Horário:</Text>
+          {props.day != "6" ? (
+            props.mealTime == "Almoço" ? (
+              <Text style={styles.itemMenuSubject}>
+                {props.lunchStartTime} - {props.lunchEndTime}
+              </Text>
+            ) : (
+              <Text style={styles.itemMenuSubject}>
+                {props.dinnerStartTime} - {props.dinnerEndTime}
+              </Text>
+            )
+          ) : (
+            <Text style={styles.itemMenuSubject}>
+              {props.saturdayLunchStartTime} - {props.saturdayLunchEndTime}
+            </Text>
+          )}
+        </View>
+        <View style={{ flexDirection: "row" }}>
           <Text style={styles.subtitle}>Prato Principal:</Text>
           <Text style={styles.itemMenuSubject}>{props.mainMeal}</Text>
         </View>
