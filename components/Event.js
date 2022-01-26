@@ -568,7 +568,7 @@ export default function Event({ route, navigation }) {
       </View>
       <NotificationDialog />
       {isSubject && (
-        <TouchableOpacity style={styles.sectionContainer}  onPress={() => navigation.navigate("Subject", {task: {...task, grade: grade, frequency:frequency, mean: mean}})}>
+        <View style={styles.sectionContainer}>
           <View style={styles.sectionIcon}>
             <IconButton icon="book-open" color="#007cc1" size={30} />
           </View>
@@ -576,7 +576,16 @@ export default function Event({ route, navigation }) {
             <Text>Média = {mean + resultMean}</Text>
             <Text>Frequência = {frequency + resultFreq}</Text>
           </View>
-        </TouchableOpacity>)}
+          {editMode && (
+          <IconButton
+            style={styles.xButton}
+            icon="pencil"
+            color="black"
+            onPress={() => navigation.navigate("Subject", {task: {...task, grade: grade, frequency:frequency, mean: mean}})}
+            size={18}
+          />
+        )}
+        </View>)}
 
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
