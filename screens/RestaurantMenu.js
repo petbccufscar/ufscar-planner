@@ -7,6 +7,7 @@ import { Days, hourHeight, hourWidth } from '../components/CalendarHelper'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { useNavigation } from '@react-navigation/core'
 import cheerio from 'react-native-cheerio'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Wallet(cash) {
   const navigation = useNavigation()
@@ -115,70 +116,72 @@ export default function Wallet(cash) {
   }
 
   return (
-    <View style={styles.container}>
-      <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-        <Appbar.Action
-          icon='menu'
-          onPress={() => {
-            navigation.openDrawer()
-          }}
-        />
-        <Appbar.Content title={'Restaurante Universitário'} />
-        <Appbar.Action
-          icon='wallet'
-          onPress={() => {
-            navigation.navigate('Restaurant')
-          }}
-        />
-      </Appbar.Header>
-      <View style={styles.title}>
-        <Text style={styles.balanceTitle}>Cardápio</Text>
-        <Text style={styles.cash}>{formatReal(cash)}</Text>
-      </View>
-      <View style={styles.semana}>
-        <View style={(styles.dias, { width: timeWidth })} />
-        <Days
-          days={days}
-          selectedDay={selectedDay}
-          setSelectedDay={setSelectedDay}
-        />
-      </View>
-      <View>
-        <Menu
-          shouldShow={true}
-          mealTime={'Almoço'}
-          day={lunchMenu.day}
-          lunchStartTime={lunchMenu.lunchStartTime}
-          lunchEndTime={lunchMenu.lunchEndTime}
-          saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
-          saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
-          mainMeal={lunchMenu.mainMeal}
-          mainMealVegetarian={lunchMenu.mainMealVegetarian}
-          garrison={lunchMenu.garrison}
-          rice={lunchMenu.rice}
-          bean={lunchMenu.bean}
-          salad={lunchMenu.salad}
-          desert={lunchMenu.desert}
-          price={'RS 5,20'}
-        ></Menu>
-        {lunchMenu.day != '6' ? (
+    <ScrollView>
+      <View style={styles.container}>
+        <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
+          <Appbar.Action
+            icon='menu'
+            onPress={() => {
+              navigation.openDrawer()
+            }}
+          />
+          <Appbar.Content title={'Restaurante Universitário'} />
+          <Appbar.Action
+            icon='wallet'
+            onPress={() => {
+              navigation.navigate('Restaurant')
+            }}
+          />
+        </Appbar.Header>
+        <View style={styles.title}>
+          <Text style={styles.balanceTitle}>Cardápio</Text>
+          <Text style={styles.cash}>{formatReal(cash)}</Text>
+        </View>
+        <View style={styles.semana}>
+          <View style={(styles.dias, { width: timeWidth })} />
+          <Days
+            days={days}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+          />
+        </View>
+        <View>
           <Menu
             shouldShow={true}
-            mealTime={'Jantar'}
-            dinnerStartTime={dinnerMenu.dinnerStartTime}
-            dinnerEndTime={dinnerMenu.dinnerEndTime}
-            mainMeal={dinnerMenu.mainMeal}
-            mainMealVegetarian={dinnerMenu.mainMealVegetarian}
-            garrison={dinnerMenu.garrison}
-            rice={dinnerMenu.rice}
-            bean={dinnerMenu.bean}
-            salad={dinnerMenu.salad}
-            desert={dinnerMenu.desert}
+            mealTime={'Almoço'}
+            day={lunchMenu.day}
+            lunchStartTime={lunchMenu.lunchStartTime}
+            lunchEndTime={lunchMenu.lunchEndTime}
+            saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
+            saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
+            mainMeal={lunchMenu.mainMeal}
+            mainMealVegetarian={lunchMenu.mainMealVegetarian}
+            garrison={lunchMenu.garrison}
+            rice={lunchMenu.rice}
+            bean={lunchMenu.bean}
+            salad={lunchMenu.salad}
+            desert={lunchMenu.desert}
             price={'RS 5,20'}
           ></Menu>
-        ) : null}
+          {lunchMenu.day != '6' ? (
+            <Menu
+              shouldShow={true}
+              mealTime={'Jantar'}
+              dinnerStartTime={dinnerMenu.dinnerStartTime}
+              dinnerEndTime={dinnerMenu.dinnerEndTime}
+              mainMeal={dinnerMenu.mainMeal}
+              mainMealVegetarian={dinnerMenu.mainMealVegetarian}
+              garrison={dinnerMenu.garrison}
+              rice={dinnerMenu.rice}
+              bean={dinnerMenu.bean}
+              salad={dinnerMenu.salad}
+              desert={dinnerMenu.desert}
+              price={'RS 5,20'}
+            ></Menu>
+          ) : null}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
