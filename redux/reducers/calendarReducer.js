@@ -86,7 +86,7 @@ export const calendarReducer = (state = initialState, action) => {
             keys[date] = true
             datei = offsetDate(datei, 7)
         }
-    
+        
         return {
             items: items,
             cid: myCid,
@@ -151,11 +151,36 @@ export const calendarReducer = (state = initialState, action) => {
     }
     
     const removePayload = (st) => {
-        const event = action.payload 
+        let event = action.payload 
         let newItems = {...st.items}
-        let newMarked = {...st.marked}
-        let d;
 
+        // buscar os dados antigos de event
+        let iterador = offsetDate(new Date(), -offset)
+        let aux = {}
+        let d;
+        const datef = offsetDate(new Date(), offset)
+        
+        // Percorre TUDO até achar o antigo evento,
+        // Se for semanal, vai ser rápido (menos de 7 iterações),
+        // Mas se for evento unico...
+        // no pior caso, vai percorrer todos os 2*offset+1 dias
+
+        while (iterador <= datef){
+            d = floorDate(iterador)
+            aux[d] = newItems[d].filter((e) => e.id == event.id)
+            if (aux[d].length > 0){
+                event = aux[d][0]
+                break
+            }
+            iterador = offsetDate(iterador, 1)
+        }
+
+
+
+        let newMarked = {...st.marked}
+
+        // marca para não visitar o mesmo dia da semana
+        let weekVisit = [0,0,0,0,0,0,0]
         // Percorre os detalhes caso o evento seja unico/ não semanal
         if (!event.weekly){
             for (let i = 0; i < event.details.length; i++){
@@ -171,21 +196,22 @@ export const calendarReducer = (state = initialState, action) => {
             }
         } else {
             for (let i = 0; i < event.details.length; i++){
-                let datei = offsetDate(new Date(), -offset)
-                const datef = offsetDate(new Date(), offset)
-                let toDay = event.details[i].day - datei.getDay()
-                if (toDay < 0){
-                    toDay += 7
+                if (!weekVisit[event.details[i].day]){
+                    let datei = offsetDate(new Date(), -offset)
+                    let toDay = event.details[i].day - datei.getDay()
+                    if (toDay < 0){
+                        toDay += 7
+                    }
+                    datei = offsetDate(datei, toDay)
+                
+                    while (datei.getTime() <= datef.getTime()){
+                        const d = floorDate(datei)
+                        // Filtra os itens
+                        newItems[d] = newItems[d].filter((e) => e.id != event.id)
+                        datei = offsetDate(datei, 7)
+                    }
+                    weekVisit[event.details[i].day] = 1
                 }
-                datei = offsetDate(datei, toDay)
-            
-                while (datei.getTime() <= datef.getTime()){
-                    const d = floorDate(datei)
-                    // Filtra os itens
-                    newItems[d] = newItems[d].filter((e) => e.id != event.id)
-                    datei = offsetDate(datei, 7)
-                }
-
             }
         }
         return {

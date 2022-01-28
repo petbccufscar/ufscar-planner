@@ -21,7 +21,6 @@ export default function Config() {
               ...events[i],
               "notification": []
             }
-            console.log(task)
             dispatch(updateEvent(task));
           }
         }
