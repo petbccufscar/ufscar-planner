@@ -530,7 +530,7 @@ export default function Event({ route, navigation }) {
           {details.sort(sortDetails).map((detail, index) => (
             <View key={index} style={styles.detail}>
               <View>
-                <Text>{`${week[detail.day]}, ${detail.local}`}</Text>
+                <Text>{`${weekly?week[detail.day]:formatDate(detail.datetime_init)}, ${detail.local}`}</Text>
                 <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
                   detail.datetime_end
                 )}`}</Text>
