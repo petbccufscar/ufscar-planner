@@ -4,6 +4,8 @@ import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
 
 export function Task(props) {
+  console.log(props.show)
+  const mostrarData = props.show || false
   let task = props.task;
   const navigation = useNavigation();
 
@@ -19,14 +21,28 @@ export function Task(props) {
         <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
         <Text style={styles.itemDate}>
           {" "}
-          {new Date(task.detail.datetime_init).getHours()}h{new Date(task.detail.datetime_init).getMinutes()} até{" "}
-          {new Date(task.detail.datetime_end).getHours()}h{new Date(task.detail.datetime_end).getMinutes()} no{" "}
+          {mostrarData ? formatDate(task.detail.datetime_init):formatHour(task.detail.datetime_init)} até{" "}
+          {formatHour(task.detail.datetime_end)} no{" "}
           {task.detail.local}
         </Text>
       </View>
     </TouchableOpacity>
   );
 
+}
+const formatDate = dataFormatar => {
+  const data = new Date(dataFormatar);
+  return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " " + ("0" + data.getHours()).slice(-2) +
+    "h" +
+    ("0" + data.getMinutes()).slice(-2);
+}
+function formatHour(date) {
+  const dateFormat = new Date(date);
+  return (
+    ("0" + dateFormat.getHours()).slice(-2) +
+    "h" +
+    ("0" + dateFormat.getMinutes()).slice(-2)
+  );
 }
 const styles = StyleSheet.create({
   item: {

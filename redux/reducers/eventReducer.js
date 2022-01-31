@@ -4,7 +4,7 @@ import * as Notifications from "expo-notifications";
 import { getTime } from '../../components/ExpressionHelper';
 
 const initialState = {
-    events: events,
+    events: [], // events: events,
     nextId: 42
 }
 

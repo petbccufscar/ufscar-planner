@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet,
   LayoutAnimation, } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { TextInput, IconButton } from 'react-native-paper'
 import Dialog from "react-native-dialog";
 import { magic, BWFont } from './ExpressionHelper';
@@ -71,10 +71,10 @@ export function Subject({ route, navigation }){
 
 
 
-  return (<>
-  <MeanLogic name={"Média"} res={[meanRes, setMeanRes]} expression={[meanExpression, setMeanExpression]} dict={[meanDict, setMeanDict]}/>
-  <MeanLogic name={"Frequência"}  res={[freqRes, setFreqRes]} expression={[freqExpression, setFreqExpression]} dict={[freqDict, setFreqDict]}/>
-  </>)
+  return (<ScrollView>
+  <MeanLogic name={"Média"} res={[meanRes, setMeanRes]} expression={[meanExpression, setMeanExpression]} dict={[meanDict, setMeanDict]} placeholder={"(p1+p2+p3)/3"}/>
+  <MeanLogic name={"Frequência"}  res={[freqRes, setFreqRes]} expression={[freqExpression, setFreqExpression]} dict={[freqDict, setFreqDict]} placeholder={"(aulas-faltas)/aulas"}/>
+  </ScrollView>)
 }
 
 function MeanLogic (props) {
@@ -82,7 +82,6 @@ function MeanLogic (props) {
     const [expression, setExpression] = props.expression
     const [res, setRes] = props.res
     const [dict, setDict] = props.dict
-
 
     const [old, setOld] = useState("")
     const [key, setKey] = useState(null)
@@ -145,23 +144,29 @@ function MeanLogic (props) {
       }
     
   return (
-    <View style={{padding:30}}>
+    <View style={{padding:30, paddingBottom:0}}>
         <SimpleDialog open={open} setOpen={setOpen} old={old}/>
-      <TouchableOpacity onPress={() => {
+        <Text style={styles.sectionTitle}>{props.name+':'}</Text>
+      <TouchableOpacity style={styles.area} onPress={() => {
         setKey(null)
         setOld(expression)
         setOpen(true)
         }}>
-          <Text>{props.name+": "+expression+" = "+res}</Text>
-      </TouchableOpacity>
 
+          
+          {expression!=0 && (<Text style={styles.grade}>{expression+" = "+res}</Text>)}
+          {expression==0 &&(<Text style={styles.fake}>{props.placeholder}</Text>)}
+
+      </TouchableOpacity>
+      { (!!Object.keys(dict).length) &&(<Text style={styles.sectionTitle}>Notas:</Text>)}
       { Object.keys(dict).map((key, idx) => {
-        return (<TouchableOpacity key={idx} onPress={() => {
+        return (
+        <TouchableOpacity key={idx} style={styles.area} onPress={() => {
           setKey(key)
           setOld("" + dict[key])
           setOpen(true)
           }}>
-          <Text>{key + " : " + dict[key]}</Text>
+          <Text style={styles.grade}>{key + " = " + dict[key]}</Text>
         </TouchableOpacity>)
       })
 
@@ -171,5 +176,30 @@ function MeanLogic (props) {
 }
 
 const styles = StyleSheet.create({
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    padding: 5,
+    paddingBottom: 30,
+    color: '#607D8B',
+  },
+  area: {
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFF'
+  },
+  grade: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "black",
+    paddingRight: 5,
+  },
+  fake:{
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#E5E5E5",
+    paddingRight: 5,
+  }
 })
 

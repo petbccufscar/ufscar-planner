@@ -1,12 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { InteractionManager, View, StyleSheet } from "react-native";
-import { Agenda } from 'react-native-calendars';
+import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
 import { Task as CalendarTask } from './CalendarTask';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
 
 export function Calendar() {
+  
+    LocaleConfig.locales['br'] = {
+      monthNames: [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
+      ],
+      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      today: "Hoje"
+    };
+    LocaleConfig.defaultLocale = 'br';
     return (
         <View style={{ backgroundColor: "#000", flex: 1}}>
                 <EventsScreen/>

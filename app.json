@@ -2,7 +2,7 @@
   "expo": {
     "name": "ufscar-planner",
     "slug": "ufscar-planner",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,15 +13,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    
     "plugins": [
       [
         "expo-notifications",
         {
           "icon": "./local/assets/icon.png",
           "color": "#ffffff",
-          "sounds": [
-          ]
+          "sounds": []
         }
       ]
     ],
@@ -31,7 +29,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pet.ufscarplanner",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.1.0"
     },
     "android": {
       "adaptiveIcon": {
@@ -59,6 +57,7 @@
         "wasm",
         "svg"
       ]
-    }
+    },
+    "description": ""
   }
 }
