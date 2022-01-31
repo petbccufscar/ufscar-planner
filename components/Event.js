@@ -95,7 +95,6 @@ export default function Event({ route, navigation }) {
       "mean": mean,
       "frequence": frequency
     }
-
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
     } else {
@@ -127,7 +126,7 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
-            if (editMode && details.length == 0) {
+            if (editMode && details.length == 0 && !isSubject) {
               //TODO mostrar aviso para a pessoa não fazer isso
             } else {
               if (editMode) {
@@ -140,7 +139,7 @@ export default function Event({ route, navigation }) {
         />
       ),
     });
-  }, [route.params, editMode, details, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
+  }, [route.params, editMode, details,weekly, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
   
   useEffect(() => {
     if (route?.params?.grade) setGrade(route.params.grade);

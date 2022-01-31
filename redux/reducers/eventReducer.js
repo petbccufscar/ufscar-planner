@@ -22,24 +22,33 @@ async function loadNotifications(task) {
         if (task.weekly) {
             for (let j = 0; j < task.notification.length; j++) {
                 const timeAux = calculateDate(task.details[i], task.notification[j])
+
+                
+                // console.log(new Date(await Notifications.getNextTriggerDateAsync(t)))
+                
+                const t =  {
+                    weekday: timeAux.getDay() + 1,
+                    hour: timeAux.getHours(),
+                    minute: timeAux.getMinutes(),
+                    repeats: true
+                }
                 const id = await Notifications.scheduleNotificationAsync(
                     {
+                        identifier: ""+task.id+"_"+i+"_"+j,
                         content: {
                             title: task.name + " em " + getTime(task.notification[j]),
                             body: 'Local: ' + task.details[i].local,
                         },
-                        trigger: {
-                            weekday: timeAux.getDay() + 1,
-                            hour: timeAux.getHours(),
-                            minute: timeAux.getMinutes(),
-                            repeats: true,
-                        },
+                        // TODO Fazer outro trigger pra IOS
+                        trigger: t,
                     })
             }
         } else {
             for (let j = 0; j < task.notification.length; j++) {
                 const timeAux = new Date(new Date(task.details[i].datetime_init).getTime() - task.notification[j] * 60000)
                 const id = await Notifications.scheduleNotificationAsync({
+                    
+                    identifier: ""+task.id+"_"+i+"_"+j,
                     content: {
                         title: task.name + " em "  + getTime(task.notification[j]),
                         body: 'Em breve',

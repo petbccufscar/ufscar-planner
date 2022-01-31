@@ -40,6 +40,7 @@
     "react-native-simple-dialogs": "^1.4.0",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^2.x",
+    "react-native-toast-message": "^2.1.1",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.6",

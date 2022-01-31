@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
 
 export function Task(props) {
-  console.log(props.show)
   const mostrarData = props.show || false
   let task = props.task;
   const navigation = useNavigation();

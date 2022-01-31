@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#E8243C"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,8 +17,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/icon.png",
-          "color": "#ffffff",
+          "icon": "./local/assets/adaptive-icon.png",
+          "color": "#E8243C",
           "sounds": []
         }
       ]
@@ -34,10 +34,12 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#E8243C"
       },
       "package": "com.pet.ufscarplanner",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true,
+      "permissions": ["RECEIVE_BOOT_COMPLETED"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
