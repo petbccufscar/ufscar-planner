@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
-import {formatHour, formatDateWithHour} from '../helpers/helper';
+import { formatHour, formatDateWithHour } from '../helpers/helper';
 
 export function Task(props) {
   const mostrarData = props.show || false

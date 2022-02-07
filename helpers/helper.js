@@ -40,11 +40,11 @@ export function formatHour(date) {
 export const formatReal = (num) => {
     num = parseFloat(num);
     return (
-      "R$ " +
-      num
-        .toFixed(2)
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1;")
-        .replace(".", ",")
-        .replace(";", ".")
+        "R$ " +
+        num
+            .toFixed(2)
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1;")
+            .replace(".", ",")
+            .replace(";", ".")
     );
-  };
+};

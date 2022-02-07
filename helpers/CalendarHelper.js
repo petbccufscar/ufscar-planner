@@ -10,7 +10,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import {BWFont} from './ExpressionHelper';
+import { BWFont } from './ExpressionHelper';
 
 export const hourHeight = hp("8%");
 export const weekHeight = hp("9%");
