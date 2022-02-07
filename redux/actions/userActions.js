@@ -1,8 +1,8 @@
-import {ActionsTypes} from '../constants/actionsTypes';
+import { ActionsTypes } from "../constants/actionsTypes";
 
 export const updateUser = (user) => {
-    return {
-        action: ActionsTypes.UPDATE_USER,
-        payload: user
-    };
-}
+  return {
+    type: ActionsTypes.UPDATE_USER,
+    payload: user,
+  };
+};

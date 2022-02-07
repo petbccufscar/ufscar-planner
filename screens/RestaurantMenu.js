@@ -8,10 +8,11 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
 import cheerio from "react-native-cheerio";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
-export default function Wallet(cash) {
+export default function Wallet() {
   const navigation = useNavigation();
-  cash = 42;
+  const cash = useSelector((state) => state.user).user.money;
   const timeWidth = wp("100%") - 7.5 * hourWidth;
   const today = new Date();
   const first = new Date(
@@ -118,12 +119,11 @@ export default function Wallet(cash) {
   return (
     <ScrollView>
       <View style={styles.container}>
-
         <View style={styles.title}>
-          <Text style={styles.balanceTitle}>Cardápio</Text> 
-        <TouchableOpacity onPress={() =>  navigation.navigate("Restaurant")}>
-        <Text style={styles.cash}>{formatReal(cash)}</Text>
-        </TouchableOpacity>
+          <Text style={styles.balanceTitle}>Cardápio</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Restaurant")}>
+            <Text style={styles.cash}>{formatReal(cash)}</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.semana}>
           <View style={(styles.dias, { width: timeWidth })} />
