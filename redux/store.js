@@ -1,6 +1,6 @@
 import { createStore } from "redux";
-import {reducers} from "./reducers/index";
-import {persistStore} from "redux-persist";
+import { reducers } from "./reducers/index";
+import { persistStore } from "redux-persist";
 
 export const store = createStore(reducers, {});
 

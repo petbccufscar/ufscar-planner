@@ -6,12 +6,12 @@ import { calendarReducer } from "./calendarReducer";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import {persistReducer, persistCombineReducers} from 'redux-persist';
+import { persistReducer, persistCombineReducers } from 'redux-persist';
 
 const persistConfig = {
-    key: 'root',
-    storage: AsyncStorage,
-    whitelist: ["events","user", "semester"]
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ["events", "user", "semester"]
 }
 
 const combined = combineReducers({
