@@ -23,7 +23,8 @@ export default function MyTabs() {
         <IconButton
           icon={"menu"}
           size={24}
-          onPress={() => { navigation.openDrawer()
+          onPress={() => {
+            navigation.openDrawer()
           }}
         />
       ),

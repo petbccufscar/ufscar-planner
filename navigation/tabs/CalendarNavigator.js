@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Colors, IconButton } from 'react-native-paper';
 // import { events } from '../../placeholder-data/data';
 import { useSelector } from 'react-redux';
-import {Calendar} from '../../components/Calendar'
-import {addEvent} from '../../redux/actions/eventActions'
+import { Calendar } from '../../components/Calendar'
+import { addEvent } from '../../redux/actions/eventActions'
 import { useDispatch } from 'react-redux';
 
 const calendarStack = createNativeStackNavigator();
@@ -14,10 +14,10 @@ const hoje = new Date();
 let mode = 0;
 
 
-export default function CalendarNavigator({navigation}) {
+export default function CalendarNavigator({ navigation }) {
     const events = useSelector(state => state.events.events);
     const dispatch = useDispatch();
-    
+
     // useEffect(() => {
     //     const newEvent = {
     //         "id": 5,
@@ -53,7 +53,9 @@ export default function CalendarNavigator({navigation}) {
     // }, [])
     useEffect(() => {
         navigation.setOptions({
-    title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,})},[])
+            title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
+        })
+    }, [])
 
     return (
         <calendarStack.Navigator screenOptions={{
@@ -62,7 +64,7 @@ export default function CalendarNavigator({navigation}) {
             <calendarStack.Screen name="Calendar" options={({ navigation }) => ({
                 headerShown: false
             })}>
-                {props => <Calendar/>}
+                {props => <Calendar />}
             </calendarStack.Screen>
 
         </calendarStack.Navigator>
