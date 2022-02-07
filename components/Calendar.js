@@ -66,7 +66,7 @@ function EventsScreen() {
     "is_subject": true,
     "mean": "",
     "grade": {},
-    "frequence": {}
+    "frequency": {}
   }
 
   return (

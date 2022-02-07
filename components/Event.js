@@ -82,7 +82,7 @@ export default function Event({ route, navigation }) {
   const sendData = () => {
     task = {
       ...task,
-      // TODO implementar edição desses atributos: grade, frequence, mean
+      // TODO implementar edição desses atributos: grade, frequency, mean
       "name": name,
       "is_subject": isSubject,
       "subject": subject,
@@ -93,7 +93,7 @@ export default function Event({ route, navigation }) {
       "description": description,
       "weekly": weekly,
       "mean": mean,
-      "frequence": frequency
+      "frequency": frequency
     }
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));

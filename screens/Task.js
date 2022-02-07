@@ -45,7 +45,7 @@ function MediaCard(props) {
   let media = 0
   let freq = 0
   const mediaform = task.mean
-  const freqform = task.frequence
+  const freqform = task.frequency
 
   const navigation = useNavigation();
   const edit = () => {

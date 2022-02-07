@@ -46,7 +46,7 @@ export default function CalendarNavigator({ navigation }) {
     //             "P1": 5,
     //             "P2": null
     //         },
-    //         "frequence": {}
+    //         "frequency": {}
     //     }
 
     //     dispatch(addEvent(newEvent));

@@ -34,7 +34,7 @@ export const events = [
         "is_subject": false,
         "mean": null,
         "grade": null,
-        "frequence": null
+        "frequency": null
     },
     {
         "id": 1,
@@ -75,7 +75,7 @@ export const events = [
             "P1": 5,
             "P2": null
         },
-        "frequence": {}
+        "frequency": {}
     },
     {
         "id": 2,
@@ -122,7 +122,7 @@ export const events = [
             "P1": 5,
             "P2": null
         },
-        "frequence": {}
+        "frequency": {}
     }
 ];
 
