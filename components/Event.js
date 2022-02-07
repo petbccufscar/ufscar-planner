@@ -17,7 +17,8 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { Button, IconButton } from "react-native-paper";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Calendar from '../assets/icons/calendar.svg';
-import { BWFont, magic, getTime } from './ExpressionHelper';
+import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
+import { formatDateWithHour } from "../helpers/helper";
 
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -235,13 +236,6 @@ export default function Event({ route, navigation }) {
       </Dialog.Container>)
   }
 
-  const formatDate = dataFormatar => {
-    const data = new Date(dataFormatar);
-    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " " + ("0" + data.getHours()).slice(-2) +
-      "h" +
-      ("0" + data.getMinutes()).slice(-2);
-  }
-
   function HorarioDialog(props) {
     const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
     const [showPicker, setShowPicker] = useState(false)
@@ -326,7 +320,7 @@ export default function Event({ route, navigation }) {
           (<>
             <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowPicker(true)}>
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>Inicio: {formatDate(date)}</Text>
+              <Text style={styles.data}>Inicio: {formatDateWithHour(date)}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowEndPicker(true)}>
               <Calendar style={styles.calendar} />
@@ -529,7 +523,7 @@ export default function Event({ route, navigation }) {
           {details.sort(sortDetails).map((detail, index) => (
             <View key={index} style={styles.detail}>
               <View>
-                <Text>{`${weekly ? week[detail.day] : formatDate(detail.datetime_init)}, ${detail.local}`}</Text>
+                <Text>{`${weekly ? week[detail.day] : formatDateWithHour(detail.datetime_init)}, ${detail.local}`}</Text>
                 <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
                   detail.datetime_end
                 )}`}</Text>

@@ -1,7 +1,7 @@
 import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
 import * as Notifications from "expo-notifications";
-import { getTime } from '../../components/ExpressionHelper';
+import { getTime } from '../../helpers/ExpressionHelper';
 
 const initialState = {
     events: [], // events: events,

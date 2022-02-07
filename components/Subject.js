@@ -6,7 +6,7 @@ import {
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { TextInput, IconButton } from 'react-native-paper'
 import Dialog from "react-native-dialog";
-import { magic, BWFont } from './ExpressionHelper';
+import { magic, BWFont } from '../helpers/ExpressionHelper';
 
 export function Subject({ route, navigation }) {
 

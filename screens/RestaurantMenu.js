@@ -3,12 +3,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
-import { Days, hourHeight, hourWidth } from "../components/CalendarHelper";
+import { Days, hourHeight, hourWidth } from "../helpers/CalendarHelper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
 import cheerio from "react-native-cheerio";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import { formatDate, formatReal } from "../helpers/helper";
 
 export default function Wallet() {
   const navigation = useNavigation();
@@ -61,17 +62,6 @@ export default function Wallet() {
   useEffect(() => {
     menuScrapping(selectedDay);
   }, [selectedDay]);
-
-  const formatDate = (dataFormatar) => {
-    const data = new Date(dataFormatar);
-    return (
-      ("0" + data.getUTCDate()).slice(-2) +
-      "/" +
-      ("0" + (data.getUTCMonth() + 1)).slice(-2) +
-      "/" +
-      data.getFullYear()
-    );
-  };
 
   function getMenuItem(menu, itemName) {
     return menu.split(itemName + ": ")[1].split("\n")[0];
@@ -170,18 +160,6 @@ export default function Wallet() {
         </View>
       </View>
     </ScrollView>
-  );
-}
-
-function formatReal(num) {
-  num = parseFloat(num);
-  return (
-    "R$ " +
-    num
-      .toFixed(2)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1;")
-      .replace(".", ",")
-      .replace(";", ".")
   );
 }
 

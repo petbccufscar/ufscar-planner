@@ -8,6 +8,7 @@ import Calendar from '../assets/icons/calendar.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSemester } from '../redux/actions/semesterActions';
 import { useNavigation } from '@react-navigation/core'
+import { formatDate } from '../helpers/helper';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -66,10 +67,6 @@ export default function Progress() {
     }
   }
 
-  const formatDate = dataFormatar => {
-    const data = new Date(dataFormatar);
-    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear();
-  }
   const navigation = useNavigation()
 
   return (<>
