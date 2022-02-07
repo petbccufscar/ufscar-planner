@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,34 +16,8 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
-
-const incrementValue = (value, setValue, mealValue) => {
-  parseFloat(value) + parseFloat(mealValue) <= 9999.99
-    ? setValue(value + mealValue)
-    : setValue(9999.99);
-};
-
-const decrementValue = (value, setValue, mealValue) => {
-  if (parseFloat(value) - parseFloat(mealValue) >= 0) {
-    setValue(value - mealValue);
-  }
-};
-
-const editValue = (setValue, newValue) => {
-  // Valores entre 0 e 9999.99
-  newValue = newValue.replace(",", ".");
-  if (parseFloat(newValue) >= 0 && parseFloat(newValue) <= 9999.99) {
-    setValue(parseFloat(newValue));
-  }
-  // Valores acima de 9999.99 seta pra 9999.99
-  else if (parseFloat(newValue) >= 9999.99) {
-    setValue(9999.99);
-  }
-  // caso o input esteja vazio pra não ficar o ultimo valor digitado seta pra 0
-  else {
-    setValue(0);
-  }
-};
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../redux/actions/userActions";
 
 const formatReal = (num) => {
   num = parseFloat(num);
@@ -58,10 +32,42 @@ const formatReal = (num) => {
 };
 
 export default function Wallet() {
-  const [value, setValue] = React.useState(0);
+  const user = useSelector((state) => state.user).user;
   const mealValue = 4.2;
   const [shouldShow, setShouldShow] = React.useState(false);
   const navigation = useNavigation();
+  const dispatcher = useDispatch();
+
+  function incrementValue() {
+    if (parseFloat(user.money) + parseFloat(mealValue) <= 9999.99)
+      user.money = user.money + mealValue;
+    else user.money = 9999.99;
+    dispatcher(updateUser(user));
+  }
+
+  const decrementValue = () => {
+    if (parseFloat(user.money) - parseFloat(mealValue) >= 0) {
+      user.money = user.money - mealValue;
+    }
+    dispatcher(updateUser(user));
+  };
+
+  const editValue = (newValue) => {
+    // Valores entre 0 e 9999.99
+    newValue = newValue.replace(",", ".");
+    if (parseFloat(newValue) >= 0 && parseFloat(newValue) <= 9999.99) {
+      user.money = parseFloat(newValue);
+    }
+    // Valores acima de 9999.99 seta pra 9999.99
+    else if (parseFloat(newValue) >= 9999.99) {
+      user.money = 9999.99;
+    }
+    // caso o input esteja vazio pra não ficar o ultimo valor digitado seta pra 0
+    else {
+      user.money = 0;
+    }
+    dispatcher(updateUser(user));
+  };
 
   return (
     <>
@@ -93,7 +99,7 @@ export default function Wallet() {
             <React.Fragment>
               <TextInput
                 style={styles.input}
-                onChangeText={(newValue) => editValue(setValue, newValue)}
+                onChangeText={(newValue) => editValue(newValue)}
                 keyboardType="numeric"
                 placeholder="Editar o saldo da Carteirinha"
                 onEndEditing={() => setShouldShow(!shouldShow)}
@@ -102,12 +108,12 @@ export default function Wallet() {
           ) : null}
         </View>
         <View style={styles.line} />
-        <Text style={styles.balance}>{formatReal(value)}</Text>
+        <Text style={styles.balance}>{formatReal(user.money)}</Text>
         <StatusBar style="auto" />
         <View style={styles.changeValue}>
           <View style={styles.line} />
           <Pressable
-            onPress={() => incrementValue(value, setValue, mealValue)}
+            onPress={() => incrementValue()}
             title="+ ADICIONAR CRÉDITO"
             style={styles.pressable}
           >
@@ -115,7 +121,7 @@ export default function Wallet() {
           </Pressable>
           <View style={styles.line} />
           <Pressable
-            onPress={() => decrementValue(value, setValue, mealValue)}
+            onPress={() => decrementValue()}
             title="- DEBITAR REFEIÇAÕ"
             style={styles.pressable}
           >
