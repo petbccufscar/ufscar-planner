@@ -139,8 +139,8 @@ export default function Event({ route, navigation }) {
         />
       ),
     });
-  }, [route.params, editMode, details,weekly, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
-  
+  }, [route.params, editMode, details, weekly, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
+
   useEffect(() => {
     if (route?.params?.grade) setGrade(route.params.grade);
     if (route?.params?.frequency) setFrequency(route.params.frequency);
@@ -422,14 +422,14 @@ export default function Event({ route, navigation }) {
   let resultFreq = "";
 
   try {
-    const meanRes = magic(grade.mean||{}, mean||"") 
+    const meanRes = magic(grade.mean || {}, mean || "")
     resultMean = " = " + (meanRes.result || 0)
-  }catch(e) {}
-  
+  } catch (e) { }
+
   try {
-    const freqRes = magic(grade.frequency||{}, frequency||"") 
+    const freqRes = magic(grade.frequency || {}, frequency || "")
     resultFreq = " = " + (freqRes.result || 0)
-  }catch(e) {}
+  } catch (e) { }
 
 
   return (
@@ -529,7 +529,7 @@ export default function Event({ route, navigation }) {
           {details.sort(sortDetails).map((detail, index) => (
             <View key={index} style={styles.detail}>
               <View>
-                <Text>{`${weekly?week[detail.day]:formatDate(detail.datetime_init)}, ${detail.local}`}</Text>
+                <Text>{`${weekly ? week[detail.day] : formatDate(detail.datetime_init)}, ${detail.local}`}</Text>
                 <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
                   detail.datetime_end
                 )}`}</Text>
@@ -576,14 +576,14 @@ export default function Event({ route, navigation }) {
             <Text>Frequência = {frequency + resultFreq}</Text>
           </View>
           {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => navigation.navigate("Subject", {task: {...task, grade: grade, frequency:frequency, mean: mean}})}
-            size={18}
-          />
-        )}
+            <IconButton
+              style={styles.xButton}
+              icon="pencil"
+              color="black"
+              onPress={() => navigation.navigate("Subject", { task: { ...task, grade: grade, frequency: frequency, mean: mean } })}
+              size={18}
+            />
+          )}
         </View>)}
 
       <View style={styles.sectionContainer}>

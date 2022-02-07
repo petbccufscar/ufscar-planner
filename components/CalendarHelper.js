@@ -155,20 +155,20 @@ export function WeekDay(props) {
         style={
           props.today == true
             ? {
-                borderRadius: 100,
-                borderWidth: 1,
-                borderColor: weekBallColor,
-                width: width,
-                height: weekDayBall,
-                alignItems: "center",
-                justifyContent: "center",
-              }
+              borderRadius: 100,
+              borderWidth: 1,
+              borderColor: weekBallColor,
+              width: width,
+              height: weekDayBall,
+              alignItems: "center",
+              justifyContent: "center",
+            }
             : {
-                width: width,
-                height: weekDayBall,
-                alignItems: "center",
-                justifyContent: "center",
-              }
+              width: width,
+              height: weekDayBall,
+              alignItems: "center",
+              justifyContent: "center",
+            }
         }
       >
         <Text style={{ color: "#000" }}>{props.label}</Text>
@@ -257,8 +257,8 @@ export function DayComponent(props) {
   const textColor = isActive
     ? "#fff"
     : props.thisMonth == true
-    ? "#FB8C00"
-    : "#000";
+      ? "#FB8C00"
+      : "#000";
   const hasEvent = props.event;
 
   return (
