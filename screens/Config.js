@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { updateEvent } from '../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
@@ -12,20 +12,20 @@ export default function Config() {
   const [notifications, setNotifications] = useState([])
   const [load, setLoad] = useState(false)
   useEffect(() => {
-    Notifications.getAllScheduledNotificationsAsync().then( result => {
-      if(!load){
+    Notifications.getAllScheduledNotificationsAsync().then(result => {
+      if (!load) {
         setNotifications(result)
         setLoad(true)
       }
     })
-  },[load])
+  }, [load])
   return (
     <ScrollView style={styles.container}>
 
-      <TouchableOpacity onPress={()=>{
-        for(let i = 0; i < events.length; i++){
+      <TouchableOpacity onPress={() => {
+        for (let i = 0; i < events.length; i++) {
 
-          if(events[i].notification.length != 0){
+          if (events[i].notification.length != 0) {
 
             const task = {
               ...events[i],
@@ -36,7 +36,7 @@ export default function Config() {
         }
 
       }}>
-      <Text style={{
+        <Text style={{
           fontSize: 24,
           fontWeight: 'bold',
           padding: 10,
@@ -45,10 +45,10 @@ export default function Config() {
           color: 'white'
         }}>Remover todas as notificações</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={()=> {
+      <TouchableOpacity onPress={() => {
         setLoad(false)
-        }}>
-      <Text style={{
+      }}>
+        <Text style={{
           fontSize: 24,
           fontWeight: 'bold',
           padding: 10,
@@ -56,8 +56,8 @@ export default function Config() {
           color: '#607D8B',
         }}>Notificacoes: </Text>
       </TouchableOpacity>
-      {notifications.map((e,i)=>(
-        <View key={i} style={{margin:20, padding:10, backgroundColor:'lightblue', borderRadius:5}}>
+      {notifications.map((e, i) => (
+        <View key={i} style={{ margin: 20, padding: 10, backgroundColor: 'lightblue', borderRadius: 5 }}>
           <Text>{e.content.title}</Text>
           <Text>{e.content.body}</Text>
           <Text>id {e.identifier}</Text>

@@ -21,21 +21,21 @@ export default function Progress() {
   let progress = 0;
   calculateProgress();
 
-  function handleSemesterInitiChange(date){
+  function handleSemesterInitiChange(date) {
     setShowInitDatePicker(false);
     semester.init = date.toString();
     dispatch(updateSemester(semester));
   }
 
-  function handleSemesterEndChange(date){
-      setShowEndDatePicker(false);
-      semester.end = date.toString();
-      dispatch(updateSemester(semester));
+  function handleSemesterEndChange(date) {
+    setShowEndDatePicker(false);
+    semester.end = date.toString();
+    dispatch(updateSemester(semester));
   }
 
   useEffect(() => {
     calculateProgress();
-  } , [semester]);
+  }, [semester]);
 
   function calculateProgress() {
     if (new Date(semester.init) < new Date(semester.end)) {
@@ -101,7 +101,7 @@ export default function Progress() {
         </View>
       </View>
       <DateTimePickerModal
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
         textColor={"#000"}
         isVisible={showInitDatePicker}
         mode={"date"}
@@ -118,7 +118,7 @@ export default function Progress() {
         headerTextIOS={'Escolha uma data'}
       />
       <DateTimePickerModal
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
         textColor={"#000"}
         isVisible={showEndDatePicker}
         mode={"date"}
