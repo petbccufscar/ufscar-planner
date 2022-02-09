@@ -5,18 +5,27 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
 import { useNavigation } from "@react-navigation/core";
+import { FAB } from 'react-native-paper';
+import { defaultTask } from '../helpers/helper';
 
 export default function Task() {
 
   let events = useSelector(state => state.events).events
+  const navigation = useNavigation()
   events = events.filter(e => e.is_subject)
-  return (
+  return (<>
     <ScrollView style={styles.container}>
-      <Text style={styles.sectionTitle}>Medias e frequências!</Text>
+      <Text style={styles.sectionTitle}>Médias e frequências!</Text>
       {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}
 
       <StatusBar style="auto" />
     </ScrollView>
+    <FAB
+    style={styles.fab}
+    icon="plus"
+    onPress={() => navigation.navigate("Event", { task: defaultTask })}
+  />
+  </>
   );
 }
 
@@ -198,6 +207,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#90A4AE',
     marginTop: 5
-  }
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
 
 });

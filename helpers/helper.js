@@ -48,3 +48,17 @@ export const formatReal = (num) => {
             .replace(";", ".")
     );
 };
+
+export const defaultTask = {
+    "weekly": true,
+    "details": [],
+    "name": "Novo Evento",
+    "subject": "Matéria X",
+    "notification": [],
+    "description": "descrição",
+    "color": "#f00",
+    "is_subject": true,
+    "mean": "",
+    "grade": {},
+    "frequency": {}
+  }

@@ -6,6 +6,7 @@ import { Task as CalendarTask } from './CalendarTask';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
 import Toast from 'react-native-toast-message';
+import { defaultTask } from '../helpers/helper';
 
 export function Calendar() {
 
@@ -55,19 +56,7 @@ function EventsScreen() {
   };
   const navigation = useNavigation()
   const rowHasChanged = (r1, r2) => r1 !== r2;
-  const defaultTask = {
-    "weekly": true,
-    "details": [],
-    "name": "Novo Evento",
-    "subject": "Matéria X",
-    "notification": [],
-    "description": "descrição",
-    "color": "#f00",
-    "is_subject": true,
-    "mean": "",
-    "grade": {},
-    "frequency": {}
-  }
+  
 
   return (
     <>
