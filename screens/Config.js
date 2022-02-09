@@ -4,13 +4,19 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-nati
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { updateEvent } from '../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
+import Dialog from "react-native-dialog";
+import { updateUser } from '../redux/actions/userActions';
 
 export default function Config() {
 
   const events = useSelector(state => state.events).events
+  const user = useSelector(state => state.user).user
   const dispatch = useDispatch();
   const [notifications, setNotifications] = useState([])
   const [load, setLoad] = useState(false)
+  const [name, setName] = useState(user.name)
+  const [nameDialog, setNameDialog] = useState(false)
+
   useEffect(() => {
     Notifications.getAllScheduledNotificationsAsync().then(result => {
       if (!load) {
@@ -21,7 +27,62 @@ export default function Config() {
   }, [load])
   return (
     <ScrollView style={styles.container}>
+      <TouchableOpacity onPress={() => {
+      }}>
+        <Text style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          padding: 10,
+          paddingBottom: 30,
+          color: 'black'
+        }}>Resetar dados do app</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+      }}>
+        <Text style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          padding: 10,
+          paddingBottom: 30,
+          color: 'black'
+        }}>Carregar dados do SIGA</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+      }}>
+        <Text style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          padding: 10,
+          paddingBottom: 30,
+          color: 'black'
+        }}>Trocar campus</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        setNameDialog(true)
 
+      }}>
+        <Text style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          padding: 10,
+          paddingBottom: 30,
+          color: 'black'
+        }}>Trocar nome</Text>
+      </TouchableOpacity>
+      <Dialog.Container visible={nameDialog}>
+        <Dialog.Title>Escolha um novo nome</Dialog.Title>
+        <Dialog.Input defaultValue={user.name} onChangeText={setName}>
+        </Dialog.Input>
+        <Dialog.Button label="Cancelar" onPress={
+          () => setNameDialog(false)
+        } />
+        <Dialog.Button label="Ok" onPress={
+          () => {
+            dispatch(updateUser({ ...user, name: name }))
+            setNameDialog(false)
+          }
+        } />
+      </Dialog.Container>
       <TouchableOpacity onPress={() => {
         for (let i = 0; i < events.length; i++) {
 
