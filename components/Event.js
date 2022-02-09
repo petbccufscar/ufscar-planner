@@ -10,6 +10,7 @@ import {
   TextInput,
   CheckBox
 } from "react-native";
+import Toast from 'react-native-toast-message';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateEvent, addEvent, removeEvent } from '../redux/actions/eventActions'
 import Dialog from "react-native-dialog";
@@ -83,7 +84,6 @@ export default function Event({ route, navigation }) {
   const sendData = () => {
     task = {
       ...task,
-      // TODO implementar edição desses atributos: grade, frequency, mean
       "name": name,
       "is_subject": isSubject,
       "subject": subject,
@@ -128,7 +128,10 @@ export default function Event({ route, navigation }) {
               },
             });
             if (editMode && details.length == 0 && !isSubject) {
-              //TODO mostrar aviso para a pessoa não fazer isso
+              Toast.show({
+                type: 'error',
+                text1: "Você deve colocar ao menos um horário",
+              }); 
             } else {
               if (editMode) {
                 sendData()
@@ -528,6 +531,19 @@ export default function Event({ route, navigation }) {
                   detail.datetime_end
                 )}`}</Text>
               </View>
+              {!editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="map"
+                  color="red"
+                  onPress={() => {
+
+                    console.log("socorro")
+
+                  }}
+                  size={18}
+                />
+              )}
               {editMode && (
                 <IconButton
                   style={styles.xButton}
