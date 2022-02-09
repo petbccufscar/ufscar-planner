@@ -60,5 +60,5 @@ export const defaultTask = {
     "is_subject": true,
     "mean": "",
     "grade": {},
-    "frequency": {}
+    "frequency": ""
   }
