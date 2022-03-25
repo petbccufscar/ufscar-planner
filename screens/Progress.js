@@ -8,6 +8,7 @@ import Calendar from '../assets/icons/calendar.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSemester } from '../redux/actions/semesterActions';
 import { useNavigation } from '@react-navigation/core'
+import { formatDate } from '../helpers/helper';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -21,21 +22,21 @@ export default function Progress() {
   let progress = 0;
   calculateProgress();
 
-  function handleSemesterInitiChange(date){
+  function handleSemesterInitiChange(date) {
     setShowInitDatePicker(false);
     semester.init = date.toString();
     dispatch(updateSemester(semester));
   }
 
-  function handleSemesterEndChange(date){
-      setShowEndDatePicker(false);
-      semester.end = date.toString();
-      dispatch(updateSemester(semester));
+  function handleSemesterEndChange(date) {
+    setShowEndDatePicker(false);
+    semester.end = date.toString();
+    dispatch(updateSemester(semester));
   }
 
   useEffect(() => {
     calculateProgress();
-  } , [semester]);
+  }, [semester]);
 
   function calculateProgress() {
     if (new Date(semester.init) < new Date(semester.end)) {
@@ -66,10 +67,6 @@ export default function Progress() {
     }
   }
 
-  const formatDate = dataFormatar => {
-    const data = new Date(dataFormatar);
-    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear();
-  }
   const navigation = useNavigation()
 
   return (<>
@@ -101,7 +98,7 @@ export default function Progress() {
         </View>
       </View>
       <DateTimePickerModal
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
         textColor={"#000"}
         isVisible={showInitDatePicker}
         mode={"date"}
@@ -118,7 +115,7 @@ export default function Progress() {
         headerTextIOS={'Escolha uma data'}
       />
       <DateTimePickerModal
-        style={{width: "100%"}}
+        style={{ width: "100%" }}
         textColor={"#000"}
         isVisible={showEndDatePicker}
         mode={"date"}

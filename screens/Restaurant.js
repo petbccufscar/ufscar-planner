@@ -18,18 +18,8 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../redux/actions/userActions";
+import { formatReal } from "../helpers/helper";
 
-const formatReal = (num) => {
-  num = parseFloat(num);
-  return (
-    "R$ " +
-    num
-      .toFixed(2)
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1;")
-      .replace(".", ",")
-      .replace(";", ".")
-  );
-};
 
 export default function Wallet() {
   const user = useSelector((state) => state.user).user;
@@ -72,19 +62,6 @@ export default function Wallet() {
   return (
     <>
       <View style={styles.container}>
-        {/* <Appbar.Header statusBarHeight={Constants.statusBarHeight}>
-          <Appbar.Action
-            icon="menu"
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          />
-          <Appbar.Content title={"Restaurante Universitário"} />
-          <Appbar.Action
-            icon="food"
-            onPress={() => navigation.navigate("RestaurantMenu")}
-          />
-        </Appbar.Header> */}
         <View style={styles.title}>
           <Pressable onPress={() => setShouldShow(!shouldShow)}>
             <Text style={styles.balanceTitle}>Saldo Carteirinha</Text>

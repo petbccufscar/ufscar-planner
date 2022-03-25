@@ -1,4 +1,4 @@
-import {ActionsTypes} from '../constants/actionsTypes';
+import { ActionsTypes } from '../constants/actionsTypes';
 
 export const addEvent = (event) => {
     return {
@@ -29,15 +29,15 @@ export const incrementNextId = () => {
 
 export const setNextId = (nextId) => {
     return {
-      type: ActionsTypes.SET_NEXT_ID,
-      payload: nextId,
+        type: ActionsTypes.SET_NEXT_ID,
+        payload: nextId,
     };
 }
 
 
 export const loadEvents = (events) => {
     return {
-      type: ActionsTypes.LOAD_EVENTS,
-      payload: events,
+        type: ActionsTypes.LOAD_EVENTS,
+        payload: events,
     };
 }

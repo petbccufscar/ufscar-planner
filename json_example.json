@@ -49,7 +49,7 @@
       "is_subject": false,
       "mean": null,
       "grade": null,
-      "frequence": null
+      "frequency": null
     },
     {
       "id": 1,
@@ -92,7 +92,7 @@
             "P2": null
             }
       },
-      "frequence": {}
+      "frequency": {}
     }
   ]
 }

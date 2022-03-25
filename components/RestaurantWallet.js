@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, Text, View, Pre, Pressable, TextInput } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
+import { formatReal } from "../helpers/helper";
 
 export default class Wallet extends React.Component {
   state = {
@@ -31,18 +32,6 @@ export default class Wallet extends React.Component {
         value: parseFloat(newValue),
       })
     }
-  }
-
-  formatReal = (num) => {
-    num = parseFloat(num)
-    return (
-      'R$' +
-      num
-        .toFixed(2)
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1;')
-        .replace('.', ',')
-        .replace(';', '.')
-    )
   }
 
   setShouldShow = () => {

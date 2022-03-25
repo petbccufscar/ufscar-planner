@@ -1,7 +1,7 @@
 import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
 import * as Notifications from "expo-notifications";
-import { getTime } from '../../components/ExpressionHelper';
+import { getTime } from '../../helpers/ExpressionHelper';
 
 const initialState = {
     events: [], // events: events,
@@ -9,10 +9,10 @@ const initialState = {
 }
 
 
-function calculateDate(detail, minutes){
+function calculateDate(detail, minutes) {
     const d = new Date(detail.datetime_init)
     d.setDate(d.getDate() + ((7 - d.getDay()) % 7 + detail.day) % 7)
-    return new Date(d.getTime() - minutes*60000)
+    return new Date(d.getTime() - minutes * 60000)
 }
 
 
@@ -22,26 +22,35 @@ async function loadNotifications(task) {
         if (task.weekly) {
             for (let j = 0; j < task.notification.length; j++) {
                 const timeAux = calculateDate(task.details[i], task.notification[j])
+
+
+                // console.log(new Date(await Notifications.getNextTriggerDateAsync(t)))
+
+                const t = {
+                    weekday: timeAux.getDay() + 1,
+                    hour: timeAux.getHours(),
+                    minute: timeAux.getMinutes(),
+                    repeats: true
+                }
                 const id = await Notifications.scheduleNotificationAsync(
                     {
+                        identifier: "" + task.id + "_" + i + "_" + j,
                         content: {
                             title: task.name + " em " + getTime(task.notification[j]),
                             body: 'Local: ' + task.details[i].local,
                         },
-                        trigger: {
-                            weekday: timeAux.getDay() + 1,
-                            hour: timeAux.getHours(),
-                            minute: timeAux.getMinutes(),
-                            repeats: true,
-                        },
+                        // TODO Fazer outro trigger pra IOS
+                        trigger: t,
                     })
             }
         } else {
             for (let j = 0; j < task.notification.length; j++) {
                 const timeAux = new Date(new Date(task.details[i].datetime_init).getTime() - task.notification[j] * 60000)
                 const id = await Notifications.scheduleNotificationAsync({
+
+                    identifier: "" + task.id + "_" + i + "_" + j,
                     content: {
-                        title: task.name + " em "  + getTime(task.notification[j]),
+                        title: task.name + " em " + getTime(task.notification[j]),
                         body: 'Em breve',
                     },
                     trigger: timeAux,
@@ -56,9 +65,9 @@ async function loadNotifications(task) {
 
 export const eventReducer = (state = initialState, action) => {
 
-    async function refazerNotificações(st){
+    async function refazerNotificações(st) {
         await Notifications.cancelAllScheduledNotificationsAsync()
-        for (let i = 0; i < st.events.length; i++ ){
+        for (let i = 0; i < st.events.length; i++) {
             await loadNotifications(st.events[i])
         }
         const l = await Notifications.getAllScheduledNotificationsAsync()

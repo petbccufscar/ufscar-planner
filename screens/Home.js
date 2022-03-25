@@ -56,7 +56,7 @@ export default function App() {
             <Text style={styles.sectionTitle}>Aulas do dia</Text>
 
             {classes.map((item, idx) => {
-              return <Task key={idx} task={item}/>;
+              return <Task key={idx} task={item} />;
             })}
 
             <Text style={styles.sectionTitle}>Cardápio</Text>
@@ -97,7 +97,7 @@ export default function App() {
             <Text style={styles.sectionTitle}>Próximas Tarefas</Text>
             <View style={styles.items}>
               {tasks.map((item, idx) => {
-                return <Task key={idx} task={item} show={true}/>;
+                return <Task key={idx} task={item} show={true} />;
               })}
             </View>
           </View>

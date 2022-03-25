@@ -8,24 +8,33 @@ import {
   StyleSheet,
   LayoutAnimation,
   TextInput,
-  CheckBox
+  CheckBox,
+  Linking,
 } from "react-native";
-import { useSelector, useDispatch } from 'react-redux';
-import { updateEvent, addEvent, removeEvent } from '../redux/actions/eventActions'
+import Toast from "react-native-toast-message";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updateEvent,
+  addEvent,
+  removeEvent,
+} from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
-import { ColorPicker, fromHsv } from 'react-native-color-picker'
+import { ColorPicker, fromHsv } from "react-native-color-picker";
 import { Button, IconButton } from "react-native-paper";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Calendar from '../assets/icons/calendar.svg';
-import { BWFont, magic, getTime } from './ExpressionHelper';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import Calendar from "../assets/icons/calendar.svg";
+import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
+import { formatDateWithHour } from "../helpers/helper";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import ScrollPicker from 'react-native-picker-scrollview';
+import ScrollPicker from "react-native-picker-scrollview";
 
 export default function Event({ route, navigation }) {
-  let task = { ...route.params.task }
+  let task = { ...route.params.task };
   //boleano
   const [isSubject, setIsSubject] = useState(task.is_subject);
   const [weekly, setWeekly] = useState(task.weekly);
@@ -34,14 +43,13 @@ export default function Event({ route, navigation }) {
   const [subject, setSubject] = useState(task.subject);
   const [color, setColor] = useState(task.color);
 
-
   // tela separada
   const [grade, setGrade] = useState(task.grade);
   const [frequency, setFrequency] = useState(task.frequency || "0");
   const [mean, setMean] = useState(task.mean || "0");
 
   const [name, setName] = useState(task.name);
-  const firstTime = task.id == null || task.id == undefined
+  const firstTime = task.id == null || task.id == undefined;
   const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
   const [notifications, setNotifications] = useState(task.notification);
@@ -57,15 +65,12 @@ export default function Event({ route, navigation }) {
 
   const changeWeekly = (e) => {
     if (!e) {
-      setWeekly(false)
-      setIsSubject(false)
+      setWeekly(false);
+      setIsSubject(false);
     } else {
-      setWeekly(true)
+      setWeekly(true);
     }
-
-  }
-
-
+  };
 
   const dispatch = useDispatch();
 
@@ -82,29 +87,24 @@ export default function Event({ route, navigation }) {
   const sendData = () => {
     task = {
       ...task,
-      // TODO implementar edição desses atributos: grade, frequence, mean
-      "name": name,
-      "is_subject": isSubject,
-      "subject": subject,
-      "color": color,
-      "grade": grade,
-      "details": details,
-      "notification": notifications,
-      "description": description,
-      "weekly": weekly,
-      "mean": mean,
-      "frequence": frequency
-    }
-
+      name: name,
+      is_subject: isSubject,
+      subject: subject,
+      color: color,
+      grade: grade,
+      details: details,
+      notification: notifications,
+      description: description,
+      weekly: weekly,
+      mean: mean,
+      frequency: frequency,
+    };
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
     } else {
       dispatch(addEvent(task));
     }
-
-  }
-
-
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -127,12 +127,15 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
-            if (editMode && details.length == 0) {
-              //TODO mostrar aviso para a pessoa não fazer isso
+            if (editMode && details.length == 0 && !isSubject) {
+              Toast.show({
+                type: "error",
+                text1: "Você deve colocar ao menos um horário",
+              });
             } else {
               if (editMode) {
-                sendData()
-                navigation.pop(1)
+                sendData();
+                navigation.pop(1);
               }
               setEditMode(!editMode);
             }
@@ -140,16 +143,27 @@ export default function Event({ route, navigation }) {
         />
       ),
     });
-  }, [route.params, editMode, details, frequency, mean, notifications, description, name, color, grade, isSubject, subject]);
-  
+  }, [
+    route.params,
+    editMode,
+    details,
+    weekly,
+    frequency,
+    mean,
+    notifications,
+    description,
+    name,
+    color,
+    grade,
+    isSubject,
+    subject,
+  ]);
+
   useEffect(() => {
     if (route?.params?.grade) setGrade(route.params.grade);
     if (route?.params?.frequency) setFrequency(route.params.frequency);
     if (route?.params?.mean) setMean(route.params.mean);
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
-
-
-
 
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
@@ -170,120 +184,161 @@ export default function Event({ route, navigation }) {
     );
   }
 
-
   function SimpleDialog(props) {
-    const fun = props.fun
-    const old = props.old || ""
-    const setOpen = props.setOpen
-    const open = props.open
-    const [texto, setTexto] = useState(old)
-    let novo = ""
+    const fun = props.fun;
+    const old = props.old || "";
+    const setOpen = props.setOpen;
+    const open = props.open;
+    const [texto, setTexto] = useState(old);
+    let novo = "";
 
     return (
       <Dialog.Container visible={open}>
         <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description>
-        </Dialog.Description>
-        <Dialog.Input value={texto} onChangeText={setTexto}>
-
-        </Dialog.Input>
+        <Dialog.Description></Dialog.Description>
+        <Dialog.Input value={texto} onChangeText={setTexto}></Dialog.Input>
         <Dialog.Button label="Cancel" onPress={() => setOpen(false)} />
-        <Dialog.Button label="Ok" onPress={() => {
-          fun(texto)
-          setOpen(false)
-        }} />
-      </Dialog.Container>)
+        <Dialog.Button
+          label="Ok"
+          onPress={() => {
+            fun(texto);
+            setOpen(false);
+          }}
+        />
+      </Dialog.Container>
+    );
   }
 
-
   function ColorDialog() {
-    let aux = color
+    let aux = color;
     return (
       <Dialog.Container visible={openColorDialog}>
         <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description>
-        </Dialog.Description>
+        <Dialog.Description></Dialog.Description>
         <ColorPicker
-
-          onColorChange={color => aux = color}
+          onColorChange={(color) => (aux = color)}
           defaultColor={aux}
           style={{ width: 300, height: 300 }}
         />
-        <Dialog.Button label="Cancel" onPress={() => setOpenColorDialog(false)} />
-        <Dialog.Button label="Ok" onPress={() => {
-          setColor(fromHsv(aux))
-          setOpenColorDialog(false)
-        }} />
-      </Dialog.Container>)
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => setOpenColorDialog(false)}
+        />
+        <Dialog.Button
+          label="Ok"
+          onPress={() => {
+            setColor(fromHsv(aux));
+            setOpenColorDialog(false);
+          }}
+        />
+      </Dialog.Container>
+    );
   }
 
   function NotificationDialog() {
     const [n, setN] = useState(1);
-    const [mult, setMult] = useState(1)
-    const multList = [1, 60, 60 * 24]
+    const [mult, setMult] = useState(1);
+    const multList = [1, 60, 60 * 24];
     return (
       <Dialog.Container visible={openNotificationDialog}>
-        <Dialog.Title >Quando Notificar?</Dialog.Title>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <Dialog.Title>Quando Notificar?</Dialog.Title>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Roleta n={90} fun={setN} />
-          <Roleta list={['minutos antes', 'horas antes', 'dias antes']} width={100} fun={setMult} />
+          <Roleta
+            list={["minutos antes", "horas antes", "dias antes"]}
+            width={100}
+            fun={setMult}
+          />
         </View>
-        <Dialog.Button label="Cancel" onPress={() => setOpenNotificationDialog(false)} />
-        <Dialog.Button label="Ok" onPress={() => {
-          setNotifications([...notifications, n * multList[mult]])
-          setOpenNotificationDialog(false)
-        }} />
-      </Dialog.Container>)
-  }
-
-  const formatDate = dataFormatar => {
-    const data = new Date(dataFormatar);
-    return ('0' + data.getUTCDate()).slice(-2) + "/" + ('0' + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " " + ("0" + data.getHours()).slice(-2) +
-      "h" +
-      ("0" + data.getMinutes()).slice(-2);
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => setOpenNotificationDialog(false)}
+        />
+        <Dialog.Button
+          label="Ok"
+          onPress={() => {
+            setNotifications([...notifications, n * multList[mult]]);
+            setOpenNotificationDialog(false);
+          }}
+        />
+      </Dialog.Container>
+    );
   }
 
   function HorarioDialog(props) {
     const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-    const [showPicker, setShowPicker] = useState(false)
-    const [showEndPicker, setShowEndPicker] = useState(false)
+    const [showPicker, setShowPicker] = useState(false);
+    const [showEndPicker, setShowEndPicker] = useState(false);
 
-    const [date, setDate] = useState(new Date())
-    const [day, setDay] = useState(0)
-    const [endTime, setEndTime] = useState(new Date())
-    const [text, setText] = useState("local X")
+    const [date, setDate] = useState(new Date());
+    const [day, setDay] = useState(0);
+    const [endTime, setEndTime] = useState(new Date());
+    const [text, setText] = useState("local X");
     const minimum = (date) => {
-      const td = new Date()
-      return (new Date(td.getFullYear(), td.getMonth(), td.getDate(), date.getHours(), date.getMinutes()))
-
-    }
+      const td = new Date();
+      return new Date(
+        td.getFullYear(),
+        td.getMonth(),
+        td.getDate(),
+        date.getHours(),
+        date.getMinutes()
+      );
+    };
 
     function Bolinha(props) {
       const cor = props.index == day ? "red" : "gray";
       return (
-        <TouchableOpacity style={{ width: 30, height: 30, margin: 3, backgroundColor: cor, borderRadius: 100, justifyContent: 'center', alignItems: 'center' }} onPress={() => setDay(props.index)}>
+        <TouchableOpacity
+          style={{
+            width: 30,
+            height: 30,
+            margin: 3,
+            backgroundColor: cor,
+            borderRadius: 100,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => setDay(props.index)}
+        >
           <Text style={{ color: BWFont(cor) }}>{props.text}</Text>
         </TouchableOpacity>
-      )
+      );
     }
     return (
       <Dialog.Container visible={openHorarioDialog}>
         <Dialog.Title>Quando e onde será o evento?</Dialog.Title>
 
-        {props.weekly &&
-          (<>
-            <View style={{ flexDirection: 'row', height: 30, margin: 5, marginBottom: 20 }}>
+        {props.weekly && (
+          <>
+            <View
+              style={{
+                flexDirection: "row",
+                height: 30,
+                margin: 5,
+                marginBottom: 20,
+              }}
+            >
               {week.map((item, idx) => {
-                return (<Bolinha index={idx} text={item} key={idx} />)
+                return <Bolinha index={idx} text={item} key={idx} />;
               })}
             </View>
-            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowPicker(true)}>
+            <TouchableOpacity
+              style={{ ...styles.dateAndDatepicker, margin: 10 }}
+              onPress={() => setShowPicker(true)}
+            >
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>Horario inicial: {formatHour(date)}</Text>
+              <Text style={styles.data}>
+                Horario inicial: {formatHour(date)}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowEndPicker(true)}>
+            <TouchableOpacity
+              style={{ ...styles.dateAndDatepicker, margin: 10 }}
+              onPress={() => setShowEndPicker(true)}
+            >
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>Hora final:{" " + formatHour(endTime)}</Text>
+              <Text style={styles.data}>
+                Hora final:{" " + formatHour(endTime)}
+              </Text>
             </TouchableOpacity>
             <DateTimePickerModal
               style={{ width: "100%" }}
@@ -292,46 +347,65 @@ export default function Event({ route, navigation }) {
               mode={"time"}
               value={new Date()}
               date={new Date()}
-              onCancel={() => { setShowPicker(false) }}
-              onHide={() => { setShowPicker(false) }}
+              onCancel={() => {
+                setShowPicker(false);
+              }}
+              onHide={() => {
+                setShowPicker(false);
+              }}
               onConfirm={(date) => {
-                setShowPicker(false)
-                setDate(date)
+                setShowPicker(false);
+                setDate(date);
                 if (minimum(date) > endTime.getTime()) {
-                  setEndTime(date)
+                  setEndTime(date);
                 }
               }}
-
-              cancelTextIOS={'Cancelar'}
-              confirmTextIOS={'Confirmar'}
-              headerTextIOS={'Escolha uma data'}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma data"}
             />
             <DateTimePickerModal
               style={{ width: "100%" }}
               textColor={"#000"}
               isVisible={showEndPicker}
               mode={"time"}
-              onCancel={() => { setShowEndPicker(false) }}
-              onHide={() => { setShowEndPicker(false) }}
-              onConfirm={(ndate) => {
-                setShowEndPicker(false)
-                setEndTime(ndate.getTime() < minimum(date) ? minimum(date) : ndate)
+              onCancel={() => {
+                setShowEndPicker(false);
               }}
-              cancelTextIOS={'Cancelar'}
-              confirmTextIOS={'Confirmar'}
-              headerTextIOS={'Escolha uma hora'}
+              onHide={() => {
+                setShowEndPicker(false);
+              }}
+              onConfirm={(ndate) => {
+                setShowEndPicker(false);
+                setEndTime(
+                  ndate.getTime() < minimum(date) ? minimum(date) : ndate
+                );
+              }}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma hora"}
             />
-
-          </>)}
-        {!props.weekly &&
-          (<>
-            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowPicker(true)}>
+          </>
+        )}
+        {!props.weekly && (
+          <>
+            <TouchableOpacity
+              style={{ ...styles.dateAndDatepicker, margin: 10 }}
+              onPress={() => setShowPicker(true)}
+            >
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>Inicio: {formatDate(date)}</Text>
+              <Text style={styles.data}>
+                Inicio: {formatDateWithHour(date)}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.dateAndDatepicker, margin: 10 }} onPress={() => setShowEndPicker(true)}>
+            <TouchableOpacity
+              style={{ ...styles.dateAndDatepicker, margin: 10 }}
+              onPress={() => setShowEndPicker(true)}
+            >
               <Calendar style={styles.calendar} />
-              <Text style={styles.data}>Hora final:{" " + formatHour(endTime)}</Text>
+              <Text style={styles.data}>
+                Hora final:{" " + formatHour(endTime)}
+              </Text>
             </TouchableOpacity>
             <DateTimePickerModal
               style={{ width: "100%" }}
@@ -340,102 +414,124 @@ export default function Event({ route, navigation }) {
               mode={"datetime"}
               value={new Date()}
               date={new Date()}
-              onCancel={() => { setShowPicker(false) }}
-              onHide={() => { setShowPicker(false) }}
+              onCancel={() => {
+                setShowPicker(false);
+              }}
+              onHide={() => {
+                setShowPicker(false);
+              }}
               onConfirm={(date) => {
-                setShowPicker(false)
-                setDate(date)
+                setShowPicker(false);
+                setDate(date);
                 if (minimum(date) > endTime.getTime()) {
-                  setEndTime(date)
+                  setEndTime(date);
                 }
               }}
-
-              cancelTextIOS={'Cancelar'}
-              confirmTextIOS={'Confirmar'}
-              headerTextIOS={'Escolha uma data'}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma data"}
             />
             <DateTimePickerModal
               style={{ width: "100%" }}
               textColor={"#000"}
               isVisible={showEndPicker}
               mode={"time"}
-              onCancel={() => { setShowEndPicker(false) }}
-              onHide={() => { setShowEndPicker(false) }}
-              onConfirm={(ndate) => {
-                setShowEndPicker(false)
-                setEndTime(ndate.getTime() < minimum(date) ? minimum(date) : ndate)
+              onCancel={() => {
+                setShowEndPicker(false);
               }}
-              cancelTextIOS={'Cancelar'}
-              confirmTextIOS={'Confirmar'}
-              headerTextIOS={'Escolha uma hora'}
+              onHide={() => {
+                setShowEndPicker(false);
+              }}
+              onConfirm={(ndate) => {
+                setShowEndPicker(false);
+                setEndTime(
+                  ndate.getTime() < minimum(date) ? minimum(date) : ndate
+                );
+              }}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma hora"}
             />
+          </>
+        )}
 
-          </>)}
-
-
-        <Dialog.Button label="Cancel" onPress={() => { setOpenHorarioDialog(false) }} />
-        <Dialog.Button label="Ok" onPress={() => {
-          let detail = {
-            day: weekly ? day : new Date(date).getDay(),
-            datetime_init: date.toUTCString(),
-            datetime_end: endTime.toUTCString(),
-            local: text
-          }
-          setDetails([...details, detail])
-          setOpenHorarioDialog(false)
-        }} />
-        <Dialog.Input label={"Local"} onChangeText={setText} accessibilityHint={"local"}></Dialog.Input>
-      </Dialog.Container>)
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => {
+            setOpenHorarioDialog(false);
+          }}
+        />
+        <Dialog.Button
+          label="Ok"
+          onPress={() => {
+            let detail = {
+              day: weekly ? day : new Date(date).getDay(),
+              datetime_init: date.toUTCString(),
+              datetime_end: endTime.toUTCString(),
+              local: text,
+            };
+            setDetails([...details, detail]);
+            setOpenHorarioDialog(false);
+          }}
+        />
+        <Dialog.Input
+          label={"Local"}
+          onChangeText={setText}
+          accessibilityHint={"local"}
+        ></Dialog.Input>
+      </Dialog.Container>
+    );
   }
 
-  const range = (n) => [...Array(n + 1).keys()]
+  const range = (n) => [...Array(n + 1).keys()];
 
   function Roleta(props) {
-    const list = props.list || range(props.n || 60)
-    const width = props.width || props.size || 60
-    const height = props.height || props.size || 60
-    const defun = () => { }
-    const fun = props.fun || defun
-    let p
-    return (<View style={{ height: height * 3, width: width }}>
-      <ScrollPicker
-        ref={(sp) => { p = sp }}
-        dataSource={list}
-        selectedIndex={1}
-        onValueChange={(data, selectedIndex) => {
-          fun(selectedIndex)
-        }}
-        wrapperHeight={height * 3}
-        wrapperBackground={'#FFFFFF'}
-        itemHeight={height}
-        highlightColor={'#d8d8d8'}
-        highlightBorderWidth={2}
-        activeItemColor={'#222121'}
-        itemColor={'#B4B4B4'}
-      />
-    </View>)
-
+    const list = props.list || range(props.n || 60);
+    const width = props.width || props.size || 60;
+    const height = props.height || props.size || 60;
+    const defun = () => {};
+    const fun = props.fun || defun;
+    let p;
+    return (
+      <View style={{ height: height * 3, width: width }}>
+        <ScrollPicker
+          ref={(sp) => {
+            p = sp;
+          }}
+          dataSource={list}
+          selectedIndex={1}
+          onValueChange={(data, selectedIndex) => {
+            fun(selectedIndex);
+          }}
+          wrapperHeight={height * 3}
+          wrapperBackground={"#FFFFFF"}
+          itemHeight={height}
+          highlightColor={"#d8d8d8"}
+          highlightBorderWidth={2}
+          activeItemColor={"#222121"}
+          itemColor={"#B4B4B4"}
+        />
+      </View>
+    );
   }
-
-
 
   let resultMean = "";
   let resultFreq = "";
 
   try {
-    const meanRes = magic(grade.mean||{}, mean||"") 
-    resultMean = " = " + (meanRes.result || 0)
-  }catch(e) {}
-  
-  try {
-    const freqRes = magic(grade.frequency||{}, frequency||"") 
-    resultFreq = " = " + (freqRes.result || 0)
-  }catch(e) {}
+    const meanRes = magic(grade.mean || {}, mean || "");
+    resultMean = " = " + (meanRes.result || 0);
+  } catch (e) {}
 
+  try {
+    const freqRes = magic(grade.frequency || {}, frequency || "");
+    resultFreq = " = " + (freqRes.result || 0);
+  } catch (e) {}
+
+  const user = useSelector(state => state.user).user
 
   return (
     <ScrollView style={styles.container}>
-
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="tag" color="#007cc1" size={30} />
@@ -448,7 +544,9 @@ export default function Event({ route, navigation }) {
             style={styles.xButton}
             icon="pencil"
             color="black"
-            onPress={() => { if (editMode) setOpenNameDialog(true) }}
+            onPress={() => {
+              if (editMode) setOpenNameDialog(true);
+            }}
             size={18}
           />
         )}
@@ -470,40 +568,44 @@ export default function Event({ route, navigation }) {
         <HorarioDialog weekly={weekly} />
       </View>
 
-      {weekly && <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="notebook" color="#007cc1" size={30} />
-        </View>
+      {weekly && (
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionIcon}>
+            <IconButton icon="notebook" color="#007cc1" size={30} />
+          </View>
 
-        <View style={styles.description}>
-          <Text>É matéria </Text>
-        </View>
-        <CheckBox
-          value={isSubject}
-          onValueChange={setIsSubject}
-          disabled={!editMode}
-        />
-
-      </View>}
-      {!isSubject && (<View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="book" color="#007cc1" size={30} />
-        </View>
-
-        <View style={styles.description}>
-          <Text>Nome da Matéria: {subject}</Text>
-        </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => { if (editMode) setOpenSubjectDialog(true) }}
-            size={18}
+          <View style={styles.description}>
+            <Text>É matéria </Text>
+          </View>
+          <CheckBox
+            value={isSubject}
+            onValueChange={setIsSubject}
+            disabled={!editMode}
           />
-        )}
-      </View>)
-      }
+        </View>
+      )}
+      {!isSubject && (
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionIcon}>
+            <IconButton icon="book" color="#007cc1" size={30} />
+          </View>
+
+          <View style={styles.description}>
+            <Text>Nome da Matéria: {subject}</Text>
+          </View>
+          {editMode && (
+            <IconButton
+              style={styles.xButton}
+              icon="pencil"
+              color="black"
+              onPress={() => {
+                if (editMode) setOpenSubjectDialog(true);
+              }}
+              size={18}
+            />
+          )}
+        </View>
+      )}
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="square" color={color} size={30} />
@@ -516,7 +618,9 @@ export default function Event({ route, navigation }) {
             style={styles.xButton}
             icon="pencil"
             color="black"
-            onPress={() => { if (editMode) setOpenColorDialog(true) }}
+            onPress={() => {
+              if (editMode) setOpenColorDialog(true);
+            }}
             size={18}
           />
         )}
@@ -530,21 +634,46 @@ export default function Event({ route, navigation }) {
           {details.sort(sortDetails).map((detail, index) => (
             <View key={index} style={styles.detail}>
               <View>
-                <Text>{`${weekly?week[detail.day]:formatDate(detail.datetime_init)}, ${detail.local}`}</Text>
+                <Text>{`${
+                  weekly
+                    ? week[detail.day]
+                    : formatDateWithHour(detail.datetime_init)
+                }, ${detail.local}`}</Text>
                 <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
                   detail.datetime_end
                 )}`}</Text>
               </View>
+              {!editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="map"
+                  color="red"
+                  onPress={async () => {
+                    let place = user.campus + ", UFSCAR, " + detail.local;
+
+                    const url =
+                      "https://www.google.com/maps/search/?api=1&query=" +
+                      encodeURI(place);
+
+                    const supported = await Linking.canOpenURL(url);
+
+                    if (supported) {
+                      await Linking.openURL(url);
+                    } else {
+                      Alert.alert(`Don't know how to open this URL: ${url}`);
+                    }
+                  }}
+                  size={18}
+                />
+              )}
               {editMode && (
                 <IconButton
                   style={styles.xButton}
                   icon="close"
                   color="black"
                   onPress={() => {
-
-                    let newDetails = details.filter((d) => d != detail)
-                    setDetails([...newDetails])
-
+                    let newDetails = details.filter((d) => d != detail);
+                    setDetails([...newDetails]);
                   }}
                   size={18}
                 />
@@ -555,7 +684,7 @@ export default function Event({ route, navigation }) {
             <View style={styles.action}>
               <Button
                 onPress={() => {
-                  setOpenHorarioDialog(true)
+                  setOpenHorarioDialog(true);
                 }}
                 labelStyle={styles.actionButtonLabel}
                 style={styles.actionButton}
@@ -577,15 +706,25 @@ export default function Event({ route, navigation }) {
             <Text>Frequência = {frequency + resultFreq}</Text>
           </View>
           {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => navigation.navigate("Subject", {task: {...task, grade: grade, frequency:frequency, mean: mean}})}
-            size={18}
-          />
-        )}
-        </View>)}
+            <IconButton
+              style={styles.xButton}
+              icon="pencil"
+              color="black"
+              onPress={() =>
+                navigation.navigate("Subject", {
+                  task: {
+                    ...task,
+                    grade: grade,
+                    frequency: frequency,
+                    mean: mean,
+                  },
+                })
+              }
+              size={18}
+            />
+          )}
+        </View>
+      )}
 
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
@@ -602,8 +741,10 @@ export default function Event({ route, navigation }) {
                   icon="close"
                   color="black"
                   onPress={() => {
-                    let newNotifications = notifications.filter((e) => e != notification)
-                    setNotifications([...newNotifications])
+                    let newNotifications = notifications.filter(
+                      (e) => e != notification
+                    );
+                    setNotifications([...newNotifications]);
                   }}
                   size={18}
                 />
@@ -613,7 +754,9 @@ export default function Event({ route, navigation }) {
           {editMode && (
             <View style={styles.action}>
               <Button
-                onPress={() => { setOpenNotificationDialog(true) }}
+                onPress={() => {
+                  setOpenNotificationDialog(true);
+                }}
                 labelStyle={styles.actionButtonLabel}
                 style={styles.actionButton}
               >
@@ -623,9 +766,24 @@ export default function Event({ route, navigation }) {
           )}
         </View>
       </View>
-      <SimpleDialog fun={setName} old={name} open={openNameDialog} setOpen={setOpenNameDialog} />
-      <SimpleDialog fun={setDescription} old={description} open={openDescriptionDialog} setOpen={setOpenDescriptionDialog} />
-      <SimpleDialog fun={setSubject} old={subject} open={openSubjectDialog} setOpen={setOpenSubjectDialog} />
+      <SimpleDialog
+        fun={setName}
+        old={name}
+        open={openNameDialog}
+        setOpen={setOpenNameDialog}
+      />
+      <SimpleDialog
+        fun={setDescription}
+        old={description}
+        open={openDescriptionDialog}
+        setOpen={setOpenDescriptionDialog}
+      />
+      <SimpleDialog
+        fun={setSubject}
+        old={subject}
+        open={openSubjectDialog}
+        setOpen={setOpenSubjectDialog}
+      />
       <ColorDialog />
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
@@ -639,7 +797,9 @@ export default function Event({ route, navigation }) {
             style={styles.xButton}
             icon="pencil"
             color="black"
-            onPress={() => { if (editMode) setOpenDescriptionDialog(true) }}
+            onPress={() => {
+              if (editMode) setOpenDescriptionDialog(true);
+            }}
             size={18}
           />
         )}
@@ -649,7 +809,7 @@ export default function Event({ route, navigation }) {
           <Button
             onPress={() => {
               dispatch(removeEvent(task));
-              navigation.pop(1)
+              navigation.pop(1);
             }}
             labelStyle={styles.actionButtonLabel}
             style={[styles.actionButton, styles.deleteButton]}
@@ -697,7 +857,7 @@ const styles = StyleSheet.create({
   },
 
   data: {
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     color: "white",
   },
   notification: {
@@ -725,10 +885,10 @@ const styles = StyleSheet.create({
 
   dateAndDatepicker: {
     flexDirection: "row",
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     backgroundColor: "#e8243c",
     padding: 8,
-    borderRadius: 10
+    borderRadius: 10,
   },
 
   deleteButton: {

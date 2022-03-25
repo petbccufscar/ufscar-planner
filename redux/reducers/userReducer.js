@@ -1,4 +1,4 @@
-import {ActionsTypes} from '../constants/actionsTypes';
+import { ActionsTypes } from '../constants/actionsTypes';
 
 
 const initialState = {
@@ -7,8 +7,8 @@ const initialState = {
         email: "fulano@f.lano",
         campus: "São Carlos",
         config: {
-        theme: "black",
-        font_size: 14,
+            theme: "black",
+            font_size: 14,
         },
         money: 0,
     },
