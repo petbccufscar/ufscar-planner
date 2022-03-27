@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
-import { Days, hourHeight, hourWidth } from "../helpers/CalendarHelper";
+import { Days, hourWidth } from "../helpers/CalendarHelper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
 import cheerio from "react-native-cheerio";
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { formatDate, formatReal } from "../helpers/helper";
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
-
+import { Foundation } from '@expo/vector-icons'; 
 
 export default function Wallet() {
   const navigation = useNavigation();
@@ -116,8 +116,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    margin: 20,
-    borderColor: theme.colors.onSurface,
+    marginTop: 20,
+    marginHorizontal: 20,
+    borderColor: theme.colors.outline,
     borderWidth: 1,
   },
   saldoTitleCard: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: 'flex-end',
     borderTopWidth: 1,
-    borderColor: theme.colors.onSurface,
+    borderColor: theme.colors.outline,
     padding: 10,
 
   },
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 10,
     borderWidth: 1,
-    borderColor: theme.colors.onSurface,
+    borderColor: theme.colors.outline,
   },
   debitarRefeicaoButton: {
     backgroundColor: theme.colors.primary,
@@ -196,11 +197,45 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     flex: 1
   },
+  backgroundColor: {
+    backgroundColor: theme.colors.surface1
+  },
+  infoView: {
+    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderColor: theme.colors.outline,
+    marginHorizontal: 20,
+    padding: 10,
+    
+  },
+  infoText: {
+    color: theme.colors.outline,
+    fontSize: 12,
+    textAlign: 'center',
+    padding: 10,
+  },
+  cardapioView: {
+    padding: 20
+  },
+  cardapioText: {
+    color: theme.colors.onSurface,
+    fontSize: 30,
+    flexDirection: "row",
+  },
+  cardapioSubText: {
+    color: theme.colors.outline,
+    fontSize: 11,
+  },
+  weekRow: {
+    flexDirection: "row",
+  }
 });
 
 
 return (
-  <ScrollView>
+  <ScrollView  contentContainerStyle={styles.backgroundColor}>
     <View style={styles.card}>
       <View style={styles.saldoTitleCard}> 
         <MaterialIcons style={styles.leftIconButton} name="account-balance-wallet" size={24} color={theme.colors.onSurfaceVariant} />
@@ -219,12 +254,27 @@ return (
           <TouchableOpacity style={styles.debitarRefeicaoButton}>
             <Text style={styles.debitarBtnText}>Debitar refeição</Text>
           </TouchableOpacity>
-
-
         </View>
       </View>
     </View>
-
+    <View style={styles.infoView}>
+      <Foundation name="info" size={24} color={theme.colors.outline}/>
+      <Text style={styles.infoText}>Edite o valor de cada refeição nas configurações.</Text>
+    </View>
+    <View style={styles.cardapioView}>
+      <Text style={styles.cardapioText}>
+      Cardápio
+      </Text>
+      <Text style={styles.cardapioSubText}>
+      Informações obtidas pela última vez às 11h38.
+      </Text>
+    </View>
+    
+    <Days
+        days={days}
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
+      />
 
 
   </ScrollView>
