@@ -48,12 +48,21 @@ const Menu = (props) => {
       fontSize: 14,
       paddingHorizontal: 10
     },
+    itemMenuSubjectPrice: {
+      /* TODO fontFamily: '', */
+      alignItems: "flex-start",
+      color: theme.colors.onSurfaceVariant,
+      flexDirection: "row",
+      fontSize: 14,
+      padding: 10
+    },
     details: {
       alignContent: "center",
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "row",
       paddingHorizontal: 10,
+      marginBottom: 10,
       width: '100%',
     },
     ghostBox: {
@@ -74,11 +83,15 @@ const Menu = (props) => {
     },
     hour: {
       flexDirection: "row",
+    },
+    money: {
+      padding: 10,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    
     }
   });
-
-
-
 
 
   return (
@@ -136,9 +149,9 @@ const Menu = (props) => {
               <Text style={styles.subtitle}>Sobremesa:</Text>
               <Text style={styles.itemMenuSubject}>{props.desert}</Text>
             </View>
-            <View>
-              <Text style={styles.subtitle}>Preço:</Text>
-              <Text style={styles.itemMenuSubject}>{props.price}</Text>
+            <View style={styles.money}>
+              <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />
+              <Text style={styles.itemMenuSubjectPrice}>{props.studentPrice} (estudante) ou {props.price} (visitante).</Text>
             </View>
           </View>
         ) : null}

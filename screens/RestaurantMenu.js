@@ -290,7 +290,8 @@ export default function Wallet() {
         bean={lunchMenu.bean}
         salad={lunchMenu.salad}
         desert={lunchMenu.desert}
-        price={"RS 5,20"}
+        studentPrice={"RS 5,20"}
+        price={"RS 10,40"}
       ></Menu>
       {lunchMenu.day != "6" ? (
         <Menu
@@ -305,7 +306,8 @@ export default function Wallet() {
           bean={dinnerMenu.bean}
           salad={dinnerMenu.salad}
           desert={dinnerMenu.desert}
-          price={"RS 5,20"}
+          studentPrice={"RS 5,20"}
+          price={"RS 10,40"}
         ></Menu>
       ) : null}
 
