@@ -5,7 +5,9 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { updateEvent } from '../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
 import Dialog from "react-native-dialog";
+import { useTheme, Appbar, TouchableRipple, Switch } from 'react-native-paper';
 import { updateUser } from '../redux/actions/userActions';
+import { PreferencesContext } from '../theme/PreferencesContext';
 
 export default function Config() {
 
@@ -16,6 +18,8 @@ export default function Config() {
   const [load, setLoad] = useState(false)
   const [name, setName] = useState(user.name)
   const [nameDialog, setNameDialog] = useState(false)
+  const theme = useTheme();
+  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
 
   useEffect(() => {
     Notifications.getAllScheduledNotificationsAsync().then(result => {
@@ -116,6 +120,17 @@ export default function Config() {
           paddingBottom: 30,
           color: '#607D8B',
         }}>Notificacoes: </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        toggleTheme()
+      }}>
+        <Text style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          padding: 10,
+          paddingBottom: 30,
+          color: '#607D8B',
+        }}>Trocar tema</Text>
       </TouchableOpacity>
       {notifications.map((e, i) => (
         <View key={i} style={{ margin: 20, padding: 10, backgroundColor: 'lightblue', borderRadius: 5 }}>
