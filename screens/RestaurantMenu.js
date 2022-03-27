@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
@@ -10,6 +10,9 @@ import cheerio from "react-native-cheerio";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { formatDate, formatReal } from "../helpers/helper";
+import { MaterialIcons } from '@expo/vector-icons';
+import { useTheme } from 'react-native-paper';
+
 
 export default function Wallet() {
   const navigation = useNavigation();
@@ -106,112 +109,124 @@ export default function Wallet() {
     }
   }
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.balanceTitle}>Cardápio</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Restaurant")}>
-            <Text style={styles.cash}>{formatReal(cash)}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.semana}>
-          <View style={(styles.dias, { width: timeWidth })} />
-          <Days
-            days={days}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-          />
-        </View>
-        <View>
-          <Menu
-            shouldShow={true}
-            mealTime={"Almoço"}
-            day={lunchMenu.day}
-            lunchStartTime={lunchMenu.lunchStartTime}
-            lunchEndTime={lunchMenu.lunchEndTime}
-            saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
-            saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
-            mainMeal={lunchMenu.mainMeal}
-            mainMealVegetarian={lunchMenu.mainMealVegetarian}
-            garrison={lunchMenu.garrison}
-            rice={lunchMenu.rice}
-            bean={lunchMenu.bean}
-            salad={lunchMenu.salad}
-            desert={lunchMenu.desert}
-            price={"RS 5,20"}
-          ></Menu>
-          {lunchMenu.day != "6" ? (
-            <Menu
-              shouldShow={true}
-              mealTime={"Jantar"}
-              dinnerStartTime={dinnerMenu.dinnerStartTime}
-              dinnerEndTime={dinnerMenu.dinnerEndTime}
-              mainMeal={dinnerMenu.mainMeal}
-              mainMealVegetarian={dinnerMenu.mainMealVegetarian}
-              garrison={dinnerMenu.garrison}
-              rice={dinnerMenu.rice}
-              bean={dinnerMenu.bean}
-              salad={dinnerMenu.salad}
-              desert={dinnerMenu.desert}
-              price={"RS 5,20"}
-            ></Menu>
-          ) : null}
-        </View>
-      </View>
-    </ScrollView>
-  );
-}
+  const theme =  useTheme();
+
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    paddingTop: 15,
-    padding: 10,
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "center",
+  card: {
     backgroundColor: "#fff",
-    borderBottomColor: "#C4C4C4",
-    borderBottomWidth: 0.5,
+    borderRadius: 12,
+    margin: 20,
+    borderColor: theme.colors.onSurface,
+    borderWidth: 1,
   },
-  balanceTitle: {
-    position: "absolute",
-    alignSelf: "center",
-    fontSize: 32,
-    color: "#484848",
-    textAlign: "center",
-  },
-  cash: {
-    fontSize: 14,
-    alignSelf: "flex-end",
-    textAlign: "center",
-    borderRadius: 5,
-    fontWeight: "bold",
-    padding: 8,
-    marginRight: 10,
-    backgroundColor: "#E8243C",
-    color: "#FFFF",
-  },
-  meals: {
-    flex: 1,
+  saldoTitleCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 10,
+
   },
-  semana: {
-    height: hourHeight,
-    width: wp("100%"),
+  saldoBodyCard: {
+    justifyContent: "space-between",
+    alignItems: 'flex-end',
+    borderTopWidth: 1,
+    borderColor: theme.colors.onSurface,
+    padding: 10,
+
+  },
+  saldo: {
+    justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: "#F8F8F8",
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  dias: {
-    width: hourWidth,
-    height: hourHeight,
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: 'flex-end',
     alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
+  },
+  alterarSaldoButton: {
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    marginRight: 10,
+    marginVertical: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: theme.colors.onSurface,
+  },
+  debitarRefeicaoButton: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 100,
+    padding: 10,
+    marginVertical: 10,
+
+  },
+  leftIconButton: {
+    marginRight: 10,
+  },
+  titleCentered: {
+    color: theme.colors.onSurface,
+    textAlign: "center",
+    fontSize: 20,
+  },
+  iconPlaceholder: {
+    width: 24,
+    height: 24,
+  },
+  saldoValue: {
+    color: theme.colors.primary,
+    fontSize: 30,
+    textAlign: 'center',
+    flex: 1
+  },
+  debitarBtnText: {
+    color: theme.colors.onPrimary,
+    fontSize: 14,
+    textAlign: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1
+  },
+  alterarBtnText: {
+    color: theme.colors.primary,
+    fontSize: 14,
+    textAlign: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1
   },
 });
+
+
+return (
+  <ScrollView>
+    <View style={styles.card}>
+      <View style={styles.saldoTitleCard}> 
+        <MaterialIcons style={styles.leftIconButton} name="account-balance-wallet" size={24} color={theme.colors.onSurfaceVariant} />
+        <Text style={styles.titleCentered} >Saldo da Carteirinha</Text>
+        <View style={styles.iconPlaceholder}></View>
+      </View>
+      <View style={styles.saldoBodyCard}>
+        <View style={styles.saldo}>
+          <Text style={styles.saldoValue}>{formatReal(cash)}</Text>
+        </View>
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.alterarSaldoButton}>
+            <Text style={styles.alterarBtnText}>Alterar saldo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.debitarRefeicaoButton}>
+            <Text style={styles.debitarBtnText}>Debitar refeição</Text>
+          </TouchableOpacity>
+
+
+        </View>
+      </View>
+    </View>
+
+
+
+  </ScrollView>
+);
+}
