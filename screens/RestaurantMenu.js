@@ -10,13 +10,13 @@ import cheerio from "react-native-cheerio";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { formatDate, formatReal } from "../helpers/helper";
-import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from 'react-native-paper';
-import { Foundation } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from "react-native-paper";
+import { Foundation } from "@expo/vector-icons";
+import RestaurantTickets from "../components/RestaurantTickt";
 
 export default function Wallet() {
   const navigation = useNavigation();
-  const cash = useSelector((state) => state.user).user.money;
   const timeWidth = wp("100%") - 7.5 * hourWidth;
   const today = new Date();
   const first = new Date(
@@ -111,113 +111,27 @@ export default function Wallet() {
 
   const theme = useTheme();
 
-
   const styles = StyleSheet.create({
-    card: {
-      backgroundColor: theme.colors.surface,
-      borderRadius: 12,
-      marginTop: 20,
-      marginHorizontal: 20,
-      borderColor: theme.colors.outline,
-      borderWidth: 1,
-    },
-    saldoTitleCard: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: 10,
-
-    },
-    saldoBodyCard: {
-      justifyContent: "space-between",
-      alignItems: 'flex-end',
-      borderTopWidth: 1,
-      borderColor: theme.colors.outline,
-      padding: 10,
-
-    },
-    saldo: {
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexDirection: "row",
-      marginBottom: 10,
-    },
-    buttonRow: {
-      flexDirection: "row",
-      justifyContent: 'flex-end',
-      alignItems: "center",
-    },
-    alterarSaldoButton: {
-      backgroundColor: theme.colors.surface,
-      borderRadius: 100,
-      marginRight: 10,
-      marginVertical: 10,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: theme.colors.outline,
-    },
-    debitarRefeicaoButton: {
-      backgroundColor: theme.colors.primary,
-      borderRadius: 100,
-      padding: 10,
-      marginVertical: 10,
-
-    },
-    leftIconButton: {
-      marginRight: 10,
-    },
-    titleCentered: {
-      color: theme.colors.onSurface,
-      textAlign: "center",
-      fontSize: 20,
-    },
-    iconPlaceholder: {
-      width: 24,
-      height: 24,
-    },
-    saldoValue: {
-      color: theme.colors.primary,
-      fontSize: 30,
-      textAlign: 'center',
-      flex: 1
-    },
-    debitarBtnText: {
-      color: theme.colors.onPrimary,
-      fontSize: 14,
-      textAlign: 'center',
-      paddingLeft: 10,
-      paddingRight: 10,
-      flex: 1
-    },
-    alterarBtnText: {
-      color: theme.colors.primary,
-      fontSize: 14,
-      textAlign: 'center',
-      paddingLeft: 10,
-      paddingRight: 10,
-      flex: 1
-    },
     backgroundColor: {
-      backgroundColor: theme.colors.surface1
+      backgroundColor: theme.colors.surface1,
     },
     infoView: {
       flexDirection: "row",
-      justifyContent: 'center',
+      justifyContent: "center",
       alignItems: "center",
       borderBottomWidth: 1,
       borderColor: theme.colors.outline,
       marginHorizontal: 20,
       padding: 10,
-
     },
     infoText: {
       color: theme.colors.outline,
       fontSize: 12,
-      textAlign: 'center',
+      textAlign: "center",
       padding: 10,
     },
     cardapioView: {
-      padding: 20
+      padding: 20,
     },
     cardapioText: {
       color: theme.colors.onSurface,
@@ -230,41 +144,20 @@ export default function Wallet() {
     },
     weekRow: {
       flexDirection: "row",
-    }
+    },
   });
-
 
   return (
     <ScrollView contentContainerStyle={styles.backgroundColor}>
-      <View style={styles.card}>
-        <View style={styles.saldoTitleCard}>
-          <MaterialIcons style={styles.leftIconButton} name="account-balance-wallet" size={24} color={theme.colors.onSurfaceVariant} />
-          <Text style={styles.titleCentered} >Saldo da Carteirinha</Text>
-          <View style={styles.iconPlaceholder}></View>
-        </View>
-        <View style={styles.saldoBodyCard}>
-          <View style={styles.saldo}>
-            <Text style={styles.saldoValue}>{formatReal(cash)}</Text>
-          </View>
-
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.alterarSaldoButton}>
-              <Text style={styles.alterarBtnText}>Alterar saldo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.debitarRefeicaoButton}>
-              <Text style={styles.debitarBtnText}>Debitar refeição</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      <RestaurantTickets />
       <View style={styles.infoView}>
         <Foundation name="info" size={24} color={theme.colors.outline} />
-        <Text style={styles.infoText}>Edite o valor de cada refeição nas configurações.</Text>
+        <Text style={styles.infoText}>
+          Edite o valor de cada refeição nas configurações.
+        </Text>
       </View>
       <View style={styles.cardapioView}>
-        <Text style={styles.cardapioText}>
-          Cardápio
-        </Text>
+        <Text style={styles.cardapioText}>Cardápio</Text>
         <Text style={styles.cardapioSubText}>
           Informações obtidas pela última vez às 11h38.
         </Text>
@@ -310,7 +203,6 @@ export default function Wallet() {
           price={"RS 10,40"}
         ></Menu>
       ) : null}
-
     </ScrollView>
   );
 }

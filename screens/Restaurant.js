@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../redux/actions/userActions";
 import { formatReal } from "../helpers/helper";
 
-
 export default function Wallet() {
   const user = useSelector((state) => state.user).user;
   const mealValue = 4.2;
