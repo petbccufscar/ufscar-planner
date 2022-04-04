@@ -14,7 +14,7 @@ export function Task(props) {
   };
   const text = task.is_subject ? "" : task.subject + ": "
   return (
-    <TouchableOpacity style={styles.item} onPress={edit}>
+    <TouchableOpacity style={{...styles.item,...props.style}} onPress={edit}>
       <View style={{ ...styles.square, backgroundColor: task.color }}>
       </View>
       <View style={styles.itemLeft}>
