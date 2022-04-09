@@ -3,17 +3,20 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
-import { Days, hourHeight, hourWidth } from "../helpers/CalendarHelper";
+import { Days, hourWidth } from "../helpers/CalendarHelper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
 import cheerio from "react-native-cheerio";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { formatDate, formatReal } from "../helpers/helper";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from "react-native-paper";
+import { Foundation } from "@expo/vector-icons";
+import RestaurantTickets from "../components/RestaurantTickt";
 
 export default function Wallet() {
   const navigation = useNavigation();
-  const cash = useSelector((state) => state.user).user.money;
   const timeWidth = wp("100%") - 7.5 * hourWidth;
   const today = new Date();
   const first = new Date(
@@ -106,112 +109,100 @@ export default function Wallet() {
     }
   }
 
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    backgroundColor: {
+      backgroundColor: theme.colors.surface1,
+    },
+    infoView: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      borderBottomWidth: 1,
+      borderColor: theme.colors.outline,
+      marginHorizontal: 20,
+      padding: 10,
+    },
+    infoText: {
+      color: theme.colors.outline,
+      fontSize: 12,
+      textAlign: "center",
+      padding: 10,
+    },
+    cardapioView: {
+      padding: 20,
+    },
+    cardapioText: {
+      color: theme.colors.onSurface,
+      fontSize: 30,
+      flexDirection: "row",
+    },
+    cardapioSubText: {
+      color: theme.colors.outline,
+      fontSize: 11,
+    },
+    weekRow: {
+      flexDirection: "row",
+    },
+  });
+
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.balanceTitle}>Cardápio</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Restaurant")}>
-            <Text style={styles.cash}>{formatReal(cash)}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.semana}>
-          <View style={(styles.dias, { width: timeWidth })} />
-          <Days
-            days={days}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-          />
-        </View>
-        <View>
-          <Menu
-            shouldShow={true}
-            mealTime={"Almoço"}
-            day={lunchMenu.day}
-            lunchStartTime={lunchMenu.lunchStartTime}
-            lunchEndTime={lunchMenu.lunchEndTime}
-            saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
-            saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
-            mainMeal={lunchMenu.mainMeal}
-            mainMealVegetarian={lunchMenu.mainMealVegetarian}
-            garrison={lunchMenu.garrison}
-            rice={lunchMenu.rice}
-            bean={lunchMenu.bean}
-            salad={lunchMenu.salad}
-            desert={lunchMenu.desert}
-            price={"RS 5,20"}
-          ></Menu>
-          {lunchMenu.day != "6" ? (
-            <Menu
-              shouldShow={true}
-              mealTime={"Jantar"}
-              dinnerStartTime={dinnerMenu.dinnerStartTime}
-              dinnerEndTime={dinnerMenu.dinnerEndTime}
-              mainMeal={dinnerMenu.mainMeal}
-              mainMealVegetarian={dinnerMenu.mainMealVegetarian}
-              garrison={dinnerMenu.garrison}
-              rice={dinnerMenu.rice}
-              bean={dinnerMenu.bean}
-              salad={dinnerMenu.salad}
-              desert={dinnerMenu.desert}
-              price={"RS 5,20"}
-            ></Menu>
-          ) : null}
-        </View>
+    <ScrollView contentContainerStyle={styles.backgroundColor}>
+      <RestaurantTickets />
+      <View style={styles.infoView}>
+        <Foundation name="info" size={24} color={theme.colors.outline} />
+        <Text style={styles.infoText}>
+          Edite o valor de cada refeição nas configurações.
+        </Text>
       </View>
+      <View style={styles.cardapioView}>
+        <Text style={styles.cardapioText}>Cardápio</Text>
+        <Text style={styles.cardapioSubText}>
+          Informações obtidas pela última vez às 11h38.
+        </Text>
+      </View>
+
+      <Days
+        days={days}
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
+      />
+      <Menu
+        shouldShow={false}
+        mealTime={"Almoço"}
+        day={lunchMenu.day}
+        lunchStartTime={lunchMenu.lunchStartTime}
+        lunchEndTime={lunchMenu.lunchEndTime}
+        saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
+        saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
+        mainMeal={lunchMenu.mainMeal}
+        mainMealVegetarian={lunchMenu.mainMealVegetarian}
+        garrison={lunchMenu.garrison}
+        rice={lunchMenu.rice}
+        bean={lunchMenu.bean}
+        salad={lunchMenu.salad}
+        desert={lunchMenu.desert}
+        studentPrice={"RS 5,20"}
+        price={"RS 10,40"}
+      ></Menu>
+      {lunchMenu.day != "6" ? (
+        <Menu
+          shouldShow={false}
+          mealTime={"Jantar"}
+          dinnerStartTime={dinnerMenu.dinnerStartTime}
+          dinnerEndTime={dinnerMenu.dinnerEndTime}
+          mainMeal={dinnerMenu.mainMeal}
+          mainMealVegetarian={dinnerMenu.mainMealVegetarian}
+          garrison={dinnerMenu.garrison}
+          rice={dinnerMenu.rice}
+          bean={dinnerMenu.bean}
+          salad={dinnerMenu.salad}
+          desert={dinnerMenu.desert}
+          studentPrice={"RS 5,20"}
+          price={"RS 10,40"}
+        ></Menu>
+      ) : null}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    paddingTop: 15,
-    padding: 10,
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    borderBottomColor: "#C4C4C4",
-    borderBottomWidth: 0.5,
-  },
-  balanceTitle: {
-    position: "absolute",
-    alignSelf: "center",
-    fontSize: 32,
-    color: "#484848",
-    textAlign: "center",
-  },
-  cash: {
-    fontSize: 14,
-    alignSelf: "flex-end",
-    textAlign: "center",
-    borderRadius: 5,
-    fontWeight: "bold",
-    padding: 8,
-    marginRight: 10,
-    backgroundColor: "#E8243C",
-    color: "#FFFF",
-  },
-  meals: {
-    flex: 1,
-    padding: 10,
-  },
-  semana: {
-    height: hourHeight,
-    width: wp("100%"),
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#F8F8F8",
-    marginBottom: 20,
-  },
-  dias: {
-    width: hourWidth,
-    height: hourHeight,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-});

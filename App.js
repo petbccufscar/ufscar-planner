@@ -1,19 +1,32 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, Platform, UIManager, View, Button, Text } from "react-native";
-import SideBar from "./navigation/SideBar";
+import {
+  NavigationContainer
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Event from "./components/Event";
-import { NavigationContainer } from "@react-navigation/native";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { store } from "./redux/store";
-import { persistor } from "./redux/store";
-import { PersistGate } from "redux-persist/integration/react";
-import { loadEvents } from "./redux/actions/eventActions";
-import { Subject } from "./components/Subject";
-import Restaurant from "./screens/Restaurant";
 import * as Notifications from "expo-notifications";
-import Toast from 'react-native-toast-message';
+import React, { useEffect, useRef } from "react";
+import {
+  Platform, StyleSheet, UIManager
+} from "react-native";
+import {
+  Provider as PaperProvider
+} from "react-native-paper";
+import Toast from "react-native-toast-message";
+import {
+  Provider as ReduxProvider,
+  useDispatch,
+  useSelector
+} from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import Event from "./components/Event";
+import { Subject } from "./components/Subject";
+import SideBar from "./navigation/SideBar";
+import { loadEvents } from "./redux/actions/eventActions";
+import { persistor, store } from "./redux/store";
+import Restaurant from "./screens/Restaurant";
+import { PreferencesContext } from "./theme/PreferencesContext";
+import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
+
+
 
 if (
   Platform.OS === "android" &&
@@ -37,90 +50,110 @@ export default function App() {
   const responseListener = useRef();
 
   useEffect(() => {
-
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-
-      Toast.show({
-        type: 'success',
-        text1: notification.request.content.title,
-        text2: notification.request.content.body
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        Toast.show({
+          type: "success",
+          text1: notification.request.content.title,
+          text2: notification.request.content.body,
+        });
       });
-    });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
   return (
-    <Provider store={store}>
+    <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Loader />
       </PersistGate>
-    </Provider>
+    </ReduxProvider>
   );
 }
 
 function Loader() {
-  const events = useSelector(state => state.events).events
-  const dispatch = useDispatch()
-  dispatch(loadEvents(events))
+  const events = useSelector((state) => state.events).events;
+  const dispatch = useDispatch();
+  dispatch(loadEvents(events));
 
-  return (<>
-    <NavigationContainer>
+  const [isThemeDark, setIsThemeDark] = React.useState(false);
 
-      <HomeStackRoutes.Navigator>
+  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
-        <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
-          <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
-        </HomeStackRoutes.Group>
-        <HomeStackRoutes.Screen
-          name="Event"
-          component={Event}
-          options={() => ({
-            headerStyle: {
-              backgroundColor: "#e8243c",
-            },
-            headerTintColor: "#fff",
-            headerTitleAlign: "center",
-          })}
-        />
-        <HomeStackRoutes.Screen
-          name="Restaurant"
-          component={Restaurant}
-          options={() => ({
-            title: "Carteirinha",
-            headerStyle: {
-              backgroundColor: "#e8243c",
-            },
-            headerTintColor: "#fff",
-            headerTitleAlign: "center",
-          })}
-        />
-        <HomeStackRoutes.Screen
-          name="Subject"
-          component={Subject}
-          options={() => ({
-            headerStyle: {
-              backgroundColor: "#e8243c",
-            },
-            headerTintColor: "#fff",
-            headerTitleAlign: "center",
-          })}
-        />
-      </HomeStackRoutes.Navigator>
-    </NavigationContainer>
-    <Toast
-      bottomOffset={20}
-    />
-  </>)
+  const toggleTheme = React.useCallback(() => {
+    return setIsThemeDark(!isThemeDark);
+  }, [isThemeDark]);
+
+  const preferences = React.useMemo(
+    () => { 
+      return({
+      toggleTheme,
+      isThemeDark,
+    })},
+    [toggleTheme, isThemeDark]
+  );
+
+  return (
+    <>
+      <PreferencesContext.Provider value={preferences}>
+        <PaperProvider theme={theme}>
+          <NavigationContainer theme={theme}>
+            <HomeStackRoutes.Navigator>
+              <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
+                <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
+              </HomeStackRoutes.Group>
+              <HomeStackRoutes.Screen
+                name="Event"
+                component={Event}
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: "#e8243c",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleAlign: "center",
+                })}
+              />
+              <HomeStackRoutes.Screen
+                name="Restaurant"
+                component={Restaurant}
+                options={() => ({
+                  title: "Carteirinha",
+                  headerStyle: {
+                    backgroundColor: "#e8243c",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleAlign: "center",
+                })}
+              />
+              <HomeStackRoutes.Screen
+                name="Subject"
+                component={Subject}
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: "#e8243c",
+                  },
+                  headerTintColor: "#fff",
+                  headerTitleAlign: "center",
+                })}
+              />
+            </HomeStackRoutes.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </PreferencesContext.Provider>
+      <Toast bottomOffset={20} />
+    </>
+  );
 }
-
 
 const styles = StyleSheet.create({
   container: {

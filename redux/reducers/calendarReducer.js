@@ -1,14 +1,11 @@
 import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
+import { floorDate } from '../../helpers/helper';
 
 const offset = 90;
 
 const offsetDate = (date, days) => {
     return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
-}
-
-const floorDate = (data) => {
-    return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0')));
 }
 
 const initalSetup = () => {

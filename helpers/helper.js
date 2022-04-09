@@ -62,3 +62,7 @@ export const defaultTask = {
     "grade": {},
     "frequency": ""
   }
+
+export const floorDate = (data) => {
+    return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0')));
+}

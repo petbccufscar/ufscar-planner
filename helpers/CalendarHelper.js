@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
 } from "react-native";
+import { useTheme } from "react-native-paper";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -32,11 +33,14 @@ export const dayComponentHeight = wp("100%") / 7;
 
 // É a barra da semana
 export function Days(props) {
+  const theme = useTheme();
+
+
   const width = props.width ?? weekBall;
   const height = props.height ?? weekBall;
   let days = [];
   const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-  if (props.days != null) {
+
     let i = props.days["begin"];
     // Percorrendo os dias da semana
     do {
@@ -49,8 +53,64 @@ export function Days(props) {
       i = new Date(i.getTime() + 24 * 60 * 60 * 1000);
     } while (i.getDay() != props.days["end"].getDay());
 
+
+    // Estilo
+    const styles = StyleSheet.create({
+      weekDays: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        backgroundColor: theme.colors.primaryContainer,
+      },
+      semana: {
+        height: hourHeight,
+        width: wp("100%"),
+        backgroundColor: bgColor,
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+      },
+      planilha: {
+        backgroundColor: bgColor,
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+      },
+      scroll: {
+        width: wp("100%"),
+        backgroundColor: bgColor,
+        flex: 1,
+        flexGrow: 1,
+      },
+      column: {
+        flexDirection: "column",
+      },
+      dias: {
+        width: hourWidth,
+        height: hourHeight,
+        backgroundColor: 'transparent',
+        alignItems: "center",
+        justifyContent: "center",
+        alignSelf: "center",
+      },
+      circulo: {
+        height: 24 * (hourHeight + dividerHeight),
+        width: hourWidth,
+        backgroundColor: bgColor,
+      },
+      horario: {
+        height: 24 * (hourHeight + dividerHeight),
+        width: hourWidth,
+        backgroundColor: "#F4F",
+      },
+    });
+
+
+
+
+
+
     return (
-      <>
+      <View style={styles.weekDays}>
         {days.map((day, i) => {
           return (
             <Pressable
@@ -58,7 +118,7 @@ export function Days(props) {
               style={styles.dias}
               key={day.day}
             >
-              <Text>{day.title}</Text>
+              <Text style={{color: theme.colors.onPrimaryContainer, fontWeight: 'bold', fontSize: 14, paddingBottom: 5}}>{day.title}</Text>
               <View
                 style={{
                   alignItems: "center",
@@ -67,11 +127,11 @@ export function Days(props) {
                   width: width,
                   height: height,
                   borderRadius: 100,
-                  backgroundColor: day.today ? weekBallColor : "transparent",
+                  backgroundColor: day.today ? theme.colors.primary : "transparent",
                 }}
               >
                 <Text
-                  style={{ color: day.today ? BWFont(weekBallColor) : "#000" }}
+                  style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onPrimaryContainer }}
                 >
                   {day.day}
                 </Text>
@@ -79,118 +139,7 @@ export function Days(props) {
             </Pressable>
           );
         })}
-      </>
-    );
-  } else {
-    return (
-      //todo arrumar isso para deixar igual a outra barra
-      <View
-        style={{ ...styles.semana, justifyContent: "center", height: height }}
-      >
-        {week.map((weekDay, i) => {
-          return (
-            <WeekDay
-              label={weekDay}
-              height={height}
-              width={width}
-              key={i}
-              active={false}
-              today={false}
-            />
-          );
-        })}
       </View>
     );
-  }
+  
 }
-
-export function WeekDay(props) {
-  const width = props.width ?? weekDayBall;
-  const height = props.height ?? weekDayBall;
-  if (props.active)
-    return (
-      <View
-        style={{
-          backgroundColor: weekBallColor,
-          width: width,
-          height: height,
-          borderRadius: 100,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ color: "#fff" }}>{props.label}</Text>
-      </View>
-    );
-  else
-    return (
-      <View
-        style={
-          props.today == true
-            ? {
-              borderRadius: 100,
-              borderWidth: 1,
-              borderColor: weekBallColor,
-              width: width,
-              height: weekDayBall,
-              alignItems: "center",
-              justifyContent: "center",
-            }
-            : {
-              width: width,
-              height: weekDayBall,
-              alignItems: "center",
-              justifyContent: "center",
-            }
-        }
-      >
-        <Text style={{ color: "#000" }}>{props.label}</Text>
-      </View>
-    );
-}
-
-
-// Estilo
-export const styles = StyleSheet.create({
-  semana: {
-    height: hourHeight,
-    width: wp("100%"),
-    backgroundColor: bgColor,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  planilha: {
-    backgroundColor: bgColor,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  scroll: {
-    width: wp("100%"),
-    backgroundColor: bgColor,
-    flex: 1,
-    flexGrow: 1,
-  },
-  column: {
-    flexDirection: "column",
-  },
-  dias: {
-    width: hourWidth,
-    height: hourHeight,
-    backgroundColor: bgColor,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  circulo: {
-    height: 24 * (hourHeight + dividerHeight),
-    width: hourWidth,
-    backgroundColor: bgColor,
-  },
-  horario: {
-    height: 24 * (hourHeight + dividerHeight),
-    width: hourWidth,
-    backgroundColor: "#F4F",
-  },
-});
