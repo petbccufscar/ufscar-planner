@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, LayoutAnimation } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Entypo, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/core";
 
 import HomeNavigator from './tabs/HomeNavigator';
@@ -40,36 +40,120 @@ export default function MyTabs() {
           }}
         />
       ),
+      tabBarActiveTintColor: theme.colors.onSecundaryContainer,
+      tabBarInactiveTintColor: theme.colors.onSurface,
+      headerPressColor: theme.colors.secundaryContainer,
+      tabBarStyle: {
+          backgroundColor: theme.colors.surface2,
+          paddingBottom: 8,
+          shadowColor: 'transparent',
+          shadowOpacity: 0.2,
+          height: 60,
+          borderTopColor: 'transparent',
+      },
     }}>
-      <Tab.Screen name="HomeTab" component={HomeNavigator} options={{
-        tabBarLabel: 'Home',
-        title: 'UFSCar Planner',
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="home" size={size} color={color} />
-        ),
-      }} />
-      <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={{
-        tabBarLabel: 'Planner',
-        title: 'UFSCar Planner',
-        // headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <MaterialIcons name="class" size={size} color={color} />
-        ),
-      }} />
-      <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={{
-        tabBarLabel: 'Restaurante',
-        title: 'UFSCar Planner',
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="silverware-fork-knife" size={size} color={color} />
-        ),
-      }} />
-      <Tab.Screen name="TaskTab" component={TaskNavigator} options={{
-        tabBarLabel: 'Mais',
-        title: 'UFSCar Planner',
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="menu" size={size} color={color} />
-        ),
-      }} />
+      <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
+          title: 'UFSCar Planner',
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
+          ),
+      })} />
+      <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
+          title: 'UFSCar Planner',
+          tabBarLabel: 'Planner',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
+          ),
+      })} />
+      <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
+          title: 'UFSCar Planner',
+          tabBarLabel: 'Restaurante',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 2} />
+          ),
+      })} />
+      <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
+          title: 'UFSCar Planner',
+          tabBarLabel: 'Mais',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="menu" color={color} active={navigation.getState().index == 3} />
+          ),
+      })} />
     </Tab.Navigator>
   );
 }
+
+
+/**
+ * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+ */
+function TabBarIcon(props) {
+  const colors = useTheme().colors;
+  
+  //make the color spread from the center when property active change
+  console.log(colors)
+  const selectedStyle = 
+  props.active ? {...styles.active, ...{ backgroundColor: colors.secondaryContainer }} : styles.inactive;
+    
+  // React.useEffect(() => {
+  //     if (props.active) {
+  //         LayoutAnimation.configureNext({
+  //             duration: 100,
+  //             create: {
+  //                 type: LayoutAnimation.Types.linear,
+  //                 property: LayoutAnimation.Properties.opacity,
+  //             },
+  //             update: {
+  //                 type: LayoutAnimation.Types.linear,
+  //             },
+  //         });
+  //         setSelectedStyle([styles.active, { backgroundColor: colors.secundaryContainer }]);
+  //     } else {
+  //         setSelectedStyle(styles.inactive);
+  //     }
+  // }, [props.active]);
+  
+  return (
+    <View style={styles.iconContainer}>
+      <View style={styles.absoluteContainer}>
+        <View style={selectedStyle} />
+      </View>
+      <MaterialIcons name={props.name} size={24} color={props.active ?  colors.onSecondaryContainer : colors.onSurface} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  absoluteContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 15,
+      backgroundColor: 'transparent',
+  },
+
+  inactive: {
+      width: 10,
+      height: 10,
+      backgroundColor: 'transparent',
+  },
+
+  active: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 15,
+  },
+
+  iconContainer: {
+      width: '50%',
+      height: '80%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+  },
+});
