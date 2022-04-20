@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View, LayoutAnimation } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Entypo, MaterialCommunityIcons, MaterialIcons,FontAwesome } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/core";
 
 import HomeNavigator from './tabs/HomeNavigator';
@@ -54,30 +54,30 @@ export default function MyTabs() {
     }}>
       <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
-          labelTitle: 'Home',
+          tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
-              <TabBarIcon name="twitter-square" color={color} active={navigation.getState().index == 0} />
+            <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
           ),
       })} />
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
-          labelTitle: 'Planner',
+          tabBarLabel: 'Planner',
           tabBarIcon: ({ color }) => (
-              <TabBarIcon name="twitter-square" color={color} active={navigation.getState().index == 1} />
+            <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
           ),
       })} />
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
-          labelTitle: 'Restaurantes',
+          tabBarLabel: 'Restaurante',
           tabBarIcon: ({ color }) => (
-              <TabBarIcon name="twitter-square" color={color} active={navigation.getState().index == 2} />
+            <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 2} />
           ),
       })} />
       <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
-          labelTitle: 'Mais',
+          tabBarLabel: 'Mais',
           tabBarIcon: ({ color }) => (
-              <TabBarIcon name="twitter-square" color={color} active={navigation.getState().index == 3} />
+            <TabBarIcon name="menu" color={color} active={navigation.getState().index == 3} />
           ),
       })} />
     </Tab.Navigator>
@@ -94,8 +94,7 @@ function TabBarIcon(props) {
   //make the color spread from the center when property active change
   console.log(colors)
   const selectedStyle = 
-    props.active ? {...styles.active, ...{ backgroundColor: colors.secondaryContainer }} : styles.inactive
-;
+  props.active ? {...styles.active, ...{ backgroundColor: colors.secondaryContainer }} : styles.inactive;
     
   // React.useEffect(() => {
   //     if (props.active) {
@@ -114,13 +113,14 @@ function TabBarIcon(props) {
   //         setSelectedStyle(styles.inactive);
   //     }
   // }, [props.active]);
-    return (
-      <View style={styles.iconContainer}>
-          <View style={styles.absoluteContainer}>
-              <View style={selectedStyle} />
-          </View>
-          <FontAwesome name={props.name} size={24} color={props.active ?  colors.onSecondaryContainer : colors.onSurface} />
+  
+  return (
+    <View style={styles.iconContainer}>
+      <View style={styles.absoluteContainer}>
+        <View style={selectedStyle} />
       </View>
+      <MaterialIcons name={props.name} size={24} color={props.active ?  colors.onSecondaryContainer : colors.onSurface} />
+    </View>
   );
 }
 
