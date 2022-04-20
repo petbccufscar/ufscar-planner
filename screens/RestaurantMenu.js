@@ -145,64 +145,73 @@ export default function Wallet() {
     weekRow: {
       flexDirection: "row",
     },
+    space: {
+      height: 20,
+      backgroundColor: theme.colors.surface1,
+    },
   });
 
   return (
-    <ScrollView contentContainerStyle={styles.backgroundColor}>
-      <RestaurantTickets />
-      <View style={styles.infoView}>
-        <Foundation name="info" size={24} color={theme.colors.outline} />
-        <Text style={styles.infoText}>
-          Edite o valor de cada refeição nas configurações.
-        </Text>
-      </View>
-      <View style={styles.cardapioView}>
-        <Text style={styles.cardapioText}>Cardápio</Text>
-        <Text style={styles.cardapioSubText}>
-          Informações obtidas pela última vez às 11h38.
-        </Text>
-      </View>
+    <View style={styles.backgroundColor}>
+      <ScrollView>
+        <RestaurantTickets />
+        <View style={styles.infoView}>
+          <Foundation name="info" size={24} color={theme.colors.outline} />
+          <Text style={styles.infoText}>
+            Edite o valor de cada refeição nas configurações.
+          </Text>
+        </View>
+        <View style={styles.cardapioView}>
+          <Text style={styles.cardapioText}>Cardápio</Text>
+          <Text style={styles.cardapioSubText}>
+            Informações obtidas pela última vez às 11h38.
+          </Text>
+        </View>
 
-      <Days
-        days={days}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
-      />
-      <Menu
-        shouldShow={false}
-        mealTime={"Almoço"}
-        day={lunchMenu.day}
-        lunchStartTime={lunchMenu.lunchStartTime}
-        lunchEndTime={lunchMenu.lunchEndTime}
-        saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
-        saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
-        mainMeal={lunchMenu.mainMeal}
-        mainMealVegetarian={lunchMenu.mainMealVegetarian}
-        garrison={lunchMenu.garrison}
-        rice={lunchMenu.rice}
-        bean={lunchMenu.bean}
-        salad={lunchMenu.salad}
-        desert={lunchMenu.desert}
-        studentPrice={"RS 5,20"}
-        price={"RS 10,40"}
-      ></Menu>
-      {lunchMenu.day != "6" ? (
+        <Days
+          days={days}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
         <Menu
           shouldShow={false}
-          mealTime={"Jantar"}
-          dinnerStartTime={dinnerMenu.dinnerStartTime}
-          dinnerEndTime={dinnerMenu.dinnerEndTime}
-          mainMeal={dinnerMenu.mainMeal}
-          mainMealVegetarian={dinnerMenu.mainMealVegetarian}
-          garrison={dinnerMenu.garrison}
-          rice={dinnerMenu.rice}
-          bean={dinnerMenu.bean}
-          salad={dinnerMenu.salad}
-          desert={dinnerMenu.desert}
+          mealTime={"Almoço"}
+          day={lunchMenu.day}
+          lunchStartTime={lunchMenu.lunchStartTime}
+          lunchEndTime={lunchMenu.lunchEndTime}
+          saturdayLunchStartTime={lunchMenu.saturdayLunchStartTime}
+          saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
+          mainMeal={lunchMenu.mainMeal}
+          mainMealVegetarian={lunchMenu.mainMealVegetarian}
+          garrison={lunchMenu.garrison}
+          rice={lunchMenu.rice}
+          bean={lunchMenu.bean}
+          salad={lunchMenu.salad}
+          desert={lunchMenu.desert}
           studentPrice={"RS 5,20"}
           price={"RS 10,40"}
         ></Menu>
-      ) : null}
-    </ScrollView>
+        {lunchMenu.day != "6" ? (
+          <Menu
+            shouldShow={false}
+            mealTime={"Jantar"}
+            dinnerStartTime={dinnerMenu.dinnerStartTime}
+            dinnerEndTime={dinnerMenu.dinnerEndTime}
+            mainMeal={dinnerMenu.mainMeal}
+            mainMealVegetarian={dinnerMenu.mainMealVegetarian}
+            garrison={dinnerMenu.garrison}
+            rice={dinnerMenu.rice}
+            bean={dinnerMenu.bean}
+            salad={dinnerMenu.salad}
+            desert={dinnerMenu.desert}
+            studentPrice={"RS 5,20"}
+            price={"RS 10,40"}
+          ></Menu>
+        ) : null}
+
+        <View style={{height: 10}}></View>
+
+      </ScrollView>
+    </View>
   );
 }
