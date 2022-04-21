@@ -7,7 +7,7 @@ import { Days, hourWidth } from "../helpers/CalendarHelper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/core";
 import cheerio from "react-native-cheerio";
-import { ScrollView } from "react-native-gesture-handler";
+import ScrollView from "./../components/ScrollView";
 import { useSelector } from "react-redux";
 import { formatDate, formatReal } from "../helpers/helper";
 import { MaterialIcons } from "@expo/vector-icons";

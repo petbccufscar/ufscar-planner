@@ -5,6 +5,8 @@ import { Colors, IconButton } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { Calendar } from '../../components/Calendar'
 import { addEvent } from '../../redux/actions/eventActions'
+import { useTheme } from 'react-native-paper';
+
 import { useDispatch } from 'react-redux';
 
 const calendarStack = createNativeStackNavigator();
@@ -16,41 +18,10 @@ let mode = 0;
 
 export default function CalendarNavigator({ navigation }) {
     const events = useSelector(state => state.events.events);
+    const colors = useTheme().colors;
+
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     const newEvent = {
-    //         "id": 5,
-    //         "weekly": true,
-    //         "details": [
-    //             {
-    //                 "datetime_init": "1995-12-17T12:24:00-03:00",
-    //                 "datetime_end": "1995-12-17T15:02:00-03:00",
-    //                 "local": "ava2",
-    //                 "day": 5
-    //             }
-    //         ],
-    //         "name": "AED10",
-    //         "subject": "AED10",
-    //         "notification": [
-    //             120,
-    //             60,
-    //             5
-    //         ],
-    //         "description": "aula do fulano",
-    //         "color": "#00f",
-    //         "is_subject": true,
-    //         "mean": "(P0 + P1 + P2)/3",
-    //         "grade": {
-    //             "P0": 0,
-    //             "P1": 5,
-    //             "P2": null
-    //         },
-    //         "frequency": {}
-    //     }
-
-    //     dispatch(addEvent(newEvent));
-    // }, [])
     useEffect(() => {
         navigation.setOptions({
             title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
@@ -62,7 +33,13 @@ export default function CalendarNavigator({ navigation }) {
             presentation: 'containedTransparentModal', animation: "fade"
         }}>
             <calendarStack.Screen name="Calendar" options={({ navigation }) => ({
-                headerShown: false
+                title: 'UFSCar Planner',
+                headerStyle: {
+                    backgroundColor: colors.surface1,
+                },
+                headerShadowVisible: false,
+                headerTintColor: colors.onSurface,
+                headerTitleAlign: 'center',
             })}>
                 {props => <Calendar />}
             </calendarStack.Screen>

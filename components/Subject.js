@@ -42,7 +42,7 @@ export function Subject({ route, navigation }) {
     navigation.setOptions({
       headerTitle: "Média e frequência",
       headerTintColor: BWFont(color),
-      headerStyle: { backgroundColor: color },
+      // headerStyle: { backgroundColor: color },
       headerRight: () => (
         <IconButton
           icon={"check"}
