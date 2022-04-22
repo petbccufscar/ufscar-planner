@@ -110,7 +110,7 @@ export default function Event({ route, navigation }) {
     navigation.setOptions({
       headerTitle: name,
       headerTintColor: BWFont(color),
-      headerStyle: { backgroundColor: color },
+      // headerStyle: { backgroundColor: color },
       headerRight: () => (
         <IconButton
           icon={editMode ? "check" : "pencil"}

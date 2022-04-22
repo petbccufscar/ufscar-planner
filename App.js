@@ -116,10 +116,10 @@ function Loader() {
                 name="Event"
                 component={Event}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: "#e8243c",
-                  },
-                  headerTintColor: "#fff",
+                  // headerStyle: {
+                  //   backgroundColor: "#e8243c",
+                  // },
+                  // headerTintColor: "#fff",
                   headerTitleAlign: "center",
                 })}
               />
@@ -128,10 +128,10 @@ function Loader() {
                 component={Restaurant}
                 options={() => ({
                   title: "Carteirinha",
-                  headerStyle: {
-                    backgroundColor: "#e8243c",
-                  },
-                  headerTintColor: "#fff",
+                  // headerStyle: {
+                  //   backgroundColor: "#e8243c",
+                  // },
+                  // headerTintColor: "#fff",
                   headerTitleAlign: "center",
                 })}
               />
@@ -139,10 +139,10 @@ function Loader() {
                 name="Subject"
                 component={Subject}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: "#e8243c",
-                  },
-                  headerTintColor: "#fff",
+                  // headerStyle: {
+                  //   backgroundColor: "#e8243c",
+                  // },
+                  // headerTintColor: "#fff",
                   headerTitleAlign: "center",
                 })}
               />

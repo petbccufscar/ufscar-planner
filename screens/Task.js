@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { row } from 'mathjs';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import ScrollView from "./../components/ScrollView";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
 import { useNavigation } from "@react-navigation/core";

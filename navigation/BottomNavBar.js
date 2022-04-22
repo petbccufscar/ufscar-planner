@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/core";
 
 import HomeNavigator from './tabs/HomeNavigator';
 import TaskNavigator from './tabs/TaskNavigator';
+import Task from '../screens/Task';
 import CalendarNavigator from './tabs/CalendarNavigator';
 import RestaurantNavigator from './tabs/RestaurantNavigator';
 import { IconButton } from "react-native-paper";
@@ -55,6 +56,7 @@ export default function MyTabs() {
       <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
           tabBarLabel: 'Home',
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
           ),
@@ -62,12 +64,14 @@ export default function MyTabs() {
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
           tabBarLabel: 'Planner',
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
           ),
       })} />
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
+          headerShown: false,
           tabBarLabel: 'Restaurante',
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 2} />
@@ -75,6 +79,7 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
+          headerShown: false,
           tabBarLabel: 'Mais',
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="menu" color={color} active={navigation.getState().index == 3} />
@@ -92,27 +97,8 @@ function TabBarIcon(props) {
   const colors = useTheme().colors;
   
   //make the color spread from the center when property active change
-  console.log(colors)
   const selectedStyle = 
   props.active ? {...styles.active, ...{ backgroundColor: colors.secondaryContainer }} : styles.inactive;
-    
-  // React.useEffect(() => {
-  //     if (props.active) {
-  //         LayoutAnimation.configureNext({
-  //             duration: 100,
-  //             create: {
-  //                 type: LayoutAnimation.Types.linear,
-  //                 property: LayoutAnimation.Properties.opacity,
-  //             },
-  //             update: {
-  //                 type: LayoutAnimation.Types.linear,
-  //             },
-  //         });
-  //         setSelectedStyle([styles.active, { backgroundColor: colors.secundaryContainer }]);
-  //     } else {
-  //         setSelectedStyle(styles.inactive);
-  //     }
-  // }, [props.active]);
   
   return (
     <View style={styles.iconContainer}>
