@@ -46,7 +46,7 @@ function EventsScreen() {
 
   const renderItem = item => {
     
-    const mt = stItems[floorDate(new Date(item.detail.datetime_init))][0] == item ? 35:0; 
+    const mt = 0;//stItems[floorDate(new Date(item.detail.datetime_init))][0] == item ? 35:0; 
     return (<CalendarTask style={{marginTop: mt}} task={item}></CalendarTask>
   )};
 
