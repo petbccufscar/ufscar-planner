@@ -38,15 +38,20 @@ export default function Event({ route, navigation }) {
   //boleano
   const [isSubject, setIsSubject] = useState(task.is_subject);
   const [weekly, setWeekly] = useState(task.weekly);
+  const [isSubmited, setIsSubmited] = useState(task.is_submited);
 
   //todo
   const [subject, setSubject] = useState(task.subject);
   const [color, setColor] = useState(task.color);
+  const [turma, setTurma] = useState(task.turma);
+  const [teachers, setTeachers] = useState(task.teachers);
+
+
 
   // tela separada
   const [grade, setGrade] = useState(task.grade);
-  const [frequency, setFrequency] = useState(task.frequency || "0");
-  const [mean, setMean] = useState(task.mean || "0");
+  const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
+  const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
   const [name, setName] = useState(task.name);
   const firstTime = task.id == null || task.id == undefined;
@@ -157,6 +162,11 @@ export default function Event({ route, navigation }) {
     grade,
     isSubject,
     subject,
+    isSubmited,
+    turma,
+    teachers,
+    
+
   ]);
 
   useEffect(() => {

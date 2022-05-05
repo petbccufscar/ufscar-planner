@@ -6,7 +6,7 @@ import { CalendarTask } from './CalendarTask';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
 import Toast from 'react-native-toast-message';
-import { defaultTask, floorDate } from '../helpers/helper';
+import { defaultTask, defaultSubject, floorDate } from '../helpers/helper';
 import { useTheme } from "react-native-paper";
 
 export function Calendar() {
@@ -61,8 +61,21 @@ function EventsScreen() {
   const rowHasChanged = (r1, r2) => r1 !== r2;
   const th = useTheme()
   const colors = th.colors;
+  const [state, setState] = React.useState({ open: false });
 
+  const onStateChange = ({ open }) => setState({ open });
 
+  const { open } = state;
+  const styles = StyleSheet.create({
+    fab: {
+      borderRadius: 10,
+      backgroundColor: colors.surface3
+    },
+    activedFAB:{
+      borderRadius: 10,
+      backgroundColor: colors.primary
+    }
+  })
   return (
     <>
       <Agenda
@@ -98,20 +111,45 @@ function EventsScreen() {
       
 
       />
-      <FAB
+      {/* <FAB
         style={styles.fab}
         icon="plus"
         onPress={() => navigation.navigate("Event", { task: defaultTask })}
-      />
+      /> */}
+
+<FAB.Group
+          open={open}
+          icon={'plus'}
+          fabStyle={open ?{width:0, height:0}: styles.fab}
+          visible={!open}
+          color={colors.primary}
+      
+          actions={[
+            {
+              icon: 'book',
+              label: 'Matéria',
+              style: styles.fab,
+              color: colors.primary,
+              onPress: () => navigation.navigate("Event", { task: defaultSubject }),
+            },
+            {
+              icon: 'calendar',
+              label: 'Evento',
+              style: styles.activedFAB,
+              color: colors.onPrimary,
+              onPress: () => navigation.navigate("Event", { task: defaultTask }),
+              small: false,
+            },
+          ]}
+          onStateChange={onStateChange}
+          onPress={() => {
+            if (open) {
+              // do something if the speed dial is open
+            }
+          }}
+        />
+
     </>
   );
 };
 
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-})
