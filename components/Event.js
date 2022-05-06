@@ -12,6 +12,7 @@ import {
   Linking,
 } from "react-native";
 import Toast from "react-native-toast-message";
+import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -19,12 +20,8 @@ import {
   removeEvent,
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
-import { ColorPicker, fromHsv } from "react-native-color-picker";
-import { Button, IconButton } from "react-native-paper";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { Button, IconButton, useTheme } from "react-native-paper";
+
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
 import { formatDateWithHour } from "../helpers/helper";
@@ -32,6 +29,7 @@ import { formatDateWithHour } from "../helpers/helper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
+import { PickerGradSquare, SelGradSquare } from "./Gradient";
 
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
@@ -64,7 +62,6 @@ export default function Event({ route, navigation }) {
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
   const [openNameDialog, setOpenNameDialog] = useState(false);
   const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
-  const [openColorDialog, setOpenColorDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
 
@@ -219,31 +216,7 @@ export default function Event({ route, navigation }) {
     );
   }
 
-  function ColorDialog() {
-    let aux = color;
-    return (
-      <Dialog.Container visible={openColorDialog}>
-        <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description></Dialog.Description>
-        <ColorPicker
-          onColorChange={(color) => (aux = color)}
-          defaultColor={aux}
-          style={{ width: 300, height: 300 }}
-        />
-        <Dialog.Button
-          label="Cancel"
-          onPress={() => setOpenColorDialog(false)}
-        />
-        <Dialog.Button
-          label="Ok"
-          onPress={() => {
-            setColor(fromHsv(aux));
-            setOpenColorDialog(false);
-          }}
-        />
-      </Dialog.Container>
-    );
-  }
+ 
 
   function NotificationDialog() {
     const [n, setN] = useState(1);
@@ -539,9 +512,48 @@ export default function Event({ route, navigation }) {
   } catch (e) {}
 
   const user = useSelector(state => state.user).user
+  const colors = useTheme().colors
 
+
+  
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.colorContainer}>
+        <View style={styles.sectionIcon}>
+        <Ionicons name="color-palette" size={24} color="black" />
+        </View>
+        <View style={styles.description}>
+          <Text style={styles.title}>Cor</Text>
+        </View>
+      </View>
+      <View style={styles.colorContainer}>
+      
+      <SelGradSquare color={0} state={color} setState={setColor}/>
+        <SelGradSquare color={1} state={color} setState={setColor}/>
+        <SelGradSquare color={2} state={color} setState={setColor}/>
+        <SelGradSquare color={3} state={color} setState={setColor}/>
+        <SelGradSquare color={4} state={color} setState={setColor}/>
+        <SelGradSquare color={5} state={color} setState={setColor}/>
+        <SelGradSquare color={6} state={color} setState={setColor}/>
+        <SelGradSquare color={7} state={color} setState={setColor}/>
+
+      </View>
+      <View style={styles.colorContainer}>
+        <SelGradSquare color={8} state={color} setState={setColor}/>
+        <SelGradSquare color={9} state={color} setState={setColor}/>
+        <SelGradSquare color={10} state={color} setState={setColor}/>
+        <SelGradSquare color={11} state={color} setState={setColor}/>
+        <SelGradSquare color={12} state={color} setState={setColor}/>
+        <SelGradSquare color={13} state={color} setState={setColor}/>
+        <SelGradSquare color={14} state={color} setState={setColor}/>
+        <PickerGradSquare color={isNaN(color)?color:"#f0f"} state={color} setState={setColor}/>
+        
+      </View>
+      <View style={styles.sectionContainer}/>
+
+
+
+
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="tag" color="#007cc1" size={30} />
@@ -616,25 +628,7 @@ export default function Event({ route, navigation }) {
           )}
         </View>
       )}
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="square" color={color} size={30} />
-        </View>
-        <View style={styles.description}>
-          <Text>Cor: {color}</Text>
-        </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenColorDialog(true);
-            }}
-            size={18}
-          />
-        )}
-      </View>
+
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="calendar" color="#007cc1" size={30} />
@@ -794,7 +788,6 @@ export default function Event({ route, navigation }) {
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
-      <ColorDialog />
       <View style={styles.sectionContainer}>
         <View style={styles.sectionIcon}>
           <IconButton icon="comment-text" color="#007cc1" size={30} />
@@ -843,10 +836,20 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
+  colorContainer: {
+    flexDirection: "row",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 18
+  },
   sectionIcon: {
-    marginTop: -10,
+    margin: 10,
+  },
+  title:{
+    fontSize: 20,
   },
 
   details: {

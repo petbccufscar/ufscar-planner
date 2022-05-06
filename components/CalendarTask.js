@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { formatHour, formatDateWithHour } from '../helpers/helper';
 import { useTheme } from "react-native-paper";
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Gradient } from "./Gradient";
 
 export function Task(props) {
   const mostrarData = props.show || false
@@ -35,7 +36,6 @@ export function Task(props) {
       width: 10,
       height: '100%',
       // backgroundColor: "#55BCF6", // Definir como passar a cor da tarefa
-      opacity: 0.4,
       //marginRight: 10,
     },
     itemTaskSubject: {
@@ -72,9 +72,8 @@ export function Task(props) {
 
   return (
         <TouchableOpacity style={{...styles.itemLeft}} onPress={edit}>
-          <View style={{ ...styles.square, backgroundColor: task.color }}>
+          <Gradient style={{ ...styles.square }} color={task.color}/>
 
-          </View>
           <View style={styles.atumalaca}>
             <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
             <View style={styles.superItem}>
@@ -139,7 +138,6 @@ export function CalendarTask(props) {
       width: 10,
       height: '100%',
       // backgroundColor: "#55BCF6", // Definir como passar a cor da tarefa
-      opacity: 0.4,
       //marginRight: 10,
     },
     itemTaskSubject: {
@@ -176,9 +174,7 @@ export function CalendarTask(props) {
 
   return (
         <TouchableOpacity style={{...styles.itemLeft}} onPress={edit}>
-          <View style={{ ...styles.square, backgroundColor: task.color }}>
-
-          </View>
+          <Gradient style={{ ...styles.square }} color={task.color}/>
           <View style={styles.atumalaca}>
             <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
             <View style={styles.superItem}>
