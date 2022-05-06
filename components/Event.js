@@ -7,12 +7,12 @@ import {
   Alert,
   StyleSheet,
   LayoutAnimation,
-  TextInput,
   CheckBox,
   Linking,
+  TextInput
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -20,6 +20,7 @@ import {
   removeEvent,
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
+  
 import { Button, IconButton, useTheme } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
@@ -30,7 +31,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
 import { PickerGradSquare, SelGradSquare } from "./Gradient";
-
+import { Feather } from '@expo/vector-icons';
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -518,7 +519,7 @@ export default function Event({ route, navigation }) {
   
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.colorContainer}>
+      {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
         <Ionicons name="color-palette" size={24} color="black" />
         </View>
@@ -549,19 +550,72 @@ export default function Event({ route, navigation }) {
         <PickerGradSquare color={isNaN(color)?color:"#f0f"} state={color} setState={setColor}/>
         
       </View>
-      <View style={styles.sectionContainer}/>
+      </>)
+      }
+
+
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialIcons name="title" size={24} color="black" />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Titulo</Text>
+          </View>
+      </View>
+      <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Novo Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setName(text)}
+/>
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <Entypo name="text" size={24} color="black" />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Descrição</Text>
+          </View>
+      </View>
+      <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Detalhes do Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setDescription(text)}
+/>
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="history" size={24} color="black" />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Recorrência</Text>
+          </View>
+      </View>
+      <View style={styles.colorContainer}>
+        <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
+          {!weekly && (<Feather name="check" size={16} color="white" />)}
+          <Text>Evento único</Text></TouchableOpacity>
+        <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
+          {weekly && (<Feather name="check" size={16} color="white" />)}  
+          <Text>Evento recorrente</Text></TouchableOpacity>
+
+      </View>
 
 
 
+
+
+
+
+        {/* Codigo antigo */}
 
       <View style={styles.sectionContainer}>
+        
         <View style={styles.sectionIcon}>
           <IconButton icon="tag" color="#007cc1" size={30} />
         </View>
         <View style={styles.description}>
-          <Text>Nome: {name}</Text>
+          <Text>Titulo: {name}</Text>
         </View>
-        {editMode && (
+        {/* {editMode && (
           <IconButton
             style={styles.xButton}
             icon="pencil"
@@ -571,7 +625,7 @@ export default function Event({ route, navigation }) {
             }}
             size={18}
           />
-        )}
+        )} */}
       </View>
 
       <View style={styles.sectionContainer}>
@@ -885,7 +939,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
-
+  textInput: {
+    marginHorizontal: 20,
+    marginVertical: 5,
+    borderRadius: 12,
+    borderBottomWidth:0,
+    padding: 10,
+    backgroundColor: 'red'
+  },
   actionButton: {
     backgroundColor: "#e8243c",
     borderRadius: 10,
@@ -902,6 +963,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8243c",
     padding: 8,
     borderRadius: 10,
+  },
+
+  rbutton:{
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginLeft: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+  rbuttonAct:{
+    marginLeft: 10,
+    padding: 10,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
 
   deleteButton: {

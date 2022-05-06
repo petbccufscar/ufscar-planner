@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Feather  } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 import { ColorPicker, fromHsv } from "react-native-color-picker";
@@ -63,7 +63,7 @@ export function SelGradSquare(props) {
         <TouchableOpacity onPress={() => setState(props.color)} style={{borderRadius: 9,margin: 5,
             borderWidth: state == props.color?1:0, }}>
             <Gradient color={props.color} style={styles.square}>
-                {state == props.color && (<Entypo name="check" size={24} color="white" />)}
+                {state == props.color && (<Feather name="check" size={24} color="white" />)}
             </Gradient>
         </TouchableOpacity>
     )
