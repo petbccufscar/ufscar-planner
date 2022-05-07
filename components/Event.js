@@ -78,11 +78,11 @@ export default function Event({ route, navigation }) {
 
   const week = [
     "Domingo",
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
     "Sábado",
   ];
 
@@ -597,7 +597,55 @@ export default function Event({ route, navigation }) {
           <Text>Evento recorrente</Text></TouchableOpacity>
 
       </View>
+      {details.sort(sortDetails).map((detail, index) => (
+            <View key={index} style={styles.detail}>
+              <View>
+                <Text>{`${
+                  weekly
+                    ? week[detail.day]
+                    : formatDateWithHour(detail.datetime_init)
+                }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
+                  detail.datetime_end
+                )}`}</Text>
+                <Text>{ `${detail.local}`}</Text>
+              </View>
+              {!editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="map"
+                  color="red"
+                  onPress={async () => {
+                    let place = user.campus + ", UFSCAR, " + detail.local;
 
+                    const url =
+                      "https://www.google.com/maps/search/?api=1&query=" +
+                      encodeURI(place);
+
+                    const supported = await Linking.canOpenURL(url);
+
+                    if (supported) {
+                      await Linking.openURL(url);
+                    } else {
+                      Alert.alert(`Don't know how to open this URL: ${url}`);
+                    }
+                  }}
+                  size={18}
+                />
+              )}
+              {editMode && (
+                <IconButton
+                  style={styles.xButton}
+                  icon="close"
+                  color="black"
+                  onPress={() => {
+                    let newDetails = details.filter((d) => d != detail);
+                    setDetails([...newDetails]);
+                  }}
+                  size={18}
+                />
+              )}
+            </View>
+          ))}
 
 
 
@@ -688,55 +736,7 @@ export default function Event({ route, navigation }) {
         </View>
         <View style={styles.details}>
           <Text>Horários: </Text>
-          {details.sort(sortDetails).map((detail, index) => (
-            <View key={index} style={styles.detail}>
-              <View>
-                <Text>{`${
-                  weekly
-                    ? week[detail.day]
-                    : formatDateWithHour(detail.datetime_init)
-                }, ${detail.local}`}</Text>
-                <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
-                  detail.datetime_end
-                )}`}</Text>
-              </View>
-              {!editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="map"
-                  color="red"
-                  onPress={async () => {
-                    let place = user.campus + ", UFSCAR, " + detail.local;
-
-                    const url =
-                      "https://www.google.com/maps/search/?api=1&query=" +
-                      encodeURI(place);
-
-                    const supported = await Linking.canOpenURL(url);
-
-                    if (supported) {
-                      await Linking.openURL(url);
-                    } else {
-                      Alert.alert(`Don't know how to open this URL: ${url}`);
-                    }
-                  }}
-                  size={18}
-                />
-              )}
-              {editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="close"
-                  color="black"
-                  onPress={() => {
-                    let newDetails = details.filter((d) => d != detail);
-                    setDetails([...newDetails]);
-                  }}
-                  size={18}
-                />
-              )}
-            </View>
-          ))}
+          
           {editMode && (
             <View style={styles.action}>
               <Button
