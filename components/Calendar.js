@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { InteractionManager, View, StyleSheet } from "react-native";
-import { Agenda, LocaleConfig, CalendarProps } from 'react-native-calendars';
+import {  LocaleConfig, CalendarProps } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
+import AgendaList from './Agenda';
 import { CalendarTask } from './CalendarTask';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
@@ -45,11 +46,7 @@ function EventsScreen() {
   let stMarked = useSelector(state => state.cards).marked;
   let stItems = useSelector(state => state.cards).items;
   console.log(Object.keys(stItems).length);
-  const renderItem = item => {
-    
-    const mt = 0;//stItems[floorDate(new Date(item.detail.datetime_init))][0] == item ? 35:0; 
-    return (<CalendarTask style={{marginTop: mt}} task={item}></CalendarTask>
-  )};
+
 
   const renderEmptyDate = () => {
     return (
@@ -78,7 +75,8 @@ function EventsScreen() {
   })
   return (
     <>
-      <Agenda
+      <AgendaList items={stItems} selectedDate={new Date()}/>
+      {/* <Agenda
         key={th.dark}
         items={stItems}
         selected={new Date()}
@@ -110,7 +108,7 @@ function EventsScreen() {
         
       
 
-      />
+      /> */}
       {/* <FAB
         style={styles.fab}
         icon="plus"

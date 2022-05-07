@@ -110,7 +110,7 @@ export function CalendarTask(props) {
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-  const text = task.is_subject ? "" : task.subject + ": "
+  
 
   const theme = useTheme();
 
@@ -169,7 +169,7 @@ export function CalendarTask(props) {
         <TouchableOpacity style={{...styles.itemLeft}} onPress={edit}>
           <Gradient style={{ ...styles.square }} color={task.color}/>
           <View style={styles.atumalaca}>
-            <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
+            <Text style={styles.itemTaskSubject}>{task.name}</Text>
             <View style={styles.superItem}>
               <View style={styles.iconView}>
               <MaterialIcons name="schedule" size={24} color={theme.colors.onSecondaryContainer} />

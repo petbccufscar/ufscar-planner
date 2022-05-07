@@ -32,7 +32,6 @@ import ScrollPicker from "react-native-picker-scrollview";
 import { PickerGradSquare, SelGradSquare } from "./Gradient";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
-  console.log(task)
   //boleano
   const [isSubject, setIsSubject] = useState(task.is_subject||false);
   const [weekly, setWeekly] = useState(task.weekly||false);
