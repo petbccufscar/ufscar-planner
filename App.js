@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useRef } from "react";
 import {
-  Platform, StyleSheet, UIManager
+  Platform, StyleSheet, UIManager, AppRegistry
 } from "react-native";
 import {
   Provider as PaperProvider
@@ -44,7 +44,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-
+AppRegistry.registerComponent('X', () => App);
 export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();

@@ -7,7 +7,6 @@ import {
   Alert,
   StyleSheet,
   LayoutAnimation,
-  CheckBox,
   Linking,
   TextInput
 } from "react-native";
@@ -636,11 +635,11 @@ export default function Event({ route, navigation }) {
         <View style={styles.description}>
           <Text>É semanal </Text>
         </View>
-        <CheckBox
+        {/* <CheckBox
           value={weekly}
           onValueChange={changeWeekly}
           disabled={!editMode}
-        />
+        /> */}
         <HorarioDialog weekly={weekly} />
       </View>
 
@@ -653,11 +652,11 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text>É matéria </Text>
           </View>
-          <CheckBox
+          {/* <CheckBox
             value={isSubject}
             onValueChange={setIsSubject}
             disabled={!editMode}
-          />
+          /> */}
         </View>
       )}
       {!isSubject && (

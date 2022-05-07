@@ -2,7 +2,7 @@ import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
 import { floorDate } from '../../helpers/helper';
 
-const offset = 90;
+const offset = 7;
 
 const offsetDate = (date, days) => {
     return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -10,7 +10,7 @@ const offsetDate = (date, days) => {
 
 const initalSetup = () => {
 
-    let datei = offsetDate(new Date(), -offset)
+    let datei = offsetDate(new Date(), -1)
     const datef = offsetDate(new Date(), offset)
     let items = {}
     while (datei.getTime() <= datef.getTime()) {

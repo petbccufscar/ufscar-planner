@@ -44,7 +44,7 @@ function EventsScreen() {
 
   let stMarked = useSelector(state => state.cards).marked;
   let stItems = useSelector(state => state.cards).items;
-
+  console.log(Object.keys(stItems).length);
   const renderItem = item => {
     
     const mt = 0;//stItems[floorDate(new Date(item.detail.datetime_init))][0] == item ? 35:0; 
@@ -53,7 +53,7 @@ function EventsScreen() {
 
   const renderEmptyDate = () => {
     return (
-      <View style={{ backgroundColor: 'transparent', width: 100, height: 100 }}>
+      <View style={{ backgroundColor: 'transparent', width: 100, height: 0 }}>
       </View>
     );
   };
