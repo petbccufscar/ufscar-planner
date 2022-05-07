@@ -11,7 +11,7 @@ import {
   TextInput
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -30,7 +30,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
 import { PickerGradSquare, SelGradSquare } from "./Gradient";
-import { Feather } from '@expo/vector-icons';
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -514,6 +513,68 @@ export default function Event({ route, navigation }) {
   const user = useSelector(state => state.user).user
   const colors = useTheme().colors
 
+  function DetailRender(props){
+    const index = props.index
+    const detail = props.detail
+    return (
+      <View key={index} style={{margin: 20, backgroundColor: 'gray', borderRadius: 10, padding: 10, flexDirection: 'row'}}>
+        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor:'red'}}>
+        <Feather name="repeat" size={18} color="black" style={{paddingRight: 8}}/>
+          <Text>{`${
+            weekly
+              ? week[detail.day]
+              : formatDateWithHour(detail.datetime_init)
+          }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
+            detail.datetime_end
+          )}`}</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+        <MaterialIcons name="location-pin" size={20} color="black" style={{paddingRight: 8}}/>
+          <Text>{ `${detail.local}`}</Text>
+          
+        
+        </View>
+      </View>
+      <View style={{backgroundColor: 'blue', alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      {!editMode && (
+          <IconButton
+            icon="map"
+            color="red"
+            style={{margin:0}}
+            onPress={async () => {
+              let place = user.campus + ", UFSCAR, " + detail.local;
+
+              const url =
+                "https://www.google.com/maps/search/?api=1&query=" +
+                encodeURI(place);
+
+              const supported = await Linking.canOpenURL(url);
+
+              if (supported) {
+                await Linking.openURL(url);
+              } else {
+                Alert.alert(`Don't know how to open this URL: ${url}`);
+              }
+            }}
+            size={18}
+          />
+        )}
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color="black"
+            onPress={() => {
+              let newDetails = details.filter((d) => d != detail);
+              setDetails([...newDetails]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
 
   
   return (
@@ -597,232 +658,9 @@ export default function Event({ route, navigation }) {
           <Text>Evento recorrente</Text></TouchableOpacity>
 
       </View>
-      {details.sort(sortDetails).map((detail, index) => (
-            <View key={index} style={styles.detail}>
-              <View>
-                <Text>{`${
-                  weekly
-                    ? week[detail.day]
-                    : formatDateWithHour(detail.datetime_init)
-                }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
-                  detail.datetime_end
-                )}`}</Text>
-                <Text>{ `${detail.local}`}</Text>
-              </View>
-              {!editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="map"
-                  color="red"
-                  onPress={async () => {
-                    let place = user.campus + ", UFSCAR, " + detail.local;
-
-                    const url =
-                      "https://www.google.com/maps/search/?api=1&query=" +
-                      encodeURI(place);
-
-                    const supported = await Linking.canOpenURL(url);
-
-                    if (supported) {
-                      await Linking.openURL(url);
-                    } else {
-                      Alert.alert(`Don't know how to open this URL: ${url}`);
-                    }
-                  }}
-                  size={18}
-                />
-              )}
-              {editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="close"
-                  color="black"
-                  onPress={() => {
-                    let newDetails = details.filter((d) => d != detail);
-                    setDetails([...newDetails]);
-                  }}
-                  size={18}
-                />
-              )}
-            </View>
-          ))}
-
-
-
-
-
-
-        {/* Codigo antigo */}
-
-      <View style={styles.sectionContainer}>
-        
-        <View style={styles.sectionIcon}>
-          <IconButton icon="tag" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.description}>
-          <Text>Titulo: {name}</Text>
-        </View>
-        {/* {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenNameDialog(true);
-            }}
-            size={18}
-          />
-        )} */}
-      </View>
-
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="calendar-refresh" color="#007cc1" size={30} />
-        </View>
-
-        <View style={styles.description}>
-          <Text>É semanal </Text>
-        </View>
-        {/* <CheckBox
-          value={weekly}
-          onValueChange={changeWeekly}
-          disabled={!editMode}
-        /> */}
-        <HorarioDialog weekly={weekly} />
-      </View>
-
-      {weekly && (
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionIcon}>
-            <IconButton icon="notebook" color="#007cc1" size={30} />
-          </View>
-
-          <View style={styles.description}>
-            <Text>É matéria </Text>
-          </View>
-          {/* <CheckBox
-            value={isSubject}
-            onValueChange={setIsSubject}
-            disabled={!editMode}
-          /> */}
-        </View>
-      )}
-      {!isSubject && (
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionIcon}>
-            <IconButton icon="book" color="#007cc1" size={30} />
-          </View>
-
-          <View style={styles.description}>
-            <Text>Nome da Matéria: {subject}</Text>
-          </View>
-          {editMode && (
-            <IconButton
-              style={styles.xButton}
-              icon="pencil"
-              color="black"
-              onPress={() => {
-                if (editMode) setOpenSubjectDialog(true);
-              }}
-              size={18}
-            />
-          )}
-        </View>
-      )}
-
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="calendar" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.details}>
-          <Text>Horários: </Text>
-          
-          {editMode && (
-            <View style={styles.action}>
-              <Button
-                onPress={() => {
-                  setOpenHorarioDialog(true);
-                }}
-                labelStyle={styles.actionButtonLabel}
-                style={styles.actionButton}
-              >
-                Adicionar horário
-              </Button>
-            </View>
-          )}
-        </View>
-      </View>
+      {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
+      <HorarioDialog weekly={weekly} />
       <NotificationDialog />
-      {isSubject && (
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionIcon}>
-            <IconButton icon="book-open" color="#007cc1" size={30} />
-          </View>
-          <View style={styles.meanAndFrequency}>
-            <Text>Média = {mean + resultMean}</Text>
-            <Text>Frequência = {frequency + resultFreq}</Text>
-          </View>
-          {editMode && (
-            <IconButton
-              style={styles.xButton}
-              icon="pencil"
-              color="black"
-              onPress={() =>
-                navigation.navigate("Subject", {
-                  task: {
-                    ...task,
-                    grade: grade,
-                    frequency: frequency,
-                    mean: mean,
-                  },
-                })
-              }
-              size={18}
-            />
-          )}
-        </View>
-      )}
-
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="bell-ring" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.reminder}>
-          <Text>Notificações: </Text>
-          {notifications.map((notification, index) => (
-            <View key={index} style={styles.notification}>
-              <Text>{getTime(notification) + " antes"}</Text>
-              {editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="close"
-                  color="black"
-                  onPress={() => {
-                    let newNotifications = notifications.filter(
-                      (e) => e != notification
-                    );
-                    setNotifications([...newNotifications]);
-                  }}
-                  size={18}
-                />
-              )}
-            </View>
-          ))}
-          {editMode && (
-            <View style={styles.action}>
-              <Button
-                onPress={() => {
-                  setOpenNotificationDialog(true);
-                }}
-                labelStyle={styles.actionButtonLabel}
-                style={styles.actionButton}
-              >
-                Adicionar lembrete
-              </Button>
-            </View>
-          )}
-        </View>
-      </View>
       <SimpleDialog
         fun={setName}
         old={name}
@@ -841,25 +679,7 @@ export default function Event({ route, navigation }) {
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="comment-text" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.description}>
-          <Text>Descrição: {description}</Text>
-        </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenDescriptionDialog(true);
-            }}
-            size={18}
-          />
-        )}
-      </View>
+
       {editMode && !firstTime && (
         <View style={styles.action}>
           <Button
@@ -915,7 +735,6 @@ const styles = StyleSheet.create({
 
   detail: {
     marginBottom: 20,
-    flexDirection: "row",
   },
 
   reminder: {
