@@ -73,7 +73,7 @@ export const defaultSubject = {
     "is_subject": true,
     "is_submited": false,
     "details": [],
-    "name": "Novo Evento",
+    "name": "Nova Matéria",
     "subject": null,
     "notification": [],
     "description": "descrição",
@@ -81,7 +81,7 @@ export const defaultSubject = {
     "mean": "(p1+p2+p3)/3",
     "frequency": "(aulasDadas - faltas)/aulasDadas",
     "grade": {},
-    "turma": null,
+    "turma": "Turma A",
     "teachers": [],
 }
 

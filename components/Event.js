@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ScrollView from "./ScrollView";
 import Toast from "react-native-toast-message";
-import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -32,25 +32,26 @@ import ScrollPicker from "react-native-picker-scrollview";
 import { PickerGradSquare, SelGradSquare } from "./Gradient";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
+  console.log(task)
   //boleano
-  const [isSubject, setIsSubject] = useState(task.is_subject);
-  const [weekly, setWeekly] = useState(task.weekly);
-  const [isSubmited, setIsSubmited] = useState(task.is_submited);
+  const [isSubject, setIsSubject] = useState(task.is_subject||false);
+  const [weekly, setWeekly] = useState(task.weekly||false);
+  const [isSubmited, setIsSubmited] = useState(task.is_submited||false);
 
   //todo
-  const [subject, setSubject] = useState(task.subject);
-  const [color, setColor] = useState(task.color);
-  const [turma, setTurma] = useState(task.turma);
-  const [teachers, setTeachers] = useState(task.teachers);
+  const [subject, setSubject] = useState(task.subject||null);
+  const [color, setColor] = useState(task.color||0);
+  const [turma, setTurma] = useState(task.turma||"");
+  const [teachers, setTeachers] = useState(task.teachers||[]);
 
 
 
   // tela separada
-  const [grade, setGrade] = useState(task.grade);
+  const [grade, setGrade] = useState(task.grade||{});
   const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
-  const [name, setName] = useState(task.name);
+  const [name, setName] = useState(task.name||"Novo Evento");
   const firstTime = task.id == null || task.id == undefined;
   const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
@@ -59,6 +60,7 @@ export default function Event({ route, navigation }) {
 
   //dialog
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
+  const [openTeacherDialog, setOpenTeacherDialog] = useState(false);
   const [openNameDialog, setOpenNameDialog] = useState(false);
   const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
@@ -573,6 +575,56 @@ export default function Event({ route, navigation }) {
     )
   }
 
+  
+  function BotaoAdicionarQueAbreUmDialogo(props){
+    const setState = props.setState
+    return(
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flex:1}}/>
+            <TouchableOpacity
+              onPress={() => {
+                setState(true);
+              }}
+              style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
+            >
+              <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
+              <Text style={{color: colors.onSurface}}>Adicionar</Text>
+              
+            </TouchableOpacity>
+        <View style={{flex:1}}/>
+
+      </View>)
+  }
+
+
+  function TeacherRender(props){
+    const index = props.index
+    const teacher = props.teacher
+    return (
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, paddingVertical:5, flexDirection: 'row'}}>
+        <View style ={{alignItems: 'center', justifyContent:'center'}}>
+        
+          <Text style={{color:colors.onSurface}}>{`${teacher}`}</Text>
+      </View>
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color={colors.onSurface}
+            onPress={() => {
+              let newTeachers = teachers.filter((d) => d != teacher);
+              setTeachers([...newTeachers]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
+
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -746,6 +798,24 @@ export default function Event({ route, navigation }) {
       placeholder="Novo Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setName(text)}
 />
+
+
+  {isSubject && (<><View style={styles.colorContainer}>
+            <View style={styles.sectionIcon}>
+            <Ionicons name="school" size={24} color={colors.onSurface} />
+
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.title}>Turma</Text>
+            </View>
+        </View>
+        <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+        placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
+        onChangeText={text => setTurma(text)}
+  /></>)}
+
+
+
       <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <Entypo name="text" size={24} color={colors.onSurface} />
@@ -759,7 +829,22 @@ export default function Event({ route, navigation }) {
       placeholder="Detalhes do Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setDescription(text)}
 />
+
       <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <FontAwesome name="user" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Professores</Text>
+          </View>
+      </View>
+
+      { teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
+      }
+      {editMode && (
+          <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>)}
+      {!isSubject && (<><View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
 
@@ -776,8 +861,22 @@ export default function Event({ route, navigation }) {
           {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
           <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
 
-      </View>
+      </View></>)}
+      {isSubject && (<View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Horários</Text>
+          </View>
+      </View>)}
+
       {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
+      {editMode && (
+          <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
+
+
       <HorarioDialog weekly={weekly} />
       <NotificationDialog />
       <SimpleDialog
@@ -785,36 +884,26 @@ export default function Event({ route, navigation }) {
         old={name}
         open={openNameDialog}
         setOpen={setOpenNameDialog}
-      />
+        />
       <SimpleDialog
         fun={setDescription}
         old={description}
         open={openDescriptionDialog}
         setOpen={setOpenDescriptionDialog}
       />
+
+      <SimpleDialog
+        fun={(novoProf) => setTeachers([...teachers,novoProf])}
+        open={openTeacherDialog}
+        setOpen={setOpenTeacherDialog}
+      />
+      
       <SimpleDialog
         fun={setSubject}
         old={subject}
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
-      {editMode && (
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex:1}}/>
-              <TouchableOpacity
-                onPress={() => {
-                  setOpenHorarioDialog(true);
-                }}
-                style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
-              >
-                <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
-                <Text style={{color: colors.onSurface}}>Adicionar</Text>
-                
-              </TouchableOpacity>
-          <View style={{flex:1}}/>
-
-        </View>
-          )}
 
 
       {editMode && !firstTime && (

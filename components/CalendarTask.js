@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatHour, formatDateWithHour } from '../helpers/helper';
 import { useTheme } from "react-native-paper";
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Gradient } from "./Gradient";
 
 export function Task(props) {
@@ -78,7 +78,7 @@ export function Task(props) {
             <Text style={styles.itemTaskSubject}>{text}{task.name}</Text>
             <View style={styles.superItem}>
               <View style={styles.iconView}>
-              <MaterialIcons name="schedule" size={24} color={theme.colors.onSecondaryContainer} />
+              <MaterialCommunityIcons name="clock" size={24} color={theme.colors.onSecondaryContainer} />
               </View>
               <Text style={styles.itemDate}>
                 {""}
@@ -87,22 +87,15 @@ export function Task(props) {
                 {task.detail.local}
               </Text>
             </View>
+            {task.description.lenght > 0 &&(
             <View style={styles.superItem}>
             <View style={styles.iconView}>
             <Entypo name="text" size={24} color="black" />
               
             </View>
-            <Text style={styles.itemDate}>abasdadasd
-              asdasdasdad
-              adasdasdasdaxx
-              adsasdasdasxa
-              asdasdasdadsdadsa
-              aaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
+              <Text style={styles.itemDate}>`{task.description}`
             </Text>
-            </View>
+            </View>)}
           </View>
     </TouchableOpacity>
   );
