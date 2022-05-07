@@ -596,6 +596,43 @@ export default function Event({ route, navigation }) {
       </View>)
   }
 
+  function notificationText(notification){
+    if (notification != 0)
+      return getTime(notification) + " antes"
+    return "Assim que começar"
+  }
+
+  function NotificationRender(props){
+    const index = props.index
+    const notification = props.notification
+    return (
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10,paddingVertical:5, flexDirection: 'row'}}>
+        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.onSurface}}>{`${notificationText(notification)}`}</Text>
+        </View>
+    
+      </View>
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color={colors.onSurface}
+            onPress={() => {
+              let newNotifications = notifications.filter(
+                (e) => e != notification
+              );
+              setNotifications([...newNotifications]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
 
   function TeacherRender(props){
     const index = props.index
@@ -829,8 +866,8 @@ export default function Event({ route, navigation }) {
       placeholder="Detalhes do Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setDescription(text)}
 />
-
-      <View style={styles.colorContainer}>
+      {isSubject &&
+      (<View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <FontAwesome name="user" size={24} color={colors.onSurface} />
 
@@ -838,12 +875,16 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Professores</Text>
           </View>
-      </View>
-
-      { teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
+      </View>)
       }
-      {editMode && (
+
+      {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
+      }
+      {editMode && isSubject &&(
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>)}
+
+
+      
       {!isSubject && (<><View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
@@ -862,7 +903,7 @@ export default function Event({ route, navigation }) {
           <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
 
       </View></>)}
-      {isSubject && (<View style={styles.colorContainer}>
+      <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
 
@@ -870,11 +911,26 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Horários</Text>
           </View>
-      </View>)}
+      </View>
 
       {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
       {editMode && (
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
+
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Notificações</Text>
+          </View>
+      </View>
+
+
+      { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
+      {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+
 
 
       <HorarioDialog weekly={weekly} />
