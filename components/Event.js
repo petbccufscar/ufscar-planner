@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
   Text,
   View,
   TouchableOpacity,
@@ -10,6 +9,7 @@ import {
   Linking,
   TextInput
 } from "react-native";
+import ScrollView from "./ScrollView";
 import Toast from "react-native-toast-message";
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
@@ -64,6 +64,9 @@ export default function Event({ route, navigation }) {
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
 
+  const colors = useTheme().colors;
+
+
   const changeWeekly = (e) => {
     if (!e) {
       setWeekly(false);
@@ -110,13 +113,13 @@ export default function Event({ route, navigation }) {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: name,
-      headerTintColor: BWFont(color),
+      // headerTintColor: BWFont(color),
       // headerStyle: { backgroundColor: color },
       headerRight: () => (
         <IconButton
           icon={editMode ? "check" : "pencil"}
           size={24}
-          color={BWFont(color)}
+          // color={BWFont(color)}
           onPress={() => {
             LayoutAnimation.configureNext({
               duration: 200,
@@ -511,17 +514,16 @@ export default function Event({ route, navigation }) {
   } catch (e) {}
 
   const user = useSelector(state => state.user).user
-  const colors = useTheme().colors
 
   function DetailRender(props){
     const index = props.index
     const detail = props.detail
     return (
-      <View key={index} style={{margin: 20, backgroundColor: 'gray', borderRadius: 10, padding: 10, flexDirection: 'row'}}>
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
         <View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor:'red'}}>
-        <Feather name="repeat" size={18} color="black" style={{paddingRight: 8}}/>
-          <Text>{`${
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.onSurface}}>{`${
             weekly
               ? week[detail.day]
               : formatDateWithHour(detail.datetime_init)
@@ -529,41 +531,36 @@ export default function Event({ route, navigation }) {
             detail.datetime_end
           )}`}</Text>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-        <MaterialIcons name="location-pin" size={20} color="black" style={{paddingRight: 8}}/>
-          <Text>{ `${detail.local}`}</Text>
+        <TouchableOpacity 
+        onPress={async () => {
+          let place = user.campus + ", UFSCAR, " + detail.local;
+
+          const url =
+            "https://www.google.com/maps/search/?api=1&query=" +
+            encodeURI(place);
+
+          const supported = await Linking.canOpenURL(url);
+
+          if (supported) {
+            await Linking.openURL(url);
+          } else {
+            Alert.alert(`Don't know how to open this URL: ${url}`);
+          }
+        }}
+        
+        style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 5}}>
+        <MaterialIcons name="location-pin" size={20} color={colors.primary} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.primary}}>{ `${detail.local}`}</Text>
           
         
-        </View>
+        </TouchableOpacity>
       </View>
-      <View style={{backgroundColor: 'blue', alignItems: 'flex-end', justifyContent:'center', flex:1}}>
-      {!editMode && (
-          <IconButton
-            icon="map"
-            color="red"
-            style={{margin:0}}
-            onPress={async () => {
-              let place = user.campus + ", UFSCAR, " + detail.local;
-
-              const url =
-                "https://www.google.com/maps/search/?api=1&query=" +
-                encodeURI(place);
-
-              const supported = await Linking.canOpenURL(url);
-
-              if (supported) {
-                await Linking.openURL(url);
-              } else {
-                Alert.alert(`Don't know how to open this URL: ${url}`);
-              }
-            }}
-            size={18}
-          />
-        )}
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
         {editMode && (
           <IconButton
             icon="minus-circle-outline"
-            color="black"
+            color={colors.onSurface}
             onPress={() => {
               let newDetails = details.filter((d) => d != detail);
               setDetails([...newDetails]);
@@ -576,12 +573,134 @@ export default function Event({ route, navigation }) {
     )
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.surface1,
+    },
   
+    sectionContainer: {
+      flexDirection: "row",
+      padding: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: "#ddd",
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    colorContainer: {
+      flexDirection: "row",
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      marginLeft: 18
+    },
+    sectionIcon: {
+      margin: 10,
+    },
+    title:{
+      fontSize: 20,
+      color: colors.onSurface
+    },
+  
+    details: {
+      flex: 1,
+    },
+  
+    xButton: {
+      marginLeft: "auto",
+    },
+  
+    detail: {
+      marginBottom: 20,
+    },
+  
+    reminder: {
+      flex: 1,
+    },
+  
+    data: {
+      textAlignVertical: "center",
+      color: "white",
+    },
+    notification: {
+      marginBottom: 20,
+      flexDirection: "row",
+      height: 40,
+      alignContent: "center",
+      alignItems: "center",
+    },
+  
+    description: {
+      flex: 1,
+      flexDirection: "row",
+    },
+    textInput: {
+      marginHorizontal: 20,
+      marginVertical: 5,
+      borderRadius: 12,
+      borderBottomWidth:0,
+      padding: 10,
+      backgroundColor: colors.surface,
+      color: colors.onSurface,
+    },
+    actionButton: {
+      backgroundColor: "#e8243c",
+      borderRadius: 10,
+      width: 200,
+    },
+    spacingDate: {
+      marginTop: 10,
+      marginBottom: 10,
+    },
+  
+    dateAndDatepicker: {
+      flexDirection: "row",
+      textAlignVertical: "center",
+      backgroundColor: "#e8243c",
+      padding: 8,
+      borderRadius: 10,
+    },
+  
+    rbutton:{
+      padding: 10,
+      borderWidth: 1,
+      borderRadius: 10,
+      marginLeft: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.surface,
+      borderColor: colors.outline
+  
+    },
+    rbuttonAct:{
+      marginLeft: 10,
+      padding: 10,
+      backgroundColor: colors.secondaryContainer,
+      borderRadius: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+  
+    },
+  
+    deleteButton: {
+      margin: 20,
+      width: "50%",
+      alignSelf: "center",
+    },
+    calendar: {
+      color: "black",
+      flex: 1,
+      marginRight: 10,
+    },
+    actionButtonLabel: {
+      color: "white",
+    },})
   return (
     <ScrollView style={styles.container}>
       {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
-        <Ionicons name="color-palette" size={24} color="black" />
+        <Ionicons name="color-palette" size={24} color={colors.onSurface} />
         </View>
         <View style={styles.description}>
           <Text style={styles.title}>Cor</Text>
@@ -616,7 +735,7 @@ export default function Event({ route, navigation }) {
 
       <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-          <MaterialIcons name="title" size={24} color="black" />
+          <MaterialIcons name="title" size={24} color={colors.onSurface} />
 
           </View>
           <View style={styles.description}>
@@ -629,7 +748,7 @@ export default function Event({ route, navigation }) {
 />
       <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-          <Entypo name="text" size={24} color="black" />
+          <Entypo name="text" size={24} color={colors.onSurface} />
 
           </View>
           <View style={styles.description}>
@@ -642,7 +761,7 @@ export default function Event({ route, navigation }) {
 />
       <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-          <MaterialCommunityIcons name="history" size={24} color="black" />
+          <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
 
           </View>
           <View style={styles.description}>
@@ -651,11 +770,11 @@ export default function Event({ route, navigation }) {
       </View>
       <View style={styles.colorContainer}>
         <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
-          {!weekly && (<Feather name="check" size={16} color="white" />)}
-          <Text>Evento único</Text></TouchableOpacity>
+          {!weekly && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color: !weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento único</Text></TouchableOpacity>
         <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
-          {weekly && (<Feather name="check" size={16} color="white" />)}  
-          <Text>Evento recorrente</Text></TouchableOpacity>
+          {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
+          <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
 
       </View>
       {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
@@ -679,6 +798,24 @@ export default function Event({ route, navigation }) {
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
+      {editMode && (
+        <View style={{flexDirection: 'row'}}>
+          <View style={{flex:1}}/>
+              <TouchableOpacity
+                onPress={() => {
+                  setOpenHorarioDialog(true);
+                }}
+                style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
+              >
+                <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
+                <Text style={{color: colors.onSurface}}>Adicionar</Text>
+                
+              </TouchableOpacity>
+          <View style={{flex:1}}/>
+
+        </View>
+          )}
+
 
       {editMode && !firstTime && (
         <View style={styles.action}>
@@ -694,127 +831,8 @@ export default function Event({ route, navigation }) {
           </Button>
         </View>
       )}
+      
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  sectionContainer: {
-    flexDirection: "row",
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  colorContainer: {
-    flexDirection: "row",
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginLeft: 18
-  },
-  sectionIcon: {
-    margin: 10,
-  },
-  title:{
-    fontSize: 20,
-  },
-
-  details: {
-    flex: 1,
-  },
-
-  xButton: {
-    marginLeft: "auto",
-  },
-
-  detail: {
-    marginBottom: 20,
-  },
-
-  reminder: {
-    flex: 1,
-  },
-
-  data: {
-    textAlignVertical: "center",
-    color: "white",
-  },
-  notification: {
-    marginBottom: 20,
-    flexDirection: "row",
-    height: 40,
-    alignContent: "center",
-    alignItems: "center",
-  },
-
-  description: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  textInput: {
-    marginHorizontal: 20,
-    marginVertical: 5,
-    borderRadius: 12,
-    borderBottomWidth:0,
-    padding: 10,
-    backgroundColor: 'red'
-  },
-  actionButton: {
-    backgroundColor: "#e8243c",
-    borderRadius: 10,
-    width: 200,
-  },
-  spacingDate: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-
-  dateAndDatepicker: {
-    flexDirection: "row",
-    textAlignVertical: "center",
-    backgroundColor: "#e8243c",
-    padding: 8,
-    borderRadius: 10,
-  },
-
-  rbutton:{
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-    marginLeft: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  rbuttonAct:{
-    marginLeft: 10,
-    padding: 10,
-    backgroundColor: 'red',
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-
-  deleteButton: {
-    margin: 20,
-    width: "50%",
-    alignSelf: "center",
-  },
-  calendar: {
-    color: "black",
-    flex: 1,
-    marginRight: 10,
-  },
-  actionButtonLabel: {
-    color: "white",
-  },
-});
