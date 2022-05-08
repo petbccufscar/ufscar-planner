@@ -33,7 +33,7 @@ const floorDate = (data) => {
 export default function App() {
   const items = useSelector((state) => state.cards).items;
   const today = floorDate(new Date());
-  const classes = items[today].filter((e) => e.is_subject);
+  const classes = (items[today]||[]).filter((e) => e.is_subject);
   let tasks = [];
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
