@@ -93,3 +93,6 @@ export const floorDate = (data) => {
 export const offsetDate = (date, days) => {
     return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
 }
+
+
+export const weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']

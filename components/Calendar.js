@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { InteractionManager, View, StyleSheet } from "react-native";
 import {  LocaleConfig, CalendarProps } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
-import AgendaList from './Agenda';
+import Agenda from './Agenda';
 import { CalendarTask } from './CalendarTask';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
@@ -75,7 +75,7 @@ function EventsScreen() {
   })
   return (
     <>
-      <AgendaList items={stItems} selectedDate={new Date()}/>
+      <Agenda items={stItems} />
       {/* <Agenda
         key={th.dark}
         items={stItems}

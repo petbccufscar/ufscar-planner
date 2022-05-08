@@ -8,13 +8,13 @@ import {
     StyleSheet,
     LayoutAnimation,
     Linking,
-    TextInput
+    TextInput,
+    ActivityIndicator
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "react-native-paper";
-import { floorDate, offsetDate } from "../helpers/helper";
+import { floorDate, offsetDate, weekDaysNames } from "../helpers/helper";
 import { CalendarTask } from './CalendarTask';
-
+import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
 
 const formatDate = (dataFormatar) => {
@@ -33,19 +33,43 @@ function floorDate2Date(date) {
 }
 
 
-function RenderMonthCalendar(props){
-    
+
+function RenderCalendarRow(props){
+    const date = props.date;	
+    const month = props.month;
+    const weekDays = []
+    const domingo = offsetDate(date, -date.getDay())
+    let aux = domingo
+    for(let i = 0; i < 7; i++){
+        weekDays.push(aux)
+        aux = offsetDate(aux, 1)
+    }
+
+    return (<View style={{ flexDirection: "row", flex: 1 }}>
+        {weekDays.map((day, index) => (<RenderCalendarCell key={index} day={day} month={month}/>))}</View>
+        )
+        
+}
+
+function RenderCalendarCell(props){
+    const date = props.day;
+    const month = props.month;    
+    return(<TouchableOpacity style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
+        <Text>{date.getDate()}</Text>
+    </TouchableOpacity>)
 }
 
 
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 function RenderDay(props) {
     const day = props.day || new Date();
-    const items = props.items[formatDate(day)] || [];
-    const semana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+    const items = props.items[floorDate(day)] || [];
+    const semana = weekDaysNames
     const diaSemana = semana[day.getUTCDay()]
     const colors = useTheme().colors;
-    const isToday = formatDate(day) == formatDate(new Date())
+    const isToday = floorDate(day) == floorDate(new Date())
     const styles = StyleSheet.create({
         linha: {
             flexDirection: "row",
@@ -86,51 +110,102 @@ function RenderDay(props) {
 }
 
 
+export default function Agenda(props){
+    const items = props.items;
+    return (<View style={{flex:1}}>
+    
+    <RenderMonthCalendar year={2022} month={5}/>
+    <View style={{flex:1}}>
 
-export default function AgendaList(props) {
+        {/* <AgendaList items={items}></AgendaList> */}
+    </View>
+    </View>)
+}
+
+function RenderMonthCalendar(props){
+    let aux = new Date(props.year, props.month, 1)
+    let weeksRep = []
+    for (let i = 0; i < 6; i++) {
+        weeksRep.push(aux)
+        aux = offsetDate(aux, 7)
+    }
+
+    return (<View style={{flex:1, backgroundColor:'red', padding: 20, maargin: 20}}>
+        <View style={{flexDirection: 'row'}}>
+            {weekDaysNames.map((day, index) => (<Text style={{flex:1, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
+        </View>
+        {
+            weeksRep.map((week, index) => (<RenderCalendarRow key={index} date={week} month={props.month}/>))
+        }
+    </View>)
+}
+
+export function AgendaList(props) {
     const items = props.items;
     // const selectedDate = props.selectedDate;
     // const setSelectedDate = props.setSelectedDate;
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [firtsDate, setFirstDate] = useState(new Date());
     const [lastDate, setLastDate] = useState(new Date());
-    const offset = 30;
+    const offsetUp = 3;
+    const offsetDown = 30;
+
     const colors = useTheme().colors
     let [daysToRender, setDaysToRender] = useState({});
 
 
-    useEffect(() => {
-        const keys = Object.keys(daysToRender).sort();
-        const lastKey = keys[keys.length - 1];
-        let rerender = false;
-        const firstKey = keys[0]
+    const loadAtEnd = async (w = true) => {
         let daysAux = { ...daysToRender };
-        if (keys.length == 0 || floorDate(lastDate) == lastKey) {
-            for (let i = 0; i < offset; i++) {
-                const aux = offsetDate(selectedDate, i);
-                daysAux[floorDate(aux)] = items[floorDate(aux)] || [];
-            }
-            setDaysToRender(daysAux);
+        for (let i = 0; i <= offsetDown; i++) {
+            const aux = offsetDate(lastDate, i);
+            daysAux[floorDate(aux)] = items[floorDate(aux)] || [];
         }
-
-
-    }, [selectedDate])
-
-    const _onViewableItemsChanged = React.useCallback(({ viewableItems, changed }) => {
-        if (viewableItems.length > 0) {
-            const fdate = viewableItems[0].item
-            const ldate = viewableItems[viewableItems.length - 1].item
-            setSelectedDate(floorDate2Date(fdate));
-            setLastDate(floorDate2Date(ldate));
+        setLastDate(offsetDate(lastDate, offsetDown));
+        if (w) {
+        await sleep(20)
         }
-    }, []);
-    const viewabilityConfig={waitForInteraction: true, viewAreaCoveragePercentThreshold: 95}
-    const _viewabilityConfig = {
-        itemVisiblePercentThreshold: 60
+        setDaysToRender(daysAux);
     }
-    const viewabilityConfigCallbackPairs = useRef([{  _viewabilityConfig, _onViewableItemsChanged }])
+    const loadAtStart = async ()  => {
+        const start = offsetDate(firtsDate, -offsetUp);
+        let daysAux = {};
+        for (let i = 0; i <= offsetUp; i++) {
+            const aux = offsetDate(start, i);
+            daysAux[floorDate(aux)] = items[floorDate(aux)] || [];
+        }
+        setFirstDate(start);
+        await sleep(20)
+        setDaysToRender({...daysAux, ...daysToRender });
+    }
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const _onViewableItemsChanged = React.useRef(({ viewableItems, changed }) => {
+    if (viewableItems.length > 0) {
+        const fdate = viewableItems[0].item
+        setSelectedDate(floorDate2Date(fdate));
+    }
+    }, []);
+
+
+
+    if (Object.keys(daysToRender).length === 0) {
+        const init = loadAtEnd(false)
+    }
+
+
+    const _viewabilityConfig = {
+        itemVisiblePercentThreshold: 0
+    }
     return (
-        <FlatList style={{ backgroundColor: colors.surface1 }} onViewableItemsChanged={_onViewableItemsChanged}
-            viewabilityConfig={_viewabilityConfig} data={Object.keys(daysToRender).sort()} renderItem={({ item, index }) => (<RenderDay key={index} day={new Date(item)} index={index} items={daysToRender} />)}>
+        <FlatList 
+        onEndReached={loadAtEnd}
+        onStartReached={loadAtStart}
+        onStartReachedThreshold={100}
+        onViewableItemsChanged={_onViewableItemsChanged.current}
+        keyExtractor={(_, index) => index.toString()}   
+        showDefaultLoadingIndicators={true}
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={{ backgroundColor: colors.surface1 }} 
+            viewabilityConfig={_viewabilityConfig} data={Object.keys(daysToRender).sort()} renderItem={({ item, index }) => (<RenderDay key={index} day={floorDate2Date(item)} index={index} items={daysToRender} />)}>
         </FlatList>
     )
 }
