@@ -151,14 +151,17 @@ function RenderMonthCalendar(props){
     for (let i = 0; i < 6; i++) {
         weeksRep.push(aux)
         aux = offsetDate(aux, 7)
+        if (offsetDate(aux, -aux.getDay()).getMonth() != props.month) {
+            break
+        }
     }
 
-    return (<View style={{aspectRatio:1.2,flex:1, backgroundColor:colors.primaryContainer, padding: 20, maargin: 20}}>
+    return (<View style={{flex:1, backgroundColor:colors.primaryContainer, padding: 20, maargin: 20}}>
         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
             <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`${monthNames[props.month]} ${props.year}`}</Text>
         </View>
-        <View style={{flexDirection: 'row', color: colors.onPrimaryContainer}}>
-            {weekDaysNames.map((day, index) => (<Text style={{flex:1, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
+        <View style={{flexDirection: 'row'}}>
+            {weekDaysNames.map((day, index) => (<Text style={{flex:1,color: colors.onPrimaryContainer, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
         </View>
         {
             weeksRep.map((week, index) => (<RenderCalendarRow selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
