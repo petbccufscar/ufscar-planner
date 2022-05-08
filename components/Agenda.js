@@ -12,7 +12,7 @@ import {
     ActivityIndicator
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import { floorDate, offsetDate, weekDaysNames } from "../helpers/helper";
+import { floorDate, monthNames, offsetDate, weekDaysNames } from "../helpers/helper";
 import { CalendarTask } from './CalendarTask';
 import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
@@ -35,8 +35,11 @@ function floorDate2Date(date) {
 
 
 function RenderCalendarRow(props){
+    const colors = props.colors
     const date = props.date;	
     const month = props.month;
+    const selectedDate = props.selectedDate;
+    const setSelectedDate = props.setSelectedDate
     const weekDays = []
     const domingo = offsetDate(date, -date.getDay())
     let aux = domingo
@@ -46,20 +49,29 @@ function RenderCalendarRow(props){
     }
 
     return (<View style={{ flexDirection: "row", flex: 1 }}>
-        {weekDays.map((day, index) => (<RenderCalendarCell key={index} day={day} month={month}/>))}</View>
+        {weekDays.map((day, index) => (<RenderCalendarCell selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month}/>))}</View>
         )
         
 }
 
 function RenderCalendarCell(props){
     const date = props.day;
-    const month = props.month;    
-    return(<TouchableOpacity style={{flex:1, alignItems: 'center',justifyContent:'center'}}>
+    const colors = props.colors;
+    const month = props.month;   
+    const isToday = floorDate(date) == floorDate(new Date())
+    const selected = floorDate(date) == floorDate(props.selectedDate);
+    const setSelectedDate = props.setSelectedDate
+    const hasEvent = isToday;
+    if(date.getMonth() != month){
+        return (<View style={{flex:1}}></View>)
+    }
+
+    return(<TouchableOpacity style={{flex:1, alignItems: 'center',justifyContent:'center'}} onPress={()=>setSelectedDate(date)}>
         <View style={{ borderRadius:30,
-    aspectRatio: 1, backgroundColor: 'transparent', flex:1, alignContent:'center', justifyContent:'center'}}>
+    aspectRatio: 1, backgroundColor: selected?colors.primary:'transparent', flex:1, alignContent:'center', justifyContent:'center'}}>
         
-        <Text style={{textAlign:'center'}}>{date.getDate()}</Text>
-        <View style={{borderRadius:30, aspectRatio:1, backgroundColor:'transparent', width:10, position: 'absolute', bottom:0, alignSelf:'center'}}/>
+        <Text style={{textAlign:'center', color: selected? colors.onPrimary: isToday? colors.primary: date.getMonth() == month ? colors.onSurface: colors.outline}}>{date.getDate()}</Text>
+        <View style={{borderRadius:30, aspectRatio:1, backgroundColor:hasEvent?selected?colors.onPrimary:colors.primary:'transparent', width:10, position: 'absolute', bottom:0, alignSelf:'center'}}/>
         </View>
     </TouchableOpacity>)
 }
@@ -116,18 +128,24 @@ function RenderDay(props) {
 
 
 export default function Agenda(props){
+    const colors = useTheme().colors;
     const items = props.items;
+    const [selectedDate, setSelectedDate] = useState(new Date());
     return (<View style={{flex:1}}>
     
-    <RenderMonthCalendar year={2022} month={5}/>
-    <View style={{flex:1}}>
+    <RenderMonthCalendar colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={2022} month={4}/>
+    <RenderMonthCalendar colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={2022} month={5}/>
+    <View style={{flex:0}}>
 
-        {/* <AgendaList items={items}></AgendaList> */}
+    {/* <AgendaList items={items}></AgendaList> */}
     </View>
     </View>)
 }
 
 function RenderMonthCalendar(props){
+    const colors = props.colors;
+    const selectedDate = props.selectedDate;
+    const setSelectedDate = props.setSelectedDate
     let aux = new Date(props.year, props.month, 1)
     let weeksRep = []
     for (let i = 0; i < 6; i++) {
@@ -135,23 +153,23 @@ function RenderMonthCalendar(props){
         aux = offsetDate(aux, 7)
     }
 
-    return (<View style={{flex:1, backgroundColor:'red', padding: 20, maargin: 20}}>
+    return (<View style={{aspectRatio:1.2,flex:1, backgroundColor:colors.primaryContainer, padding: 20, maargin: 20}}>
         <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
-            <Text style={{fontSize:20}}>Mes tal do ano tal</Text>
+            <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`${monthNames[props.month]} ${props.year}`}</Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', color: colors.onPrimaryContainer}}>
             {weekDaysNames.map((day, index) => (<Text style={{flex:1, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
         </View>
         {
-            weeksRep.map((week, index) => (<RenderCalendarRow key={index} date={week} month={props.month}/>))
+            weeksRep.map((week, index) => (<RenderCalendarRow selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
         }
     </View>)
 }
 
 export function AgendaList(props) {
     const items = props.items;
-    // const selectedDate = props.selectedDate;
-    // const setSelectedDate = props.setSelectedDate;
+    const selectedDate = props.selectedDate;
+    const setSelectedDate = props.setSelectedDate
     const [firtsDate, setFirstDate] = useState(new Date());
     const [lastDate, setLastDate] = useState(new Date());
     const offsetUp = 3;
@@ -184,7 +202,6 @@ export function AgendaList(props) {
         await sleep(20)
         setDaysToRender({...daysAux, ...daysToRender });
     }
-    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const _onViewableItemsChanged = React.useRef(({ viewableItems, changed }) => {
     if (viewableItems.length > 0) {
