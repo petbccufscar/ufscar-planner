@@ -91,6 +91,15 @@ function RenderDay(props) {
     const diaSemana = semana[day.getUTCDay()]
     const colors = useTheme().colors;
     const isToday = floorDate(day) == floorDate(new Date())
+
+    const Divisor = () =>
+    {   const yesterday = offsetDate(day, -1)
+        return (<View style={{alignItems:'center', justifyContent:'center'}}>
+            <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`Fim de ${monthNames[yesterday.getMonth()]} ${yesterday.getFullYear()}`}</Text>
+            <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`Inicio de ${monthNames[day.getMonth()]} ${day.getFullYear()}`}</Text>
+        </View>)
+    } 
+
     const styles = StyleSheet.create({
         linha: {
             flexDirection: "row",
@@ -114,7 +123,11 @@ function RenderDay(props) {
         }
 
     })
-    return (<View style={styles.linha}>
+    return (<>
+    {1 == day.getDate() && (
+        <Divisor/>
+    )}
+    <View style={styles.linha}>
         <View style={styles.dia}>
             <Text style={styles.diaNum}>{`${day.getUTCDate()}`}</Text>
             <Text style={styles.diaText}>{`${diaSemana}`}</Text>
@@ -126,37 +139,100 @@ function RenderDay(props) {
         </View>
 
     </View>
-
+    </>
     )
 }
 
+function nextMonth(month){
+    obj = {}
+    if(month.month == 11){
+        obj['month'] = 0
+        obj['year'] = month.year + 1
+    } else {
+        obj['month'] = month.month + 1
+        obj['year'] = month.year 
+    }
+    return obj
+}
+
+function prevMonth(month){
+    obj = {}
+    if(month.month == 0){
+        obj['month'] = 11
+        obj['year'] = month.year - 1
+    } else {
+        obj['month'] = month.month - 1
+        obj['year'] = month.year
+    }
+    return obj
+}
 
 export default function Agenda(props){
     const colors = useTheme().colors;
     const items = props.items;
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [open, setOpen] = useState(false);
+
+    const [changedByController, setChangedByController] = useState(false);
+    const [loadedMonth, setLoadedMonth] = useState([{month: selectedDate.getMonth(), year: selectedDate.getFullYear()}]);
+    const [lastMonth, setLastMonth] = useState({month: selectedDate.getMonth(), year: selectedDate.getFullYear()});
+    const [firstMonth, setFirstMonth] = useState({month: selectedDate.getMonth(), year: selectedDate.getFullYear()});
+
+    const msetOpen = (value) => {
+        setOpen(value);
+        setChangedByController(true)
+    }
+
+
+    const loadAtEnd = async () => {
+        aux = []
+        auxMonth = lastMonth
+        for (let i = 0; i < 3; i++) {
+            auxMonth = nextMonth(auxMonth)
+            aux.push(auxMonth)
+        }
+        setLastMonth(auxMonth)
+        // await sleep(20)
+        setLoadedMonth([...loadedMonth,...aux])
+    }
+
+    const loadAtStart = async () => {
+        aux = []
+        auxMonth = firstMonth
+        for (let i = 0; i < 3; i++) {
+            auxMonth = prevMonth(auxMonth)
+            aux = [auxMonth, ...aux]
+        }
+        setFirstMonth(auxMonth)
+        await sleep(20)
+        setLoadedMonth([...aux,...loadedMonth])
+    }
+    if (loadedMonth.length < 3)
+        loadAtEnd()
+
     if (open){
         return (<View style={{flex:1}}>
-    
-            <RenderMonthCalendar open={open} setOpen={setOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={2022} month={4}/>
-            
-            
+            <FlatList
+            onStartReached={loadAtStart}
+            data={loadedMonth}
+            onEndReached={loadAtEnd}
+            renderItem={({ item }) => <RenderMonthCalendar open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month}/>}
+            showDefaultLoadingIndicators={true}
+            />
             </View>)
     }
     return (<View style={{flex:1}}>
     
-    <RenderMonthCalendar colors={colors} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()}/>
+    <RenderMonthCalendar colors={colors} open={open} setOpen={msetOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()}/>
     <View style={{flex:1}}>
         
-        <AgendaList setSelectedDate={setSelectedDate} selectedDate={selectedDate} items={items}></AgendaList>
+        <AgendaList setSelectedDate={setSelectedDate} changedByController={changedByController} setChangedByController={setChangedByController} selectedDate={selectedDate} items={items}></AgendaList>
         </View>
     </View>)
 }
 
 function RenderMonthCalendar(props){
     const colors = props.colors;
-    console.log(props)
     const open = props.open
     const setOpen = props.setOpen
     const selectedDate = props.selectedDate;
@@ -201,6 +277,8 @@ function RenderMonthCalendar(props){
 export function AgendaList(props) {
     const items = props.items;
     const selectedDate = props.selectedDate;
+    const changedByController = props.changedByController;
+    const setChangedByController = props.setChangedByController;
     const setSelectedDate = props.setSelectedDate
     const [firtsDate, setFirstDate] = useState(new Date());
     const [lastDate, setLastDate] = useState(new Date());
@@ -242,8 +320,14 @@ export function AgendaList(props) {
     }
     }, []);
 
-
-
+    useEffect (()=>{
+        if (changedByController){
+            setChangedByController(false)
+            setLastDate(selectedDate)
+            setFirstDate(selectedDate)
+            setDaysToRender({})
+        }
+    }, [changedByController])
     if (Object.keys(daysToRender).length === 0) {
         const init = loadAtEnd(false)
     }
