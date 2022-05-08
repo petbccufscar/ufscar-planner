@@ -37,6 +37,7 @@ function floorDate2Date(date) {
 function RenderCalendarRow(props){
     const colors = props.colors
     const date = props.date;	
+    const open= props.open;
     const month = props.month;
     const setOpen = props.setOpen
     const selectedDate = props.selectedDate;
@@ -50,7 +51,7 @@ function RenderCalendarRow(props){
     }
 
     return (<View style={{ flexDirection: "row"}}>
-        {weekDays.map((day, index) => (<RenderCalendarCell setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month}/>))}</View>
+        {weekDays.map((day, index) => (<RenderCalendarCell open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month}/>))}</View>
         )
         
 }
@@ -59,12 +60,13 @@ function RenderCalendarCell(props){
     const date = props.day;
     const colors = props.colors;
     const month = props.month;   
+    const open = props.open;
     const setOpen = props.setOpen
     const isToday = floorDate(date) == floorDate(new Date())
     const selected = floorDate(date) == floorDate(props.selectedDate);
     const setSelectedDate = props.setSelectedDate
     const hasEvent = isToday;
-    if(date.getMonth() != month){
+    if(open && date.getMonth() != month){
         return (<View style={{flex:1}}></View>)
     }
 
@@ -139,16 +141,16 @@ export default function Agenda(props){
     
             <RenderMonthCalendar open={open} setOpen={setOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={2022} month={4}/>
             
-            <View style={{flex:0}}>
-        
-            {/* <AgendaList items={items}></AgendaList> */}
-            </View>
+            
             </View>)
     }
     return (<View style={{flex:1}}>
     
-    <RenderMonthCalendar colors={colors} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={2022} month={4}/>
-
+    <RenderMonthCalendar colors={colors} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()}/>
+    <View style={{flex:1}}>
+        
+        <AgendaList setSelectedDate={setSelectedDate} selectedDate={selectedDate} items={items}></AgendaList>
+        </View>
     </View>)
 }
 
@@ -170,13 +172,13 @@ function RenderMonthCalendar(props){
     }
     if (!open){
         return(<View style={{backgroundColor:colors.primaryContainer, padding: 20, maargin: 20}}>
-            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
+            {/* <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
                 <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`${monthNames[props.month]} ${props.year}`}</Text>
-            </View>
+            </View> */}
             <View style={{flexDirection: 'row'}}>
                 {weekDaysNames.map((day, index) => (<Text style={{flex:1,color: colors.onPrimaryContainer, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
             </View>
-            <RenderCalendarRow setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month}/>
+            <RenderCalendarRow open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month}/>
             
             <TouchableOpacity onPress={()=>setOpen(true)} style={{alignItems:'center', justifyContent:'center'}}>
             <MaterialIcons name="expand-more" size={24} color={colors.primary} />
@@ -191,7 +193,7 @@ function RenderMonthCalendar(props){
             {weekDaysNames.map((day, index) => (<Text style={{flex:1,color: colors.onPrimaryContainer, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
         </View>
         {
-            weeksRep.map((week, index) => (<RenderCalendarRow setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
+            weeksRep.map((week, index) => (<RenderCalendarRow open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
         }
     </View>)
 }
