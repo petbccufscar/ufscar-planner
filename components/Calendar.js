@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { InteractionManager, View, StyleSheet } from "react-native";
-import {  LocaleConfig, CalendarProps } from 'react-native-calendars';
+import { Agenda as AAgenda, LocaleConfig, CalendarProps } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
 import Agenda from './Agenda';
 import { CalendarTask } from './CalendarTask';
@@ -76,11 +76,11 @@ function EventsScreen() {
   return (
     <>
       <Agenda items={stItems} />
-      {/* <Agenda
+      {/* <AAgenda
         key={th.dark}
         items={stItems}
         selected={new Date()}
-        renderItem={renderItem}
+        renderItem={renderEmptyDate}
         renderEmptyDate={renderEmptyDate}
         rowHasChanged={rowHasChanged}
         markedDates={stMarked}
@@ -109,6 +109,7 @@ function EventsScreen() {
       
 
       /> */}
+
       {/* <FAB
         style={styles.fab}
         icon="plus"

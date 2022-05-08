@@ -54,8 +54,13 @@ function RenderCalendarRow(props){
 function RenderCalendarCell(props){
     const date = props.day;
     const month = props.month;    
-    return(<TouchableOpacity style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
-        <Text>{date.getDate()}</Text>
+    return(<TouchableOpacity style={{flex:1, alignItems: 'center',justifyContent:'center'}}>
+        <View style={{ borderRadius:30,
+    aspectRatio: 1, backgroundColor: 'transparent', flex:1, alignContent:'center', justifyContent:'center'}}>
+        
+        <Text style={{textAlign:'center'}}>{date.getDate()}</Text>
+        <View style={{borderRadius:30, aspectRatio:1, backgroundColor:'transparent', width:10, position: 'absolute', bottom:0, alignSelf:'center'}}/>
+        </View>
     </TouchableOpacity>)
 }
 
@@ -131,6 +136,9 @@ function RenderMonthCalendar(props){
     }
 
     return (<View style={{flex:1, backgroundColor:'red', padding: 20, maargin: 20}}>
+        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
+            <Text style={{fontSize:20}}>Mes tal do ano tal</Text>
+        </View>
         <View style={{flexDirection: 'row'}}>
             {weekDaysNames.map((day, index) => (<Text style={{flex:1, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
         </View>
