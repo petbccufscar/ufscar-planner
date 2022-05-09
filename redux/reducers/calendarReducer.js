@@ -163,7 +163,7 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (iterador <= datef) {
             d = floorDate(iterador)
-            aux[d] = newItems[d].filter((e) => e.id == event.id)
+            aux[d] = (newItems[d]||[]).filter((e) => e.id == event.id)
             if (aux[d].length > 0) {
                 event = aux[d][0]
                 break

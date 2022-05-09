@@ -103,7 +103,11 @@ export default function Event({ route, navigation }) {
       weekly: weekly,
       mean: mean,
       frequency: frequency,
+      teachers:teachers,
+      turma:turma,
+      is_submited:isSubmited
     };
+    console.log(task);
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
     } else {
@@ -259,7 +263,7 @@ export default function Event({ route, navigation }) {
     const [date, setDate] = useState(new Date());
     const [day, setDay] = useState(0);
     const [endTime, setEndTime] = useState(new Date());
-    const [text, setText] = useState("local X");
+    const [text, setText] = useState("");
     const minimum = (date) => {
       const td = new Date();
       return new Date(

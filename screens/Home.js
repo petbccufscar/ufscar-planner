@@ -38,7 +38,7 @@ export default function App() {
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
   for (let j = initial; j < keys.length && j >= 0; j++) {
-    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject)];
+    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject && floorDate(new Date(e.detail.datetime_init)) == today)];
   }
   const nome = useSelector((state) => state.user).user.name;
   const navigation = useNavigation();
@@ -114,7 +114,7 @@ export default function App() {
 
             <View style={styles.items}>
               {tasks.map((item, idx) => {
-                return <Task key={idx} task={item} show={true} />;
+                return <Task key={idx} task={item} show={false} />;
               })}
             </View>
           </View>
