@@ -75,46 +75,8 @@ function EventsScreen() {
   })
   return (
     <>
-      <Agenda items={stItems} />
-      {/* <AAgenda
-        key={th.dark}
-        items={stItems}
-        selected={new Date()}
-        renderItem={renderEmptyDate}
-        renderEmptyDate={renderEmptyDate}
-        rowHasChanged={rowHasChanged}
-        markedDates={stMarked}
-
-        theme={
-          {
-            selectedDayBackgroundColor: colors.primary, // primary
-            todayTextColor: colors.primary,// primary
-            dayTextColor: colors.outline, //outline
-            backgroundColor: colors.surface1,//surface1
-            monthTextColor: colors.onPrimaryContainer,
-            textDisabledColor: colors.outline, // outline
-            agendaKnobColor: colors.primary, // primary
-            textSectionTitleColor: colors.onPrimaryContainer, //on primary container
-            textDayHeaderFontWeight: 'bold',
-            selectedDayTextColor: colors.onPrimary, //on primary container
-            calendarBackground: colors.background,//background
-          
-            dayTextColor: colors.outline,//outline
-            agendaTodayColor: colors.primary,
-            agendaDayTextColor: colors.outline,
-            agendaDayNumColor: colors.outline,
-          }
-        }
-        
+      <Agenda items={stItems} marked={stMarked} />
       
-
-      /> */}
-
-      {/* <FAB
-        style={styles.fab}
-        icon="plus"
-        onPress={() => navigation.navigate("Event", { task: defaultTask })}
-      /> */}
 
 <FAB.Group
           open={open}

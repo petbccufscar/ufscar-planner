@@ -38,6 +38,7 @@ function RenderCalendarRow(props){
     const colors = props.colors
     const date = props.date;	
     const open= props.open;
+    const marked = props.marked;
     const month = props.month;
     const setOpen = props.setOpen
     const selectedDate = props.selectedDate;
@@ -51,7 +52,7 @@ function RenderCalendarRow(props){
     }
 
     return (<View style={{ flexDirection: "row"}}>
-        {weekDays.map((day, index) => (<RenderCalendarCell open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month}/>))}</View>
+        {weekDays.map((day, index) => (<RenderCalendarCell marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month}/>))}</View>
         )
         
 }
@@ -65,7 +66,10 @@ function RenderCalendarCell(props){
     const isToday = floorDate(date) == floorDate(new Date())
     const selected = floorDate(date) == floorDate(props.selectedDate);
     const setSelectedDate = props.setSelectedDate
-    const hasEvent = isToday;
+    const hasEvent = Object.keys(props.marked).includes(floorDate(date));
+    if(isToday){
+        console.log(props.marked)
+    }
     if(open && date.getMonth() != month){
         return (<View style={{flex:1}}></View>)
     }
@@ -170,6 +174,7 @@ function prevMonth(month){
 export default function Agenda(props){
     const colors = useTheme().colors;
     const items = props.items;
+    const marked = props.marked;
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [open, setOpen] = useState(false);
 
@@ -217,6 +222,7 @@ export default function Agenda(props){
             <FlatList
             onStartReached={loadAtStart}
             data={loadedMonth}
+            marked={marked}
             onEndReached={loadAtEnd}
             renderItem={({ item }) => <RenderMonthCalendar open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month}/>}
             showDefaultLoadingIndicators={true}
@@ -225,7 +231,7 @@ export default function Agenda(props){
     }
     return (<View style={{flex:1}}>
     
-    <RenderMonthCalendar colors={colors} open={open} setOpen={msetOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()}/>
+    <RenderMonthCalendar marked={marked} colors={colors} open={open} setOpen={msetOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()}/>
     <View style={{flex:1}}>
         
         <AgendaList setSelectedDate={setSelectedDate} changedByController={changedByController} setChangedByController={setChangedByController} selectedDate={selectedDate} items={items}></AgendaList>
@@ -236,6 +242,7 @@ export default function Agenda(props){
 function RenderMonthCalendar(props){
     const colors = props.colors;
     const open = props.open
+    const marked = props.marked
     const setOpen = props.setOpen
     const selectedDate = props.selectedDate;
     const setSelectedDate = props.setSelectedDate
@@ -256,7 +263,7 @@ function RenderMonthCalendar(props){
             <View style={{flexDirection: 'row'}}>
                 {weekDaysNames.map((day, index) => (<Text style={{flex:1,color: colors.onPrimaryContainer, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
             </View>
-            <RenderCalendarRow open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month}/>
+            <RenderCalendarRow marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month}/>
             
             <TouchableOpacity onPress={()=> setOpen(true)} style={{alignItems:'center', justifyContent:'center'}}>
             <MaterialIcons name="expand-more" size={24} color={colors.primary} />
@@ -271,7 +278,7 @@ function RenderMonthCalendar(props){
             {weekDaysNames.map((day, index) => (<Text style={{flex:1,color: colors.onPrimaryContainer, textAlign:'center', fontWeight:'bold'}} key={index}>{day}</Text>))}
         </View>
         {
-            weeksRep.map((week, index) => (<RenderCalendarRow open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
+            weeksRep.map((week, index) => (<RenderCalendarRow marked={marked}  open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month}/>))
         }
     </View>)
 }

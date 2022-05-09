@@ -107,7 +107,6 @@ export default function Event({ route, navigation }) {
       turma:turma,
       is_submited:isSubmited
     };
-    console.log(task);
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
     } else {
