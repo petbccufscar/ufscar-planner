@@ -50,19 +50,66 @@ export const formatReal = (num) => {
 };
 
 export const defaultTask = {
-    "weekly": true,
+    "weekly": false,
+    "is_subject": false,
+    "is_submited": false,
     "details": [],
     "name": "Novo Evento",
-    "subject": "Matéria X",
+    "subject": null,
     "notification": [],
     "description": "descrição",
     "color": "#f00",
-    "is_subject": true,
-    "mean": "",
+
+    // não utilizaveis
+    "mean": "(p1+p2+p3)/3",
+    "frequency": "(aulasDadas - faltas)/aulasDadas",
     "grade": {},
-    "frequency": ""
-  }
+    "turma": null,
+    "teachers": [],
+}
+
+export const defaultSubject = {
+    "weekly": true,
+    "is_subject": true,
+    "is_submited": false,
+    "details": [],
+    "name": "Nova Matéria",
+    "subject": null,
+    "notification": [],
+    "description": "descrição",
+    "color": "#f00",
+    "mean": "(p1+p2+p3)/3",
+    "frequency": "(aulasDadas - faltas)/aulasDadas",
+    "grade": {},
+    "turma": "Turma A",
+    "teachers": [],
+}
 
 export const floorDate = (data) => {
     return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, '0')) + "-" + (data.getDate().toString().padStart(2, '0')));
 }
+
+
+export const offsetDate = (date, days) => {
+    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+
+export const weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+
+export const monthNames = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+]
+
+export const  monthNamesShort= ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']

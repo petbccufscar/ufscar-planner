@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   Keyboard,
   ScrollView,
+  Image,
 
 } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
 import { Task } from '../components/CalendarTask'
 import Menu from '../components/HomeMenu'
@@ -30,18 +32,16 @@ const floorDate = (data) => {
 
 export default function App() {
   const items = useSelector((state) => state.cards).items;
-
   const today = floorDate(new Date());
-  const classes = items[today].filter((e) => e.is_subject);
+  const classes = (items[today]||[]).filter((e) => e.is_subject);
   let tasks = [];
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
   for (let j = initial; j < keys.length && j >= 0; j++) {
-    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject)];
+    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject && floorDate(new Date(e.detail.datetime_init)) == today)];
   }
   const nome = useSelector((state) => state.user).user.name;
   const navigation = useNavigation();
-
   const theme = useTheme();
 
   const styles = StyleSheet.create({
@@ -102,6 +102,7 @@ export default function App() {
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
+            <AcontecendoAgora/>
 
             <Text style={styles.sectionTitle}>Aulas de hoje</Text>
 
@@ -113,7 +114,7 @@ export default function App() {
 
             <View style={styles.items}>
               {tasks.map((item, idx) => {
-                return <Task key={idx} task={item} show={true} />;
+                return <Task key={idx} task={item} show={false} />;
               })}
             </View>
           </View>
@@ -121,4 +122,82 @@ export default function App() {
       </View>
     </>
   );
+}
+
+
+function AcontecendoAgora(){
+
+  const colors = useTheme().colors;
+  const mapsSrc = require('../assets/icons/maps.png')
+
+
+  const styles = StyleSheet.create({
+  hourglassContainer: {
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 36,
+    height: 36,
+  },
+  acontecendoAgoraRow:{
+    flexDirection: "row",
+    justifyContent: "flex-start",  
+    alignItems: "center",
+  },
+  localContainer:{
+    borderWidth: 1,
+    borderColor: colors.outline,
+    borderRadius: 8,
+    backgroundColor: colors.surface,
+    flexDirection: 'row',
+    padding: 5,
+    paddingRight: 10,
+  },
+  emptyflex:{
+  },
+  localView:{
+    flexDirection: 'row'
+  },
+  acontecendoAgoraContainer:{
+    borderRadius: 12,
+    backgroundColor: colors.primaryContainer,
+    padding: 10,
+    marginVertical: 10
+  },
+  acontecendoAgoraText:{
+    color: colors.onPrimaryContainer,
+    marginVertical: 10,
+    fontSize: 20,
+
+  },
+  acontecendoAgoraMapsIcon:{
+    width: 24,
+    height: 24,
+  },
+  acontecendoAgoraTitle:{
+    fontSize: 24,
+    paddingLeft: 10,
+    color: colors.primary,
+  }
+})
+
+  return (<View style={styles.acontecendoAgoraContainer}>
+    <View style={styles.acontecendoAgoraRow}>
+      <View style={styles.hourglassContainer}>
+        <MaterialIcons name="hourglass-bottom" size={24} color={colors.onPrimary} />
+      </View>
+      <Text style={styles.acontecendoAgoraTitle}>Acontecendo agora</Text>
+    </View>
+      <Text style={styles.acontecendoAgoraText}>Churrascão</Text>
+      <View style={styles.localView}>
+    <TouchableOpacity style={styles.localContainer}>
+      <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc}/>
+      <Text style={{color: colors.onSurface}}>
+      At72, Sala 707
+      </Text>
+    </TouchableOpacity>
+    <View style={styles.emptyflex}/>
+      </View>
+  </View>)
 }

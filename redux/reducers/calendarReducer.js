@@ -1,12 +1,9 @@
 import { events } from '../../placeholder-data/data';
 import { ActionsTypes } from '../constants/actionsTypes';
-import { floorDate } from '../../helpers/helper';
+import { floorDate, offsetDate } from '../../helpers/helper';
 
-const offset = 90;
+const offset = 180;
 
-const offsetDate = (date, days) => {
-    return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
-}
 
 const initalSetup = () => {
 
@@ -166,7 +163,7 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (iterador <= datef) {
             d = floorDate(iterador)
-            aux[d] = newItems[d].filter((e) => e.id == event.id)
+            aux[d] = (newItems[d]||[]).filter((e) => e.id == event.id)
             if (aux[d].length > 0) {
                 event = aux[d][0]
                 break
@@ -260,9 +257,9 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (datei.getTime() <= datef.getTime()) {
             const date = floorDate(datei)
-            if (items[date] == null) {
-                items[date] = []
-            }
+            // if (items[date] == null) {
+            //     items[date] = []
+            // }
 
             datei = offsetDate(datei, 1)
         }

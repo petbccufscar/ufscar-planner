@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
-  ScrollView,
   Text,
   View,
   TouchableOpacity,
   Alert,
   StyleSheet,
   LayoutAnimation,
-  TextInput,
-  CheckBox,
   Linking,
+  TextInput
 } from "react-native";
+import ScrollView from "./ScrollView";
 import Toast from "react-native-toast-message";
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -19,12 +19,9 @@ import {
   removeEvent,
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
-import { ColorPicker, fromHsv } from "react-native-color-picker";
-import { Button, IconButton } from "react-native-paper";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+  
+import { Button, IconButton, useTheme } from "react-native-paper";
+
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
 import { formatDateWithHour } from "../helpers/helper";
@@ -32,23 +29,28 @@ import { formatDateWithHour } from "../helpers/helper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
-
+import { PickerGradSquare, SelGradSquare } from "./Gradient";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
-  const [isSubject, setIsSubject] = useState(task.is_subject);
-  const [weekly, setWeekly] = useState(task.weekly);
+  const [isSubject, setIsSubject] = useState(task.is_subject||false);
+  const [weekly, setWeekly] = useState(task.weekly||false);
+  const [isSubmited, setIsSubmited] = useState(task.is_submited||false);
 
   //todo
-  const [subject, setSubject] = useState(task.subject);
-  const [color, setColor] = useState(task.color);
+  const [subject, setSubject] = useState(task.subject||null);
+  const [color, setColor] = useState(task.color||0);
+  const [turma, setTurma] = useState(task.turma||"");
+  const [teachers, setTeachers] = useState(task.teachers||[]);
+
+
 
   // tela separada
-  const [grade, setGrade] = useState(task.grade);
-  const [frequency, setFrequency] = useState(task.frequency || "0");
-  const [mean, setMean] = useState(task.mean || "0");
+  const [grade, setGrade] = useState(task.grade||{});
+  const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
+  const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
-  const [name, setName] = useState(task.name);
+  const [name, setName] = useState(task.name||"Novo Evento");
   const firstTime = task.id == null || task.id == undefined;
   const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
@@ -57,11 +59,14 @@ export default function Event({ route, navigation }) {
 
   //dialog
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
+  const [openTeacherDialog, setOpenTeacherDialog] = useState(false);
   const [openNameDialog, setOpenNameDialog] = useState(false);
   const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
-  const [openColorDialog, setOpenColorDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
+
+  const colors = useTheme().colors;
+
 
   const changeWeekly = (e) => {
     if (!e) {
@@ -76,11 +81,11 @@ export default function Event({ route, navigation }) {
 
   const week = [
     "Domingo",
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
     "Sábado",
   ];
 
@@ -98,6 +103,9 @@ export default function Event({ route, navigation }) {
       weekly: weekly,
       mean: mean,
       frequency: frequency,
+      teachers:teachers,
+      turma:turma,
+      is_submited:isSubmited
     };
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
@@ -109,13 +117,13 @@ export default function Event({ route, navigation }) {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: name,
-      headerTintColor: BWFont(color),
+      // headerTintColor: BWFont(color),
       // headerStyle: { backgroundColor: color },
       headerRight: () => (
         <IconButton
           icon={editMode ? "check" : "pencil"}
           size={24}
-          color={BWFont(color)}
+          // color={BWFont(color)}
           onPress={() => {
             LayoutAnimation.configureNext({
               duration: 200,
@@ -157,6 +165,11 @@ export default function Event({ route, navigation }) {
     grade,
     isSubject,
     subject,
+    isSubmited,
+    turma,
+    teachers,
+    
+
   ]);
 
   useEffect(() => {
@@ -209,31 +222,7 @@ export default function Event({ route, navigation }) {
     );
   }
 
-  function ColorDialog() {
-    let aux = color;
-    return (
-      <Dialog.Container visible={openColorDialog}>
-        <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description></Dialog.Description>
-        <ColorPicker
-          onColorChange={(color) => (aux = color)}
-          defaultColor={aux}
-          style={{ width: 300, height: 300 }}
-        />
-        <Dialog.Button
-          label="Cancel"
-          onPress={() => setOpenColorDialog(false)}
-        />
-        <Dialog.Button
-          label="Ok"
-          onPress={() => {
-            setColor(fromHsv(aux));
-            setOpenColorDialog(false);
-          }}
-        />
-      </Dialog.Container>
-    );
-  }
+ 
 
   function NotificationDialog() {
     const [n, setN] = useState(1);
@@ -273,7 +262,7 @@ export default function Event({ route, navigation }) {
     const [date, setDate] = useState(new Date());
     const [day, setDay] = useState(0);
     const [endTime, setEndTime] = useState(new Date());
-    const [text, setText] = useState("local X");
+    const [text, setText] = useState("");
     const minimum = (date) => {
       const td = new Date();
       return new Date(
@@ -530,280 +519,451 @@ export default function Event({ route, navigation }) {
 
   const user = useSelector(state => state.user).user
 
+  function DetailRender(props){
+    const index = props.index
+    const detail = props.detail
+    return (
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
+        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.onSurface}}>{`${
+            weekly
+              ? week[detail.day]
+              : formatDateWithHour(detail.datetime_init)
+          }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
+            detail.datetime_end
+          )}`}</Text>
+        </View>
+        <TouchableOpacity 
+        onPress={async () => {
+          let place = user.campus + ", UFSCAR, " + detail.local;
+
+          const url =
+            "https://www.google.com/maps/search/?api=1&query=" +
+            encodeURI(place);
+
+          const supported = await Linking.canOpenURL(url);
+
+          if (supported) {
+            await Linking.openURL(url);
+          } else {
+            Alert.alert(`Don't know how to open this URL: ${url}`);
+          }
+        }}
+        
+        style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 5}}>
+        <MaterialIcons name="location-pin" size={20} color={colors.primary} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.primary}}>{ `${detail.local}`}</Text>
+          
+        
+        </TouchableOpacity>
+      </View>
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color={colors.onSurface}
+            onPress={() => {
+              let newDetails = details.filter((d) => d != detail);
+              setDetails([...newDetails]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
+
+  
+  function BotaoAdicionarQueAbreUmDialogo(props){
+    const setState = props.setState
+    return(
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flex:1}}/>
+            <TouchableOpacity
+              onPress={() => {
+                setState(true);
+              }}
+              style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
+            >
+              <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
+              <Text style={{color: colors.onSurface}}>Adicionar</Text>
+              
+            </TouchableOpacity>
+        <View style={{flex:1}}/>
+
+      </View>)
+  }
+
+  function notificationText(notification){
+    if (notification != 0)
+      return getTime(notification) + " antes"
+    return "Assim que começar"
+  }
+
+  function NotificationRender(props){
+    const index = props.index
+    const notification = props.notification
+    return (
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10,paddingVertical:5, flexDirection: 'row'}}>
+        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
+          <Text style={{color:colors.onSurface}}>{`${notificationText(notification)}`}</Text>
+        </View>
+    
+      </View>
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color={colors.onSurface}
+            onPress={() => {
+              let newNotifications = notifications.filter(
+                (e) => e != notification
+              );
+              setNotifications([...newNotifications]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
+
+  function TeacherRender(props){
+    const index = props.index
+    const teacher = props.teacher
+    return (
+      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, paddingVertical:5, flexDirection: 'row'}}>
+        <View style ={{alignItems: 'center', justifyContent:'center'}}>
+        
+          <Text style={{color:colors.onSurface}}>{`${teacher}`}</Text>
+      </View>
+      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
+      
+        {editMode && (
+          <IconButton
+            icon="minus-circle-outline"
+            color={colors.onSurface}
+            onPress={() => {
+              let newTeachers = teachers.filter((d) => d != teacher);
+              setTeachers([...newTeachers]);
+            }}
+            size={18}
+          />
+        )}
+      </View>
+      </View>
+    )
+  }
+
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.surface1,
+    },
+  
+    sectionContainer: {
+      flexDirection: "row",
+      padding: 15,
+      borderBottomWidth: 1,
+      borderBottomColor: "#ddd",
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    colorContainer: {
+      flexDirection: "row",
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      marginLeft: 18
+    },
+    sectionIcon: {
+      margin: 10,
+    },
+    title:{
+      fontSize: 20,
+      color: colors.onSurface
+    },
+  
+    details: {
+      flex: 1,
+    },
+  
+    xButton: {
+      marginLeft: "auto",
+    },
+  
+    detail: {
+      marginBottom: 20,
+    },
+  
+    reminder: {
+      flex: 1,
+    },
+  
+    data: {
+      textAlignVertical: "center",
+      color: "white",
+    },
+    notification: {
+      marginBottom: 20,
+      flexDirection: "row",
+      height: 40,
+      alignContent: "center",
+      alignItems: "center",
+    },
+  
+    description: {
+      flex: 1,
+      flexDirection: "row",
+    },
+    textInput: {
+      marginHorizontal: 20,
+      marginVertical: 5,
+      borderRadius: 12,
+      borderBottomWidth:0,
+      padding: 10,
+      backgroundColor: colors.surface,
+      color: colors.onSurface,
+    },
+    actionButton: {
+      backgroundColor: "#e8243c",
+      borderRadius: 10,
+      width: 200,
+    },
+    spacingDate: {
+      marginTop: 10,
+      marginBottom: 10,
+    },
+  
+    dateAndDatepicker: {
+      flexDirection: "row",
+      textAlignVertical: "center",
+      backgroundColor: "#e8243c",
+      padding: 8,
+      borderRadius: 10,
+    },
+  
+    rbutton:{
+      padding: 10,
+      borderWidth: 1,
+      borderRadius: 10,
+      marginLeft: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.surface,
+      borderColor: colors.outline
+  
+    },
+    rbuttonAct:{
+      marginLeft: 10,
+      padding: 10,
+      backgroundColor: colors.secondaryContainer,
+      borderRadius: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+  
+    },
+  
+    deleteButton: {
+      margin: 20,
+      width: "50%",
+      alignSelf: "center",
+    },
+    calendar: {
+      color: "black",
+      flex: 1,
+      marginRight: 10,
+    },
+    actionButtonLabel: {
+      color: "white",
+    },})
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.sectionContainer}>
+      {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
-          <IconButton icon="tag" color="#007cc1" size={30} />
+        <Ionicons name="color-palette" size={24} color={colors.onSurface} />
         </View>
         <View style={styles.description}>
-          <Text>Nome: {name}</Text>
+          <Text style={styles.title}>Cor</Text>
         </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenNameDialog(true);
-            }}
-            size={18}
-          />
-        )}
       </View>
+      <View style={styles.colorContainer}>
+      
+      <SelGradSquare color={0} state={color} setState={setColor}/>
+        <SelGradSquare color={1} state={color} setState={setColor}/>
+        <SelGradSquare color={2} state={color} setState={setColor}/>
+        <SelGradSquare color={3} state={color} setState={setColor}/>
+        <SelGradSquare color={4} state={color} setState={setColor}/>
+        <SelGradSquare color={5} state={color} setState={setColor}/>
+        <SelGradSquare color={6} state={color} setState={setColor}/>
+        <SelGradSquare color={7} state={color} setState={setColor}/>
 
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="calendar-refresh" color="#007cc1" size={30} />
-        </View>
-
-        <View style={styles.description}>
-          <Text>É semanal </Text>
-        </View>
-        <CheckBox
-          value={weekly}
-          onValueChange={changeWeekly}
-          disabled={!editMode}
-        />
-        <HorarioDialog weekly={weekly} />
       </View>
+      <View style={styles.colorContainer}>
+        <SelGradSquare color={8} state={color} setState={setColor}/>
+        <SelGradSquare color={9} state={color} setState={setColor}/>
+        <SelGradSquare color={10} state={color} setState={setColor}/>
+        <SelGradSquare color={11} state={color} setState={setColor}/>
+        <SelGradSquare color={12} state={color} setState={setColor}/>
+        <SelGradSquare color={13} state={color} setState={setColor}/>
+        <SelGradSquare color={14} state={color} setState={setColor}/>
+        <PickerGradSquare color={isNaN(color)?color:"#f0f"} state={color} setState={setColor}/>
+        
+      </View>
+      </>)
+      }
 
-      {weekly && (
-        <View style={styles.sectionContainer}>
+
+      <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-            <IconButton icon="notebook" color="#007cc1" size={30} />
-          </View>
+          <MaterialIcons name="title" size={24} color={colors.onSurface} />
 
-          <View style={styles.description}>
-            <Text>É matéria </Text>
           </View>
-          <CheckBox
-            value={isSubject}
-            onValueChange={setIsSubject}
-            disabled={!editMode}
-          />
+          <View style={styles.description}>
+            <Text style={styles.title}>Titulo</Text>
+          </View>
+      </View>
+      <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Novo Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setName(text)}
+/>
+
+
+  {isSubject && (<><View style={styles.colorContainer}>
+            <View style={styles.sectionIcon}>
+            <Ionicons name="school" size={24} color={colors.onSurface} />
+
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.title}>Turma</Text>
+            </View>
         </View>
-      )}
-      {!isSubject && (
-        <View style={styles.sectionContainer}>
+        <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+        placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
+        onChangeText={text => setTurma(text)}
+  /></>)}
+
+
+
+      <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-            <IconButton icon="book" color="#007cc1" size={30} />
-          </View>
+          <Entypo name="text" size={24} color={colors.onSurface} />
 
+          </View>
           <View style={styles.description}>
-            <Text>Nome da Matéria: {subject}</Text>
+            <Text style={styles.title}>Descrição</Text>
           </View>
-          {editMode && (
-            <IconButton
-              style={styles.xButton}
-              icon="pencil"
-              color="black"
-              onPress={() => {
-                if (editMode) setOpenSubjectDialog(true);
-              }}
-              size={18}
-            />
-          )}
-        </View>
-      )}
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="square" color={color} size={30} />
-        </View>
-        <View style={styles.description}>
-          <Text>Cor: {color}</Text>
-        </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenColorDialog(true);
-            }}
-            size={18}
-          />
-        )}
       </View>
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="calendar" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.details}>
-          <Text>Horários: </Text>
-          {details.sort(sortDetails).map((detail, index) => (
-            <View key={index} style={styles.detail}>
-              <View>
-                <Text>{`${
-                  weekly
-                    ? week[detail.day]
-                    : formatDateWithHour(detail.datetime_init)
-                }, ${detail.local}`}</Text>
-                <Text>{`${formatHour(detail.datetime_init)} - ${formatHour(
-                  detail.datetime_end
-                )}`}</Text>
-              </View>
-              {!editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="map"
-                  color="red"
-                  onPress={async () => {
-                    let place = user.campus + ", UFSCAR, " + detail.local;
+      <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Detalhes do Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setDescription(text)}
+/>
+      {isSubject &&
+      (<View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <FontAwesome name="user" size={24} color={colors.onSurface} />
 
-                    const url =
-                      "https://www.google.com/maps/search/?api=1&query=" +
-                      encodeURI(place);
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Professores</Text>
+          </View>
+      </View>)
+      }
 
-                    const supported = await Linking.canOpenURL(url);
+      {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
+      }
+      {editMode && isSubject &&(
+          <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>)}
 
-                    if (supported) {
-                      await Linking.openURL(url);
-                    } else {
-                      Alert.alert(`Don't know how to open this URL: ${url}`);
-                    }
-                  }}
-                  size={18}
-                />
-              )}
-              {editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="close"
-                  color="black"
-                  onPress={() => {
-                    let newDetails = details.filter((d) => d != detail);
-                    setDetails([...newDetails]);
-                  }}
-                  size={18}
-                />
-              )}
-            </View>
-          ))}
-          {editMode && (
-            <View style={styles.action}>
-              <Button
-                onPress={() => {
-                  setOpenHorarioDialog(true);
-                }}
-                labelStyle={styles.actionButtonLabel}
-                style={styles.actionButton}
-              >
-                Adicionar horário
-              </Button>
-            </View>
-          )}
-        </View>
+
+      
+      {!isSubject && (<><View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Recorrência</Text>
+          </View>
       </View>
+      <View style={styles.colorContainer}>
+        <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
+          {!weekly && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color: !weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento único</Text></TouchableOpacity>
+        <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
+          {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
+          <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
+
+      </View></>)}
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Horários</Text>
+          </View>
+      </View>
+
+      {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
+      {editMode && (
+          <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
+
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Notificações</Text>
+          </View>
+      </View>
+
+
+      { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
+      {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+
+
+
+      <HorarioDialog weekly={weekly} />
       <NotificationDialog />
-      {isSubject && (
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionIcon}>
-            <IconButton icon="book-open" color="#007cc1" size={30} />
-          </View>
-          <View style={styles.meanAndFrequency}>
-            <Text>Média = {mean + resultMean}</Text>
-            <Text>Frequência = {frequency + resultFreq}</Text>
-          </View>
-          {editMode && (
-            <IconButton
-              style={styles.xButton}
-              icon="pencil"
-              color="black"
-              onPress={() =>
-                navigation.navigate("Subject", {
-                  task: {
-                    ...task,
-                    grade: grade,
-                    frequency: frequency,
-                    mean: mean,
-                  },
-                })
-              }
-              size={18}
-            />
-          )}
-        </View>
-      )}
-
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="bell-ring" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.reminder}>
-          <Text>Notificações: </Text>
-          {notifications.map((notification, index) => (
-            <View key={index} style={styles.notification}>
-              <Text>{getTime(notification) + " antes"}</Text>
-              {editMode && (
-                <IconButton
-                  style={styles.xButton}
-                  icon="close"
-                  color="black"
-                  onPress={() => {
-                    let newNotifications = notifications.filter(
-                      (e) => e != notification
-                    );
-                    setNotifications([...newNotifications]);
-                  }}
-                  size={18}
-                />
-              )}
-            </View>
-          ))}
-          {editMode && (
-            <View style={styles.action}>
-              <Button
-                onPress={() => {
-                  setOpenNotificationDialog(true);
-                }}
-                labelStyle={styles.actionButtonLabel}
-                style={styles.actionButton}
-              >
-                Adicionar lembrete
-              </Button>
-            </View>
-          )}
-        </View>
-      </View>
       <SimpleDialog
         fun={setName}
         old={name}
         open={openNameDialog}
         setOpen={setOpenNameDialog}
-      />
+        />
       <SimpleDialog
         fun={setDescription}
         old={description}
         open={openDescriptionDialog}
         setOpen={setOpenDescriptionDialog}
       />
+
+      <SimpleDialog
+        fun={(novoProf) => setTeachers([...teachers,novoProf])}
+        open={openTeacherDialog}
+        setOpen={setOpenTeacherDialog}
+      />
+      
       <SimpleDialog
         fun={setSubject}
         old={subject}
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
-      <ColorDialog />
-      <View style={styles.sectionContainer}>
-        <View style={styles.sectionIcon}>
-          <IconButton icon="comment-text" color="#007cc1" size={30} />
-        </View>
-        <View style={styles.description}>
-          <Text>Descrição: {description}</Text>
-        </View>
-        {editMode && (
-          <IconButton
-            style={styles.xButton}
-            icon="pencil"
-            color="black"
-            onPress={() => {
-              if (editMode) setOpenDescriptionDialog(true);
-            }}
-            size={18}
-          />
-        )}
-      </View>
+
+
       {editMode && !firstTime && (
         <View style={styles.action}>
           <Button
@@ -818,90 +978,8 @@ export default function Event({ route, navigation }) {
           </Button>
         </View>
       )}
+      
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  sectionContainer: {
-    flexDirection: "row",
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-
-  sectionIcon: {
-    marginTop: -10,
-  },
-
-  details: {
-    flex: 1,
-  },
-
-  xButton: {
-    marginLeft: "auto",
-  },
-
-  detail: {
-    marginBottom: 20,
-    flexDirection: "row",
-  },
-
-  reminder: {
-    flex: 1,
-  },
-
-  data: {
-    textAlignVertical: "center",
-    color: "white",
-  },
-  notification: {
-    marginBottom: 20,
-    flexDirection: "row",
-    height: 40,
-    alignContent: "center",
-    alignItems: "center",
-  },
-
-  description: {
-    flex: 1,
-    flexDirection: "row",
-  },
-
-  actionButton: {
-    backgroundColor: "#e8243c",
-    borderRadius: 10,
-    width: 200,
-  },
-  spacingDate: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-
-  dateAndDatepicker: {
-    flexDirection: "row",
-    textAlignVertical: "center",
-    backgroundColor: "#e8243c",
-    padding: 8,
-    borderRadius: 10,
-  },
-
-  deleteButton: {
-    margin: 20,
-    width: "50%",
-    alignSelf: "center",
-  },
-  calendar: {
-    color: "black",
-    flex: 1,
-    marginRight: 10,
-  },
-  actionButtonLabel: {
-    color: "white",
-  },
-});
