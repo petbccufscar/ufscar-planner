@@ -1,4 +1,4 @@
-import { floor } from "mathjs";
+import { floor, random } from "mathjs";
 import React, { useEffect, useState, useRef } from "react";
 import {
     Text,
@@ -185,8 +185,8 @@ export default function Agenda(props){
 
 
     const loadAtEnd = async () => {
-        aux = []
-        auxMonth = lastMonth
+        let aux = []
+        let auxMonth = lastMonth
         for (let i = 0; i < 3; i++) {
             auxMonth = nextMonth(auxMonth)
             aux.push(auxMonth)
@@ -194,11 +194,12 @@ export default function Agenda(props){
         setLastMonth(auxMonth)
         // await sleep(20)
         setLoadedMonth([...loadedMonth,...aux])
+        return []
     }
 
     const loadAtStart = async () => {
-        aux = []
-        auxMonth = firstMonth
+        let aux = []
+        let auxMonth = firstMonth
         for (let i = 0; i < 3; i++) {
             auxMonth = prevMonth(auxMonth)
             aux = [auxMonth, ...aux]
@@ -206,6 +207,7 @@ export default function Agenda(props){
         setFirstMonth(auxMonth)
         await sleep(20)
         setLoadedMonth([...aux,...loadedMonth])
+        return []
     }
     if (loadedMonth.length < 3)
         loadAtEnd()
@@ -256,7 +258,7 @@ function RenderMonthCalendar(props){
             </View>
             <RenderCalendarRow open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month}/>
             
-            <TouchableOpacity onPress={()=>setOpen(true)} style={{alignItems:'center', justifyContent:'center'}}>
+            <TouchableOpacity onPress={()=> setOpen(true)} style={{alignItems:'center', justifyContent:'center'}}>
             <MaterialIcons name="expand-more" size={24} color={colors.primary} />
             </TouchableOpacity>
         </View>)
@@ -296,10 +298,9 @@ export function AgendaList(props) {
             daysAux[floorDate(aux)] = items[floorDate(aux)] || [];
         }
         setLastDate(offsetDate(lastDate, offsetDown));
-        if (w) {
-        await sleep(20)
-        }
+
         setDaysToRender(daysAux);
+        return {}
     }
     const loadAtStart = async ()  => {
         const start = offsetDate(firtsDate, -offsetUp);
@@ -309,8 +310,8 @@ export function AgendaList(props) {
             daysAux[floorDate(aux)] = items[floorDate(aux)] || [];
         }
         setFirstDate(start);
-        await sleep(20)
         setDaysToRender({...daysAux, ...daysToRender });
+        return {}
     }
 
     const _onViewableItemsChanged = React.useRef(({ viewableItems, changed }) => {
@@ -319,17 +320,26 @@ export function AgendaList(props) {
         setSelectedDate(floorDate2Date(fdate));
     }
     }, []);
-
+    const flatlistRef = useRef();
     useEffect (()=>{
         if (changedByController){
             setChangedByController(false)
             setLastDate(selectedDate)
             setFirstDate(selectedDate)
             setDaysToRender({})
+            flatlistRef.current.scrollToIndex({index: 0});
         }
     }, [changedByController])
+    useEffect (()=>{
+        setLastDate(selectedDate)
+        setFirstDate(selectedDate)
+        setDaysToRender({})
+        flatlistRef.current.scrollToIndex({index: 0});
+    }, [items])
+
+
     if (Object.keys(daysToRender).length === 0) {
-        const init = loadAtEnd(false)
+        loadAtEnd(false)
     }
 
 
@@ -339,6 +349,7 @@ export function AgendaList(props) {
     return (
         <FlatList 
         onEndReached={loadAtEnd}
+        ref={flatlistRef}
         onStartReached={loadAtStart}
         onStartReachedThreshold={100}
         onViewableItemsChanged={_onViewableItemsChanged.current}
