@@ -786,7 +786,167 @@ export default function Event({ route, navigation }) {
     },
     actionButtonLabel: {
       color: "white",
-    },})
+    },
+    tituloDetail:{
+      color: colors.onSurface,
+      fontSize:16,
+      fontWeight: 'bold',
+      marginBottom: 5
+    },
+    medfreqcontainer:{
+      paddingRight: 30
+    },
+    corpoDetail:{
+      color: colors.onSurfaceVariant,
+      fontSize: 14,
+    },
+    turmaDetail:{
+      color: colors.primary
+    },
+    corDetail: {
+      height: 20,
+      marginRight:5,
+      borderRadius: 5,
+      aspectRatio: 1,
+      backgroundColor: 'red'
+    },
+    deleteButton:{
+      marginTop: 30,
+      backgroundColor: colors.surface,
+      padding:10,
+      borderRadius: 100,
+      borderColor: colors.outline,
+      borderWidth: 1
+    },
+    iconDetail:{
+      marginRight: 2,
+      height: 24,
+      width:24,
+      
+    },
+    deleteFont:{
+      color: colors.error
+    },
+    linecenter:{
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    cortainer:{
+      margin:10,
+      marginLeft: 20,
+      
+    },
+    linhaEsquerdaDetail:{
+      flexDirection:'row',
+      alignItems: 'center'
+    },
+    containerSectionDetail:{
+      borderBottomWidth: 1,
+      borderBottomColor: colors.outline,
+      padding: 20,
+      paddingLeft: 0,
+      marginLeft: 20
+    },
+    botaoDetail: {
+      backgroundColor: colors.surface,
+      padding: 5,
+      marginRight: 5,
+      marginTop: 20,
+      marginLeft: 0,
+      borderColor: colors.outline,
+      borderRadius: 8,
+      borderWidth: 1,
+    },
+    nomeEventoDetail:{
+      color: colors.onSurface,
+      fontSize: 22,
+      paddingLeft: 20,
+
+    },
+    textoBotaoDetail:{
+
+    }
+  
+  
+  })
+
+    if(!editMode){
+      return (<ScrollView style={styles.container}>
+              <View style={styles.cortainer}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.corDetail}/>
+              <Text style={styles.turmaDetail}>Turma A</Text>
+              </View>
+              </View>
+              <Text style={styles.nomeEventoDetail}>Algoritmos e Estruturas de Dados 7</Text>
+              <View style={styles.containerSectionDetail}>
+              <Text style={styles.tituloDetail}>Descrição</Text>
+              <Text style={styles.corpoDetail}>ABLUBLUEBLUBLUE</Text>
+              </View>
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.medfreqcontainer}>
+              <Text style={styles.tituloDetail}>Media</Text>
+              <Text style={styles.corpoDetail}>7,12</Text>
+              </View><View style={styles.medfreqcontainer}>
+              <Text style={styles.tituloDetail}>Frequência</Text>
+              <Text style={styles.corpoDetail}>82%</Text>
+              </View>
+              </View>
+              <View style={styles.linhaEsquerdaDetail}>
+              <TouchableOpacity style={styles.botaoDetail}>
+              <Text>Editar cálculo de média</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.botaoDetail}>
+              <Text>Editar cálculo de frequência</Text>
+              </TouchableOpacity>
+              </View>
+              </View>
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+                <View style={styles.iconDetail}>
+              <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Professores</Text>
+              </View>
+              <Text style={styles.corpoDetail}>Prof. ahahahahha</Text>
+              </View>
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}>
+              <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Horários</Text>
+              </View>
+              <Text style={styles.corpoDetail}>Segunda ablubbubub</Text>
+              <Text style={styles.corpoDetail}>Terça ablublue</Text>
+              </View>
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}> 
+
+              <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Notificações</Text>
+              </View>
+              <Text style={styles.corpoDetail}>ASN ANTES</Text>
+              <Text style={styles.corpoDetail}>asdas Depois</Text>
+              </View>
+              <View style={styles.linecenter}>
+                <TouchableOpacity style={styles.deleteButton}>
+                  <View style={styles.linhaEsquerdaDetail}>
+                    <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
+                    <Text style={styles.deleteFont}>Excluir</Text>
+                  </View>  
+                </TouchableOpacity>
+              </View>
+
+
+      </ScrollView>)
+    }
+
+
   return (
     <ScrollView style={styles.container}>
       {editMode && (<><View style={styles.colorContainer}>
