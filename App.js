@@ -116,10 +116,10 @@ function Loader() {
                 name="Event"
                 component={Event}
                 options={() => ({
-                  // headerStyle: {
-                  //   backgroundColor: "#e8243c",
-                  // },
-                  // headerTintColor: "#fff",
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
                   headerTitleAlign: "center",
                 })}
               />

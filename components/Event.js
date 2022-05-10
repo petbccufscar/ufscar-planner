@@ -20,7 +20,7 @@ import {
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
   
-import { Button, IconButton, useTheme } from "react-native-paper";
+import { Button, IconButton, useTheme, FAB } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
@@ -30,6 +30,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
 import { Gradient, PickerGradSquare, SelGradSquare } from "./Gradient";
+import { isString } from "mathjs";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -116,14 +117,16 @@ export default function Event({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: name,
-      // headerTintColor: BWFont(color),
-      // headerStyle: { backgroundColor: color },
+      headerTintColor: colors.onSurface,
+      headerTitle: editMode? 
+      isSubject? "Editar Matéria": "Editar Evento":
+      isSubject? "Detalhes da Matéria": "Detalhes do Evento",
       headerRight: () => (
-        <IconButton
-          icon={editMode ? "check" : "pencil"}
-          size={24}
-          // color={BWFont(color)}
+        editMode && (
+        <TouchableOpacity
+          style={{backgroundColor: colors.primary, padding: 10, 
+            borderRadius: 30, justifyContent: 'center', alignItems:'center',
+            marginRight: 10}}
           onPress={() => {
             LayoutAnimation.configureNext({
               duration: 200,
@@ -148,7 +151,9 @@ export default function Event({ route, navigation }) {
               setEditMode(!editMode);
             }
           }}
-        />
+        >
+          <Text style={{color: colors.onPrimary}}>Salvar</Text>
+        </TouchableOpacity>)
       ),
     });
   }, [
@@ -863,6 +868,15 @@ export default function Event({ route, navigation }) {
       fontSize: 22,
 
     },
+    fab: {
+      position: 'absolute',
+      shadowOpacity: 10,
+      borderRadius: 10,
+      backgroundColor: colors.surface3,
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
     containername:{
       paddingLeft: 20,
 
@@ -875,7 +889,9 @@ export default function Event({ route, navigation }) {
   })
 
     if(!editMode){
-      return (<ScrollView style={styles.container}>
+            return (<ScrollView style={styles.container}  
+              contentContainerStyle={styles.container}          
+              >
               <View style={styles.cortainer}>
               <View style={styles.linhaEsquerdaDetail}>
               <Gradient style={styles.corDetail} color={color}/>
@@ -981,7 +997,12 @@ export default function Event({ route, navigation }) {
                 </TouchableOpacity>
               </View>
 
-
+              <FAB
+                style={styles.fab}
+                color={colors.primary}
+                icon="pencil"
+                onPress={() =>setEditMode(true)}
+              />
       </ScrollView>)
     }
 
