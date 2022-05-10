@@ -524,7 +524,7 @@ export default function Event({ route, navigation }) {
     const detail = props.detail
     return (
       <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
-        <View>
+        <View style={{justifyContent:'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
         <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
           <Text style={{color:colors.onSurface}}>{`${
@@ -535,6 +535,7 @@ export default function Event({ route, navigation }) {
             detail.datetime_end
           )}`}</Text>
         </View>
+        {detail.local.length > 0 &&(
         <TouchableOpacity 
         onPress={async () => {
           let place = user.campus + ", UFSCAR, " + detail.local;
@@ -557,7 +558,7 @@ export default function Event({ route, navigation }) {
           <Text style={{color:colors.primary}}>{ `${detail.local}`}</Text>
           
         
-        </TouchableOpacity>
+        </TouchableOpacity>)}
       </View>
       <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
       
