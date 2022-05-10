@@ -8,25 +8,201 @@ import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
 import { useNavigation } from "@react-navigation/core";
 import { FAB } from 'react-native-paper';
 import { defaultTask } from '../helpers/helper';
+import { useTheme } from "react-native-paper";
+import { MaterialIcons } from '@expo/vector-icons';
+import { ProgressBar, Colors } from 'react-native-paper';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default function Task() {
-
   let events = useSelector(state => state.events).events
   const navigation = useNavigation()
   events = events.filter(e => e.is_subject)
+  const nome = useSelector((state) => state.user).user.name;
+
+  const theme = useTheme();
+
+  // const dispatch = useDispatch();
+  // const semester = useSelector((state) => state.semester).semester;
+  // const currentDate = new Date();
+  // const [showInitDatePicker, setShowInitDatePicker] = useState(false);
+  // const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  // let message = '';
+  // let progress = 0;
+  // calculateProgress();
+
+  // function handleSemesterInitiChange(date) {
+  //   setShowInitDatePicker(false);
+  //   semester.init = date.toString();
+  //   dispatch(updateSemester(semester));
+  // }
+
+  // function handleSemesterEndChange(date) {
+  //   setShowEndDatePicker(false);
+  //   semester.end = date.toString();
+  //   dispatch(updateSemester(semester));
+  // }
+
+  // useEffect(() => {
+  //   calculateProgress();
+  // }, [semester]);
+
+  // function calculateProgress() {
+  //   if (new Date(semester.init) < new Date(semester.end)) {
+  //     let auxProgress = (currentDate - new Date(semester.init)) / (new Date(semester.end) - new Date(semester.init));
+  //     auxProgress = auxProgress > 1 ? 1 : auxProgress < 0 ? 0 : auxProgress;
+
+  //     let auxDaysLeft = Math.round((new Date(semester.end) - currentDate) / (24 * 60 * 60 * 1000));
+  //     auxDaysLeft = auxDaysLeft < 0 ? 0 : auxDaysLeft;
+
+  //     if (currentDate < new Date(semester.init)) {
+  //       let auxVacationDays = Math.round(Math.abs((new Date(semester.init) - currentDate) / (24 * 60 * 60 * 1000)));
+  //       auxVacationDays = auxVacationDays < 0 ? 0 : auxVacationDays;
+
+  //       message = `Você ainda tem ${auxVacationDays} dia${auxVacationDays != 0 ? "s" : ""} de férias!`;
+  //     }
+  //     else {
+  //       if (auxDaysLeft <= 0) {
+  //         message = `As férias chegaram!`;
+  //       }
+  //       else {
+  //         message = `Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`;
+  //       }
+  //     }
+  //     progress = auxProgress;
+  //   } else {
+  //     message = "Selecione datas válidas de início e término do seu semestre!";
+  //     progress = 0;
+  //   }
+  // }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.surface1,
+      padding: 20,
+    },
+    sectionTitle: {
+      fontSize: 30,
+      padding: 20,
+      color: theme.colors.onSurface,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.onSurfaceVariant,
+    },
+    fab: {
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    }, 
+    button: {
+      flexDirection: "row",
+      borderRadius: 10,
+      backgroundColor: theme.colors.surface,
+      padding: 5,
+      marginBottom: 10,
+      alignItems: "center",
+    },
+    buttonText: {
+      alignItems: "flex-start",
+      flexWrap: "wrap",
+      fontSize: 22,
+      marginLeft: 10,
+      padding: 5,
+      color: theme.colors.onSurfaceVariant,
+    },
+    buttonCont: {
+      marginVertical: 15,
+      padding: 25,
+    },
+    // progress: {
+    //   height: 20,
+    //   width: wp('85%'),
+    //   marginTop: hp("5%"),
+    //   marginBottom: hp("5%"),
+    //   borderRadius: 5
+    // },
+    miscCont: {
+      padding: 10,
+      borderBottomWidth: 1,
+      borderColor: theme.colors.onSurfaceVariant,
+      alignItems: "center",
+    },
+    squareBtn: {
+      flexDirection: "column",
+      borderRadius: 10,
+      backgroundColor: theme.colors.surface,
+      padding: 5,
+      marginBottom: 10,
+      marginHorizontal: 10,
+      width: wp("26%"),
+      height: wp("26%"),
+      alignItems: "center",
+    },
+    line: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    smallBtnText: {
+      fontSize: 18,
+      color: theme.colors.onSurfaceVariant,
+      paddingTop: 5,
+      alignItems: "center",
+    },
+  });
+
   return (<>
     <ScrollView style={styles.container}>
-      <Text style={styles.sectionTitle}>Médias e frequências!</Text>
-      {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}
+      <Text style={styles.sectionTitle}>Olá, {nome}</Text>
+
+      <View style={styles.miscCont}>
+        <View style={styles.line}>
+          <View style={styles.squareBtn}>
+            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <Text style={styles.smallBtnText}>Frequência</Text>
+          </View>
+          <View style={styles.squareBtn}>
+            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <Text style={styles.smallBtnText}>Eventos</Text>
+          </View>
+          <View style={styles.squareBtn}>
+            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <Text style={styles.smallBtnText}>Matérias</Text>
+          </View>
+        </View>
+
+        {/* Ordem e progresso */}
+
+        {/* <ProgressBar style={styles.progress} progress={progress} color={Colors.green600} />
+        <Text style={styles.message}>{message}</Text>
+        <StatusBar style="auto" /> */}
+      </View>
+
+      <View style={styles.buttonCont}>
+        <View style={styles.button}>
+          <MaterialIcons name="settings" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Configurações</Text>
+        </View>
+        <View style={styles.button}>
+          <MaterialIcons name="info" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Sobre nós</Text>
+        </View>
+        <View style={styles.button}>
+          <MaterialIcons name="mail" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Fale conosco</Text>
+        </View>
+      </View>
+      
+      {/* {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}
 
       <StatusBar style="auto" />
     </ScrollView>
     <FAB
-    style={styles.fab}
-    icon="plus"
-    onPress={() => navigation.navigate("Event", { task: defaultTask })}
-  />
-  </>
+      style={styles.fab}
+      icon="plus"
+      onPress={() => navigation.navigate("Event", { task: defaultTask })}
+    /> */}
+    </ScrollView>
+    </> 
   );
 }
 
@@ -74,6 +250,65 @@ function MediaCard(props) {
   // if(media > 10) media /= 10
 
   const [det, setDet] = useState(false)
+
+  const styles = StyleSheet.create({
+    mediaCard: {
+      padding: 15,
+      marginBottom: 20,
+      borderRadius: 10,
+      backgroundColor: '#FFF'
+    },
+    box: {
+      flexDirection: 'row',
+      flexGrow: 1,
+    },
+    subtitle: {
+      fontSize: 14,
+      fontWeight: "bold",
+      color: "#607D8B",
+      paddingRight: 5,
+    }, subsubtitle: {
+      fontSize: 12,
+      fontWeight: "bold",
+      textAlign: 'center',
+      color: "#90A4AE",
+      paddingRight: 5,
+    },
+    row: {
+      flexDirection: 'row'
+    },
+    col: {
+      flexDirection: 'column'
+    },
+    square: {
+      width: 4,
+      height: '100%',
+      backgroundColor: "#55BCF6", // Definir como passar a cor da tarefa
+      opacity: 0.4,
+      borderRadius: 5,
+      marginRight: 15,
+    },
+    details: {
+      textAlign: "right",
+      color: "lightblue",
+      fontWeight: "bold",
+      padding: 10,
+      paddingBottom: 3
+    },
+    grade: {
+      width: '100%',
+      padding: 5,
+      borderRadius: 5,
+      color: 'white',
+      textAlign: 'center',
+      marginTop: 5
+    },
+    normalText: {
+      fontSize: 10,
+      color: '#90A4AE',
+      marginTop: 5
+    },
+  });
 
   return (<View style={styles.mediaCard}>
     <TouchableOpacity onPress={edit} style={styles.box}>
@@ -139,81 +374,3 @@ function MediaCard(props) {
       </View></>)}
   </View>)
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E5E5E5',
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 10,
-    paddingBottom: 30,
-    color: '#607D8B',
-  },
-  mediaCard: {
-    padding: 15,
-    marginBottom: 20,
-    borderRadius: 10,
-    backgroundColor: '#FFF'
-  },
-  box: {
-    flexDirection: 'row',
-    flexGrow: 1,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#607D8B",
-    paddingRight: 5,
-  }, subsubtitle: {
-    fontSize: 12,
-    fontWeight: "bold",
-    textAlign: 'center',
-    color: "#90A4AE",
-    paddingRight: 5,
-  },
-  row: {
-    flexDirection: 'row'
-  },
-  col: {
-    flexDirection: 'column'
-  },
-  square: {
-    width: 4,
-    height: '100%',
-    backgroundColor: "#55BCF6", // Definir como passar a cor da tarefa
-    opacity: 0.4,
-    borderRadius: 5,
-    marginRight: 15,
-  },
-  details: {
-    textAlign: "right",
-    color: "lightblue",
-    fontWeight: "bold",
-    padding: 10,
-    paddingBottom: 3
-  },
-  grade: {
-    width: '100%',
-    padding: 5,
-    borderRadius: 5,
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 5
-  },
-  normalText: {
-    fontSize: 10,
-    color: '#90A4AE',
-    marginTop: 5
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-
-});
