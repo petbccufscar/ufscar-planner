@@ -20,7 +20,7 @@ import {
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
   
-import { Button, IconButton, useTheme } from "react-native-paper";
+import { Button, IconButton, useTheme, FAB } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
@@ -29,7 +29,8 @@ import { formatDateWithHour } from "../helpers/helper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
-import { PickerGradSquare, SelGradSquare } from "./Gradient";
+import { Gradient, PickerGradSquare, SelGradSquare } from "./Gradient";
+import { isString } from "mathjs";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -116,14 +117,16 @@ export default function Event({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: name,
-      // headerTintColor: BWFont(color),
-      // headerStyle: { backgroundColor: color },
+      headerTintColor: colors.onSurface,
+      headerTitle: editMode? 
+      isSubject? "Editar Matéria": "Editar Evento":
+      isSubject? "Detalhes da Matéria": "Detalhes do Evento",
       headerRight: () => (
-        <IconButton
-          icon={editMode ? "check" : "pencil"}
-          size={24}
-          // color={BWFont(color)}
+        editMode && (
+        <TouchableOpacity
+          style={{backgroundColor: colors.primary, padding: 10, 
+            borderRadius: 30, justifyContent: 'center', alignItems:'center',
+            marginRight: 10}}
           onPress={() => {
             LayoutAnimation.configureNext({
               duration: 200,
@@ -148,7 +151,9 @@ export default function Event({ route, navigation }) {
               setEditMode(!editMode);
             }
           }}
-        />
+        >
+          <Text style={{color: colors.onPrimary}}>Salvar</Text>
+        </TouchableOpacity>)
       ),
     });
   }, [
@@ -260,7 +265,7 @@ export default function Event({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState(0);
+    const [day, setDay] = useState((new Date()).getDay());
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
     const minimum = (date) => {
@@ -509,12 +514,12 @@ export default function Event({ route, navigation }) {
 
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
-    resultMean = " = " + (meanRes.result || 0);
+    resultMean = "" + (meanRes.result || 0);
   } catch (e) {}
 
   try {
     const freqRes = magic(grade.frequency || {}, frequency || "");
-    resultFreq = " = " + (freqRes.result || 0);
+    resultFreq = "" + (freqRes.result || 0);
   } catch (e) {}
 
   const user = useSelector(state => state.user).user
@@ -524,7 +529,7 @@ export default function Event({ route, navigation }) {
     const detail = props.detail
     return (
       <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
-        <View>
+        <View style={{justifyContent:'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
         <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
           <Text style={{color:colors.onSurface}}>{`${
@@ -535,6 +540,7 @@ export default function Event({ route, navigation }) {
             detail.datetime_end
           )}`}</Text>
         </View>
+        {detail.local.length > 0 &&(
         <TouchableOpacity 
         onPress={async () => {
           let place = user.campus + ", UFSCAR, " + detail.local;
@@ -557,7 +563,7 @@ export default function Event({ route, navigation }) {
           <Text style={{color:colors.primary}}>{ `${detail.local}`}</Text>
           
         
-        </TouchableOpacity>
+        </TouchableOpacity>)}
       </View>
       <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
       
@@ -786,7 +792,221 @@ export default function Event({ route, navigation }) {
     },
     actionButtonLabel: {
       color: "white",
-    },})
+    },
+    tituloDetail:{
+      color: colors.onSurface,
+      fontSize:16,
+      fontWeight: 'bold',
+      marginBottom: 5
+    },
+    medfreqcontainer:{
+      paddingRight: 30
+    },
+    corpoDetail:{
+      color: colors.onSurfaceVariant,
+      fontSize: 14,
+    },
+    turmaDetail:{
+      color: colors.primary
+    },
+    corDetail: {
+      height: 20,
+      marginRight:5,
+      borderRadius: 5,
+      aspectRatio: 1,
+    },
+    deleteButton:{
+      marginTop: 30,
+      backgroundColor: colors.surface,
+      padding:10,
+      borderRadius: 100,
+      borderColor: colors.outline,
+      borderWidth: 1
+    },
+    iconDetail:{
+      marginRight: 2,
+      height: 24,
+      width:24,
+      
+    },
+    deleteFont:{
+      color: colors.error
+    },
+    linecenter:{
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    cortainer:{
+      margin:10,
+      marginLeft: 20,
+      
+    },
+    linhaEsquerdaDetail:{
+      flexDirection:'row',
+      alignItems: 'center'
+    },
+    containerSectionDetail:{
+      borderBottomWidth: 1,
+      borderBottomColor: colors.outline,
+      padding: 20,
+      paddingLeft: 0,
+      marginLeft: 20
+    },
+    botaoDetail: {
+      backgroundColor: colors.surface,
+      padding: 5,
+      marginRight: 5,
+      marginTop: 20,
+      marginLeft: 0,
+      borderColor: colors.outline,
+      borderRadius: 8,
+      borderWidth: 1,
+    },
+    nomeEventoDetail:{
+      color: colors.onSurface,
+      fontSize: 22,
+
+    },
+    fab: {
+      position: 'absolute',
+      shadowOpacity: 10,
+      borderRadius: 10,
+      backgroundColor: colors.surface3,
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
+    containername:{
+      paddingLeft: 20,
+
+    },
+    textoBotaoDetail:{
+
+    }
+  
+  
+  })
+
+    if(!editMode){
+            return (<ScrollView style={styles.container}  
+              contentContainerStyle={styles.container}          
+              >
+              <View style={styles.cortainer}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <Gradient style={styles.corDetail} color={color}/>
+
+              {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
+              {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
+              </View>
+              </View>
+              {
+              turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
+              {description.length > 0 &&(
+              <View style={styles.containerSectionDetail}>
+              <Text style={styles.tituloDetail}>Descrição</Text>
+              <Text style={styles.corpoDetail}>{description}</Text>
+              </View>
+              )}
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.medfreqcontainer}>
+              <Text style={styles.tituloDetail}>Média</Text>
+              <Text style={styles.corpoDetail}>{resultMean}</Text>
+              </View><View style={styles.medfreqcontainer}>
+              <Text style={styles.tituloDetail}>Frequência</Text>
+              <Text style={styles.corpoDetail}>{resultFreq}</Text>
+              </View>
+              </View>
+              <View style={styles.linhaEsquerdaDetail}>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+                navigation.navigate("Subject", {
+                  task: {
+                    ...task,
+                    grade: grade,
+                    frequency: frequency,
+                    mean: mean,
+                  },
+                })}>
+              <Text>Editar cálculo de média</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+                navigation.navigate("Subject", {
+                  task: {
+                    ...task,
+                    grade: grade,
+                    frequency: frequency,
+                    mean: mean,
+                  },
+                })}>
+              <Text>Editar cálculo de frequência</Text>
+              </TouchableOpacity>
+              </View>
+              </View>
+              {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+                <View style={styles.iconDetail}>
+              <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Professores</Text>
+              </View>
+              {teachers.map((teacher, index) => (
+              <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
+            }
+            </View>)}
+              <View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}>
+              <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Horários</Text>
+              </View>
+              {details.map((detail, index) => 
+              (<Text style={styles.corpoDetail} key={index}>{`${
+                  weekly
+                    ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
+                    : formatDateWithHour(detail.datetime_init)
+                }`} {` - ${formatHour(
+                  detail.datetime_end
+                )}`}</Text>))
+              }
+              </View>
+              {
+              notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
+              <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}> 
+
+              <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Notificações</Text>
+              </View>
+              { notifications.map((notification, index) => (
+              <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
+              }
+              </View>)
+              }
+              <View style={styles.linecenter}>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => {
+              dispatch(removeEvent(task));
+              navigation.pop();
+            }}>
+                  <View style={styles.linhaEsquerdaDetail}>
+                    <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
+                    <Text style={styles.deleteFont}>Excluir</Text>
+                  </View>  
+                </TouchableOpacity>
+              </View>
+
+              <FAB
+                style={styles.fab}
+                color={colors.primary}
+                icon="pencil"
+                onPress={() =>setEditMode(true)}
+              />
+      </ScrollView>)
+    }
+
+
   return (
     <ScrollView style={styles.container}>
       {editMode && (<><View style={styles.colorContainer}>
@@ -963,21 +1183,6 @@ export default function Event({ route, navigation }) {
         setOpen={setOpenSubjectDialog}
       />
 
-
-      {editMode && !firstTime && (
-        <View style={styles.action}>
-          <Button
-            onPress={() => {
-              dispatch(removeEvent(task));
-              navigation.pop(1);
-            }}
-            labelStyle={styles.actionButtonLabel}
-            style={[styles.actionButton, styles.deleteButton]}
-          >
-            Deletar Evento
-          </Button>
-        </View>
-      )}
       
     </ScrollView>
   );

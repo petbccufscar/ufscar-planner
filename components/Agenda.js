@@ -67,9 +67,7 @@ function RenderCalendarCell(props){
     const selected = floorDate(date) == floorDate(props.selectedDate);
     const setSelectedDate = props.setSelectedDate
     const hasEvent = Object.keys(props.marked).includes(floorDate(date));
-    if(isToday){
-        console.log(props.marked)
-    }
+
     if(open && date.getMonth() != month){
         return (<View style={{flex:1}}></View>)
     }

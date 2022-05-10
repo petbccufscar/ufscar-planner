@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -7,10 +7,10 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
-  ScrollView,
   Image,
 
 } from 'react-native'
+import ScrollView from '../components/ScrollView'
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
 import { Task } from '../components/CalendarTask'
@@ -31,9 +31,11 @@ const floorDate = (data) => {
 };
 
 export default function App() {
-  const items = useSelector((state) => state.cards).items;
   const today = floorDate(new Date());
+  const items = useSelector((state) => state.cards).items;
   const classes = (items[today]||[]).filter((e) => e.is_subject);
+  const [acontecendoAgora, setAcontecendoAgora] = useState([]);
+
   let tasks = [];
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
@@ -43,6 +45,28 @@ export default function App() {
   const nome = useSelector((state) => state.user).user.name;
   const navigation = useNavigation();
   const theme = useTheme();
+
+  function calculateAcontecendoAgora () {  
+    const aux1 = classes.filter((e) => {
+      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()})
+    const aux2 = tasks.filter((e) => {
+      
+      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()
+    
+    })
+    const aux3 = [...aux1, ...aux2]
+    if (JSON.stringify(acontecendoAgora) != JSON.stringify(aux3)) {
+      setAcontecendoAgora(aux3)
+    }
+  }
+  setInterval(calculateAcontecendoAgora, 60*1000);
+  useEffect(() => {
+    calculateAcontecendoAgora()
+  },[items])
+  
+
+
+
 
   const styles = StyleSheet.create({
     container: {
@@ -102,7 +126,7 @@ export default function App() {
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
-            <AcontecendoAgora/>
+            <AcontecendoAgora list={acontecendoAgora}/>
 
             <Text style={styles.sectionTitle}>Aulas de hoje</Text>
 
@@ -110,7 +134,7 @@ export default function App() {
               return <Task key={idx} task={item} />;
             })}
 
-            <Text style={styles.sectionTitle}>Entregas de hoje</Text>
+            <Text style={styles.sectionTitle}>Eventos de hoje</Text>
 
             <View style={styles.items}>
               {tasks.map((item, idx) => {
@@ -125,11 +149,11 @@ export default function App() {
 }
 
 
-function AcontecendoAgora(){
+function AcontecendoAgora(props){
 
   const colors = useTheme().colors;
   const mapsSrc = require('../assets/icons/maps.png')
-
+  const list = props.list
 
   const styles = StyleSheet.create({
   hourglassContainer: {
@@ -181,7 +205,8 @@ function AcontecendoAgora(){
     color: colors.primary,
   }
 })
-
+  if (list.length == 0)
+    return null
   return (<View style={styles.acontecendoAgoraContainer}>
     <View style={styles.acontecendoAgoraRow}>
       <View style={styles.hourglassContainer}>
@@ -189,15 +214,18 @@ function AcontecendoAgora(){
       </View>
       <Text style={styles.acontecendoAgoraTitle}>Acontecendo agora</Text>
     </View>
-      <Text style={styles.acontecendoAgoraText}>Churrascão</Text>
+    {list.map((item, idx) => {
+      return(<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
       <View style={styles.localView}>
-    <TouchableOpacity style={styles.localContainer}>
+    
+    {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}>
       <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc}/>
       <Text style={{color: colors.onSurface}}>
-      At72, Sala 707
+        {item.detail.local}
       </Text>
     </TouchableOpacity>
-    <View style={styles.emptyflex}/>
-      </View>
+    <View style={styles.emptyflex}/></>)}
+    
+      </View></View>)})}
   </View>)
 }
