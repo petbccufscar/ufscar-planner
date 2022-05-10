@@ -260,7 +260,7 @@ export default function Event({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState(0);
+    const [day, setDay] = useState((new Date()).getDay());
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
     const minimum = (date) => {
