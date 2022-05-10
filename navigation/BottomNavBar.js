@@ -69,20 +69,20 @@ export default function MyTabs() {
             <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
           ),
       })} />
+      <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
+          title: 'UFSCar Planner',
+          headerShown: false,
+          tabBarLabel: 'Dashboard',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="menu" color={color} active={navigation.getState().index == 2} />
+          ),
+      })} />
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
           headerShown: false,
           tabBarLabel: 'Restaurante',
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 2} />
-          ),
-      })} />
-      <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
-          title: 'UFSCar Planner',
-          headerShown: false,
-          tabBarLabel: 'Mais',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="menu" color={color} active={navigation.getState().index == 3} />
+            <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 3} />
           ),
       })} />
     </Tab.Navigator>
