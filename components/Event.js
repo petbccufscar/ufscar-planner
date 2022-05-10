@@ -29,7 +29,7 @@ import { formatDateWithHour } from "../helpers/helper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import ScrollPicker from "react-native-picker-scrollview";
-import { PickerGradSquare, SelGradSquare } from "./Gradient";
+import { Gradient, PickerGradSquare, SelGradSquare } from "./Gradient";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -509,12 +509,12 @@ export default function Event({ route, navigation }) {
 
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
-    resultMean = " = " + (meanRes.result || 0);
+    resultMean = "" + (meanRes.result || 0);
   } catch (e) {}
 
   try {
     const freqRes = magic(grade.frequency || {}, frequency || "");
-    resultFreq = " = " + (freqRes.result || 0);
+    resultFreq = "" + (freqRes.result || 0);
   } catch (e) {}
 
   const user = useSelector(state => state.user).user
@@ -808,7 +808,6 @@ export default function Event({ route, navigation }) {
       marginRight:5,
       borderRadius: 5,
       aspectRatio: 1,
-      backgroundColor: 'red'
     },
     deleteButton:{
       marginTop: 30,
@@ -861,6 +860,9 @@ export default function Event({ route, navigation }) {
     nomeEventoDetail:{
       color: colors.onSurface,
       fontSize: 22,
+
+    },
+    containername:{
       paddingLeft: 20,
 
     },
@@ -875,43 +877,66 @@ export default function Event({ route, navigation }) {
       return (<ScrollView style={styles.container}>
               <View style={styles.cortainer}>
               <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.corDetail}/>
-              <Text style={styles.turmaDetail}>Turma A</Text>
+              <Gradient style={styles.corDetail} color={color}/>
+
+              {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
+              {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
               </View>
               </View>
-              <Text style={styles.nomeEventoDetail}>Algoritmos e Estruturas de Dados 7</Text>
+              {
+              turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
+              {description.length > 0 &&(
               <View style={styles.containerSectionDetail}>
               <Text style={styles.tituloDetail}>Descrição</Text>
-              <Text style={styles.corpoDetail}>ABLUBLUEBLUBLUE</Text>
+              <Text style={styles.corpoDetail}>{description}</Text>
               </View>
+              )}
               <View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.medfreqcontainer}>
-              <Text style={styles.tituloDetail}>Media</Text>
-              <Text style={styles.corpoDetail}>7,12</Text>
+              <Text style={styles.tituloDetail}>Média</Text>
+              <Text style={styles.corpoDetail}>{resultMean}</Text>
               </View><View style={styles.medfreqcontainer}>
               <Text style={styles.tituloDetail}>Frequência</Text>
-              <Text style={styles.corpoDetail}>82%</Text>
+              <Text style={styles.corpoDetail}>{resultFreq}</Text>
               </View>
               </View>
               <View style={styles.linhaEsquerdaDetail}>
-              <TouchableOpacity style={styles.botaoDetail}>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+                navigation.navigate("Subject", {
+                  task: {
+                    ...task,
+                    grade: grade,
+                    frequency: frequency,
+                    mean: mean,
+                  },
+                })}>
               <Text>Editar cálculo de média</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.botaoDetail}>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+                navigation.navigate("Subject", {
+                  task: {
+                    ...task,
+                    grade: grade,
+                    frequency: frequency,
+                    mean: mean,
+                  },
+                })}>
               <Text>Editar cálculo de frequência</Text>
               </TouchableOpacity>
               </View>
               </View>
-              <View style={styles.containerSectionDetail}>
+              {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
                 <View style={styles.iconDetail}>
               <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
               </View>
               <Text style={styles.tituloDetail}>Professores</Text>
               </View>
-              <Text style={styles.corpoDetail}>Prof. ahahahahha</Text>
-              </View>
+              {teachers.map((teacher, index) => (
+              <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
+            }
+            </View>)}
               <View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.iconDetail}>
@@ -919,10 +944,18 @@ export default function Event({ route, navigation }) {
               </View>
               <Text style={styles.tituloDetail}>Horários</Text>
               </View>
-              <Text style={styles.corpoDetail}>Segunda ablubbubub</Text>
-              <Text style={styles.corpoDetail}>Terça ablublue</Text>
+              {details.map((detail, index) => 
+              (<Text style={styles.corpoDetail} key={index}>{`${
+                  weekly
+                    ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
+                    : formatDateWithHour(detail.datetime_init)
+                }`} {` - ${formatHour(
+                  detail.datetime_end
+                )}`}</Text>))
+              }
               </View>
-              <View style={styles.containerSectionDetail}>
+              {
+              notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.iconDetail}> 
 
@@ -930,11 +963,16 @@ export default function Event({ route, navigation }) {
               </View>
               <Text style={styles.tituloDetail}>Notificações</Text>
               </View>
-              <Text style={styles.corpoDetail}>ASN ANTES</Text>
-              <Text style={styles.corpoDetail}>asdas Depois</Text>
-              </View>
+              { notifications.map((notification, index) => (
+              <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
+              }
+              </View>)
+              }
               <View style={styles.linecenter}>
-                <TouchableOpacity style={styles.deleteButton}>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => {
+              dispatch(removeEvent(task));
+              navigation.pop();
+            }}>
                   <View style={styles.linhaEsquerdaDetail}>
                     <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
                     <Text style={styles.deleteFont}>Excluir</Text>
@@ -1123,21 +1161,6 @@ export default function Event({ route, navigation }) {
         setOpen={setOpenSubjectDialog}
       />
 
-
-      {editMode && !firstTime && (
-        <View style={styles.action}>
-          <Button
-            onPress={() => {
-              dispatch(removeEvent(task));
-              navigation.pop(1);
-            }}
-            labelStyle={styles.actionButtonLabel}
-            style={[styles.actionButton, styles.deleteButton]}
-          >
-            Deletar Evento
-          </Button>
-        </View>
-      )}
       
     </ScrollView>
   );
