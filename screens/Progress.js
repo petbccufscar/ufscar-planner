@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Touchable, View, TouchableOpacity } from 'react-native';
-import { ProgressBar, Colors } from 'react-native-paper';
+import { ProgressBar, Colors, useTheme } from 'react-native-paper';
 import Constants from 'expo-constants';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Calendar from '../assets/icons/calendar.svg';
@@ -9,8 +9,32 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSemester } from '../redux/actions/semesterActions';
 import { useNavigation } from '@react-navigation/core'
 import { formatDate } from '../helpers/helper';
-
+import { MaterialIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Dialog from "react-native-dialog";
+
+
+function Bar(props) {
+  const text = props.text || "";
+  const progress = props.progress || 0;
+  const colors = useTheme().colors
+  const colorOutside = props.colorOutside || colors.surface5;
+  const colorInside = props.colorInside || colors.tertiaryContainer;
+  const style = props.style || {};
+  return (
+    <View style={{ flexDirection: 'row', borderRadius: 30, overflow: 'hidden', ...style }}>
+      <View style={{ width: `${progress}%`, backgroundColor: colorInside }}></View>
+      <View style={{ width: `${100 - progress}%`, backgroundColor: colorOutside }}></View>
+      <View style={{ left: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: colors.onSurface }}>{text}</Text>
+      </View>
+      <View style={{ right: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: colors.onSurface }}>{`${progress}%`}</Text>
+      </View>
+    </View>)
+
+}
+
 
 export default function Progress() {
   const dispatch = useDispatch();
@@ -21,6 +45,8 @@ export default function Progress() {
   let message = '';
   let progress = 0;
   calculateProgress();
+  const colors = useTheme().colors 
+  const [showDialog, setShowDialog] = useState(false);
 
   function handleSemesterInitiChange(date) {
     setShowInitDatePicker(false);
@@ -72,11 +98,25 @@ export default function Progress() {
   return (<>
     <View style={styles.content}>
       <View style={styles.container}>
-        <Text style={styles.progressTitle}>Progresso do Semestre</Text>
-        <ProgressBar style={styles.progress} progress={progress} color={Colors.green600} />
-        <Text style={styles.message}>{message}</Text>
+        <Bar style={styles.progress} progress={progress * 100} text={'Progresso do Semestre'} >
+        </Bar>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ alignItems: 'flex-start',flex:1,}}>
+            <Text style={{color:colors.onSurfaceVariant, ...styles.message}}>{message}</Text>
+          </View>
+          <View style={{ alignItems: 'flex-end',flex:1, }}>
+            <TouchableOpacity onPress={() => setShowDialog(true)} style={{borderWidth:1, borderRadius: 8, backgroundColor: colors.surface, alignItems:'center', justifyContent:'center' ,flexDirection:'row', paddingHorizontal: 10, paddingVertical:5}}>
+              <MaterialIcons name="settings" size={18} color={colors.primary} style={{paddingRight:5}} />
+              <Text style={{color: colors.onSurface}}>Ajustar</Text>
+
+            </TouchableOpacity>
+          </View>
+        </View>
         <StatusBar style="auto" />
       </View>
+      <Dialog.Container visible={showDialog}>
+        <Dialog.Title>Escolha as datas do semestre</Dialog.Title>
+        <Dialog.Description>
       <View style={styles.line}>
         <View style={styles.semestre}>
           <Text style={styles.spacing}>Início do Semestre: </Text>
@@ -97,6 +137,14 @@ export default function Progress() {
           </View>
         </View>
       </View>
+      </Dialog.Description>
+        <Dialog.Button
+          label="Ok"
+          onPress={() => {
+            setShowDialog(false);
+          }}
+        />
+      </Dialog.Container>
       <DateTimePickerModal
         style={{ width: "100%" }}
         textColor={"#000"}
@@ -154,11 +202,10 @@ const styles = StyleSheet.create({
   },
 
   progress: {
-    height: 20,
-    width: wp('85%'),
-    marginTop: hp("5%"),
-    marginBottom: hp("5%"),
-    borderRadius: 5
+    flex: 1,
+    height: 33,
+    borderRadius: 8,
+    marginBottom: 10,
   },
 
   message: {
@@ -172,9 +219,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: "#EBEBEB",
-    marginTop: hp("5%"),
-    padding: hp("2%"),
     borderRadius: 15
   },
 
@@ -184,12 +228,10 @@ const styles = StyleSheet.create({
 
   spacing: {
     marginTop: 18,
-    marginBottom: 18,
   },
 
   spacingDate: {
     marginTop: 10,
-    marginBottom: 10,
   },
 
   dateAndDatepicker: {

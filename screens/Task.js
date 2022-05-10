@@ -9,9 +9,10 @@ import { useNavigation } from "@react-navigation/core";
 import { FAB } from 'react-native-paper';
 import { defaultTask } from '../helpers/helper';
 import { useTheme } from "react-native-paper";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { ProgressBar, Colors } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Progress from './Progress';
 
 export default function Task() {
   let events = useSelector(state => state.events).events
@@ -20,60 +21,6 @@ export default function Task() {
   const nome = useSelector((state) => state.user).user.name;
 
   const theme = useTheme();
-
-  // const dispatch = useDispatch();
-  // const semester = useSelector((state) => state.semester).semester;
-  // const currentDate = new Date();
-  // const [showInitDatePicker, setShowInitDatePicker] = useState(false);
-  // const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  // let message = '';
-  // let progress = 0;
-  // calculateProgress();
-
-  // function handleSemesterInitiChange(date) {
-  //   setShowInitDatePicker(false);
-  //   semester.init = date.toString();
-  //   dispatch(updateSemester(semester));
-  // }
-
-  // function handleSemesterEndChange(date) {
-  //   setShowEndDatePicker(false);
-  //   semester.end = date.toString();
-  //   dispatch(updateSemester(semester));
-  // }
-
-  // useEffect(() => {
-  //   calculateProgress();
-  // }, [semester]);
-
-  // function calculateProgress() {
-  //   if (new Date(semester.init) < new Date(semester.end)) {
-  //     let auxProgress = (currentDate - new Date(semester.init)) / (new Date(semester.end) - new Date(semester.init));
-  //     auxProgress = auxProgress > 1 ? 1 : auxProgress < 0 ? 0 : auxProgress;
-
-  //     let auxDaysLeft = Math.round((new Date(semester.end) - currentDate) / (24 * 60 * 60 * 1000));
-  //     auxDaysLeft = auxDaysLeft < 0 ? 0 : auxDaysLeft;
-
-  //     if (currentDate < new Date(semester.init)) {
-  //       let auxVacationDays = Math.round(Math.abs((new Date(semester.init) - currentDate) / (24 * 60 * 60 * 1000)));
-  //       auxVacationDays = auxVacationDays < 0 ? 0 : auxVacationDays;
-
-  //       message = `Você ainda tem ${auxVacationDays} dia${auxVacationDays != 0 ? "s" : ""} de férias!`;
-  //     }
-  //     else {
-  //       if (auxDaysLeft <= 0) {
-  //         message = `As férias chegaram!`;
-  //       }
-  //       else {
-  //         message = `Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`;
-  //       }
-  //     }
-  //     progress = auxProgress;
-  //   } else {
-  //     message = "Selecione datas válidas de início e término do seu semestre!";
-  //     progress = 0;
-  //   }
-  // }
 
   const styles = StyleSheet.create({
     container: {
@@ -114,13 +61,6 @@ export default function Task() {
       marginVertical: 15,
       padding: 25,
     },
-    // progress: {
-    //   height: 20,
-    //   width: wp('85%'),
-    //   marginTop: hp("5%"),
-    //   marginBottom: hp("5%"),
-    //   borderRadius: 5
-    // },
     miscCont: {
       padding: 10,
       borderBottomWidth: 1,
@@ -132,7 +72,6 @@ export default function Task() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
-      marginBottom: 10,
       marginHorizontal: 10,
       width: wp("26%"),
       height: wp("26%"),
@@ -157,50 +96,40 @@ export default function Task() {
       <View style={styles.miscCont}>
         <View style={styles.line}>
           <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Frequência</Text>
           </View>
           <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Eventos</Text>
           </View>
           <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+            <MaterialIcons name="book" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Matérias</Text>
           </View>
         </View>
 
         {/* Ordem e progresso */}
-
-        {/* <ProgressBar style={styles.progress} progress={progress} color={Colors.green600} />
-        <Text style={styles.message}>{message}</Text>
-        <StatusBar style="auto" /> */}
+        <Progress/>
+        {/* <Text style={styles.message}>{message}</Text>
+        <StatusBar style="auto" />  */}
       </View>
 
       <View style={styles.buttonCont}>
-        <View style={styles.button}>
-          <MaterialIcons name="settings" size={24} color={theme.colors.onSurfaceVariant} />
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Configurações")}>
+          <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Configurações</Text>
-        </View>
-        <View style={styles.button}>
-          <MaterialIcons name="info" size={24} color={theme.colors.onSurfaceVariant} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Sobre Nós")}>
+          <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
-        </View>
-        <View style={styles.button}>
-          <MaterialIcons name="mail" size={24} color={theme.colors.onSurfaceVariant} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("FAQ")}>
+          <Feather name="mail" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Fale conosco</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       
-      {/* {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}
-
-      <StatusBar style="auto" />
-    </ScrollView>
-    <FAB
-      style={styles.fab}
-      icon="plus"
-      onPress={() => navigation.navigate("Event", { task: defaultTask })}
-    /> */}
     </ScrollView>
     </> 
   );
