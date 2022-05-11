@@ -1,17 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { row } from 'mathjs';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import ScrollView from "./../components/ScrollView";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/core";
-import { FAB } from 'react-native-paper';
-import { defaultTask } from '../helpers/helper';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from "react-native-paper";
-import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { ProgressBar, Colors } from 'react-native-paper';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { useSelector } from "react-redux";
+import { magic } from '../helpers/ExpressionHelper';
+import ScrollView from "./../components/ScrollView";
 import Progress from './Progress';
 
 export default function Dashboard() {
@@ -109,11 +104,7 @@ export default function Dashboard() {
             <Text style={styles.smallBtnText}>Matérias</Text>
           </View>
         </View>
-
-        {/* Ordem e progresso */}
         <Progress/>
-        {/* <Text style={styles.message}>{message}</Text>
-        <StatusBar style="auto" />  */}
       </View>
 
       <View style={styles.buttonCont}>
@@ -125,7 +116,7 @@ export default function Dashboard() {
           <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Contact")}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Contato")}>
           <Feather name="mail" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Fale conosco</Text>
         </TouchableOpacity>

@@ -155,7 +155,7 @@ function Loader() {
                 name="Sobre Nós"
                 component={AboutUs} />
             <HomeStackRoutes.Screen
-                name="Contact"
+                name="Contato"
                 component={Contact} />
                 </HomeStackRoutes.Navigator>
           </NavigationContainer>

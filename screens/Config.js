@@ -5,12 +5,17 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { updateEvent } from '../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
 import Dialog from "react-native-dialog";
-import { useTheme, Appbar, TouchableRipple, Switch } from 'react-native-paper';
+import { useTheme, Appbar, TouchableRipple, Switch, TextInput } from 'react-native-paper';
 import { updateUser } from '../redux/actions/userActions';
+import { MaterialIcons } from '@expo/vector-icons';
 import { PreferencesContext } from '../theme/PreferencesContext';
 
-export default function Config() {
-
+export function Config2() {
+  const styles = StyleSheet.create({
+    container: {
+      flex:1, backgroundColor: '#fff'
+    },
+  });
   const events = useSelector(state => state.events).events
   const user = useSelector(state => state.user).user
   const dispatch = useDispatch();
@@ -146,9 +151,119 @@ export default function Config() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+export default function Config() {
+  const user = useSelector(state => state.user).user
+  const colors = useTheme().colors;
+  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
+  const dispatch = useDispatch();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex:1,
+      backgroundColor: colors.surface1,
+      padding: 20,
+
+    },
+    icon: {
+      marginRight: 10
+    },
+    text: {
+      color: colors.onSurfaceVariant,
+
+    },
+    textInput:{
+      width: '100%',
+      backgroundColor: colors.surface5,
+      height: 40,
+    },
+    datePickerInput: {
+      width: '100%',
+      backgroundColor: colors.surface5,
+      padding: 10,
+      borderRadius: 5,
+    },
+    linha: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    opcao: {
+      marginVertical: 10
+    },
+    switchContainer:{
+      flex:1,
+      justifyContent: 'flex-end',
+    }
+
+  });
+  const [money, setMoney] = React.useState('5.20');
+  const handleMoneyChange = (value) => {
+    try{
+      const valor = parseFloat(value.substring(3))
+      console.log(valor)
+      if (!isNaN(valor))
+        setMoney(value.substring(3))
+      else
+        setMoney('0')
+    } catch (e) {
+    }
+  }
+
+  const handleNameChange = (value) => {
+    dispatch(updateUser({ ...user, name: value }))
+  }
+
+  return (<View style={styles.container}>
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <View style={styles.linha}>
+          <MaterialIcons style={styles.icon} name="nightlight-round" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.text}>Modo escuro </Text>
+        </View>
+        <View style={styles.switchContainer}>
+          <Switch color={colors.primary} value={isThemeDark} onValueChange={toggleTheme}></Switch>
+
+        </View>
+      </View>
+    </View>
+
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <MaterialIcons style={styles.icon} name="monetization-on" size={24} color={colors.onSurfaceVariant} />
+        <Text style={styles.text}>Valor padrão da refeição</Text>
+      </View>
+    </View>
+    <TextInput style={styles.textInput} value={"R$ "+money} onChangeText={handleMoneyChange}></TextInput>
+
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+        <Text style={styles.text}>Início do semestre</Text>
+      </View>
+    </View>
+    <TouchableOpacity style={styles.datePickerInput}>
+      <Text style={styles.text}>30/02/2023</Text>
+    </TouchableOpacity>
+
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+        <Text style={styles.text}>Término do semestre</Text>
+      </View>
+    </View>
+    <TouchableOpacity style={styles.datePickerInput}>
+    <Text style={styles.text}>30/02/2023</Text>
+    </TouchableOpacity>
+
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <MaterialIcons style={styles.icon} name="account-circle" size={24} color={colors.onSurfaceVariant} />
+        <Text style={styles.text}>Como você gostaria de ser chamado?</Text>
+      </View>
+    </View>
+    <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
+
+
+  </View>)
+}
+
+
