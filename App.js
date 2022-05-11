@@ -26,6 +26,9 @@ import { PreferencesContext } from "./theme/PreferencesContext";
 import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
 import BottomNavBar from "./navigation/BottomNavBar"
 
+import Config from "./screens/Config";
+import AboutUs from "./screens/AboutUs";
+import Contact from "./screens/Contact";
 
 if (
   Platform.OS === "android" &&
@@ -145,7 +148,16 @@ function Loader() {
                   headerTitleAlign: "center",
                 })}
               />
-            </HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Screen
+                name="Configurações"
+                component={Config} />
+            <HomeStackRoutes.Screen
+                name="Sobre Nós"
+                component={AboutUs} />
+            <HomeStackRoutes.Screen
+                name="Contact"
+                component={Contact} />
+                </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>
       </PreferencesContext.Provider>

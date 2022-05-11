@@ -32,6 +32,7 @@ export default function MyTabs() {
 
   return (
     <Tab.Navigator screenOptions={{
+      keyboardHidesTabBar: true,
       headerLeft: () => (
         <IconButton
           icon={"menu"}
