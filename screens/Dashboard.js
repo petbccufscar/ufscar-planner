@@ -14,7 +14,7 @@ import { ProgressBar, Colors } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Progress from './Progress';
 
-export default function Task() {
+export default function Dashboard() {
   let events = useSelector(state => state.events).events
   const navigation = useNavigation()
   events = events.filter(e => e.is_subject)
@@ -27,10 +27,11 @@ export default function Task() {
       flex: 1,
       backgroundColor: theme.colors.surface1,
       padding: 20,
+      paddingTop: 0,
     },
     sectionTitle: {
       fontSize: 30,
-      padding: 20,
+      padding: 10,
       color: theme.colors.onSurface,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
@@ -124,7 +125,7 @@ export default function Task() {
           <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("FAQ")}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Contact")}>
           <Feather name="mail" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Fale conosco</Text>
         </TouchableOpacity>

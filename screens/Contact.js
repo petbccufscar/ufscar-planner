@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function FAQ() {
+export default function Contato() {
   return (
     <View style={styles.container}>
-      <Text>FAQ!</Text>
+      <Text>Contact!</Text>
       <StatusBar style="auto" />
     </View>
   );
