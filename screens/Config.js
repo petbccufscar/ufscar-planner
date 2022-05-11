@@ -9,157 +9,20 @@ import { useTheme, Appbar, TouchableRipple, Switch, TextInput } from 'react-nati
 import { updateUser } from '../redux/actions/userActions';
 import { MaterialIcons } from '@expo/vector-icons';
 import { PreferencesContext } from '../theme/PreferencesContext';
-
-export function Config2() {
-  const styles = StyleSheet.create({
-    container: {
-      flex:1, backgroundColor: '#fff'
-    },
-  });
-  const events = useSelector(state => state.events).events
-  const user = useSelector(state => state.user).user
-  const dispatch = useDispatch();
-  const [notifications, setNotifications] = useState([])
-  const [load, setLoad] = useState(false)
-  const [name, setName] = useState(user.name)
-  const [nameDialog, setNameDialog] = useState(false)
-  const theme = useTheme();
-  const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
-
-  useEffect(() => {
-    Notifications.getAllScheduledNotificationsAsync().then(result => {
-      if (!load) {
-        setNotifications(result)
-        setLoad(true)
-      }
-    })
-  }, [load])
-  return (
-    <ScrollView style={styles.container}>
-      <TouchableOpacity onPress={() => {
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: 'black'
-        }}>Resetar dados do app</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: 'black'
-        }}>Carregar dados do SIGA</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: 'black'
-        }}>Trocar campus</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-        setNameDialog(true)
-
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: 'black'
-        }}>Trocar nome</Text>
-      </TouchableOpacity>
-      <Dialog.Container visible={nameDialog}>
-        <Dialog.Title>Escolha um novo nome</Dialog.Title>
-        <Dialog.Input defaultValue={user.name} onChangeText={setName}>
-        </Dialog.Input>
-        <Dialog.Button label="Cancelar" onPress={
-          () => setNameDialog(false)
-        } />
-        <Dialog.Button label="Ok" onPress={
-          () => {
-            dispatch(updateUser({ ...user, name: name }))
-            setNameDialog(false)
-          }
-        } />
-      </Dialog.Container>
-      <TouchableOpacity onPress={() => {
-        for (let i = 0; i < events.length; i++) {
-
-          if (events[i].notification.length != 0) {
-
-            const task = {
-              ...events[i],
-              "notification": []
-            }
-            dispatch(updateEvent(task));
-          }
-        }
-
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          backgroundColor: 'red',
-          color: 'white'
-        }}>Remover todas as notificações</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-        setLoad(false)
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: '#607D8B',
-        }}>Notificacoes: </Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-        toggleTheme()
-      }}>
-        <Text style={{
-          fontSize: 24,
-          fontWeight: 'bold',
-          padding: 10,
-          paddingBottom: 30,
-          color: '#607D8B',
-        }}>Trocar tema</Text>
-      </TouchableOpacity>
-      {notifications.map((e, i) => (
-        <View key={i} style={{ margin: 20, padding: 10, backgroundColor: 'lightblue', borderRadius: 5 }}>
-          <Text>{e.content.title}</Text>
-          <Text>{e.content.body}</Text>
-          <Text>id {e.identifier}</Text>
-          <Text>trigger{JSON.stringify(e.trigger)}</Text>
-          <Text>{new Date(e.trigger.value).toString()}</Text>
-        </View>
-      ))}
-      <StatusBar style="auto" />
-    </ScrollView>
-  );
-}
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { formatDate } from '../helpers/helper';
+import { updateSemester } from '../redux/actions/semesterActions';
 
 export default function Config() {
   const user = useSelector(state => state.user).user
+
   const colors = useTheme().colors;
   const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
   const dispatch = useDispatch();
-
+ 
   const styles = StyleSheet.create({
     container: {
-      flex:1,
+      flex: 1,
       backgroundColor: colors.surface1,
       padding: 20,
 
@@ -171,16 +34,10 @@ export default function Config() {
       color: colors.onSurfaceVariant,
 
     },
-    textInput:{
+    textInput: {
       width: '100%',
       backgroundColor: colors.surface5,
       height: 40,
-    },
-    datePickerInput: {
-      width: '100%',
-      backgroundColor: colors.surface5,
-      padding: 10,
-      borderRadius: 5,
     },
     linha: {
       flexDirection: 'row',
@@ -189,14 +46,14 @@ export default function Config() {
     opcao: {
       marginVertical: 10
     },
-    switchContainer:{
-      flex:1,
+    switchContainer: {
+      flex: 1,
       justifyContent: 'flex-end',
     }
 
   });
   const handleMoneyChange = (value) => {
-    try{
+    try {
       const valor = parseFloat(value.substring(3))
       console.log(valor)
       if (!isNaN(valor))
@@ -231,28 +88,9 @@ export default function Config() {
         <Text style={styles.text}>Valor padrão da refeição</Text>
       </View>
     </View>
-    <TextInput style={styles.textInput} value={"R$ "+user.meal} onChangeText={handleMoneyChange}></TextInput>
+    <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
 
-    <View style={styles.opcao}>
-      <View style={styles.linha}>
-        <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
-        <Text style={styles.text}>Início do semestre</Text>
-      </View>
-    </View>
-    <TouchableOpacity style={styles.datePickerInput}>
-      <Text style={styles.text}>30/02/2023</Text>
-    </TouchableOpacity>
-
-    <View style={styles.opcao}>
-      <View style={styles.linha}>
-        <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
-        <Text style={styles.text}>Término do semestre</Text>
-      </View>
-    </View>
-    <TouchableOpacity style={styles.datePickerInput}>
-    <Text style={styles.text}>30/02/2023</Text>
-    </TouchableOpacity>
-
+    <ConfigSemester/>
     <View style={styles.opcao}>
       <View style={styles.linha}>
         <MaterialIcons style={styles.icon} name="account-circle" size={24} color={colors.onSurfaceVariant} />
@@ -266,3 +104,112 @@ export default function Config() {
 }
 
 
+export function ConfigSemester(){
+  const colors = useTheme().colors;
+  const dispatch = useDispatch();
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.surface1,
+      padding: 20,
+
+    },
+    icon: {
+      marginRight: 10
+    },
+    text: {
+      color: colors.onSurfaceVariant,
+
+    },
+    datePickerInput: {
+      width: '100%',
+      backgroundColor: colors.surface5,
+      padding: 10,
+      borderRadius: 5,
+    },
+    linha: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    opcao: {
+      marginVertical: 10
+    },
+
+  });
+  const semester = useSelector((state) => state.semester).semester;
+
+  const setBeginTime = (ndate) => {
+    dispatch(updateSemester({ ...semester, init: ndate.toString() }));
+
+  }
+  const setEndTime = (ndate) => {
+    dispatch(updateSemester({ ...semester, end: ndate.toString() }));
+  }
+  
+  const [showBeginPicker, setShowBeginPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
+  return(<><View style={styles.opcao}>
+  <View style={styles.linha}>
+    <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+    <Text style={styles.text}>Início do semestre</Text>
+  </View>
+</View>
+<DateTimePickerModal
+  style={{ width: "100%" }}
+  textColor={"#000"}
+  isVisible={showEndPicker}
+  mode={"date"}
+  value={new Date(semester.end)}
+  date={new Date(semester.end)}
+  onCancel={() => {
+    setShowEndPicker(false);
+  }}
+  onHide={() => {
+    setShowEndPicker(false);
+  }}
+  onConfirm={(ndate) => {
+    setShowEndPicker(false);
+    setEndTime(ndate);
+  }}
+  cancelTextIOS={"Cancelar"}
+  confirmTextIOS={"Confirmar"}
+  headerTextIOS={"Escolha as datas"}
+/>
+<DateTimePickerModal
+  style={{ width: "100%" }}
+  textColor={"#000"}
+  isVisible={showBeginPicker}
+  value={new Date(semester.init)}
+  date={new Date(semester.init)}
+  mode={"date"}
+  onCancel={() => {
+    setShowBeginPicker(false);
+  }}
+  onHide={() => {
+    setShowBeginPicker(false);
+  }}
+  onConfirm={(ndate) => {
+    setShowBeginPicker(false);
+    setBeginTime(ndate);
+  }}
+  cancelTextIOS={"Cancelar"}
+  confirmTextIOS={"Confirmar"}
+  headerTextIOS={"Escolha as datas"}
+/>
+<TouchableOpacity style={styles.datePickerInput} onPress={() => setShowBeginPicker(true)}>
+  <Text style={styles.text}>{formatDate(new Date(semester.init))}</Text>
+</TouchableOpacity>
+
+<View style={styles.opcao}>
+  <View style={styles.linha}>
+    <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+    <Text style={styles.text}>Término do semestre</Text>
+  </View>
+</View>
+<TouchableOpacity style={styles.datePickerInput} onPress={() => setShowEndPicker(true)}>
+  <Text style={styles.text}>{formatDate(new Date(semester.end))}</Text>
+</TouchableOpacity></>)
+
+}

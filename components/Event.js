@@ -24,7 +24,7 @@ import { Button, IconButton, useTheme, FAB } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
-import { formatDateWithHour } from "../helpers/helper";
+import { formatDateWithHour, minimum } from "../helpers/helper";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -268,16 +268,7 @@ export default function Event({ route, navigation }) {
     const [day, setDay] = useState((new Date()).getDay());
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
-    const minimum = (date) => {
-      const td = new Date();
-      return new Date(
-        td.getFullYear(),
-        td.getMonth(),
-        td.getDate(),
-        date.getHours(),
-        date.getMinutes()
-      );
-    };
+    
 
     function Bolinha(props) {
       const cor = props.index == day ? "red" : "gray";

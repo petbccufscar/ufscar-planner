@@ -12,6 +12,7 @@ import { formatDate } from '../helpers/helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dialog from "react-native-dialog";
+import { ConfigSemester } from './Config';
 
 
 function Bar(props) {
@@ -29,7 +30,7 @@ function Bar(props) {
         <Text style={{ color: colors.onSurface }}>{text}</Text>
       </View>
       <View style={{ right: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: colors.onSurface }}>{`${progress}%`}</Text>
+        <Text style={{ color: colors.onSurface }}>{`${progress.toFixed(2)}%`}</Text>
       </View>
     </View>)
 
@@ -37,28 +38,14 @@ function Bar(props) {
 
 
 export default function Progress() {
-  const dispatch = useDispatch();
   const semester = useSelector((state) => state.semester).semester;
   const currentDate = new Date();
-  const [showInitDatePicker, setShowInitDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   let message = '';
   let progress = 0;
   calculateProgress();
   const colors = useTheme().colors 
   const [showDialog, setShowDialog] = useState(false);
 
-  function handleSemesterInitiChange(date) {
-    setShowInitDatePicker(false);
-    semester.init = date.toString();
-    dispatch(updateSemester(semester));
-  }
-
-  function handleSemesterEndChange(date) {
-    setShowEndDatePicker(false);
-    semester.end = date.toString();
-    dispatch(updateSemester(semester));
-  }
 
   useEffect(() => {
     calculateProgress();
@@ -93,8 +80,6 @@ export default function Progress() {
     }
   }
 
-  const navigation = useNavigation()
-
   return (<>
     <View style={styles.content}>
       <View style={styles.container}>
@@ -105,7 +90,7 @@ export default function Progress() {
             <Text style={{color:colors.onSurfaceVariant, ...styles.message}}>{message}</Text>
           </View>
           <View style={{ alignItems: 'flex-end',flex:1, }}>
-            <TouchableOpacity onPress={() => setShowDialog(true)} style={{borderWidth:1, borderRadius: 8, backgroundColor: colors.surface, alignItems:'center', justifyContent:'center' ,flexDirection:'row', paddingHorizontal: 10, paddingVertical:5}}>
+            <TouchableOpacity onPress={() => setShowDialog(true)} style={{borderWidth:1, borderColor: colors.outline ,borderRadius: 8, backgroundColor: colors.surface, alignItems:'center', justifyContent:'center' ,flexDirection:'row', paddingHorizontal: 10, paddingVertical:5}}>
               <MaterialIcons name="settings" size={18} color={colors.primary} style={{paddingRight:5}} />
               <Text style={{color: colors.onSurface}}>Ajustar</Text>
 
@@ -114,71 +99,20 @@ export default function Progress() {
         </View>
         <StatusBar style="auto" />
       </View>
-      <Dialog.Container visible={showDialog}>
-        <Dialog.Title>Escolha as datas do semestre</Dialog.Title>
-        <Dialog.Description>
-      <View style={styles.line}>
-        <View style={styles.semestre}>
-          <Text style={styles.spacing}>Início do Semestre: </Text>
-          <Text style={styles.spacing}>Fim do Semestre: </Text>
+      <Dialog.Container contentStyle={{backgroundColor:colors.surface}} visible={showDialog}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Escolha as datas do semestre</Dialog.Title>
+          <View >
+        <ConfigSemester></ConfigSemester>
         </View>
-        <View style={styles.datas}>
-          <View style={styles.spacingDate}>
-            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowInitDatePicker(true)}>
-              <Calendar style={styles.calendar} />
-              <Text style={styles.data}>{formatDate(new Date(semester.init))}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.spacingDate}>
-            <TouchableOpacity style={styles.dateAndDatepicker} onPress={() => setShowEndDatePicker(true)}>
-              <Calendar style={styles.calendar} />
-              <Text style={styles.data}>{formatDate(new Date(semester.end))}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      </Dialog.Description>
         <Dialog.Button
+          color={colors.primary}
           label="Ok"
           onPress={() => {
             setShowDialog(false);
           }}
         />
       </Dialog.Container>
-      <DateTimePickerModal
-        style={{ width: "100%" }}
-        textColor={"#000"}
-        isVisible={showInitDatePicker}
-        mode={"date"}
-        value={new Date(semester.init)}
-        date={new Date(semester.init)}
-        onCancel={() => setShowInitDatePicker(false)}
-        onHide={() => setShowInitDatePicker(false)}
-        onConfirm={(date) => {
-          handleSemesterInitiChange(date);
-        }}
-
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma data'}
-      />
-      <DateTimePickerModal
-        style={{ width: "100%" }}
-        textColor={"#000"}
-        isVisible={showEndDatePicker}
-        mode={"date"}
-        value={new Date(semester.end)}
-        date={new Date(semester.end)}
-        onCancel={() => setShowEndDatePicker(false)}
-        onHide={() => setShowEndDatePicker(false)}
-        onConfirm={(date) => {
-          handleSemesterEndChange(date);
-        }}
-
-        cancelTextIOS={'Cancelar'}
-        confirmTextIOS={'Confirmar'}
-        headerTextIOS={'Escolha uma data'}
-      />
+      
     </View>
   </>);
 }

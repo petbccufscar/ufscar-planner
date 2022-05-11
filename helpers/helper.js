@@ -112,4 +112,15 @@ export const monthNames = [
     'Dezembro'
 ]
 
+export const minimum = (date) => {
+    const td = new Date();
+    return new Date(
+      td.getFullYear(),
+      td.getMonth(),
+      td.getDate(),
+      date.getHours(),
+      date.getMinutes()
+    );
+  };
+
 export const  monthNamesShort= ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
