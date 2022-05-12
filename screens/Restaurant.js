@@ -22,7 +22,7 @@ import { formatReal } from "../helpers/helper";
 
 export default function Wallet() {
   const user = useSelector((state) => state.user).user;
-  const mealValue = 4.2;
+  const mealValue = user.meal;
   const [shouldShow, setShouldShow] = React.useState(false);
   const navigation = useNavigation();
   const dispatcher = useDispatch();

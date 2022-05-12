@@ -27,8 +27,7 @@ export function Task(props) {
       borderRadius: 10,
       overflow: 'hidden',
       alignItems: "flex-start",
-      margin: 10,
-
+      marginVertical: 10
       // width: '100%',
     },
     square: {

@@ -1,11 +1,12 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Task from '../../screens/Task';
+import Dashboard from '../../screens/Dashboard';
 import { useTheme } from 'react-native-paper';
+import {MaterialIcons} from "@expo/vector-icons";
 const taskStack = createNativeStackNavigator();
 
 
-export default function TaskNavigator() {
+export default function DashboardNavigator() {
     const colors = useTheme().colors;
 
     return (
@@ -18,7 +19,8 @@ export default function TaskNavigator() {
             headerTintColor: colors.onSurface,
             headerTitleAlign: 'center',
         }}>
-            <taskStack.Screen name="Task" component={Task} />
+            <taskStack.Screen name="Task" component={Dashboard} />
+
         </taskStack.Navigator>
     );
 }

@@ -12,7 +12,7 @@ export default function RestaurantTickets() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.money.toString());
-  const mealValue = 4.2;
+  const mealValue = user.meal;
 
   const dispatcher = useDispatch();
 

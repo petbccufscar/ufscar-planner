@@ -20,11 +20,11 @@ import {
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
   
-import { Button, IconButton, useTheme, FAB } from "react-native-paper";
+import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
-import { formatDateWithHour } from "../helpers/helper";
+import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -37,12 +37,13 @@ export default function Event({ route, navigation }) {
   const [isSubject, setIsSubject] = useState(task.is_subject||false);
   const [weekly, setWeekly] = useState(task.weekly||false);
   const [isSubmited, setIsSubmited] = useState(task.is_submited||false);
-
+  
   //todo
   const [subject, setSubject] = useState(task.subject||null);
   const [color, setColor] = useState(task.color||0);
   const [turma, setTurma] = useState(task.turma||"");
   const [teachers, setTeachers] = useState(task.teachers||[]);
+  const [whenSubmit, setWhenSubmit] = useState(task.when_submit||null);
 
 
 
@@ -65,6 +66,7 @@ export default function Event({ route, navigation }) {
   const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
+  const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
   const colors = useTheme().colors;
 
@@ -106,7 +108,8 @@ export default function Event({ route, navigation }) {
       frequency: frequency,
       teachers:teachers,
       turma:turma,
-      is_submited:isSubmited
+      is_submited:isSubmited,
+      when_submit:whenSubmit
     };
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
@@ -173,7 +176,7 @@ export default function Event({ route, navigation }) {
     isSubmited,
     turma,
     teachers,
-    
+    whenSubmit
 
   ]);
 
@@ -268,16 +271,7 @@ export default function Event({ route, navigation }) {
     const [day, setDay] = useState((new Date()).getDay());
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
-    const minimum = (date) => {
-      const td = new Date();
-      return new Date(
-        td.getFullYear(),
-        td.getMonth(),
-        td.getDate(),
-        date.getHours(),
-        date.getMinutes()
-      );
-    };
+    
 
     function Bolinha(props) {
       const cor = props.index == day ? "red" : "gray";
@@ -887,7 +881,13 @@ export default function Event({ route, navigation }) {
   
   
   })
+  const [showMenu, setShowMenu] = useState(false);
+  const openMenu = () => setShowMenu(true);
+  const closeMenu = () => setShowMenu(false);
+  
+  const events = useSelector((state) => state.events).events;
 
+  const materias = events.filter(event => event.is_subject === true);
     if(!editMode){
             return (<ScrollView style={styles.container}  
               contentContainerStyle={styles.container}          
@@ -1006,9 +1006,10 @@ export default function Event({ route, navigation }) {
       </ScrollView>)
     }
 
-
+  
   return (
     <ScrollView style={styles.container}>
+      
       {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
         <Ionicons name="color-palette" size={24} color={colors.onSurface} />
@@ -1139,7 +1140,95 @@ export default function Event({ route, navigation }) {
       {editMode && (
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
 
+
+      
+      {!isSubject && (<>
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="book" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Pertence a uma matéria?</Text>
+          </View>
+      </View>
+      <Menu
+          visible={showMenu}
+          onDismiss={closeMenu}
+          style={{width:'100%'} }
+          anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.textInput} >{materias.filter(event=> event.id == subject)[0]?.name||"Nenhuma matéria"}</Text></TouchableOpacity>}>
+          <Menu.Item onPress={() => {setSubject(null); setShowMenu(false)}} title="Nenhuma matéria" />
+          {materias.map((materia, index) => (<Menu.Item key={index} onPress={() => {setSubject(materia.id);setShowMenu(false)}} title={materia.name} />
+            ))}
+        </Menu>
+        
+        </>)}
+      {!isSubject && (<><View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="message-question-outline" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Tem data de entrega?</Text>
+          </View>
+      </View>
       <View style={styles.colorContainer}>
+        <TouchableOpacity style={whenSubmit==null?styles.rbutton:styles.rbuttonAct} onPress={()=>setOpenWhenDialog(true)}>
+          {whenSubmit!=null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          {whenSubmit==null && (<Text style={{color: colors.onSurface}}>Sim</Text>)}
+          {whenSubmit!=null && (<Text style={{color: colors.onSecondaryContainer}}>{formatDateWithHour(new Date(whenSubmit))}</Text>)}
+          
+          </TouchableOpacity>
+          <TouchableOpacity style={whenSubmit!=null?styles.rbutton:styles.rbuttonAct} onPress={()=>setWhenSubmit(null)}>
+          {whenSubmit==null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color:whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Não</Text>
+          
+          </TouchableOpacity>
+      </View></>)}
+      <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={openWhenDialog}
+              mode={"datetime"}
+              onCancel={() => {
+                setOpenWhenDialog(false);
+              }}
+              onHide={() => {
+                setOpenWhenDialog(false);
+              }}
+              onConfirm={(ndate) => {
+                setOpenWhenDialog(false);
+                setWhenSubmit(ndate.toString());
+              }}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma data/hora"}
+            />
+        {(whenSubmit != null || isSubject) && (<>
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="file-check" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            {!isSubject && (<Text style={styles.title}>já foi entregue?</Text>)}
+            {isSubject && (<Text style={styles.title}>já foi finalizada?</Text>)}
+          </View>
+        </View>
+        
+        <View style={styles.colorContainer}>
+        <TouchableOpacity style={!isSubmited?styles.rbutton:styles.rbuttonAct} onPress={()=>setIsSubmited(true)}>
+          {isSubmited && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color: whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Sim</Text>
+          
+          </TouchableOpacity>
+          <TouchableOpacity style={isSubmited?styles.rbutton:styles.rbuttonAct} onPress={()=>setIsSubmited(false)}>
+          {!isSubmited && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color:whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Não</Text>
+          
+          </TouchableOpacity>
+      </View></>)}
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
 
@@ -1148,8 +1237,6 @@ export default function Event({ route, navigation }) {
             <Text style={styles.title}>Notificações</Text>
           </View>
       </View>
-
-
       { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
       {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
 

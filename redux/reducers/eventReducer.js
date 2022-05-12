@@ -75,9 +75,10 @@ export const eventReducer = (state = initialState, action) => {
     let aux;
     switch (action.type) {
         case ActionsTypes.ADD_EVENT:
+            auxid = action.payload.id || state.nextId
             aux = {
                 ...state,
-                events: [...state.events, { ...action.payload, id: state.nextId }],
+                events: [...state.events, { ...action.payload, id: auxid}],
                 nextId: state.nextId + 1
             }
             refazerNotificações(aux)
@@ -85,7 +86,7 @@ export const eventReducer = (state = initialState, action) => {
         case ActionsTypes.REMOVE_EVENT:
             aux = {
                 ...state,
-                events: state.events.filter(event => event.id !== action.payload.id)
+                events: state.events.filter(event => event.id !== action.payload.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
             }
             refazerNotificações(aux)
             return aux

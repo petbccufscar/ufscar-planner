@@ -19,14 +19,16 @@ import {
 import { PersistGate } from "redux-persist/integration/react";
 import Event from "./components/Event";
 import { Subject } from "./components/Subject";
-import SideBar from "./navigation/SideBar";
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
 import Restaurant from "./screens/Restaurant";
 import { PreferencesContext } from "./theme/PreferencesContext";
 import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
+import BottomNavBar from "./navigation/BottomNavBar"
 
-
+import Config from "./screens/Config";
+import AboutUs from "./screens/AboutUs";
+import Contact from "./screens/Contact";
 
 if (
   Platform.OS === "android" &&
@@ -110,7 +112,7 @@ function Loader() {
           <NavigationContainer theme={theme}>
             <HomeStackRoutes.Navigator>
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
-                <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
+                <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
               <HomeStackRoutes.Screen
                 name="Event"
@@ -146,7 +148,16 @@ function Loader() {
                   headerTitleAlign: "center",
                 })}
               />
-            </HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Screen
+                name="Configurações"
+                component={Config} />
+            <HomeStackRoutes.Screen
+                name="AboutUs"
+                component={AboutUs} />
+            <HomeStackRoutes.Screen
+                name="Contato"
+                component={Contact} />
+                </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>
       </PreferencesContext.Provider>
