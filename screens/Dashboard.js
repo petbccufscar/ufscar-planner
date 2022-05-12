@@ -28,6 +28,8 @@ export default function Dashboard() {
       fontSize: 30,
       padding: 10,
       color: theme.colors.onSurface,
+      paddingBottom: 10,
+      marginBottom: 10,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
     },
@@ -48,13 +50,14 @@ export default function Dashboard() {
     buttonText: {
       alignItems: "flex-start",
       flexWrap: "wrap",
-      fontSize: 22,
+      fontSize: 20,
       marginLeft: 10,
       padding: 5,
       color: theme.colors.onSurfaceVariant,
     },
     buttonCont: {
-      marginVertical: 15,
+      margin: 15,
+      marginHorizontal: 0,
       padding: 25,
     },
     miscCont: {
@@ -78,7 +81,7 @@ export default function Dashboard() {
       alignItems: "center",
     },
     smallBtnText: {
-      fontSize: 18,
+      fontSize: 16,
       color: theme.colors.onSurfaceVariant,
       paddingTop: 5,
       alignItems: "center",
@@ -91,18 +94,18 @@ export default function Dashboard() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <View style={styles.squareBtn}>
+          <TouchableOpacity style={styles.squareBtn}>
             <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Frequência</Text>
-          </View>
-          <View style={styles.squareBtn}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}>
             <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Eventos</Text>
-          </View>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="book" size={50} color={theme.colors.onSurfaceVariant} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}>
+            <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Matérias</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <Progress/>
       </View>
@@ -112,7 +115,7 @@ export default function Dashboard() {
           <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Configurações</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Sobre Nós")}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("AboutUs")}>
           <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
         </TouchableOpacity>
