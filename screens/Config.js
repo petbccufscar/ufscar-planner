@@ -5,7 +5,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { updateEvent } from '../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
 import Dialog from "react-native-dialog";
-import { useTheme, Appbar, TouchableRipple, Switch, TextInput } from 'react-native-paper';
+import { useTheme, Appbar, TouchableRipple, Switch, TextInput, Menu } from 'react-native-paper';
 import { updateUser } from '../redux/actions/userActions';
 import { MaterialIcons } from '@expo/vector-icons';
 import { PreferencesContext } from '../theme/PreferencesContext';
@@ -39,6 +39,12 @@ export default function Config() {
       backgroundColor: colors.surface5,
       height: 40,
     },
+    datePickerInput: {
+      width: '100%',
+      backgroundColor: colors.surface5,
+      padding: 10,
+      borderRadius: 5,
+    },
     linha: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -67,7 +73,12 @@ export default function Config() {
   const handleNameChange = (value) => {
     dispatch(updateUser({ ...user, name: value }))
   }
-
+  const [showMenu, setShowMenu] = useState(false);
+  const openMenu = () => setShowMenu(true);
+  const closeMenu = () => setShowMenu(false);
+  const setCampus = (name) =>{
+    dispatch(updateUser({ ...user, campus: name }))
+  }
   return (<View style={styles.container}>
     <View style={styles.opcao}>
       <View style={styles.linha}>
@@ -89,6 +100,23 @@ export default function Config() {
       </View>
     </View>
     <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
+    
+    <View style={styles.opcao}>
+      <View style={styles.linha}>
+        <MaterialIcons style={styles.icon} name="school" size={24} color={colors.onSurfaceVariant} />
+        <Text style={styles.text}>Campus da UFSCar</Text>
+      </View>
+    </View>
+    <Menu
+      visible={showMenu}
+      onDismiss={closeMenu}
+      anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.datePickerInput} >{user.campus}</Text></TouchableOpacity>}>
+      <Menu.Item onPress={() => {setCampus("Araras"); setShowMenu(false)}} title="Araras" />
+      <Menu.Item onPress={() => {setCampus("Lagoa do Sino"); setShowMenu(false)}} title="Lagoa do Sino" />
+      <Menu.Item onPress={() => {setCampus("São Carlos"); setShowMenu(false)}} title="São Carlos" />
+      <Menu.Item onPress={() => {setCampus("Sorocaba"); setShowMenu(false)}} title="Sorocaba" />
+          
+    </Menu>
 
     <ConfigSemester/>
     <View style={styles.opcao}>

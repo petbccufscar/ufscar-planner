@@ -883,7 +883,6 @@ export default function Event({ route, navigation }) {
   })
   const [showMenu, setShowMenu] = useState(false);
   const openMenu = () => setShowMenu(true);
-
   const closeMenu = () => setShowMenu(false);
   
   const events = useSelector((state) => state.events).events;
