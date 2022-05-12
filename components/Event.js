@@ -20,7 +20,7 @@ import {
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
   
-import { Button, IconButton, useTheme, FAB } from "react-native-paper";
+import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
 
 import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
@@ -878,7 +878,14 @@ export default function Event({ route, navigation }) {
   
   
   })
+  const [showMenu, setShowMenu] = useState(false);
+  const openMenu = () => setShowMenu(true);
 
+  const closeMenu = () => setShowMenu(false);
+  
+  const events = useSelector((state) => state.events).events;
+
+  const materias = events.filter(event => event.is_subject === true);
     if(!editMode){
             return (<ScrollView style={styles.container}  
               contentContainerStyle={styles.container}          
@@ -997,9 +1004,10 @@ export default function Event({ route, navigation }) {
       </ScrollView>)
     }
 
-
+  
   return (
     <ScrollView style={styles.container}>
+      
       {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
         <Ionicons name="color-palette" size={24} color={colors.onSurface} />
@@ -1130,7 +1138,32 @@ export default function Event({ route, navigation }) {
       {editMode && (
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
 
-      <View style={styles.colorContainer}>
+
+      
+      {!isSubject && (<>
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="book" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Pertence a uma matéria?</Text>
+          </View>
+      </View>
+      <Menu
+          visible={showMenu}
+          onDismiss={closeMenu}
+          style={{width:'100%'} }
+          anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.textInput} >{materias.filter(event=> event.id == subject)[0]?.name||"Nenhuma matéria"}</Text></TouchableOpacity>}>
+          <Menu.Item onPress={() => {setSubject(null); setShowMenu(false)}} title="Nenhuma matéria" />
+          {materias.map((materia, index) => (<Menu.Item key={index} onPress={() => {setSubject(materia.id);setShowMenu(false)}} title={materia.name} />
+            ))}
+        </Menu>
+        
+        </>)}
+
+
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
 
@@ -1139,8 +1172,6 @@ export default function Event({ route, navigation }) {
             <Text style={styles.title}>Notificações</Text>
           </View>
       </View>
-
-
       { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
       {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
 
