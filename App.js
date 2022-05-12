@@ -152,7 +152,7 @@ function Loader() {
                 name="Configurações"
                 component={Config} />
             <HomeStackRoutes.Screen
-                name="Sobre Nós"
+                name="AboutUs"
                 component={AboutUs} />
             <HomeStackRoutes.Screen
                 name="Contato"
