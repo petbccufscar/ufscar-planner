@@ -12,6 +12,8 @@ import { useTheme } from "react-native-paper";
 import { MaterialIcons } from '@expo/vector-icons';
 import { ProgressBar, Colors } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AboutUs from '../screens/AboutUs';
+import Config from '../screens/Config';
 
 export default function Task() {
   let events = useSelector(state => state.events).events
@@ -83,8 +85,9 @@ export default function Task() {
     },
     sectionTitle: {
       fontSize: 30,
-      padding: 20,
       color: theme.colors.onSurface,
+      paddingBottom: 10,
+      marginBottom: 10,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
     },
@@ -105,13 +108,14 @@ export default function Task() {
     buttonText: {
       alignItems: "flex-start",
       flexWrap: "wrap",
-      fontSize: 22,
+      fontSize: 20,
       marginLeft: 10,
       padding: 5,
       color: theme.colors.onSurfaceVariant,
     },
     buttonCont: {
-      marginVertical: 15,
+      margin: 15,
+      marginHorizontal: 0,
       padding: 25,
     },
     // progress: {
@@ -143,7 +147,7 @@ export default function Task() {
       alignItems: "center",
     },
     smallBtnText: {
-      fontSize: 18,
+      fontSize: 16,
       color: theme.colors.onSurfaceVariant,
       paddingTop: 5,
       alignItems: "center",
@@ -156,18 +160,18 @@ export default function Task() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+          <TouchableOpacity style={styles.squareBtn}>
+            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Frequência</Text>
-          </View>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}>
+            <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Eventos</Text>
-          </View>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}>
+            <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
             <Text style={styles.smallBtnText}>Matérias</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Ordem e progresso */}
@@ -178,18 +182,18 @@ export default function Task() {
       </View>
 
       <View style={styles.buttonCont}>
-        <View style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Config')}>
           <MaterialIcons name="settings" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Configurações</Text>
-        </View>
-        <View style={styles.button}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AboutUs')}>
           <MaterialIcons name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
-        </View>
-        <View style={styles.button}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FAQ')}>
           <MaterialIcons name="mail" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Fale conosco</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       
       {/* {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}

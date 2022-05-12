@@ -36,7 +36,7 @@ export default function SideBar(props) {
         }}
         component={Progress} />
       <Drawer.Screen
-        name="Configurações"
+        name="Config"
         options={{
           drawerIcon: ({ focused, size }) => (
             <MaterialIcons name="settings" size={size} color="black" />
@@ -45,7 +45,7 @@ export default function SideBar(props) {
         component={Config} />
 
       <Drawer.Screen
-        name="Sobre Nós"
+        name="AboutUs"
         options={{
           drawerIcon: ({ focused, size }) => (
             <MaterialIcons name="group" size={size} color="black" />
