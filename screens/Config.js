@@ -37,11 +37,13 @@ export default function Config() {
     textInput: {
       width: '100%',
       backgroundColor: colors.surface5,
+      color: colors.onSurfaceVariant,
       height: 40,
     },
     datePickerInput: {
       width: '100%',
       backgroundColor: colors.surface5,
+      color: colors.onSurfaceVariant,
       padding: 10,
       borderRadius: 5,
     },
@@ -80,7 +82,7 @@ export default function Config() {
     dispatch(updateUser({ ...user, campus: name }))
   }
   return (<View style={styles.container}>
-    <View style={styles.opcao}>
+    <View style={{...styles.opcao, marginBottom: 0}}>
       <View style={styles.linha}>
         <View style={styles.linha}>
           <MaterialIcons style={styles.icon} name="nightlight-round" size={24} color={colors.onSurfaceVariant} />
