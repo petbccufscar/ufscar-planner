@@ -22,7 +22,6 @@ import Dialog from "react-native-dialog";
   
 import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
 
-import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
 import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 
@@ -268,13 +267,21 @@ export default function Event({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState((new Date()).getDay());
+    const [day, setDay] = useState([(new Date()).getDay()]);
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
     
+    const handleTouchDay = (aux) => {
+      if (day.includes(aux)) {
+        if (day.length > 1)
+          setDay(day.filter((d) => d !== aux));
+      } else {
+        setDay([...day, aux]);
+      }
+    }
 
     function Bolinha(props) {
-      const cor = props.index == day ? "red" : "gray";
+      const cor = day.includes(props.index ) ? colors.primary : colors.surface3;
       return (
         <TouchableOpacity
           style={{
@@ -286,15 +293,15 @@ export default function Event({ route, navigation }) {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={() => setDay(props.index)}
+          onPress={() => handleTouchDay(props.index)}
         >
-          <Text style={{ color: BWFont(cor) }}>{props.text}</Text>
+          <Text style={{ color: day.includes(props.index ) ? colors.onPrimary : colors.onSurface }}>{props.text}</Text>
         </TouchableOpacity>
       );
     }
     return (
-      <Dialog.Container visible={openHorarioDialog}>
-        <Dialog.Title>Quando e onde será o evento?</Dialog.Title>
+      <Dialog.Container visible={openHorarioDialog} contentStyle={{backgroundColor: colors.surface}}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Quando e onde será o evento?</Dialog.Title>
 
         {props.weekly && (
           <>
@@ -314,7 +321,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Horario inicial: {formatHour(date)}
               </Text>
@@ -323,7 +330,8 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowEndPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+
               <Text style={styles.data}>
                 Hora final:{" " + formatHour(endTime)}
               </Text>
@@ -445,25 +453,42 @@ export default function Event({ route, navigation }) {
 
         <Dialog.Button
           label="Cancel"
+          color={colors.primary}
           onPress={() => {
             setOpenHorarioDialog(false);
           }}
         />
         <Dialog.Button
           label="Ok"
+          color={colors.primary}
           onPress={() => {
-            let detail = {
-              day: weekly ? day : new Date(date).getDay(),
-              datetime_init: date.toUTCString(),
-              datetime_end: endTime.toUTCString(),
-              local: text,
-            };
-            setDetails([...details, detail]);
+            if (weekly){
+              let aux = []
+              for(let i = 0; i < day.length; i++){
+                let detail = {
+                  day: day[i],
+                  datetime_init: date.toUTCString(),
+                  datetime_end: endTime.toUTCString(),
+                  local: text,
+                };
+                aux.push(detail)
+              }
+              setDetails([...details, ...aux]);
+            }else{
+              let detail = {
+                day: new Date(date).getDay(),
+                datetime_init: date.toUTCString(),
+                datetime_end: endTime.toUTCString(),
+                local: text,
+              };
+              setDetails([...details, detail]);
+            }
             setOpenHorarioDialog(false);
           }}
         />
         <Dialog.Input
-          label={"Local"}
+          label={(<Text style={{color: colors.onSurfaceVariant}}>Local</Text>)}
+          style={{color: colors.onSurface}}
           onChangeText={setText}
           accessibilityHint={"local"}
         ></Dialog.Input>
@@ -710,7 +735,7 @@ export default function Event({ route, navigation }) {
   
     data: {
       textAlignVertical: "center",
-      color: "white",
+      color: colors.onPrimary,
     },
     notification: {
       marginBottom: 20,
@@ -746,7 +771,7 @@ export default function Event({ route, navigation }) {
     dateAndDatepicker: {
       flexDirection: "row",
       textAlignVertical: "center",
-      backgroundColor: "#e8243c",
+      backgroundColor: colors.primary,
       padding: 8,
       borderRadius: 10,
     },
@@ -780,8 +805,6 @@ export default function Event({ route, navigation }) {
       alignSelf: "center",
     },
     calendar: {
-      color: "black",
-      flex: 1,
       marginRight: 10,
     },
     actionButtonLabel: {
@@ -928,7 +951,7 @@ export default function Event({ route, navigation }) {
                     mean: mean,
                   },
                 })}>
-              <Text>Editar cálculo de média</Text>
+              <Text style={{color:colors.onSurface}}>Editar cálculo de média</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
                 navigation.navigate("Subject", {
@@ -939,7 +962,7 @@ export default function Event({ route, navigation }) {
                     mean: mean,
                   },
                 })}>
-              <Text>Editar cálculo de frequência</Text>
+              <Text style={{color:colors.onSurface}}>Editar cálculo de frequência</Text>
               </TouchableOpacity>
               </View>
               </View>
