@@ -389,7 +389,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Inicio: {formatDateWithHour(date)}
               </Text>
@@ -398,7 +398,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowEndPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Hora final:{" " + formatHour(endTime)}
               </Text>
