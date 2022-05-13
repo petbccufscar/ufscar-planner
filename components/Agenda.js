@@ -222,7 +222,7 @@ export default function Agenda(props){
             data={loadedMonth}
             marked={marked}
             onEndReached={loadAtEnd}
-            renderItem={({ item }) => <RenderMonthCalendar open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month}/>}
+            renderItem={({ item }) => <RenderMonthCalendar marked={marked} open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month}/>}
             showDefaultLoadingIndicators={true}
             />
             </View>)
