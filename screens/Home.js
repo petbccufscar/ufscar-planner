@@ -131,14 +131,14 @@ export default function App() {
             <Text style={styles.sectionTitle}>Aulas de hoje</Text>
 
             {classes.map((item, idx) => {
-              return <Task key={idx} task={item} />;
+              return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} />;
             })}
 
             <Text style={styles.sectionTitle}>Eventos de hoje</Text>
 
             <View style={styles.items}>
               {tasks.map((item, idx) => {
-                return <Task key={idx} task={item} show={false} />;
+                return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
               })}
             </View>
           </View>

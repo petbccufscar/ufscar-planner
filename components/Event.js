@@ -486,9 +486,8 @@ export default function Event({ route, navigation }) {
             setOpenHorarioDialog(false);
           }}
         />
+        <Text style={{color: colors.onSurface, marginLeft: 10}}>Local</Text>
         <Dialog.Input
-          label={(<Text style={{color: colors.onSurfaceVariant}}>Local</Text>)}
-          style={{color: colors.onSurface}}
           onChangeText={setText}
           accessibilityHint={"local"}
         ></Dialog.Input>
@@ -1234,8 +1233,8 @@ export default function Event({ route, navigation }) {
 
           </View>
           <View style={styles.description}>
-            {!isSubject && (<Text style={styles.title}>já foi entregue?</Text>)}
-            {isSubject && (<Text style={styles.title}>já foi finalizada?</Text>)}
+            {!isSubject && (<Text style={styles.title}>Já foi entregue?</Text>)}
+            {isSubject && (<Text style={styles.title}>Já foi finalizada?</Text>)}
           </View>
         </View>
         
