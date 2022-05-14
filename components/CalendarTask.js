@@ -13,12 +13,15 @@ export function Task(props) {
   let task = props.task;
   const navigation = useNavigation();
   const user = useSelector(state => state.user).user
+  // TODO verificar se está acontecendo agora
+  const acontecendoAgora = props.acontecendo || false;
 
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
 
   const theme = useTheme();
+  const colors = theme.colors;
 
   const styles = StyleSheet.create({
     itemLeft: {
@@ -39,14 +42,10 @@ export function Task(props) {
       //marginRight: 10,
     },
     itemTaskSubject: {
-      /* TODO fontFamily: '', */
       fontSize: 22,
       color: theme.colors.onSurfaceVariant,
-      paddingLeft: 5,
-      width: "100%",
     },
     itemDate: {
-      /* TODO fontFamily: '', */
       fontSize: 14,
       color: theme.colors.onSurfaceVariant,
       flexShrink: 1,
@@ -59,7 +58,7 @@ export function Task(props) {
     },
     atumalaca: {
       padding: 10,
-      
+      flex:1,
       flexShrink: 1
       // backgroundColor: ,
     },
@@ -87,6 +86,26 @@ export function Task(props) {
       paddingRight: 10,
       marginTop:5
     },
+    linhaAcontecendoTitulo:{
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      paddingHorizontal:5,
+      flex:1,
+    },
+    AcontecendoView:{
+      alignItems:'flex-end',
+      right:0,
+      position:'absolute',
+    },
+    AcontecendoIcon:{
+      justifyContent:'center',
+      alignItems:'center',
+      backgroundColor: colors.primary,
+      width:30, 
+      height:30, 
+      borderRadius: 8, 
+    }
   });
 
   return (
@@ -94,7 +113,15 @@ export function Task(props) {
           <Gradient style={{ ...styles.square }} color={task.color}/>
 
           <View style={styles.atumalaca}>
+            <View style={styles.linhaAcontecendoTitulo}>
             <Text style={styles.itemTaskSubject}>{task.name}</Text>
+            <View style={styles.AcontecendoView}>
+              
+            {acontecendoAgora &&(<View style={styles.AcontecendoIcon}>
+              <MaterialIcons name="hourglass-bottom" size={20} color={colors.onPrimary} />
+            </View>)}
+            </View>
+            </View>
             <View style={styles.superItem}>
               <View style={styles.iconView}>
               <MaterialCommunityIcons name="clock" size={24} color={theme.colors.onSurfaceVariant} />
