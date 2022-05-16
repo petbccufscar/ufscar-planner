@@ -1,32 +1,25 @@
-import {
-  NavigationContainer
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useRef } from "react";
-import {
-  Platform, StyleSheet, UIManager, AppRegistry
-} from "react-native";
-import {
-  Provider as PaperProvider
-} from "react-native-paper";
+import { Platform, StyleSheet, UIManager, AppRegistry } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import {
   Provider as ReduxProvider,
   useDispatch,
-  useSelector
+  useSelector,
 } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Event from "./components/Event";
-import { Subject } from "./components/Subject";
+// import { Subject } from "./components/Subject";
+import Subject from "./components/NewSubject";
 import SideBar from "./navigation/SideBar";
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
 import Restaurant from "./screens/Restaurant";
 import { PreferencesContext } from "./theme/PreferencesContext";
-import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
-
-
+import { CombinedDefaultTheme, CombinedDarkTheme } from "./theme/Themes";
 
 if (
   Platform.OS === "android" &&
@@ -44,7 +37,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
-AppRegistry.registerComponent('X', () => App);
+AppRegistry.registerComponent("X", () => App);
 export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -94,14 +87,12 @@ function Loader() {
     return setIsThemeDark(!isThemeDark);
   }, [isThemeDark]);
 
-  const preferences = React.useMemo(
-    () => { 
-      return({
+  const preferences = React.useMemo(() => {
+    return {
       toggleTheme,
       isThemeDark,
-    })},
-    [toggleTheme, isThemeDark]
-  );
+    };
+  }, [toggleTheme, isThemeDark]);
 
   return (
     <>
@@ -139,10 +130,12 @@ function Loader() {
                 name="Subject"
                 component={Subject}
                 options={() => ({
-                  // headerStyle: {
-                  //   backgroundColor: "#e8243c",
-                  // },
-                  // headerTintColor: "#fff",
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+
+                  title: "Média",
                   headerTitleAlign: "center",
                 })}
               />
