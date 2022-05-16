@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import {
   widthPercentageToDP as wp,
@@ -67,26 +67,35 @@ export default function AboutUs() {
 
             <Text style={styles.text}>Esse projeto contou com a colaboração dos alunos:</Text>
 
-            <Text style={[styles.contentText]}>{`      Carlos Eduardo Fontaneli
-      Igor Lúcio Manta Guedes
-      Isabela Vieira Magalhães
-      João Victor Bueno de Caldas
-      Lucas Machado Cid
-      Matheus Ramos de Carvalho
-      Natália Bachiega Magalhães
-      Vanderley Vanderlei de Brito Junior
-      Vinicius Quaresma da Luz`}</Text>
+            <Text style={[styles.contentText]}>{`    • Carlos Eduardo Fontaneli
+    • Igor Lúcio Manta Guedes
+    • Isabela Vieira Magalhães
+    • João Victor Bueno de Caldas
+    • Lucas Machado Cid
+    • Matheus Ramos de Carvalho
+    • Natália Bachiega Magalhães
+    • Vanderley Vanderlei de Brito Junior
+    • Vinicius Quaresma da Luz`}</Text>
 
             <Text style={styles.text}>Também contou com a supervisão do tutor:</Text>
             
-            <Text style={[styles.contentText]}>{`      Renato Bueno`}</Text>
+            <Text style={[styles.contentText]}>{`    • Renato Bueno`}</Text>
           </View>
 
           <View style={styles.textWall}> 
             <Text style={styles.title}>O PET</Text>
 
             <Text style={styles.text}>Conheça mais sobre o PET-BCC:</Text>
-            <TouchableOpacity><Text style={[styles.text, styles.contentText, styles.link]}>{`      https://petbcc.ufscar.br/`}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              const url = "https://petbcc.ufscar.br/";
+              Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                  Linking.openURL(url);
+                } else {
+                  console.log("Don't know how to open URI: " + url);
+                }
+              });
+            }}><Text style={[styles.text, styles.contentText, styles.link]}>{`      https://petbcc.ufscar.br/`}</Text></TouchableOpacity>
           </View>
 
         </View>
