@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { magic } from '../helpers/ExpressionHelper';
 import ScrollView from "./../components/ScrollView";
 import Progress from './Progress';
+import TextTicker from 'react-native-text-ticker'
 
 export default function Dashboard() {
   let events = useSelector(state => state.events).events
@@ -44,6 +45,7 @@ export default function Dashboard() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
+      paddingHorizontal: 15,
       marginBottom: 10,
       alignItems: "center",
     },
@@ -56,9 +58,7 @@ export default function Dashboard() {
       color: theme.colors.onSurfaceVariant,
     },
     buttonCont: {
-      margin: 15,
-      marginHorizontal: 0,
-      padding: 25,
+      marginVertical: 20,
     },
     miscCont: {
       padding: 10,
@@ -71,19 +71,20 @@ export default function Dashboard() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
-      marginHorizontal: 10,
+      marginHorizontal: 20,
       width: wp("26%"),
       height: wp("26%"),
       alignItems: "center",
     },
     line: {
       flexDirection: "row",
-      alignItems: "center",
+      flex: 1,
+      justifyContent: "space-evenly",
     },
     smallBtnText: {
       fontSize: 16,
       color: theme.colors.onSurfaceVariant,
-      paddingTop: 5,
+      paddingVertical: 5,
       alignItems: "center",
     },
   });
@@ -96,15 +97,15 @@ export default function Dashboard() {
         <View style={styles.line}>
           <TouchableOpacity style={styles.squareBtn}>
             <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Frequência</Text>
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
           </TouchableOpacity>
           <TouchableOpacity style={styles.squareBtn}>
             <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Eventos</Text>
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Eventos</TextTicker>
           </TouchableOpacity>
           <TouchableOpacity style={styles.squareBtn}>
             <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Matérias</Text>
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
           </TouchableOpacity>
         </View>
         <Progress/>

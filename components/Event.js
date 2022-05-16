@@ -51,7 +51,7 @@ export default function Event({ route, navigation }) {
   const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
-  const [name, setName] = useState(task.name||"Novo Evento");
+  const [name, setName] = useState(task.name||"");
   const firstTime = task.id == null || task.id == undefined;
   const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
@@ -693,6 +693,10 @@ export default function Event({ route, navigation }) {
       flex: 1,
       backgroundColor: colors.surface1,
     },
+    trueContainer: {
+      flex: 1,
+      paddingBottom: 20,
+    },
   
     sectionContainer: {
       flexDirection: "row",
@@ -911,36 +915,39 @@ export default function Event({ route, navigation }) {
 
   const materias = events.filter(event => event.is_subject === true);
     if(!editMode){
-            return (<ScrollView style={styles.container}  
-              contentContainerStyle={styles.container}          
-              >
-              <View style={styles.cortainer}>
-              <View style={styles.linhaEsquerdaDetail}>
-              <Gradient style={styles.corDetail} color={color}/>
+      return (
+        <ScrollView style={styles.container}  
+          contentContainerStyle={styles.container}          
+          >
+          <View style={styles.trueContainer}>
+          <View style={styles.cortainer}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <Gradient style={styles.corDetail} color={color}/>
 
-              {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
-              {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
-              </View>
-              </View>
-              {
-              turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
-              {description.length > 0 &&(
-              <View style={styles.containerSectionDetail}>
-              <Text style={styles.tituloDetail}>Descrição</Text>
-              <Text style={styles.corpoDetail}>{description}</Text>
-              </View>
-              )}
-              <View style={styles.containerSectionDetail}>
-              <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.medfreqcontainer}>
-              <Text style={styles.tituloDetail}>Média</Text>
-              <Text style={styles.corpoDetail}>{resultMean}</Text>
-              </View><View style={styles.medfreqcontainer}>
-              <Text style={styles.tituloDetail}>Frequência</Text>
-              <Text style={styles.corpoDetail}>{resultFreq}</Text>
-              </View>
-              </View>
-              <View style={styles.linhaEsquerdaDetail}>
+          {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
+          {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
+          </View>
+          </View>
+          {
+          turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
+          {description.length > 0 &&(
+          <View style={styles.containerSectionDetail}>
+          <Text style={styles.tituloDetail}>Descrição</Text>
+          <Text style={styles.corpoDetail}>{description}</Text>
+          </View>
+          )}
+          <View style={styles.containerSectionDetail}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <View style={styles.medfreqcontainer}>
+          <Text style={styles.tituloDetail}>Média</Text>
+          <Text style={styles.corpoDetail}>{resultMean}</Text>
+          </View><View style={styles.medfreqcontainer}>
+          <Text style={styles.tituloDetail}>Frequência</Text>
+          <Text style={styles.corpoDetail}>{resultFreq}</Text>
+          </View>
+          </View>
+          <ScrollView horizontal={true}>
+            <View style={styles.linhaEsquerdaDetail}>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
                 navigation.navigate("Subject", {
                   task: {
@@ -950,7 +957,7 @@ export default function Event({ route, navigation }) {
                     mean: mean,
                   },
                 })}>
-              <Text style={{color:colors.onSurface}}>Editar cálculo de média</Text>
+                <Text style={{color:colors.onSurface}}>Editar média</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
                 navigation.navigate("Subject", {
@@ -961,76 +968,80 @@ export default function Event({ route, navigation }) {
                     mean: mean,
                   },
                 })}>
-              <Text style={{color:colors.onSurface}}>Editar cálculo de frequência</Text>
+                <Text style={{color:colors.onSurface}}>Editar frequência</Text>
               </TouchableOpacity>
-              </View>
-              </View>
-              {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
-              <View style={styles.linhaEsquerdaDetail}>
-                <View style={styles.iconDetail}>
-              <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
-              </View>
-              <Text style={styles.tituloDetail}>Professores</Text>
-              </View>
-              {teachers.map((teacher, index) => (
-              <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
-            }
-            </View>)}
-              <View style={styles.containerSectionDetail}>
-              <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}>
-              <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-              </View>
-              <Text style={styles.tituloDetail}>Horários</Text>
-              </View>
-              {details.map((detail, index) => 
-              (<Text style={styles.corpoDetail} key={index}>{`${
-                  weekly
-                    ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
-                    : formatDateWithHour(detail.datetime_init)
-                }`} {` - ${formatHour(
-                  detail.datetime_end
-                )}`}</Text>))
-              }
-              </View>
-              {
-              notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
-              <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}> 
+            </View>
+          </ScrollView>
+          </View>
+          {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
+          <View style={styles.linhaEsquerdaDetail}>
+            <View style={styles.iconDetail}>
+          <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
+          </View>
+          <Text style={styles.tituloDetail}>Professores</Text>
+          </View>
+          {teachers.map((teacher, index) => (
+          <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
+        }
+        </View>)}
+          <View style={styles.containerSectionDetail}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <View style={styles.iconDetail}>
+          <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+          </View>
+          <Text style={styles.tituloDetail}>Horários</Text>
+          </View>
+          {details.map((detail, index) => 
+          (<Text style={styles.corpoDetail} key={index}>{`${
+              weekly
+                ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
+                : formatDateWithHour(detail.datetime_init)
+            }`} {` - ${formatHour(
+              detail.datetime_end
+            )}`}</Text>))
+          }
+          </View>
+          {
+          notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <View style={styles.iconDetail}> 
 
-              <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-              </View>
-              <Text style={styles.tituloDetail}>Notificações</Text>
-              </View>
-              { notifications.map((notification, index) => (
-              <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
-              }
-              </View>)
-              }
-              <View style={styles.linecenter}>
-                <TouchableOpacity style={styles.deleteButton} onPress={() => {
-              dispatch(removeEvent(task));
-              navigation.pop();
-            }}>
-                  <View style={styles.linhaEsquerdaDetail}>
-                    <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
-                    <Text style={styles.deleteFont}>Excluir</Text>
-                  </View>  
-                </TouchableOpacity>
-              </View>
+          <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+          </View>
+          <Text style={styles.tituloDetail}>Notificações</Text>
+          </View>
+          { notifications.map((notification, index) => (
+          <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
+          }
+          </View>)
+          }
+          <View style={styles.linecenter}>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => {
+          dispatch(removeEvent(task));
+          navigation.pop();
+          }}>
+              <View style={styles.linhaEsquerdaDetail}>
+                <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
+                <Text style={styles.deleteFont}>Excluir</Text>
+              </View>  
+            </TouchableOpacity>
+          </View>
 
-              <FAB
-                style={styles.fab}
-                color={colors.primary}
-                icon="pencil"
-                onPress={() =>setEditMode(true)}
-              />
+          <FAB
+            style={styles.fab}
+            color={colors.primary}
+            icon="pencil"
+            onPress={() =>setEditMode(true)}
+          />
+
+        </View>
       </ScrollView>)
     }
 
   
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.trueContainer}>
       
       {editMode && (<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
@@ -1077,7 +1088,7 @@ export default function Event({ route, navigation }) {
           </View>
       </View>
       <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-      placeholder="Novo Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setName(text)}
 />
 
@@ -1108,7 +1119,7 @@ export default function Event({ route, navigation }) {
           </View>
       </View>
       <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-      placeholder="Detalhes do Evento ..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setDescription(text)}
 />
       {isSubject &&
@@ -1292,7 +1303,7 @@ export default function Event({ route, navigation }) {
         setOpen={setOpenSubjectDialog}
       />
 
-      
+      </View>
     </ScrollView>
   );
 }

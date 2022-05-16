@@ -55,10 +55,10 @@ export const defaultTask = {
     "is_submited": false,
     "when_submit": null,
     "details": [],
-    "name": "Novo Evento",
+    "name": "",
     "subject": null,
     "notification": [],
-    "description": "descrição",
+    "description": "",
     "color": "#f00",
 
     // não utilizaveis
@@ -75,15 +75,15 @@ export const defaultSubject = {
     "is_submited": false,
     "when_submit": null,
     "details": [],
-    "name": "Nova Matéria",
+    "name": "",
     "subject": null,
     "notification": [],
-    "description": "descrição",
+    "description": "",
     "color": "#f00",
     "mean": "(p1+p2+p3)/3",
     "frequency": "(aulasDadas - faltas)/aulasDadas",
     "grade": {},
-    "turma": "Turma A",
+    "turma": "",
     "teachers": [],
 }
 
