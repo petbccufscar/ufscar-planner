@@ -29,6 +29,9 @@ import BottomNavBar from "./navigation/BottomNavBar"
 import Config from "./screens/Config";
 import AboutUs from "./screens/AboutUs";
 import Contact from "./screens/Contact";
+import SubjectScreen from "./screens/dashboardScreens/Materias";
+import EventScreen from "./screens/dashboardScreens/Eventos";
+import NotasScreen from "./screens/dashboardScreens/Notas";
 
 if (
   Platform.OS === "android" &&
@@ -157,6 +160,50 @@ function Loader() {
             <HomeStackRoutes.Screen
                 name="Contato"
                 component={Contact} />
+            <HomeStackRoutes.Screen
+                name="Eventos"
+                component={EventScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Eventos",
+                })}
+            />
+            <HomeStackRoutes.Screen
+                name="Materias"
+                component={SubjectScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Matérias",
+                })}
+              />
+            <HomeStackRoutes.Screen
+                name="Notas"
+                component={NotasScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Notas",
+                })}
+                />
+            <HomeStackRoutes.Screen
+                name="Frequencia"
+                component={NotasScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Frequência",
+                })}
+                />
                 </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>

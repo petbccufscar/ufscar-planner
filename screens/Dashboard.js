@@ -95,15 +95,15 @@ export default function Dashboard() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <TouchableOpacity style={styles.squareBtn}>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Frequencia")}>
             <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
             <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.squareBtn}>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Eventos")}>
             <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
             <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Eventos</TextTicker>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.squareBtn}>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Materias")}>
             <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
             <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
           </TouchableOpacity>
