@@ -20,7 +20,7 @@ function Bar(props) {
   const progress = props.progress || 0;
   const colors = useTheme().colors
   const colorOutside = props.colorOutside || colors.surface5;
-  const colorInside = props.colorInside || colors.tertiaryContainer;
+  const colorInside = props.colorInside || "#73FCB2";
   const style = props.style || {};
   return (
     <View style={{ flexDirection: 'row', borderRadius: 30, overflow: 'hidden', ...style }}>
