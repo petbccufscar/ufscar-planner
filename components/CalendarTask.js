@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Image} from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
-import { formatHour, formatDateWithHour, weekDaysNames } from '../helpers/helper';
+import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames } from '../helpers/helper';
 import { useTheme, Checkbox } from "react-native-paper";
 import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Gradient } from "./Gradient";
@@ -311,8 +311,8 @@ export function CalendarTask(props) {
 }
 
 export function EventRender(props) {
-  const mostrarData = props.show || false
   let task = props.task;
+  const mostrarData = task.weekly
   const navigation = useNavigation();
   const edit = () => {
     navigation.navigate("Event", { task: task });
@@ -399,7 +399,7 @@ export function EventRender(props) {
               </View>
               <Text style={styles.itemDate}>
                 {""}
-                {mostrarData ? formatDateWithHour(detail.datetime_init) : weekDaysNames[detail.day] + formatHour(detail.datetime_init)} -{" "}
+                {mostrarData ? formatDateWithHour(detail.datetime_init) : weekDaysFullNames[detail.day] +", " + formatHour(detail.datetime_init)} -{" "}
                 {formatHour(detail.datetime_end)}
                 
               </Text>

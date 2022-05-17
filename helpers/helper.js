@@ -98,6 +98,7 @@ export const offsetDate = (date, days) => {
 
 
 export const weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+export const weekDaysFullNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
 
 export const monthNames = [
     'Janeiro',
