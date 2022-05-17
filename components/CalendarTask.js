@@ -3,11 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Image} from "
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames } from '../helpers/helper';
-import { useTheme, Checkbox } from "react-native-paper";
+import { useTheme, Checkbox, Paragraph, Dialog, Portal, Button } from "react-native-paper";
 import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Gradient } from "./Gradient";
-import { randomInt } from "mathjs";
 import { updateEvent } from "../redux/actions/eventActions";
+import { magic } from "../helpers/ExpressionHelper";
 const mapsSrc = require('../assets/icons/maps.png')
 
 export function Task(props) {
@@ -410,4 +410,181 @@ export function EventRender(props) {
     </TouchableOpacity>
   );
 
+}
+
+
+export function NotaRender(props) {
+  let task = props.task;
+  const navigation = useNavigation();
+
+  const theme = useTheme();
+  const edit = () => {
+    navigation.navigate("Event", { task: task });
+  };
+  const colors = theme.colors
+  const styles = StyleSheet.create({
+    itemLeft: {
+      flexDirection: "row",
+      backgroundColor: theme.colors.surface,
+      borderRadius: 10,
+      overflow: 'hidden',
+      alignItems: "flex-start",
+      margin: 10,
+      width: '100%'
+    },
+    square: {
+      width: 10,
+      height: '100%',
+    },
+    atumalaca: {
+      padding: 10,
+      paddingLeft: 10,
+      flexShrink: 1,
+      flex: 1,
+      
+    },
+    titulo:{
+      color: colors.primary,
+      fontSize: 22,
+    },
+    header: {
+      flexDirection: 'row',
+      borderBottomColor: colors.outline,
+      borderBottomWidth: 1,
+    },
+    campo: {
+      paddingRight: 5,
+      flexDirection: 'row',
+      marginRight: 10,
+      alignItems: 'center',
+      paddingVertical: 10
+    },
+    campotxt: {
+      fontSize: 16,
+      color: colors.onSurfaceVariant,
+      maxWidth: '90%',
+      overflow: 'scroll'
+    },
+    campoicon: {
+      marginRight: 5
+    }, 
+    nota: {
+      flexDirection: 'row',
+      paddingVertical: 5,
+      alignItems: 'center'
+    },
+    notas: {
+      paddingVertical: 5,
+    },
+    notaleft:{
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    notaright:{
+
+    },
+    notatxt: {
+      fontSize: 19,
+      color: colors.onSurface,
+    },
+    notavalue: {
+      fontSize: 19,
+      color: colors.onSurfaceVariant,
+      padding: 5,
+      backgroundColor: colors.surfaceVariant,
+      borderRadius: 10
+
+    },
+    editarbtn: {
+      padding: 10,
+      paddingHorizontal: 15,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: colors.outline,
+    },
+    editartxt: {
+      color: colors.primary,
+      fontSize: 16,
+    },
+    editarrow:{
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      margin: 10
+    }
+
+  });
+  const dict = task?.grades?.mean || {}
+
+  let resultMean = "";
+
+  try {
+    const meanRes = magic(dict || {}, task.mean || "");
+    resultMean = "" + (meanRes.result || 0);
+  } catch (e) {
+  }
+
+  const [visible, setVisible] = React.useState(false);
+  
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+  return (
+        <TouchableOpacity style={{...styles.itemLeft}} onPress={edit}>
+          <Gradient style={{ ...styles.square }} color={task.color}/>
+          <View style={styles.atumalaca}>
+          <Text style={styles.titulo}>{task.name}</Text>
+          <View style={styles.header}>
+          { task.teachers.length > 0 &&
+          <View style={styles.campo}> 
+          <MaterialIcons style={styles.campoicon} name="person" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.campotxt}>{task.teachers[0]} {task.teachers.length>1? '+': ''}</Text>
+          </View>}
+
+          <View style={styles.campo}> 
+          <MaterialIcons style={styles.campoicon} name="stars" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.campotxt}>{resultMean}</Text>
+          </View>
+          </View>
+          <View style={styles.notas}>
+          { Object.keys(dict).map((item, index)=>
+          <View style={styles.nota} key={index}>
+          <View style={styles.notaleft}> 
+          <MaterialIcons style={styles.campoicon} name="event" size={24} color={colors.onSurface} />
+          <Text style={styles.notatxt}>{item}</Text>
+          </View>
+          <View style={styles.notaright}>
+            <Text style={styles.notavalue}>{dict[item]}</Text>
+          </View> 
+
+          </View>)}
+
+          </View>
+          <View style={styles.editarrow}>
+          <TouchableOpacity style={styles.editarbtn} onPress={showDialog}>
+            <Text style={styles.editartxt}>
+              Editar Notas
+            </Text>
+          </TouchableOpacity>
+          </View>
+          <Portal>
+          <Dialog visible={visible} onDismiss={hideDialog}>
+            <Dialog.Title>Editar</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>Editando nota</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <TouchableOpacity onPress={hideDialog} style={{padding: 10}}>
+                <Text>
+                Done
+                </Text>
+              </TouchableOpacity>
+            </Dialog.Actions>
+          </Dialog>
+          </Portal>
+          </View>
+          
+    </TouchableOpacity>
+  );
 }
