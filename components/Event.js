@@ -7,11 +7,18 @@ import {
   StyleSheet,
   LayoutAnimation,
   Linking,
-  TextInput
+  TextInput,
 } from "react-native";
 import ScrollView from "./ScrollView";
 import Toast from "react-native-toast-message";
-import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
+import {
+  Ionicons,
+  Entypo,
+  MaterialIcons,
+  MaterialCommunityIcons,
+  Feather,
+  FontAwesome,
+} from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateEvent,
@@ -19,6 +26,7 @@ import {
   removeEvent,
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
+
   
 import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
 
@@ -33,6 +41,7 @@ import { isString } from "mathjs";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
+
   const [isSubject, setIsSubject] = useState(task.is_subject||false);
   const [weekly, setWeekly] = useState(task.weekly||false);
   const [isSubmited, setIsSubmited] = useState(task.is_submited||false);
@@ -47,9 +56,12 @@ export default function Event({ route, navigation }) {
 
 
   // tela separada
-  const [grade, setGrade] = useState(task.grade||{});
-  const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
+  const [grade, setGrade] = useState(task.grade || {});
+  const [frequency, setFrequency] = useState(
+    task.frequency || "(aulasDadas - faltas)/aulasDadas"
+  );
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
+
 
   const [name, setName] = useState(task.name||"");
   const firstTime = task.id == null || task.id == undefined;
@@ -68,7 +80,6 @@ export default function Event({ route, navigation }) {
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
   const colors = useTheme().colors;
-
 
   const changeWeekly = (e) => {
     if (!e) {
@@ -105,6 +116,7 @@ export default function Event({ route, navigation }) {
       weekly: weekly,
       mean: mean,
       frequency: frequency,
+
       teachers:teachers,
       turma:turma,
       is_submited:isSubmited,
@@ -120,31 +132,36 @@ export default function Event({ route, navigation }) {
   useEffect(() => {
     navigation.setOptions({
       headerTintColor: colors.onSurface,
-      headerTitle: editMode? 
-      isSubject? "Editar Matéria": "Editar Evento":
-      isSubject? "Detalhes da Matéria": "Detalhes do Evento",
-      headerRight: () => (
+      headerTitle: editMode
+        ? isSubject
+          ? "Editar Matéria"
+          : "Editar Evento"
+        : isSubject
+        ? "Detalhes da Matéria"
+        : "Detalhes do Evento",
+      headerRight: () =>
         editMode && (
-        <TouchableOpacity
-          style={{backgroundColor: colors.primary, padding: 10, 
-            borderRadius: 30, justifyContent: 'center', alignItems:'center',
-            marginRight: 10}}
-          onPress={() => {
-            LayoutAnimation.configureNext({
-              duration: 200,
-              create: {
-                type: LayoutAnimation.Types.easeIn,
-                property: LayoutAnimation.Properties.opacity,
-              },
-              update: {
-                type: LayoutAnimation.Types.easeOut,
-              },
-            });
-            if (editMode && details.length == 0 && !isSubject) {
-              Toast.show({
-                type: "error",
-                text1: "Você deve colocar ao menos um horário",
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.primary,
+              padding: 10,
+              borderRadius: 30,
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 10,
+            }}
+            onPress={() => {
+              LayoutAnimation.configureNext({
+                duration: 200,
+                create: {
+                  type: LayoutAnimation.Types.easeIn,
+                  property: LayoutAnimation.Properties.opacity,
+                },
+                update: {
+                  type: LayoutAnimation.Types.easeOut,
+                },
               });
+
             } else {
               if (name.length == 0 && !isSubject) {
                 Toast.show({
@@ -164,6 +181,7 @@ export default function Event({ route, navigation }) {
                 }
                 setEditMode(!editMode);
               }
+
             }
           }
           }
@@ -171,6 +189,7 @@ export default function Event({ route, navigation }) {
           <Text style={{color: colors.onPrimary}}>Salvar</Text>
         </TouchableOpacity>)
       ),
+
     });
   }, [
     route.params,
@@ -190,7 +209,6 @@ export default function Event({ route, navigation }) {
     turma,
     teachers,
     whenSubmit
-
   ]);
 
   useEffect(() => {
@@ -198,6 +216,10 @@ export default function Event({ route, navigation }) {
     if (route?.params?.frequency) setFrequency(route.params.frequency);
     if (route?.params?.mean) setMean(route.params.mean);
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
+
+  useEffect(() => {
+    sendData();
+  }, [grade, frequency, mean]);
 
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
@@ -245,8 +267,6 @@ export default function Event({ route, navigation }) {
     );
   }
 
- 
-
   function NotificationDialog() {
     const [n, setN] = useState(1);
     const [mult, setMult] = useState(1);
@@ -283,7 +303,9 @@ export default function Event({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
+
     const [day, setDay] = useState([(new Date()).getDay()]);
+
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
     
@@ -556,159 +578,241 @@ export default function Event({ route, navigation }) {
     resultFreq = "" + (freqRes.result || 0);
   } catch (e) {}
 
-  const user = useSelector(state => state.user).user
+  const user = useSelector((state) => state.user).user;
 
-  function DetailRender(props){
-    const index = props.index
-    const detail = props.detail
+  function DetailRender(props) {
+    const index = props.index;
+    const detail = props.detail;
     return (
-      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
-        <View style={{justifyContent:'center'}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
-          <Text style={{color:colors.onSurface}}>{`${
-            weekly
-              ? week[detail.day]
-              : formatDateWithHour(detail.datetime_init)
-          }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
-            detail.datetime_end
-          )}`}</Text>
-        </View>
-        {detail.local.length > 0 &&(
-        <TouchableOpacity 
-        onPress={async () => {
-          let place = user.campus + ", UFSCAR, " + detail.local;
-
-          const url =
-            "https://www.google.com/maps/search/?api=1&query=" +
-            encodeURI(place);
-
-          const supported = await Linking.canOpenURL(url);
-
-          if (supported) {
-            await Linking.openURL(url);
-          } else {
-            Alert.alert(`Don't know how to open this URL: ${url}`);
-          }
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          padding: 10,
+          flexDirection: "row",
         }}
-        
-        style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 5}}>
-        <MaterialIcons name="location-pin" size={20} color={colors.primary} style={{paddingRight: 8}}/>
-          <Text style={{color:colors.primary}}>{ `${detail.local}`}</Text>
-          
-        
-        </TouchableOpacity>)}
-      </View>
-      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
-      
-        {editMode && (
-          <IconButton
-            icon="minus-circle-outline"
-            color={colors.onSurface}
-            onPress={() => {
-              let newDetails = details.filter((d) => d != detail);
-              setDetails([...newDetails]);
+      >
+        <View style={{ justifyContent: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
             }}
-            size={18}
-          />
-        )}
-      </View>
-      </View>
-    )
-  }
-
-  
-  function BotaoAdicionarQueAbreUmDialogo(props){
-    const setState = props.setState
-    return(
-      <View style={{flexDirection: 'row'}}>
-        <View style={{flex:1}}/>
+          >
+            <Feather
+              name="repeat"
+              size={18}
+              color={colors.onSurface}
+              style={{ paddingRight: 8 }}
+            />
+            <Text style={{ color: colors.onSurface }}>
+              {`${
+                weekly
+                  ? week[detail.day]
+                  : formatDateWithHour(detail.datetime_init)
+              }, `}{" "}
+              {`${formatHour(detail.datetime_init)} - ${formatHour(
+                detail.datetime_end
+              )}`}
+            </Text>
+          </View>
+          {detail.local.length > 0 && (
             <TouchableOpacity
-              onPress={() => {
-                setState(true);
+              onPress={async () => {
+                let place = user.campus + ", UFSCAR, " + detail.local;
+
+                const url =
+                  "https://www.google.com/maps/search/?api=1&query=" +
+                  encodeURI(place);
+
+                const supported = await Linking.canOpenURL(url);
+
+                if (supported) {
+                  await Linking.openURL(url);
+                } else {
+                  Alert.alert(`Don't know how to open this URL: ${url}`);
+                }
               }}
-              style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                paddingTop: 5,
+              }}
             >
-              <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
-              <Text style={{color: colors.onSurface}}>Adicionar</Text>
-              
+              <MaterialIcons
+                name="location-pin"
+                size={20}
+                color={colors.primary}
+                style={{ paddingRight: 8 }}
+              />
+              <Text style={{ color: colors.primary }}>{`${detail.local}`}</Text>
             </TouchableOpacity>
-        <View style={{flex:1}}/>
-
-      </View>)
-  }
-
-  function notificationText(notification){
-    if (notification != 0)
-      return getTime(notification) + " antes"
-    return "Assim que começar"
-  }
-
-  function NotificationRender(props){
-    const index = props.index
-    const notification = props.notification
-    return (
-      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10,paddingVertical:5, flexDirection: 'row'}}>
-        <View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1}}>
-        <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
-          <Text style={{color:colors.onSurface}}>{`${notificationText(notification)}`}</Text>
+          )}
         </View>
-    
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
+          {editMode && (
+            <IconButton
+              icon="minus-circle-outline"
+              color={colors.onSurface}
+              onPress={() => {
+                let newDetails = details.filter((d) => d != detail);
+                setDetails([...newDetails]);
+              }}
+              size={18}
+            />
+          )}
+        </View>
       </View>
-      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
-      
-        {editMode && (
-          <IconButton
-            icon="minus-circle-outline"
-            color={colors.onSurface}
-            onPress={() => {
-              let newNotifications = notifications.filter(
-                (e) => e != notification
-              );
-              setNotifications([...newNotifications]);
-            }}
-            size={18}
-          />
-        )}
-      </View>
-      </View>
-    )
+    );
   }
 
-  function TeacherRender(props){
-    const index = props.index
-    const teacher = props.teacher
+  function BotaoAdicionarQueAbreUmDialogo(props) {
+    const setState = props.setState;
     return (
-      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, paddingVertical:5, flexDirection: 'row'}}>
-        <View style ={{alignItems: 'center', justifyContent:'center'}}>
-        
-          <Text style={{color:colors.onSurface}}>{`${teacher}`}</Text>
-      </View>
-      <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
-      
-        {editMode && (
-          <IconButton
-            icon="minus-circle-outline"
-            color={colors.onSurface}
-            onPress={() => {
-              let newTeachers = teachers.filter((d) => d != teacher);
-              setTeachers([...newTeachers]);
-            }}
-            size={18}
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ flex: 1 }} />
+        <TouchableOpacity
+          onPress={() => {
+            setState(true);
+          }}
+          style={{
+            marginTop: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: colors.surface,
+            borderRadius: 10,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: colors.outline,
+          }}
+        >
+          <Feather
+            name="plus"
+            size={24}
+            color={colors.primary}
+            style={{ paddingRight: 10 }}
           />
-        )}
+          <Text style={{ color: colors.onSurface }}>Adicionar</Text>
+        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
       </View>
-      </View>
-    )
+    );
   }
 
+  function notificationText(notification) {
+    if (notification != 0) return getTime(notification) + " antes";
+    return "Assim que começar";
+  }
+
+  function NotificationRender(props) {
+    const index = props.index;
+    const notification = props.notification;
+    return (
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          padding: 10,
+          paddingVertical: 5,
+          flexDirection: "row",
+        }}
+      >
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: 1,
+            }}
+          >
+            <Feather
+              name="repeat"
+              size={18}
+              color={colors.onSurface}
+              style={{ paddingRight: 8 }}
+            />
+            <Text style={{ color: colors.onSurface }}>{`${notificationText(
+              notification
+            )}`}</Text>
+          </View>
+        </View>
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
+          {editMode && (
+            <IconButton
+              icon="minus-circle-outline"
+              color={colors.onSurface}
+              onPress={() => {
+                let newNotifications = notifications.filter(
+                  (e) => e != notification
+                );
+                setNotifications([...newNotifications]);
+              }}
+              size={18}
+            />
+          )}
+        </View>
+      </View>
+    );
+  }
+
+  function TeacherRender(props) {
+    const index = props.index;
+    const teacher = props.teacher;
+    return (
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          padding: 10,
+          paddingVertical: 5,
+          flexDirection: "row",
+        }}
+      >
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ color: colors.onSurface }}>{`${teacher}`}</Text>
+        </View>
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
+          {editMode && (
+            <IconButton
+              icon="minus-circle-outline"
+              color={colors.onSurface}
+              onPress={() => {
+                let newTeachers = teachers.filter((d) => d != teacher);
+                setTeachers([...newTeachers]);
+              }}
+              size={18}
+            />
+          )}
+        </View>
+      </View>
+    );
+  }
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.surface1,
     },
+
     trueContainer: {
       flex: 1,
       paddingBottom: 20,
@@ -719,39 +823,39 @@ export default function Event({ route, navigation }) {
       padding: 15,
       borderBottomWidth: 1,
       borderBottomColor: "#ddd",
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
     colorContainer: {
       flexDirection: "row",
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      marginLeft: 18
+      justifyContent: "flex-start",
+      alignItems: "center",
+      marginLeft: 18,
     },
     sectionIcon: {
       margin: 10,
     },
-    title:{
+    title: {
       fontSize: 20,
-      color: colors.onSurface
+      color: colors.onSurface,
     },
-  
+
     details: {
       flex: 1,
     },
-  
+
     xButton: {
       marginLeft: "auto",
     },
-  
+
     detail: {
       marginBottom: 20,
     },
-  
+
     reminder: {
       flex: 1,
     },
-  
+
     data: {
       textAlignVertical: "center",
       color: colors.onPrimary,
@@ -763,7 +867,7 @@ export default function Event({ route, navigation }) {
       alignContent: "center",
       alignItems: "center",
     },
-  
+
     description: {
       flex: 1,
       flexDirection: "row",
@@ -772,7 +876,7 @@ export default function Event({ route, navigation }) {
       marginHorizontal: 20,
       marginVertical: 5,
       borderRadius: 12,
-      borderBottomWidth:0,
+      borderBottomWidth: 0,
       padding: 10,
       backgroundColor: colors.surface,
       color: colors.onSurface,
@@ -786,7 +890,7 @@ export default function Event({ route, navigation }) {
       marginTop: 10,
       marginBottom: 10,
     },
-  
+
     dateAndDatepicker: {
       flexDirection: "row",
       textAlignVertical: "center",
@@ -794,30 +898,28 @@ export default function Event({ route, navigation }) {
       padding: 8,
       borderRadius: 10,
     },
-  
-    rbutton:{
+
+    rbutton: {
       padding: 10,
       borderWidth: 1,
       borderRadius: 10,
       marginLeft: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
       backgroundColor: colors.surface,
-      borderColor: colors.outline
-  
+      borderColor: colors.outline,
     },
-    rbuttonAct:{
+    rbuttonAct: {
       marginLeft: 10,
       padding: 10,
       backgroundColor: colors.secondaryContainer,
       borderRadius: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-  
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
     },
-  
+
     deleteButton: {
       margin: 20,
       width: "50%",
@@ -829,65 +931,63 @@ export default function Event({ route, navigation }) {
     actionButtonLabel: {
       color: "white",
     },
-    tituloDetail:{
+    tituloDetail: {
       color: colors.onSurface,
-      fontSize:16,
-      fontWeight: 'bold',
-      marginBottom: 5
+      fontSize: 16,
+      fontWeight: "bold",
+      marginBottom: 5,
     },
-    medfreqcontainer:{
-      paddingRight: 30
+    medfreqcontainer: {
+      paddingRight: 30,
     },
-    corpoDetail:{
+    corpoDetail: {
       color: colors.onSurfaceVariant,
       fontSize: 14,
     },
-    turmaDetail:{
-      color: colors.primary
+    turmaDetail: {
+      color: colors.primary,
     },
     corDetail: {
       height: 20,
-      marginRight:5,
+      marginRight: 5,
       borderRadius: 5,
       aspectRatio: 1,
     },
-    deleteButton:{
+    deleteButton: {
       marginTop: 30,
       backgroundColor: colors.surface,
-      padding:10,
+      padding: 10,
       borderRadius: 100,
       borderColor: colors.outline,
-      borderWidth: 1
+      borderWidth: 1,
     },
-    iconDetail:{
+    iconDetail: {
       marginRight: 2,
       height: 24,
-      width:24,
-      
+      width: 24,
     },
-    deleteFont:{
-      color: colors.error
+    deleteFont: {
+      color: colors.error,
     },
-    linecenter:{
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
+    linecenter: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
     },
-    cortainer:{
-      margin:10,
+    cortainer: {
+      margin: 10,
       marginLeft: 20,
-      
     },
-    linhaEsquerdaDetail:{
-      flexDirection:'row',
-      alignItems: 'center'
+    linhaEsquerdaDetail: {
+      flexDirection: "row",
+      alignItems: "center",
     },
-    containerSectionDetail:{
+    containerSectionDetail: {
       borderBottomWidth: 1,
       borderBottomColor: colors.outline,
       padding: 20,
       paddingLeft: 0,
-      marginLeft: 20
+      marginLeft: 20,
     },
     botaoDetail: {
       backgroundColor: colors.surface,
@@ -899,13 +999,12 @@ export default function Event({ route, navigation }) {
       borderRadius: 8,
       borderWidth: 1,
     },
-    nomeEventoDetail:{
+    nomeEventoDetail: {
       color: colors.onSurface,
       fontSize: 22,
-
     },
     fab: {
-      position: 'absolute',
+      position: "absolute",
       shadowOpacity: 10,
       borderRadius: 10,
       backgroundColor: colors.surface3,
@@ -913,11 +1012,12 @@ export default function Event({ route, navigation }) {
       right: 0,
       bottom: 0,
     },
-    containername:{
+    containername: {
       paddingLeft: 20,
-
     },
-    textoBotaoDetail:{
+    textoBotaoDetail: {},
+  });
+
 
     }
   
@@ -965,24 +1065,30 @@ export default function Event({ route, navigation }) {
           <ScrollView horizontal={true}>
             <View style={styles.linhaEsquerdaDetail}>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+
                 navigation.navigate("Subject", {
+                  type: "editMean",
                   task: {
                     ...task,
                     grade: grade,
                     frequency: frequency,
                     mean: mean,
                   },
+
                 })}>
                 <Text style={{color:colors.onSurface}}>Editar média</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+
                 navigation.navigate("Subject", {
+                  type: "editFrequency",
                   task: {
                     ...task,
                     grade: grade,
                     frequency: frequency,
                     mean: mean,
                   },
+
                 })}>
                 <Text style={{color:colors.onSurface}}>Editar frequência</Text>
               </TouchableOpacity>
@@ -1060,13 +1166,15 @@ export default function Event({ route, navigation }) {
       <View style={styles.trueContainer}>
       
       {editMode && (<><View style={styles.colorContainer}>
+
         <View style={styles.sectionIcon}>
-        <Ionicons name="color-palette" size={24} color={colors.onSurface} />
+          <MaterialIcons name="title" size={24} color={colors.onSurface} />
         </View>
         <View style={styles.description}>
-          <Text style={styles.title}>Cor</Text>
+          <Text style={styles.title}>Titulo</Text>
         </View>
       </View>
+
       <View style={styles.colorContainer}>
       
       <SelGradSquare color={0} state={color} setState={setColor}/>
@@ -1109,85 +1217,146 @@ export default function Event({ route, navigation }) {
 />
 
 
-  {isSubject && (<><View style={styles.colorContainer}>
+      {isSubject && (
+        <>
+          <View style={styles.colorContainer}>
             <View style={styles.sectionIcon}>
-            <Ionicons name="school" size={24} color={colors.onSurface} />
-
+              <Ionicons name="school" size={24} color={colors.onSurface} />
             </View>
             <View style={styles.description}>
               <Text style={styles.title}>Turma</Text>
             </View>
-        </View>
-        <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-        placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
-        onChangeText={text => setTurma(text)}
-  /></>)}
-
-
+          </View>
+          <TextInput
+            value={turma}
+            multiline={false}
+            style={styles.textInput}
+            inputContainerStyle={styles.textInput}
+            editable={editMode}
+            placeholder="Turma A"
+            underlineColor="transparent"
+            underlineColorAndroid={"transparent"}
+            onChangeText={(text) => setTurma(text)}
+          />
+        </>
+      )}
 
       <View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
+        <View style={styles.sectionIcon}>
           <Entypo name="text" size={24} color={colors.onSurface} />
-
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Descrição</Text>
-          </View>
+        </View>
+        <View style={styles.description}>
+          <Text style={styles.title}>Descrição</Text>
+        </View>
       </View>
+
       <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
       placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
       onChangeText={text => setDescription(text)}
 />
       {isSubject &&
       (<View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-          <FontAwesome name="user" size={24} color={colors.onSurface} />
 
+          <View style={styles.sectionIcon}>
+            <FontAwesome name="user" size={24} color={colors.onSurface} />
           </View>
           <View style={styles.description}>
             <Text style={styles.title}>Professores</Text>
           </View>
-      </View>)
-      }
+        </View>
+      )}
 
-      {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
-      }
-      {editMode && isSubject &&(
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>)}
+      {isSubject &&
+        teachers.map((teacher, index) => (
+          <TeacherRender key={index} index={index} teacher={teacher} />
+        ))}
+      {editMode && isSubject && (
+        <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog} />
+      )}
 
-
-      
-      {!isSubject && (<><View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-          <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
-
+      {!isSubject && (
+        <>
+          <View style={styles.colorContainer}>
+            <View style={styles.sectionIcon}>
+              <MaterialCommunityIcons
+                name="history"
+                size={24}
+                color={colors.onSurface}
+              />
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.title}>Recorrência</Text>
+            </View>
           </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Recorrência</Text>
+          <View style={styles.colorContainer}>
+            <TouchableOpacity
+              style={weekly ? styles.rbutton : styles.rbuttonAct}
+              onPress={() => setWeekly(false)}
+            >
+              {!weekly && (
+                <Feather
+                  name="check"
+                  size={16}
+                  color={
+                    !weekly ? colors.onSecondaryContainer : colors.onSurface
+                  }
+                />
+              )}
+              <Text
+                style={{
+                  color: !weekly
+                    ? colors.onSecondaryContainer
+                    : colors.onSurface,
+                }}
+              >
+                Evento único
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={!weekly ? styles.rbutton : styles.rbuttonAct}
+              onPress={() => setWeekly(true)}
+            >
+              {weekly && (
+                <Feather
+                  name="check"
+                  size={16}
+                  color={
+                    weekly ? colors.onSecondaryContainer : colors.onSurface
+                  }
+                />
+              )}
+              <Text
+                style={{
+                  color: weekly
+                    ? colors.onSecondaryContainer
+                    : colors.onSurface,
+                }}
+              >
+                Evento recorrente
+              </Text>
+            </TouchableOpacity>
           </View>
-      </View>
+        </>
+      )}
       <View style={styles.colorContainer}>
-        <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
-          {!weekly && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
-          <Text style={{color: !weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento único</Text></TouchableOpacity>
-        <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
-          {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
-          <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
-
-      </View></>)}
-      <View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-          <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
-
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Horários</Text>
-          </View>
+        <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons
+            name="clock"
+            size={24}
+            color={colors.onSurface}
+          />
+        </View>
+        <View style={styles.description}>
+          <Text style={styles.title}>Horários</Text>
+        </View>
       </View>
 
-      {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
+      {details.sort(sortDetails).map((detail, index) => (
+        <DetailRender key={index} index={index} detail={detail} />
+      ))}
       {editMode && (
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
+        <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog} />
+      )}
 
 
       
@@ -1222,6 +1391,7 @@ export default function Event({ route, navigation }) {
           </View>
       </View>
       <View style={styles.colorContainer}>
+
         <TouchableOpacity style={whenSubmit==null?styles.rbutton:styles.rbuttonAct} onPress={()=>setOpenWhenDialog(true)}>
           {whenSubmit!=null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
           {whenSubmit==null && (<Text style={{color: colors.onSurface}}>Sim</Text>)}
@@ -1291,6 +1461,7 @@ export default function Event({ route, navigation }) {
 
 
 
+
       <HorarioDialog weekly={weekly} />
       <NotificationDialog />
       <SimpleDialog
@@ -1298,7 +1469,7 @@ export default function Event({ route, navigation }) {
         old={name}
         open={openNameDialog}
         setOpen={setOpenNameDialog}
-        />
+      />
       <SimpleDialog
         fun={setDescription}
         old={description}
@@ -1307,11 +1478,11 @@ export default function Event({ route, navigation }) {
       />
 
       <SimpleDialog
-        fun={(novoProf) => setTeachers([...teachers,novoProf])}
+        fun={(novoProf) => setTeachers([...teachers, novoProf])}
         open={openTeacherDialog}
         setOpen={setOpenTeacherDialog}
       />
-      
+
       <SimpleDialog
         fun={setSubject}
         old={subject}
@@ -1319,8 +1490,8 @@ export default function Event({ route, navigation }) {
         setOpen={setOpenSubjectDialog}
       />
 
+
       </View>
     </ScrollView>
   );
 }
-
