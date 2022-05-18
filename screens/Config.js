@@ -52,7 +52,8 @@ export default function Config() {
       alignItems: 'center',
     },
     opcao: {
-      marginVertical: 10
+      marginVertical: 10,
+      marginTop: 20
     },
     switchContainer: {
       flex: 1,
@@ -81,56 +82,58 @@ export default function Config() {
   const setCampus = (name) =>{
     dispatch(updateUser({ ...user, campus: name }))
   }
-  return (<View style={styles.container}>
-    <View style={{...styles.opcao, marginBottom: 0}}>
-      <View style={styles.linha}>
+  return (
+  <ScrollView>
+    <View style={{...styles.container, paddingTop: 10}}>
+      <View style={{...styles.opcao, marginTop:10, marginBottom: 0}}>
         <View style={styles.linha}>
-          <MaterialIcons style={styles.icon} name="nightlight-round" size={24} color={colors.onSurfaceVariant} />
-          <Text style={styles.text}>Modo escuro </Text>
+          <View style={styles.linha}>
+            <MaterialIcons style={styles.icon} name="nightlight-round" size={24} color={colors.onSurfaceVariant} />
+            <Text style={styles.text}>Modo escuro </Text>
+          </View>
+          <View style={styles.switchContainer}>
+            <Switch color={colors.primary} value={isThemeDark} onValueChange={toggleTheme}></Switch>
+
+          </View>
         </View>
-        <View style={styles.switchContainer}>
-          <Switch color={colors.primary} value={isThemeDark} onValueChange={toggleTheme}></Switch>
+      </View>
 
+      <View style={styles.opcao}>
+        <View style={styles.linha}>
+          <MaterialIcons style={styles.icon} name="monetization-on" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.text}>Valor padrão da refeição</Text>
         </View>
       </View>
-    </View>
-
-    <View style={styles.opcao}>
-      <View style={styles.linha}>
-        <MaterialIcons style={styles.icon} name="monetization-on" size={24} color={colors.onSurfaceVariant} />
-        <Text style={styles.text}>Valor padrão da refeição</Text>
+      <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
+      
+      <View style={styles.opcao}>
+        <View style={styles.linha}>
+          <MaterialIcons style={styles.icon} name="school" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.text}>Campus da UFSCar</Text>
+        </View>
       </View>
-    </View>
-    <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
-    
-    <View style={styles.opcao}>
-      <View style={styles.linha}>
-        <MaterialIcons style={styles.icon} name="school" size={24} color={colors.onSurfaceVariant} />
-        <Text style={styles.text}>Campus da UFSCar</Text>
+      <Menu
+        visible={showMenu}
+        onDismiss={closeMenu}
+        anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.datePickerInput} >{user.campus}</Text></TouchableOpacity>}>
+        <Menu.Item onPress={() => {setCampus("Araras"); setShowMenu(false)}} title="Araras" />
+        <Menu.Item onPress={() => {setCampus("Lagoa do Sino"); setShowMenu(false)}} title="Lagoa do Sino" />
+        <Menu.Item onPress={() => {setCampus("São Carlos"); setShowMenu(false)}} title="São Carlos" />
+        <Menu.Item onPress={() => {setCampus("Sorocaba"); setShowMenu(false)}} title="Sorocaba" />
+            
+      </Menu>
+
+      <ConfigSemester/>
+      <View style={styles.opcao}>
+        <View style={styles.linha}>
+          <MaterialIcons style={styles.icon} name="account-circle" size={24} color={colors.onSurfaceVariant} />
+          <Text style={styles.text}>Como você gostaria de ser chamado?</Text>
+        </View>
       </View>
+      <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
+
     </View>
-    <Menu
-      visible={showMenu}
-      onDismiss={closeMenu}
-      anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.datePickerInput} >{user.campus}</Text></TouchableOpacity>}>
-      <Menu.Item onPress={() => {setCampus("Araras"); setShowMenu(false)}} title="Araras" />
-      <Menu.Item onPress={() => {setCampus("Lagoa do Sino"); setShowMenu(false)}} title="Lagoa do Sino" />
-      <Menu.Item onPress={() => {setCampus("São Carlos"); setShowMenu(false)}} title="São Carlos" />
-      <Menu.Item onPress={() => {setCampus("Sorocaba"); setShowMenu(false)}} title="Sorocaba" />
-          
-    </Menu>
-
-    <ConfigSemester/>
-    <View style={styles.opcao}>
-      <View style={styles.linha}>
-        <MaterialIcons style={styles.icon} name="account-circle" size={24} color={colors.onSurfaceVariant} />
-        <Text style={styles.text}>Como você gostaria de ser chamado?</Text>
-      </View>
-    </View>
-    <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
-
-
-  </View>)
+  </ScrollView>)
 }
 
 
@@ -163,7 +166,7 @@ export function ConfigSemester(){
       alignItems: 'center',
     },
     opcao: {
-      marginVertical: 10
+      marginVertical: 20
     },
 
   });
@@ -180,66 +183,67 @@ export function ConfigSemester(){
   const [showBeginPicker, setShowBeginPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  return(<><View style={styles.opcao}>
-  <View style={styles.linha}>
-    <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
-    <Text style={styles.text}>Início do semestre</Text>
+  return(<>
+  <View style={{...styles.opcao, marginBottom: 10}}>
+    <View style={styles.linha}>
+      <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+      <Text style={styles.text}>Início do semestre</Text>
+    </View>
   </View>
-</View>
-<DateTimePickerModal
-  style={{ width: "100%" }}
-  textColor={colors.onSurfaceVariant}
-  isVisible={showEndPicker}
-  mode={"date"}
-  value={new Date(semester.end)}
-  date={new Date(semester.end)}
-  onCancel={() => {
-    setShowEndPicker(false);
-  }}
-  onHide={() => {
-    setShowEndPicker(false);
-  }}
-  onConfirm={(ndate) => {
-    setShowEndPicker(false);
-    setEndTime(ndate);
-  }}
-  cancelTextIOS={"Cancelar"}
-  confirmTextIOS={"Confirmar"}
-  headerTextIOS={"Escolha as datas"}
-/>
-<DateTimePickerModal
-  style={{ width: "100%" }}
-  textColor={"#000"}
-  isVisible={showBeginPicker}
-  value={new Date(semester.init)}
-  date={new Date(semester.init)}
-  mode={"date"}
-  onCancel={() => {
-    setShowBeginPicker(false);
-  }}
-  onHide={() => {
-    setShowBeginPicker(false);
-  }}
-  onConfirm={(ndate) => {
-    setShowBeginPicker(false);
-    setBeginTime(ndate);
-  }}
-  cancelTextIOS={"Cancelar"}
-  confirmTextIOS={"Confirmar"}
-  headerTextIOS={"Escolha as datas"}
-/>
-<TouchableOpacity style={styles.datePickerInput} onPress={() => setShowBeginPicker(true)}>
-  <Text style={styles.text}>{formatDate(new Date(semester.init))}</Text>
-</TouchableOpacity>
+  <DateTimePickerModal
+    style={{ width: "100%" }}
+    textColor={colors.onSurfaceVariant}
+    isVisible={showEndPicker}
+    mode={"date"}
+    value={new Date(semester.end)}
+    date={new Date(semester.end)}
+    onCancel={() => {
+      setShowEndPicker(false);
+    }}
+    onHide={() => {
+      setShowEndPicker(false);
+    }}
+    onConfirm={(ndate) => {
+      setShowEndPicker(false);
+      setEndTime(ndate);
+    }}
+    cancelTextIOS={"Cancelar"}
+    confirmTextIOS={"Confirmar"}
+    headerTextIOS={"Escolha as datas"}
+  />
+  <DateTimePickerModal
+    style={{ width: "100%" }}
+    textColor={"#000"}
+    isVisible={showBeginPicker}
+    value={new Date(semester.init)}
+    date={new Date(semester.init)}
+    mode={"date"}
+    onCancel={() => {
+      setShowBeginPicker(false);
+    }}
+    onHide={() => {
+      setShowBeginPicker(false);
+    }}
+    onConfirm={(ndate) => {
+      setShowBeginPicker(false);
+      setBeginTime(ndate);
+    }}
+    cancelTextIOS={"Cancelar"}
+    confirmTextIOS={"Confirmar"}
+    headerTextIOS={"Escolha as datas"}
+  />
+  <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowBeginPicker(true)}>
+    <Text style={styles.text}>{formatDate(new Date(semester.init))}</Text>
+  </TouchableOpacity>
 
-<View style={styles.opcao}>
-  <View style={styles.linha}>
-    <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
-    <Text style={styles.text}>Término do semestre</Text>
+  <View style={{...styles.opcao, marginBottom: 10}}>
+    <View style={styles.linha}>
+      <MaterialIcons style={styles.icon} name="calendar-today" size={24} color={colors.onSurfaceVariant} />
+      <Text style={styles.text}>Término do semestre</Text>
+    </View>
   </View>
-</View>
-<TouchableOpacity style={styles.datePickerInput} onPress={() => setShowEndPicker(true)}>
-  <Text style={styles.text}>{formatDate(new Date(semester.end))}</Text>
-</TouchableOpacity></>)
+  <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowEndPicker(true)}>
+    <Text style={styles.text}>{formatDate(new Date(semester.end))}</Text>
+  </TouchableOpacity></>)
 
 }
