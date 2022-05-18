@@ -235,8 +235,10 @@ export default function Event({ route, navigation }) {
         <Dialog.Button
           label="Ok"
           onPress={() => {
+            if (texto.length > 0){
             fun(texto);
             setOpen(false);
+          }
           }}
         />
       </Dialog.Container>
