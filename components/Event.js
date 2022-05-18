@@ -566,15 +566,15 @@ export default function Event({ route, navigation }) {
     const index = props.index
     const detail = props.detail
     return (
-      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, flexDirection: 'row'}}>
+      <View key={index} style={{marginHorizontal: 20,marginBottom: 15, backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 10, padding: 5, flexDirection: 'row'}}>
         <View style={{justifyContent:'center'}}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
         <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
           <Text style={{color:colors.onSurface}}>{`${
             weekly
               ? week[detail.day]
-              : formatDateWithHour(detail.datetime_init)
-          }, `} {`${formatHour(detail.datetime_init)} - ${formatHour(
+              : formatDate(detail.datetime_init)
+          } `} {`${formatHour(detail.datetime_init)} - ${formatHour(
             detail.datetime_end
           )}`}</Text>
         </View>
@@ -631,7 +631,7 @@ export default function Event({ route, navigation }) {
               onPress={() => {
                 setState(true);
               }}
-              style={{marginTop: 20,flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
+              style={{marginTop: 0, flexDirection: 'row', alignItems:'center', justifyContent:'center',backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline}}
             >
               <Feather name="plus" size={24} color={colors.primary} style={{paddingRight: 10}}/>
               <Text style={{color: colors.onSurface}}>Adicionar</Text>
@@ -652,7 +652,7 @@ export default function Event({ route, navigation }) {
     const index = props.index
     const notification = props.notification
     return (
-      <View key={index} style={{marginHorizontal: 20,marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10,paddingVertical:5, flexDirection: 'row'}}>
+      <View key={index} style={{marginHorizontal: 20, marginBottom: 15, backgroundColor: colors.surface, borderRadius: 10, padding: 10,paddingVertical:5, flexDirection: 'row'}}>
         <View>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1}}>
         <Feather name="repeat" size={18} color={colors.onSurface} style={{paddingRight: 8}}/>
@@ -730,7 +730,8 @@ export default function Event({ route, navigation }) {
       flexDirection: "row",
       justifyContent: 'flex-start',
       alignItems: 'center',
-      marginLeft: 18
+      marginLeft: 18,
+      marginTop: 5
     },
     sectionIcon: {
       margin: 10,
@@ -921,8 +922,8 @@ export default function Event({ route, navigation }) {
       paddingLeft: 20,
 
     },
-    textoBotaoDetail:{
-
+    choice:{
+      marginBottom: 10,
     }
   
   
@@ -936,9 +937,7 @@ export default function Event({ route, navigation }) {
   const materias = events.filter(event => event.is_subject === true);
     if(!editMode){
       return (
-        <ScrollView style={styles.container}  
-          contentContainerStyle={styles.container}          
-          >
+        <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.trueContainer}>
           <View style={styles.cortainer}>
           <View style={styles.linhaEsquerdaDetail}>
@@ -1007,34 +1006,35 @@ export default function Event({ route, navigation }) {
         }
         </View>)}
           <View style={styles.containerSectionDetail}>
-          <View style={styles.linhaEsquerdaDetail}>
-          <View style={styles.iconDetail}>
-          <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-          </View>
-          <Text style={styles.tituloDetail}>Horários</Text>
-          </View>
-          {details.map((detail, index) => 
-          (<Text style={styles.corpoDetail} key={index}>{`${
-              weekly
-                ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
-                : formatDateWithHour(detail.datetime_init)
-            }`} {` - ${formatHour(
-              detail.datetime_end
-            )}`}</Text>))
-          }
+            <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}>
+                <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Horários</Text>
+              
+            </View>
+            {details.map((detail, index) => 
+            (<Text style={styles.corpoDetail} key={index}>{`${
+                weekly
+                  ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
+                  : formatDateWithHour(detail.datetime_init)
+              }`} {` - ${formatHour(
+                detail.datetime_end
+              )}`}</Text>))
+            }
           </View>
           {
-          notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
-          <View style={styles.linhaEsquerdaDetail}>
-          <View style={styles.iconDetail}> 
-
-          <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-          </View>
-          <Text style={styles.tituloDetail}>Notificações</Text>
-          </View>
-          { notifications.map((notification, index) => (
-          <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
-          }
+          notifications.length > 0 &&(
+          <View style={styles.containerSectionDetail}>
+            <View style={styles.linhaEsquerdaDetail}>
+              <View style={styles.iconDetail}> 
+                <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.tituloDetail}>Notificações</Text>
+            </View>
+            { notifications.map((notification, index) => (
+            <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
+            }
           </View>)
           }
           <View style={styles.linecenter}>
@@ -1075,7 +1075,7 @@ export default function Event({ route, navigation }) {
       </View>
       <View style={styles.colorContainer}>
       
-      <SelGradSquare color={0} state={color} setState={setColor}/>
+        <SelGradSquare color={0} state={color} setState={setColor}/>
         <SelGradSquare color={1} state={color} setState={setColor}/>
         <SelGradSquare color={2} state={color} setState={setColor}/>
         <SelGradSquare color={3} state={color} setState={setColor}/>
@@ -1099,71 +1099,81 @@ export default function Event({ route, navigation }) {
       </>)
       }
 
-
-      <View style={styles.colorContainer}>
+      <View style={styles.choice}>
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-          <MaterialIcons name="title" size={24} color={colors.onSurface} />
-
+            <MaterialIcons name="title" size={24} color={colors.onSurface} />
           </View>
           <View style={styles.description}>
-            <Text style={styles.title}>Titulo</Text>
+            <Text style={styles.title}>Título</Text>
           </View>
+        </View>
+        <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+          placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+          onChangeText={text => setName(text)}
+          />
+
+        {isSubject && (
+        <>
+          <View style={styles.colorContainer}>
+              <View style={styles.sectionIcon}>
+              <Ionicons name="school" size={24} color={colors.onSurface} />
+
+              </View>
+              <View style={styles.description}>
+                <Text style={styles.title}>Turma</Text>
+              </View>
+          </View>
+          <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+          placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
+          onChangeText={text => setTurma(text)}
+        />
+        </>)}
       </View>
-      <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-      placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
-      onChangeText={text => setName(text)}
-/>
 
 
-  {isSubject && (<><View style={styles.colorContainer}>
+      <View style={styles.choice}>
+        <View style={styles.colorContainer}>
             <View style={styles.sectionIcon}>
-            <Ionicons name="school" size={24} color={colors.onSurface} />
+            <Entypo name="text" size={24} color={colors.onSurface} />
 
             </View>
             <View style={styles.description}>
-              <Text style={styles.title}>Turma</Text>
+              <Text style={styles.title}>Descrição</Text>
             </View>
         </View>
-        <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-        placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
-        onChangeText={text => setTurma(text)}
-  /></>)}
-
-
-
-      <View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-          <Entypo name="text" size={24} color={colors.onSurface} />
-
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Descrição</Text>
-          </View>
+        <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+        placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+        onChangeText={text => setDescription(text)}/>
       </View>
-      <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
-      placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
-      onChangeText={text => setDescription(text)}
-/>
-      {isSubject &&
-      (<View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-          <FontAwesome name="user" size={24} color={colors.onSurface} />
 
+      {isSubject &&
+      (
+        <View style={styles.choice}>
+          <View style={styles.colorContainer}>
+            <View style={styles.sectionIcon}>
+            <FontAwesome name="user" size={24} color={colors.onSurface} />
+
+            </View>
+            <View style={styles.description}>
+              <Text style={styles.title}>Professores</Text>
+            </View>
           </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Professores</Text>
-          </View>
-      </View>)
-      }
+        </View>
+      )}
 
       {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
       }
       {editMode && isSubject &&(
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>)}
+        <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>
+      )}
 
 
       
-      {!isSubject && (<><View style={styles.colorContainer}>
+      {!isSubject && (
+      <>
+      <View style={styles.choice}>
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
 
@@ -1171,17 +1181,21 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Recorrência</Text>
           </View>
-      </View>
-      <View style={styles.colorContainer}>
-        <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
-          {!weekly && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
-          <Text style={{color: !weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento único</Text></TouchableOpacity>
-        <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
-          {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
-          <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
+        </View>
+        <View style={styles.colorContainer}>
+          <TouchableOpacity style={weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(false)}>
+            {!weekly && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+            <Text style={{color: !weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento único</Text></TouchableOpacity>
+          <TouchableOpacity style={!weekly?styles.rbutton:styles.rbuttonAct} onPress={()=>setWeekly(true)}>
+            {weekly && (<Feather name="check" size={16} color={ weekly? colors.onSecondaryContainer: colors.onSurface} />)}  
+            <Text style={{color: weekly? colors.onSecondaryContainer: colors.onSurface}}>Evento recorrente</Text></TouchableOpacity>
 
-      </View></>)}
-      <View style={styles.colorContainer}>
+        </View>
+      </View>
+      </>)}
+        
+      <View style={styles.choice}>
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
 
@@ -1189,15 +1203,18 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Horários</Text>
           </View>
+        </View>
+
+        <View style={{height: 10}}></View>
+
+        {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
+        {editMode && (
+            <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
       </View>
-
-      {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
-      {editMode && (
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
-
 
       
       {!isSubject && (<>
+      <View style={styles.choice}>
         <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="book" size={24} color={colors.onSurface} />
@@ -1206,8 +1223,8 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Pertence a uma matéria?</Text>
           </View>
-      </View>
-      <Menu
+        </View>
+        <Menu
           visible={showMenu}
           onDismiss={closeMenu}
           style={{width:'100%'} }
@@ -1216,9 +1233,12 @@ export default function Event({ route, navigation }) {
           {materias.map((materia, index) => (<Menu.Item key={index} onPress={() => {setSubject(materia.id);setShowMenu(false)}} title={materia.name} />
             ))}
         </Menu>
-        
+      </View>
         </>)}
-      {!isSubject && (<><View style={styles.colorContainer}>
+
+      {!isSubject && (<>
+      <View style={styles.choice}>
+        <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
           <MaterialCommunityIcons name="message-question-outline" size={24} color={colors.onSurface} />
 
@@ -1226,20 +1246,22 @@ export default function Event({ route, navigation }) {
           <View style={styles.description}>
             <Text style={styles.title}>Tem data de entrega?</Text>
           </View>
-      </View>
-      <View style={styles.colorContainer}>
-        <TouchableOpacity style={whenSubmit==null?styles.rbutton:styles.rbuttonAct} onPress={()=>setOpenWhenDialog(true)}>
-          {whenSubmit!=null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
-          {whenSubmit==null && (<Text style={{color: colors.onSurface}}>Sim</Text>)}
-          {whenSubmit!=null && (<Text style={{color: colors.onSecondaryContainer}}>{formatDateWithHour(new Date(whenSubmit))}</Text>)}
-          
+        </View>
+        <View style={styles.colorContainer}>
+          <TouchableOpacity style={whenSubmit==null?styles.rbutton:styles.rbuttonAct} onPress={()=>setOpenWhenDialog(true)}>
+            {whenSubmit!=null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+            {whenSubmit==null && (<Text style={{color: colors.onSurface}}>Sim</Text>)}
+            {whenSubmit!=null && (<Text style={{color: colors.onSecondaryContainer}}>{formatDateWithHour(new Date(whenSubmit))}</Text>)}
+            
           </TouchableOpacity>
           <TouchableOpacity style={whenSubmit!=null?styles.rbutton:styles.rbuttonAct} onPress={()=>setWhenSubmit(null)}>
           {whenSubmit==null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
           <Text style={{color:whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Não</Text>
           
           </TouchableOpacity>
+        </View>
       </View></>)}
+
       <DateTimePickerModal
               style={{ width: "100%" }}
               textColor={"#000"}
@@ -1283,18 +1305,22 @@ export default function Event({ route, navigation }) {
           
           </TouchableOpacity>
       </View></>)}
+
+      <View style={styles.choice}>
         <View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
-          <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
-
+            <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
           </View>
           <View style={styles.description}>
             <Text style={styles.title}>Notificações</Text>
           </View>
-      </View>
-      { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
-      {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+        </View>
 
+        <View style={{height: 10}}></View>
+
+        { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
+        {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+      </View>
 
 
       <HorarioDialog weekly={weekly} />
