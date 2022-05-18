@@ -121,8 +121,12 @@ export default function Dashboard() {
         </View>
 
         <Progress/>
+        <TouchableOpacity style={{...styles.button,flex:1, margin:10}} onPress={()=> navigation.navigate("Siga")}>
+          <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Login no Siga</Text>
+        </TouchableOpacity>
       </View>
-
+      
       <View style={styles.buttonCont}>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Configurações")}>
           <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />

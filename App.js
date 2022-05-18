@@ -33,6 +33,7 @@ import SubjectScreen from "./screens/dashboardScreens/Materias";
 import EventScreen from "./screens/dashboardScreens/Eventos";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
+import SigaScreen from "./screens/dashboardScreens/Siga";
 
 if (
   Platform.OS === "android" &&
@@ -203,6 +204,17 @@ function Loader() {
                   },
                   headerTintColor: theme.colors.onSurface,
                   title: "Frequência",
+                })}
+                />
+            <HomeStackRoutes.Screen
+                name="Siga"
+                component={SigaScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Siga",
                 })}
                 />
                 </HomeStackRoutes.Navigator>
