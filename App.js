@@ -209,7 +209,7 @@ function Loader() {
           </NavigationContainer>
         </PaperProvider>
       </PreferencesContext.Provider>
-      <Toast bottomOffset={20} />
+      <Toast bottomOffset={20} text1NumberOfLines={2}/>
     </>
   );
 }

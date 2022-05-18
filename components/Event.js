@@ -146,13 +146,27 @@ export default function Event({ route, navigation }) {
                 text1: "Você deve colocar ao menos um horário",
               });
             } else {
-              if (editMode) {
-                sendData();
-                navigation.pop(1);
+              if (name.length == 0 && !isSubject) {
+                Toast.show({
+                  type: "error",
+                  text1: "Você deve colocar um nome no evento",
+                });
+              }else if (isSubject && (name.length == 0 || teachers.length == 0 || turma.length == 0)) {
+                Toast.show({
+                  type: "error",
+                  text2: "Você deve colocar um nome, um professor e uma turma",
+                });
               }
-              setEditMode(!editMode);
+              else{
+                if (editMode) {
+                  sendData();
+                  navigation.pop(1);
+                }
+                setEditMode(!editMode);
+              }
             }
-          }}
+          }
+          }
         >
           <Text style={{color: colors.onPrimary}}>Salvar</Text>
         </TouchableOpacity>)
