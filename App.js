@@ -13,7 +13,7 @@ import {
 import { PersistGate } from "redux-persist/integration/react";
 import Event from "./components/Event";
 
-import { Subject } from "./components/Subject";
+import Subject from "./components/NewSubject";
 
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";

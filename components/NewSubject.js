@@ -216,6 +216,7 @@ export default function NewSubject({ route, navigation }) {
               if (Object.keys(meanDict).includes(character)) {
                 return (
                   <KeyboardButton
+                    key={index}
                     style={styles.variableButton}
                     textStyle={styles.variableButtonText}
                   >
@@ -223,7 +224,7 @@ export default function NewSubject({ route, navigation }) {
                   </KeyboardButton>
                 );
               } else {
-                return <Text style={styles.operator}>{character}</Text>;
+                return <Text key={index} style={styles.operator}>{character}</Text>;
               }
             })}
           </View>
@@ -233,8 +234,8 @@ export default function NewSubject({ route, navigation }) {
       <View style={styles.section}>
         <Text style={styles.subtitle}>Operadores</Text>
         <View style={[styles.sectionContent, styles.row, { marginLeft: -8 }]}>
-          {operators.map((operator) => (
-            <View style={styles.buttonContainer}>
+          {operators.map((operator, index) => (
+            <View style={styles.buttonContainer} key={index}>
               <KeyboardButton onPress={() => handleFormulaAddition(operator)}>
                 {operator}
               </KeyboardButton>
@@ -284,8 +285,8 @@ export default function NewSubject({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.sectionContent}>
-          {Object.keys(meanDict).map((key) => (
-            <View style={[styles.row, { marginBottom: 20 }]}>
+          {Object.keys(meanDict).map((key, index) => (
+            <View style={[styles.row, { marginBottom: 20 }]} key={index}>
               <KeyboardButton
                 style={styles.variableButton}
                 textStyle={styles.variableButtonText}
