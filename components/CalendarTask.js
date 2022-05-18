@@ -596,11 +596,13 @@ export function FreqRender(props) {
 
   let resultFreq = "";
   let task = props.task;
-
-
+  const navigation = useNavigation()
+  const edit = () => {
+    navigation.navigate("Event", { task: task });
+  };
   try {
     const freqRes = magic(task?.grade?.frequency || {}, task.frequency || "");
-    resultFreq = "" + (freqRes.result || 0);
+    resultFreq = "" + (freqRes.result*100 || 0);
   } catch (e) {}
 
   resultFreq += "%";
@@ -692,9 +694,10 @@ export function FreqRender(props) {
     }
   })
   const removeSpaces = (str) => str.replace(/\s/g, '');
-  const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas - faltas)/aulasDadas";
-
-  return (<TouchableOpacity style={styles.card}>
+  const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
+  const aulasDadas = task?.grade?.frequency?.aulasDadas||0
+  const faltas = task?.grade?.frequency?.faltas||0
+  return (<TouchableOpacity style={styles.card} onPress={edit}>
     <View style={styles.headerline}>
       <Text style={styles.name}>{task.name}</Text>
       <TouchableOpacity style={styles.editarbtn}>
@@ -711,9 +714,9 @@ export function FreqRender(props) {
     <View style={styles.body}>
       <View style={styles.textocontainer}>
         {isDefault && <>
-        <Text style={styles.texto}>quantidade de presenças: 5</Text>
-        <Text style={styles.texto}>quantidade de faltas:5</Text>
-        <Text style={styles.texto}>faltas disponiveis:5</Text>
+        <Text style={styles.texto}>quantidade de presenças: {aulasDadas - faltas}</Text>
+        <Text style={styles.texto}>quantidade de faltas: {faltas}</Text>
+        <Text style={styles.texto}>faltas disponiveis: {Math.floor(0.25*aulasDadas-faltas)}</Text>
         </>}
       </View>
       <View style={styles.percentcontainer}>
