@@ -199,6 +199,10 @@ export default function Event({ route, navigation }) {
     if (route?.params?.mean) setMean(route.params.mean);
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
 
+  useEffect(() => {
+    sendData()
+  }, [grade, mean, frequency]);
+
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
     if (a.day > b.day) return 1;
@@ -966,6 +970,7 @@ export default function Event({ route, navigation }) {
             <View style={styles.linhaEsquerdaDetail}>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
                 navigation.navigate("Subject", {
+                  type:'editMean',
                   task: {
                     ...task,
                     grade: grade,
@@ -977,6 +982,7 @@ export default function Event({ route, navigation }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
                 navigation.navigate("Subject", {
+                  type:'editFrequency',
                   task: {
                     ...task,
                     grade: grade,
@@ -1323,4 +1329,3 @@ export default function Event({ route, navigation }) {
     </ScrollView>
   );
 }
-
