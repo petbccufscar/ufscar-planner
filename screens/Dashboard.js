@@ -1,19 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { row } from 'mathjs';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import ScrollView from "./../components/ScrollView";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { BWFont, magic, getTime } from '../helpers/ExpressionHelper';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/core";
-import { FAB } from 'react-native-paper';
-import { defaultTask } from '../helpers/helper';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from "react-native-paper";
-import { MaterialIcons } from '@expo/vector-icons';
-import { ProgressBar, Colors } from 'react-native-paper';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { useSelector } from "react-redux";
+import { magic } from '../helpers/ExpressionHelper';
+import ScrollView from "./../components/ScrollView";
+import Progress from './Progress';
+import TextTicker from 'react-native-text-ticker'
 
-export default function Task() {
+export default function Dashboard() {
   let events = useSelector(state => state.events).events
   const navigation = useNavigation()
   events = events.filter(e => e.is_subject)
@@ -21,70 +18,19 @@ export default function Task() {
 
   const theme = useTheme();
 
-  // const dispatch = useDispatch();
-  // const semester = useSelector((state) => state.semester).semester;
-  // const currentDate = new Date();
-  // const [showInitDatePicker, setShowInitDatePicker] = useState(false);
-  // const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  // let message = '';
-  // let progress = 0;
-  // calculateProgress();
-
-  // function handleSemesterInitiChange(date) {
-  //   setShowInitDatePicker(false);
-  //   semester.init = date.toString();
-  //   dispatch(updateSemester(semester));
-  // }
-
-  // function handleSemesterEndChange(date) {
-  //   setShowEndDatePicker(false);
-  //   semester.end = date.toString();
-  //   dispatch(updateSemester(semester));
-  // }
-
-  // useEffect(() => {
-  //   calculateProgress();
-  // }, [semester]);
-
-  // function calculateProgress() {
-  //   if (new Date(semester.init) < new Date(semester.end)) {
-  //     let auxProgress = (currentDate - new Date(semester.init)) / (new Date(semester.end) - new Date(semester.init));
-  //     auxProgress = auxProgress > 1 ? 1 : auxProgress < 0 ? 0 : auxProgress;
-
-  //     let auxDaysLeft = Math.round((new Date(semester.end) - currentDate) / (24 * 60 * 60 * 1000));
-  //     auxDaysLeft = auxDaysLeft < 0 ? 0 : auxDaysLeft;
-
-  //     if (currentDate < new Date(semester.init)) {
-  //       let auxVacationDays = Math.round(Math.abs((new Date(semester.init) - currentDate) / (24 * 60 * 60 * 1000)));
-  //       auxVacationDays = auxVacationDays < 0 ? 0 : auxVacationDays;
-
-  //       message = `Você ainda tem ${auxVacationDays} dia${auxVacationDays != 0 ? "s" : ""} de férias!`;
-  //     }
-  //     else {
-  //       if (auxDaysLeft <= 0) {
-  //         message = `As férias chegaram!`;
-  //       }
-  //       else {
-  //         message = `Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`;
-  //       }
-  //     }
-  //     progress = auxProgress;
-  //   } else {
-  //     message = "Selecione datas válidas de início e término do seu semestre!";
-  //     progress = 0;
-  //   }
-  // }
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.colors.surface1,
       padding: 20,
+      paddingTop: 0,
     },
     sectionTitle: {
       fontSize: 30,
-      padding: 20,
+      padding: 10,
       color: theme.colors.onSurface,
+      paddingBottom: 10,
+      marginBottom: 10,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
     },
@@ -99,30 +45,24 @@ export default function Task() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
+      paddingHorizontal: 15,
       marginBottom: 10,
       alignItems: "center",
     },
     buttonText: {
       alignItems: "flex-start",
       flexWrap: "wrap",
-      fontSize: 22,
+      fontSize: 20,
       marginLeft: 10,
       padding: 5,
       color: theme.colors.onSurfaceVariant,
     },
     buttonCont: {
-      marginVertical: 15,
-      padding: 25,
+      marginVertical: 20,
     },
-    // progress: {
-    //   height: 20,
-    //   width: wp('85%'),
-    //   marginTop: hp("5%"),
-    //   marginBottom: hp("5%"),
-    //   borderRadius: 5
-    // },
     miscCont: {
       padding: 10,
+      paddingTop: 0,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
       alignItems: "center",
@@ -132,20 +72,22 @@ export default function Task() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
-      marginBottom: 10,
-      marginHorizontal: 10,
+      marginHorizontal: 20,
       width: wp("26%"),
       height: wp("26%"),
       alignItems: "center",
     },
     line: {
       flexDirection: "row",
-      alignItems: "center",
+      flex: 1,
+      justifyContent: "space-evenly",
+      paddingTop: 10,
+
     },
     smallBtnText: {
-      fontSize: 18,
+      fontSize: 16,
       color: theme.colors.onSurfaceVariant,
-      paddingTop: 5,
+      paddingVertical: 5,
       alignItems: "center",
     },
   });
@@ -156,51 +98,50 @@ export default function Task() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Frequência</Text>
-          </View>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Eventos</Text>
-          </View>
-          <View style={styles.squareBtn}>
-            <MaterialIcons name="settings" size={50} color={theme.colors.onSurfaceVariant} />
-            <Text style={styles.smallBtnText}>Matérias</Text>
-          </View>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Frequencia")}>
+            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Eventos")}>
+            <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Eventos</TextTicker>
+          </TouchableOpacity>
+          
+        </View>
+        <View style={styles.line}>
+
+        <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Notas")}>
+            <MaterialIcons name="star" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Notas</TextTicker>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Materias")}>
+            <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
+          </TouchableOpacity>
         </View>
 
-        {/* Ordem e progresso */}
-
-        {/* <ProgressBar style={styles.progress} progress={progress} color={Colors.green600} />
-        <Text style={styles.message}>{message}</Text>
-        <StatusBar style="auto" /> */}
-      </View>
-
-      <View style={styles.buttonCont}>
-        <View style={styles.button}>
-          <MaterialIcons name="settings" size={24} color={theme.colors.onSurfaceVariant} />
-          <Text style={styles.buttonText}>Configurações</Text>
-        </View>
-        <View style={styles.button}>
-          <MaterialIcons name="info" size={24} color={theme.colors.onSurfaceVariant} />
-          <Text style={styles.buttonText}>Sobre nós</Text>
-        </View>
-        <View style={styles.button}>
-          <MaterialIcons name="mail" size={24} color={theme.colors.onSurfaceVariant} />
-          <Text style={styles.buttonText}>Fale conosco</Text>
-        </View>
+        <Progress/>
+        <TouchableOpacity style={{...styles.button,flex:1, margin:10}} onPress={()=> navigation.navigate("Siga")}>
+          <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Login no Siga</Text>
+        </TouchableOpacity>
       </View>
       
-      {/* {events.sort((a, b) => b.id - a.id).map((e, i) => (<MediaCard key={i} task={e} />))}
-
-      <StatusBar style="auto" />
-    </ScrollView>
-    <FAB
-      style={styles.fab}
-      icon="plus"
-      onPress={() => navigation.navigate("Event", { task: defaultTask })}
-    /> */}
+      <View style={styles.buttonCont}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Configurações")}>
+          <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Configurações</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("AboutUs")}>
+          <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Sobre nós</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Contato")}>
+          <Feather name="mail" size={24} color={theme.colors.onSurfaceVariant} />
+          <Text style={styles.buttonText}>Fale conosco</Text>
+        </TouchableOpacity>
+      </View>
+      
     </ScrollView>
     </> 
   );

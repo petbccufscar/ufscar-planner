@@ -50,14 +50,16 @@ export const formatReal = (num) => {
 };
 
 export const defaultTask = {
+    "siga": false,
     "weekly": false,
     "is_subject": false,
     "is_submited": false,
+    "when_submit": null,
     "details": [],
-    "name": "Novo Evento",
+    "name": "",
     "subject": null,
     "notification": [],
-    "description": "descrição",
+    "description": "",
     "color": "#f00",
 
     // não utilizaveis
@@ -70,18 +72,30 @@ export const defaultTask = {
 
 export const defaultSubject = {
     "weekly": true,
+    "siga": false,
     "is_subject": true,
     "is_submited": false,
+    "when_submit": null,
     "details": [],
-    "name": "Nova Matéria",
+    "name": "",
     "subject": null,
     "notification": [],
-    "description": "descrição",
+    "description": "",
     "color": "#f00",
     "mean": "(p1+p2+p3)/3",
     "frequency": "(aulasDadas - faltas)/aulasDadas",
-    "grade": {},
-    "turma": "Turma A",
+    "grade": {
+        "frequency": {
+            "aulasDadas": 1,
+            "faltas": 0
+        },
+        "mean": {
+            "p1": 0,
+            "p2": 0,
+            "p3": 0,
+        }
+    },
+    "turma": "",
     "teachers": [],
 }
 
@@ -96,6 +110,7 @@ export const offsetDate = (date, days) => {
 
 
 export const weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+export const weekDaysFullNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
 
 export const monthNames = [
     'Janeiro',
@@ -111,5 +126,16 @@ export const monthNames = [
     'Novembro',
     'Dezembro'
 ]
+
+export const minimum = (date) => {
+    const td = new Date();
+    return new Date(
+      td.getFullYear(),
+      td.getMonth(),
+      td.getDate(),
+      date.getHours(),
+      date.getMinutes()
+    );
+  };
 
 export const  monthNamesShort= ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']

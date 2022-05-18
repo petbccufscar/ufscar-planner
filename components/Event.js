@@ -27,11 +27,11 @@ import {
 } from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
 
-import { Button, IconButton, useTheme, FAB } from "react-native-paper";
+  
+import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
 
-import Calendar from "../assets/icons/calendar.svg";
 import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
-import { formatDateWithHour } from "../helpers/helper";
+import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -41,15 +41,19 @@ import { isString } from "mathjs";
 export default function Event({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
-  const [isSubject, setIsSubject] = useState(task.is_subject || false);
-  const [weekly, setWeekly] = useState(task.weekly || false);
-  const [isSubmited, setIsSubmited] = useState(task.is_submited || false);
 
+  const [isSubject, setIsSubject] = useState(task.is_subject||false);
+  const [weekly, setWeekly] = useState(task.weekly||false);
+  const [isSubmited, setIsSubmited] = useState(task.is_submited||false);
+  
   //todo
-  const [subject, setSubject] = useState(task.subject || null);
-  const [color, setColor] = useState(task.color || 0);
-  const [turma, setTurma] = useState(task.turma || "");
-  const [teachers, setTeachers] = useState(task.teachers || []);
+  const [subject, setSubject] = useState(task.subject||null);
+  const [color, setColor] = useState(task.color||0);
+  const [turma, setTurma] = useState(task.turma||"");
+  const [teachers, setTeachers] = useState(task.teachers||[]);
+  const [whenSubmit, setWhenSubmit] = useState(task.when_submit||null);
+
+
 
   // tela separada
   const [grade, setGrade] = useState(task.grade || {});
@@ -58,7 +62,8 @@ export default function Event({ route, navigation }) {
   );
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
-  const [name, setName] = useState(task.name || "Novo Evento");
+
+  const [name, setName] = useState(task.name||"");
   const firstTime = task.id == null || task.id == undefined;
   const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
@@ -72,6 +77,7 @@ export default function Event({ route, navigation }) {
   const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
+  const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
   const colors = useTheme().colors;
 
@@ -110,9 +116,11 @@ export default function Event({ route, navigation }) {
       weekly: weekly,
       mean: mean,
       frequency: frequency,
-      teachers: teachers,
-      turma: turma,
-      is_submited: isSubmited,
+
+      teachers:teachers,
+      turma:turma,
+      is_submited:isSubmited,
+      when_submit:whenSubmit
     };
     if (task.id != undefined && task.id != null) {
       dispatch(updateEvent(task));
@@ -153,23 +161,35 @@ export default function Event({ route, navigation }) {
                   type: LayoutAnimation.Types.easeOut,
                 },
               });
-              if (editMode && details.length == 0 && !isSubject) {
+
+            } else {
+              if (name.length == 0 && !isSubject) {
                 Toast.show({
                   type: "error",
-                  text1: "Você deve colocar ao menos um horário",
+                  text1: "Você deve colocar um nome no evento",
                 });
-              } else {
+              }else if (isSubject && (name.length == 0 || teachers.length == 0 || turma.length == 0)) {
+                Toast.show({
+                  type: "error",
+                  text2: "Você deve colocar um nome, um professor e uma turma",
+                });
+              }
+              else{
                 if (editMode) {
                   sendData();
                   navigation.pop(1);
                 }
                 setEditMode(!editMode);
               }
-            }}
-          >
-            <Text style={{ color: colors.onPrimary }}>Salvar</Text>
-          </TouchableOpacity>
-        ),
+
+            }
+          }
+          }
+        >
+          <Text style={{color: colors.onPrimary}}>Salvar</Text>
+        </TouchableOpacity>)
+      ),
+
     });
   }, [
     route.params,
@@ -188,6 +208,7 @@ export default function Event({ route, navigation }) {
     isSubmited,
     turma,
     teachers,
+    whenSubmit
   ]);
 
   useEffect(() => {
@@ -236,8 +257,10 @@ export default function Event({ route, navigation }) {
         <Dialog.Button
           label="Ok"
           onPress={() => {
+            if (texto.length > 0){
             fun(texto);
             setOpen(false);
+          }
           }}
         />
       </Dialog.Container>
@@ -280,22 +303,23 @@ export default function Event({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState(new Date().getDay());
+
+    const [day, setDay] = useState([(new Date()).getDay()]);
+
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
-    const minimum = (date) => {
-      const td = new Date();
-      return new Date(
-        td.getFullYear(),
-        td.getMonth(),
-        td.getDate(),
-        date.getHours(),
-        date.getMinutes()
-      );
-    };
+    
+    const handleTouchDay = (aux) => {
+      if (day.includes(aux)) {
+        if (day.length > 1)
+          setDay(day.filter((d) => d !== aux));
+      } else {
+        setDay([...day, aux]);
+      }
+    }
 
     function Bolinha(props) {
-      const cor = props.index == day ? "red" : "gray";
+      const cor = day.includes(props.index ) ? colors.primary : colors.surface3;
       return (
         <TouchableOpacity
           style={{
@@ -307,15 +331,15 @@ export default function Event({ route, navigation }) {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={() => setDay(props.index)}
+          onPress={() => handleTouchDay(props.index)}
         >
-          <Text style={{ color: BWFont(cor) }}>{props.text}</Text>
+          <Text style={{ color: day.includes(props.index ) ? colors.onPrimary : colors.onSurface }}>{props.text}</Text>
         </TouchableOpacity>
       );
     }
     return (
-      <Dialog.Container visible={openHorarioDialog}>
-        <Dialog.Title>Quando e onde será o evento?</Dialog.Title>
+      <Dialog.Container visible={openHorarioDialog} contentStyle={{backgroundColor: colors.surface}}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Quando e onde será o evento?</Dialog.Title>
 
         {props.weekly && (
           <>
@@ -335,7 +359,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Horario inicial: {formatHour(date)}
               </Text>
@@ -344,7 +368,8 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowEndPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+
               <Text style={styles.data}>
                 Hora final:{" " + formatHour(endTime)}
               </Text>
@@ -402,7 +427,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Inicio: {formatDateWithHour(date)}
               </Text>
@@ -411,7 +436,7 @@ export default function Event({ route, navigation }) {
               style={{ ...styles.dateAndDatepicker, margin: 10 }}
               onPress={() => setShowEndPicker(true)}
             >
-              <Calendar style={styles.calendar} />
+              <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
               <Text style={styles.data}>
                 Hora final:{" " + formatHour(endTime)}
               </Text>
@@ -466,25 +491,41 @@ export default function Event({ route, navigation }) {
 
         <Dialog.Button
           label="Cancel"
+          color={colors.primary}
           onPress={() => {
             setOpenHorarioDialog(false);
           }}
         />
         <Dialog.Button
           label="Ok"
+          color={colors.primary}
           onPress={() => {
-            let detail = {
-              day: weekly ? day : new Date(date).getDay(),
-              datetime_init: date.toUTCString(),
-              datetime_end: endTime.toUTCString(),
-              local: text,
-            };
-            setDetails([...details, detail]);
+            if (weekly){
+              let aux = []
+              for(let i = 0; i < day.length; i++){
+                let detail = {
+                  day: day[i],
+                  datetime_init: date.toUTCString(),
+                  datetime_end: endTime.toUTCString(),
+                  local: text,
+                };
+                aux.push(detail)
+              }
+              setDetails([...details, ...aux]);
+            }else{
+              let detail = {
+                day: new Date(date).getDay(),
+                datetime_init: date.toUTCString(),
+                datetime_end: endTime.toUTCString(),
+                local: text,
+              };
+              setDetails([...details, detail]);
+            }
             setOpenHorarioDialog(false);
           }}
         />
+        <Text style={{color: colors.onSurface, marginLeft: 10}}>Local</Text>
         <Dialog.Input
-          label={"Local"}
           onChangeText={setText}
           accessibilityHint={"local"}
         ></Dialog.Input>
@@ -772,6 +813,11 @@ export default function Event({ route, navigation }) {
       backgroundColor: colors.surface1,
     },
 
+    trueContainer: {
+      flex: 1,
+      paddingBottom: 20,
+    },
+  
     sectionContainer: {
       flexDirection: "row",
       padding: 15,
@@ -812,7 +858,7 @@ export default function Event({ route, navigation }) {
 
     data: {
       textAlignVertical: "center",
-      color: "white",
+      color: colors.onPrimary,
     },
     notification: {
       marginBottom: 20,
@@ -848,7 +894,7 @@ export default function Event({ route, navigation }) {
     dateAndDatepicker: {
       flexDirection: "row",
       textAlignVertical: "center",
-      backgroundColor: "#e8243c",
+      backgroundColor: colors.primary,
       padding: 8,
       borderRadius: 10,
     },
@@ -880,8 +926,6 @@ export default function Event({ route, navigation }) {
       alignSelf: "center",
     },
     calendar: {
-      color: "black",
-      flex: 1,
       marginRight: 10,
     },
     actionButtonLabel: {
@@ -974,54 +1018,54 @@ export default function Event({ route, navigation }) {
     textoBotaoDetail: {},
   });
 
-  if (!editMode) {
-    return (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.container}
-      >
-        <View style={styles.cortainer}>
-          <View style={styles.linhaEsquerdaDetail}>
-            <Gradient style={styles.corDetail} color={color} />
 
-            {turma.length > 0 && (
-              <Text style={styles.turmaDetail}>{`${turma}`}</Text>
-            )}
-            {turma.length === 0 && (
-              <Text style={styles.nomeEventoDetail}>{`${name}`}</Text>
-            )}
+    }
+  
+  
+  })
+  const [showMenu, setShowMenu] = useState(false);
+  const openMenu = () => setShowMenu(true);
+  const closeMenu = () => setShowMenu(false);
+  
+  const events = useSelector((state) => state.events).events;
+
+  const materias = events.filter(event => event.is_subject === true);
+    if(!editMode){
+      return (
+        <ScrollView style={styles.container}  
+          contentContainerStyle={styles.container}          
+          >
+          <View style={styles.trueContainer}>
+          <View style={styles.cortainer}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <Gradient style={styles.corDetail} color={color}/>
+
+          {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
+          {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
           </View>
-        </View>
-        {turma.length > 0 && (
-          <Text
-            style={{ ...styles.nomeEventoDetail, ...styles.containername }}
-          >{`${name}`}</Text>
-        )}
-        {description.length > 0 && (
+          </View>
+          {
+          turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
+          {description.length > 0 &&(
           <View style={styles.containerSectionDetail}>
-            <Text style={styles.tituloDetail}>Descrição</Text>
-            <Text style={styles.corpoDetail}>{description}</Text>
+          <Text style={styles.tituloDetail}>Descrição</Text>
+          <Text style={styles.corpoDetail}>{description}</Text>
           </View>
-        )}
-        <View style={styles.containerSectionDetail}>
+          )}
+          <View style={styles.containerSectionDetail}>
           <View style={styles.linhaEsquerdaDetail}>
-            <View style={styles.medfreqcontainer}>
-              <Text style={styles.tituloDetail}>Média</Text>
-              <Text style={styles.corpoDetail}>
-                {parseFloat(resultMean).toFixed(2)}
-              </Text>
-            </View>
-            <View style={styles.medfreqcontainer}>
-              <Text style={styles.tituloDetail}>Frequência</Text>
-              <Text style={styles.corpoDetail}>
-                {parseFloat(resultFreq).toFixed(2)}
-              </Text>
-            </View>
+          <View style={styles.medfreqcontainer}>
+          <Text style={styles.tituloDetail}>Média</Text>
+          <Text style={styles.corpoDetail}>{resultMean}</Text>
+          </View><View style={styles.medfreqcontainer}>
+          <Text style={styles.tituloDetail}>Frequência</Text>
+          <Text style={styles.corpoDetail}>{resultFreq}</Text>
           </View>
-          <View style={styles.linhaEsquerdaDetail}>
-            <TouchableOpacity
-              style={styles.botaoDetail}
-              onPress={() =>
+          </View>
+          <ScrollView horizontal={true}>
+            <View style={styles.linhaEsquerdaDetail}>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+
                 navigation.navigate("Subject", {
                   type: "editMean",
                   task: {
@@ -1030,14 +1074,12 @@ export default function Event({ route, navigation }) {
                     frequency: frequency,
                     mean: mean,
                   },
-                })
-              }
-            >
-              <Text>Editar cálculo de média</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.botaoDetail}
-              onPress={() =>
+
+                })}>
+                <Text style={{color:colors.onSurface}}>Editar média</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
+
                 navigation.navigate("Subject", {
                   type: "editFrequency",
                   task: {
@@ -1046,151 +1088,85 @@ export default function Event({ route, navigation }) {
                     frequency: frequency,
                     mean: mean,
                   },
-                })
-              }
-            >
-              <Text>Editar cálculo de frequência</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {isSubject && teachers.length > 0 && (
-          <View style={styles.containerSectionDetail}>
-            <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}>
-                <MaterialCommunityIcons
-                  name="account"
-                  size={24}
-                  color={colors.onSurfaceVariant}
-                />
-              </View>
-              <Text style={styles.tituloDetail}>Professores</Text>
+
+                })}>
+                <Text style={{color:colors.onSurface}}>Editar frequência</Text>
+              </TouchableOpacity>
             </View>
-            {teachers.map((teacher, index) => (
-              <Text style={styles.corpoDetail} key={index}>
-                {teacher}
-              </Text>
-            ))}
+          </ScrollView>
           </View>
-        )}
-        <View style={styles.containerSectionDetail}>
+          {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
           <View style={styles.linhaEsquerdaDetail}>
             <View style={styles.iconDetail}>
-              <MaterialCommunityIcons
-                name="clock"
-                style={styles.iconDetail}
-                size={24}
-                color={colors.onSurfaceVariant}
-              />
-            </View>
-            <Text style={styles.tituloDetail}>Horários</Text>
+          <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
           </View>
-          {details.map((detail, index) => (
-            <Text style={styles.corpoDetail} key={index}>
-              {`${
-                weekly
-                  ? week[detail.day] +
-                    " " +
-                    `${formatHour(detail.datetime_init)}`
-                  : formatDateWithHour(detail.datetime_init)
-              }`}{" "}
-              {` - ${formatHour(detail.datetime_end)}`}
-            </Text>
-          ))}
-        </View>
-        {notifications.length > 0 && (
+          <Text style={styles.tituloDetail}>Professores</Text>
+          </View>
+          {teachers.map((teacher, index) => (
+          <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
+        }
+        </View>)}
           <View style={styles.containerSectionDetail}>
-            <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}>
-                <MaterialCommunityIcons
-                  name="bell"
-                  style={styles.iconDetail}
-                  size={24}
-                  color={colors.onSurfaceVariant}
-                />
-              </View>
-              <Text style={styles.tituloDetail}>Notificações</Text>
-            </View>
-            {notifications.map((notification, index) => (
-              <Text style={styles.corpoDetail} key={index}>
-                {notificationText(notification)}
-              </Text>
-            ))}
+          <View style={styles.linhaEsquerdaDetail}>
+          <View style={styles.iconDetail}>
+          <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
           </View>
-        )}
-        <View style={styles.linecenter}>
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => {
-              dispatch(removeEvent(task));
-              navigation.pop();
-            }}
-          >
-            <View style={styles.linhaEsquerdaDetail}>
-              <MaterialCommunityIcons
-                name="trash-can"
-                style={styles.iconDetail}
-                size={24}
-                color={colors.error}
-              />
-              <Text style={styles.deleteFont}>Excluir</Text>
-            </View>
-          </TouchableOpacity>
+          <Text style={styles.tituloDetail}>Horários</Text>
+          </View>
+          {details.map((detail, index) => 
+          (<Text style={styles.corpoDetail} key={index}>{`${
+              weekly
+                ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
+                : formatDateWithHour(detail.datetime_init)
+            }`} {` - ${formatHour(
+              detail.datetime_end
+            )}`}</Text>))
+          }
+          </View>
+          {
+          notifications.length > 0 &&(<View style={styles.containerSectionDetail}>
+          <View style={styles.linhaEsquerdaDetail}>
+          <View style={styles.iconDetail}> 
+
+          <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
+          </View>
+          <Text style={styles.tituloDetail}>Notificações</Text>
+          </View>
+          { notifications.map((notification, index) => (
+          <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
+          }
+          </View>)
+          }
+          <View style={styles.linecenter}>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => {
+          dispatch(removeEvent(task));
+          navigation.pop();
+          }}>
+              <View style={styles.linhaEsquerdaDetail}>
+                <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
+                <Text style={styles.deleteFont}>Excluir</Text>
+              </View>  
+            </TouchableOpacity>
+          </View>
+
+          <FAB
+            style={styles.fab}
+            color={colors.primary}
+            icon="pencil"
+            onPress={() =>setEditMode(true)}
+          />
+
         </View>
+      </ScrollView>)
+    }
 
-        <FAB
-          style={styles.fab}
-          color={colors.primary}
-          icon="pencil"
-          onPress={() => setEditMode(true)}
-        />
-      </ScrollView>
-    );
-  }
-
+  
   return (
     <ScrollView style={styles.container}>
-      {editMode && (
-        <>
-          <View style={styles.colorContainer}>
-            <View style={styles.sectionIcon}>
-              <Ionicons
-                name="color-palette"
-                size={24}
-                color={colors.onSurface}
-              />
-            </View>
-            <View style={styles.description}>
-              <Text style={styles.title}>Cor</Text>
-            </View>
-          </View>
-          <View style={styles.colorContainer}>
-            <SelGradSquare color={0} state={color} setState={setColor} />
-            <SelGradSquare color={1} state={color} setState={setColor} />
-            <SelGradSquare color={2} state={color} setState={setColor} />
-            <SelGradSquare color={3} state={color} setState={setColor} />
-            <SelGradSquare color={4} state={color} setState={setColor} />
-            <SelGradSquare color={5} state={color} setState={setColor} />
-            <SelGradSquare color={6} state={color} setState={setColor} />
-            <SelGradSquare color={7} state={color} setState={setColor} />
-          </View>
-          <View style={styles.colorContainer}>
-            <SelGradSquare color={8} state={color} setState={setColor} />
-            <SelGradSquare color={9} state={color} setState={setColor} />
-            <SelGradSquare color={10} state={color} setState={setColor} />
-            <SelGradSquare color={11} state={color} setState={setColor} />
-            <SelGradSquare color={12} state={color} setState={setColor} />
-            <SelGradSquare color={13} state={color} setState={setColor} />
-            <SelGradSquare color={14} state={color} setState={setColor} />
-            <PickerGradSquare
-              color={isNaN(color) ? color : "#f0f"}
-              state={color}
-              setState={setColor}
-            />
-          </View>
-        </>
-      )}
+      <View style={styles.trueContainer}>
+      
+      {editMode && (<><View style={styles.colorContainer}>
 
-      <View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
           <MaterialIcons name="title" size={24} color={colors.onSurface} />
         </View>
@@ -1198,17 +1174,48 @@ export default function Event({ route, navigation }) {
           <Text style={styles.title}>Titulo</Text>
         </View>
       </View>
-      <TextInput
-        value={name}
-        multiline={false}
-        style={styles.textInput}
-        inputContainerStyle={styles.textInput}
-        editable={editMode}
-        placeholder="Novo Evento ..."
-        underlineColor="transparent"
-        underlineColorAndroid={"transparent"}
-        onChangeText={(text) => setName(text)}
-      />
+
+      <View style={styles.colorContainer}>
+      
+      <SelGradSquare color={0} state={color} setState={setColor}/>
+        <SelGradSquare color={1} state={color} setState={setColor}/>
+        <SelGradSquare color={2} state={color} setState={setColor}/>
+        <SelGradSquare color={3} state={color} setState={setColor}/>
+        <SelGradSquare color={4} state={color} setState={setColor}/>
+        <SelGradSquare color={5} state={color} setState={setColor}/>
+        <SelGradSquare color={6} state={color} setState={setColor}/>
+        <SelGradSquare color={7} state={color} setState={setColor}/>
+
+      </View>
+      <View style={styles.colorContainer}>
+        <SelGradSquare color={8} state={color} setState={setColor}/>
+        <SelGradSquare color={9} state={color} setState={setColor}/>
+        <SelGradSquare color={10} state={color} setState={setColor}/>
+        <SelGradSquare color={11} state={color} setState={setColor}/>
+        <SelGradSquare color={12} state={color} setState={setColor}/>
+        <SelGradSquare color={13} state={color} setState={setColor}/>
+        <SelGradSquare color={14} state={color} setState={setColor}/>
+        <PickerGradSquare color={isNaN(color)?color:"#f0f"} state={color} setState={setColor}/>
+        
+      </View>
+      </>)
+      }
+
+
+      <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialIcons name="title" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Titulo</Text>
+          </View>
+      </View>
+      <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setName(text)}
+/>
+
 
       {isSubject && (
         <>
@@ -1242,19 +1249,14 @@ export default function Event({ route, navigation }) {
           <Text style={styles.title}>Descrição</Text>
         </View>
       </View>
-      <TextInput
-        value={description}
-        multiline={true}
-        style={styles.textInput}
-        inputContainerStyle={styles.textInput}
-        editable={editMode}
-        placeholder="Detalhes do Evento ..."
-        underlineColor="transparent"
-        underlineColorAndroid={"transparent"}
-        onChangeText={(text) => setDescription(text)}
-      />
-      {isSubject && (
-        <View style={styles.colorContainer}>
+
+      <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+      placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+      onChangeText={text => setDescription(text)}
+/>
+      {isSubject &&
+      (<View style={styles.colorContainer}>
+
           <View style={styles.sectionIcon}>
             <FontAwesome name="user" size={24} color={colors.onSurface} />
           </View>
@@ -1356,29 +1358,109 @@ export default function Event({ route, navigation }) {
         <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog} />
       )}
 
-      <View style={styles.colorContainer}>
-        <View style={styles.sectionIcon}>
-          <MaterialCommunityIcons
-            name="bell"
-            size={24}
-            color={colors.onSurface}
-          />
-        </View>
-        <View style={styles.description}>
-          <Text style={styles.title}>Notificações</Text>
-        </View>
-      </View>
 
-      {notifications.map((notification, index) => (
-        <NotificationRender
-          key={index}
-          index={index}
-          notification={notification}
-        />
-      ))}
-      {editMode && (
-        <BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog} />
-      )}
+      
+      {!isSubject && (<>
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="book" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Pertence a uma matéria?</Text>
+          </View>
+      </View>
+      <Menu
+          visible={showMenu}
+          onDismiss={closeMenu}
+          style={{width:'100%'} }
+          anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.textInput} >{materias.filter(event=> event.id == subject)[0]?.name||"Nenhuma matéria"}</Text></TouchableOpacity>}>
+          <Menu.Item onPress={() => {setSubject(null); setShowMenu(false)}} title="Nenhuma matéria" />
+          {materias.map((materia, index) => (<Menu.Item key={index} onPress={() => {setSubject(materia.id);setShowMenu(false)}} title={materia.name} />
+            ))}
+        </Menu>
+        
+        </>)}
+      {!isSubject && (<><View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="message-question-outline" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Tem data de entrega?</Text>
+          </View>
+      </View>
+      <View style={styles.colorContainer}>
+
+        <TouchableOpacity style={whenSubmit==null?styles.rbutton:styles.rbuttonAct} onPress={()=>setOpenWhenDialog(true)}>
+          {whenSubmit!=null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          {whenSubmit==null && (<Text style={{color: colors.onSurface}}>Sim</Text>)}
+          {whenSubmit!=null && (<Text style={{color: colors.onSecondaryContainer}}>{formatDateWithHour(new Date(whenSubmit))}</Text>)}
+          
+          </TouchableOpacity>
+          <TouchableOpacity style={whenSubmit!=null?styles.rbutton:styles.rbuttonAct} onPress={()=>setWhenSubmit(null)}>
+          {whenSubmit==null && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color:whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Não</Text>
+          
+          </TouchableOpacity>
+      </View></>)}
+      <DateTimePickerModal
+              style={{ width: "100%" }}
+              textColor={"#000"}
+              isVisible={openWhenDialog}
+              mode={"datetime"}
+              onCancel={() => {
+                setOpenWhenDialog(false);
+              }}
+              onHide={() => {
+                setOpenWhenDialog(false);
+              }}
+              onConfirm={(ndate) => {
+                setOpenWhenDialog(false);
+                setWhenSubmit(ndate.toString());
+              }}
+              cancelTextIOS={"Cancelar"}
+              confirmTextIOS={"Confirmar"}
+              headerTextIOS={"Escolha uma data/hora"}
+            />
+        {(whenSubmit != null || isSubject) && (<>
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="file-check" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            {!isSubject && (<Text style={styles.title}>Já foi entregue?</Text>)}
+            {isSubject && (<Text style={styles.title}>Já foi finalizada?</Text>)}
+          </View>
+        </View>
+        
+        <View style={styles.colorContainer}>
+        <TouchableOpacity style={!isSubmited?styles.rbutton:styles.rbuttonAct} onPress={()=>setIsSubmited(true)}>
+          {isSubmited && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color: whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Sim</Text>
+          
+          </TouchableOpacity>
+          <TouchableOpacity style={isSubmited?styles.rbutton:styles.rbuttonAct} onPress={()=>setIsSubmited(false)}>
+          {!isSubmited && (<Feather name="check" size={16} color={ !weekly? colors.onSecondaryContainer: colors.onSurface} />)}
+          <Text style={{color:whenSubmit!=null? colors.onSurface : colors.onSecondaryContainer}}>Não</Text>
+          
+          </TouchableOpacity>
+      </View></>)}
+        <View style={styles.colorContainer}>
+          <View style={styles.sectionIcon}>
+          <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
+
+          </View>
+          <View style={styles.description}>
+            <Text style={styles.title}>Notificações</Text>
+          </View>
+      </View>
+      { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
+      {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+
+
+
 
       <HorarioDialog weekly={weekly} />
       <NotificationDialog />
@@ -1407,6 +1489,9 @@ export default function Event({ route, navigation }) {
         open={openSubjectDialog}
         setOpen={setOpenSubjectDialog}
       />
+
+
+      </View>
     </ScrollView>
   );
 }

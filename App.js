@@ -12,14 +12,26 @@ import {
 } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Event from "./components/Event";
-// import { Subject } from "./components/Subject";
-import Subject from "./components/NewSubject";
-import SideBar from "./navigation/SideBar";
+
+import { Subject } from "./components/Subject";
+
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
 import Restaurant from "./screens/Restaurant";
 import { PreferencesContext } from "./theme/PreferencesContext";
-import { CombinedDefaultTheme, CombinedDarkTheme } from "./theme/Themes";
+
+import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
+import BottomNavBar from "./navigation/BottomNavBar"
+
+import Config from "./screens/Config";
+import AboutUs from "./screens/AboutUs";
+import Contact from "./screens/Contact";
+import SubjectScreen from "./screens/dashboardScreens/Materias";
+import EventScreen from "./screens/dashboardScreens/Eventos";
+import NotasScreen from "./screens/dashboardScreens/Notas";
+import FreqScreen from "./screens/dashboardScreens/Frequencia";
+import SigaScreen from "./screens/dashboardScreens/Siga";
+
 
 if (
   Platform.OS === "android" &&
@@ -101,7 +113,7 @@ function Loader() {
           <NavigationContainer theme={theme}>
             <HomeStackRoutes.Navigator>
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
-                <HomeStackRoutes.Screen name="SideBar" component={SideBar} />
+                <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
               <HomeStackRoutes.Screen
                 name="Event"
@@ -139,11 +151,75 @@ function Loader() {
                   headerTitleAlign: "center",
                 })}
               />
-            </HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Screen
+                name="Configurações"
+                component={Config} />
+            <HomeStackRoutes.Screen
+                name="AboutUs"
+                component={AboutUs} />
+            <HomeStackRoutes.Screen
+                name="Contato"
+                component={Contact} />
+            <HomeStackRoutes.Screen
+                name="Eventos"
+                component={EventScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Eventos",
+                })}
+            />
+            <HomeStackRoutes.Screen
+                name="Materias"
+                component={SubjectScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Matérias",
+                })}
+              />
+            <HomeStackRoutes.Screen
+                name="Notas"
+                component={NotasScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Notas",
+                })}
+                />
+            <HomeStackRoutes.Screen
+                name="Frequencia"
+                component={FreqScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Frequência",
+                })}
+                />
+            <HomeStackRoutes.Screen
+                name="Siga"
+                component={SigaScreen} 
+                options={() => ({
+                  headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,
+                  title: "Siga",
+                })}
+                />
+                </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>
       </PreferencesContext.Provider>
-      <Toast bottomOffset={20} />
+      <Toast bottomOffset={20} text1NumberOfLines={2}/>
     </>
   );
 }

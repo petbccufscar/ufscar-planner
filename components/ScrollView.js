@@ -20,7 +20,6 @@ export default function ScrollView(props) {
             },
             headerShadowVisible: false,
             headerTintColor: colors.onSurface,
-            headerTitleAlign: 'center',
         });
         if (position > 0 && onTop) {
             setOnTop(false);

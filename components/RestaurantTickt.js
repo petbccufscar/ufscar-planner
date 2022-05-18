@@ -6,13 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { formatReal } from "../helpers/helper";
 import Dialog from "react-native-dialog";
 import { updateUser } from "../redux/actions/userActions";
+import ScrollView from "./ScrollView";
 
 export default function RestaurantTickets() {
   const user = useSelector((state) => state.user).user;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.money.toString());
-  const mealValue = 4.2;
+  const mealValue = user.meal;
 
   const dispatcher = useDispatch();
 
@@ -99,7 +100,7 @@ export default function RestaurantTickets() {
     },
     debitarBtnText: {
       color: theme.colors.onPrimary,
-      fontSize: 14,
+      fontSize: 13,
       textAlign: "center",
       paddingLeft: 10,
       paddingRight: 10,
@@ -107,7 +108,7 @@ export default function RestaurantTickets() {
     },
     alterarBtnText: {
       color: theme.colors.primary,
-      fontSize: 14,
+      fontSize: 13,
       textAlign: "center",
       paddingLeft: 10,
       paddingRight: 10,
@@ -131,20 +132,22 @@ export default function RestaurantTickets() {
           <Text style={styles.saldoValue}>{formatReal(user.money)}</Text>
         </View>
 
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            style={styles.alterarSaldoButton}
-            onPress={() => setOpen(true)}
-          >
-            <Text style={styles.alterarBtnText}>Alterar saldo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => decrementValue()}
-            style={styles.debitarRefeicaoButton}
-          >
-            <Text style={styles.debitarBtnText}>Debitar refeição</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView horizontal={true}>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={styles.alterarSaldoButton}
+              onPress={() => setOpen(true)}
+            >
+              <Text style={styles.alterarBtnText}>Alterar saldo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => decrementValue()}
+              style={styles.debitarRefeicaoButton}
+            >
+              <Text style={styles.debitarBtnText}>Debitar refeição</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
       <Dialog.Container visible={open}>
         <Dialog.Title>Alterar</Dialog.Title>

@@ -6,8 +6,8 @@ import { Entypo, MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@exp
 import { useNavigation } from "@react-navigation/core";
 
 import HomeNavigator from './tabs/HomeNavigator';
-import TaskNavigator from './tabs/TaskNavigator';
-import Task from '../screens/Task';
+import DashboardNavigator from './tabs/DashboardNavigator';
+import Dashboard from '../screens/Dashboard';
 import CalendarNavigator from './tabs/CalendarNavigator';
 import RestaurantNavigator from './tabs/RestaurantNavigator';
 import { IconButton } from "react-native-paper";
@@ -32,6 +32,7 @@ export default function MyTabs() {
 
   return (
     <Tab.Navigator screenOptions={{
+      keyboardHidesTabBar: true,
       headerLeft: () => (
         <IconButton
           icon={"menu"}
@@ -69,7 +70,7 @@ export default function MyTabs() {
             <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
           ),
       })} />
-      <Tab.Screen name="TaskTab" component={TaskNavigator} options={({ navigation }) => ({
+      <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
           title: 'UFSCar Planner',
           headerShown: false,
           tabBarLabel: 'Dashboard',
