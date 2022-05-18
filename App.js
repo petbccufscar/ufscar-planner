@@ -32,6 +32,7 @@ import Contact from "./screens/Contact";
 import SubjectScreen from "./screens/dashboardScreens/Materias";
 import EventScreen from "./screens/dashboardScreens/Eventos";
 import NotasScreen from "./screens/dashboardScreens/Notas";
+import FreqScreen from "./screens/dashboardScreens/Frequencia";
 
 if (
   Platform.OS === "android" &&
@@ -195,7 +196,7 @@ function Loader() {
                 />
             <HomeStackRoutes.Screen
                 name="Frequencia"
-                component={NotasScreen} 
+                component={FreqScreen} 
                 options={() => ({
                   headerStyle: {
                     backgroundColor: theme.colors.surface1,

@@ -588,3 +588,144 @@ export function NotaRender(props) {
     </TouchableOpacity>
   );
 }
+
+
+
+export function FreqRender(props) {
+  const colors = useTheme().colors
+
+  let resultFreq = "";
+  let task = props.task;
+
+
+  try {
+    const freqRes = magic(task?.grade?.frequency || {}, task.frequency || "");
+    resultFreq = "" + (freqRes.result || 0);
+  } catch (e) {}
+
+  resultFreq += "%";
+
+  styles = StyleSheet.create({
+    headerline: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 10,
+    },
+    name: {
+      flex:1,
+      color: colors.onSurfaceVariant,
+      fontSize: 20
+    },
+    editar: {
+      color: colors.primary
+    },
+    editarbtn: {
+
+    },
+    texto: {
+      color: colors.onSurfaceVariant,
+    },
+    textocontainer:{
+      flex:1,
+    },
+    body:{
+      flexDirection: 'row',
+    },
+    percentcontainer:{
+      alignItems: 'flex-end',
+      justifyContent: 'flex-end'
+    },
+    percentText: {
+      color: colors.onSurface,
+      marginRight:10,
+
+    },
+    bar: {
+      height: 25,
+      width: '100%',
+      backgroundColor: '#c4c4c4',
+      borderRadius: 20,
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start',
+      marginTop: 10,
+      overflow: 'hidden'
+    },
+    barprogress: {
+      height: 25,
+      backgroundColor: 'red',
+      borderRadius: 20,
+      width: resultFreq
+    },
+    card: {
+      flex:1,
+      backgroundColor: colors.surface,
+      margin: 20,
+      padding: 20,
+      borderRadius: 10,
+      width: '100%'
+    },
+    table: {
+      flex:1,
+      marginBottom: 5,
+    }, 
+    tableline:{
+      flexDirection: 'row',
+      padding: 5,
+      borderRadius: 5
+
+    },
+    tablelineA:{
+      flexDirection: 'row',
+      padding: 5,
+      backgroundColor: colors.surfaceVariant,
+      borderRadius: 5
+
+    },
+    tablel:{
+      flex:1,
+      color: colors.onSurfaceVariant
+    },
+    tabler:{
+      marginRight:5,
+      color: colors.onSurfaceVariant
+    }
+  })
+  const removeSpaces = (str) => str.replace(/\s/g, '');
+  const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas - faltas)/aulasDadas";
+
+  return (<TouchableOpacity style={styles.card}>
+    <View style={styles.headerline}>
+      <Text style={styles.name}>{task.name}</Text>
+      <TouchableOpacity style={styles.editarbtn}>
+        <Text style={styles.editar}>Editar</Text>
+      </TouchableOpacity>
+    </View>
+    {!isDefault && <View style={styles.table}>
+      {Object.keys(task?.grade?.frequency||{}).map((item, index) =>
+        (<View style={index%2==0?styles.tablelineA:styles.tableline} key={index}>
+          <Text style={styles.tablel}>{item}</Text>
+          <Text style={styles.tabler}>{task.grade.frequency[item]}</Text>
+        </View>))}
+      </View>}
+    <View style={styles.body}>
+      <View style={styles.textocontainer}>
+        {isDefault && <>
+        <Text style={styles.texto}>quantidade de presenças: 5</Text>
+        <Text style={styles.texto}>quantidade de faltas:5</Text>
+        <Text style={styles.texto}>faltas disponiveis:5</Text>
+        </>}
+      </View>
+      <View style={styles.percentcontainer}>
+        <Text style={styles.percentText}>{resultFreq}</Text>
+      </View>
+      
+    </View>
+    <View style={styles.bar}>
+        <View style={styles.barprogress}></View>
+    </View>
+
+
+
+  </TouchableOpacity>)
+}
