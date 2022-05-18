@@ -50,6 +50,7 @@ export const formatReal = (num) => {
 };
 
 export const defaultTask = {
+    "siga": false,
     "weekly": false,
     "is_subject": false,
     "is_submited": false,
@@ -71,6 +72,7 @@ export const defaultTask = {
 
 export const defaultSubject = {
     "weekly": true,
+    "siga": false,
     "is_subject": true,
     "is_submited": false,
     "when_submit": null,

@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Image} from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames } from '../helpers/helper';
-import { useTheme, Checkbox, Paragraph, Dialog, Portal, Button } from "react-native-paper";
+import { useTheme, Checkbox, Paragraph, Dialog, Portal, Button, TextInput } from "react-native-paper";
 import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
+import DropDownPicker from 'react-native-dropdown-picker';
 const mapsSrc = require('../assets/icons/maps.png')
 
 export function Task(props) {
@@ -588,7 +589,15 @@ export function NotaRender(props) {
     </TouchableOpacity>
   );
 }
+DropDownPicker.addTranslation("BR", {
+  PLACEHOLDER: "Selecione um item",
+  SEARCH_PLACEHOLDER: "Digite algo...",
+  SELECTED_ITEMS_COUNT_TEXT: "{count} itens foram selecionados", // See below for advanced options
+  NOTHING_TO_SHOW: "Nada a mostrar"
+});
 
+// Set as default
+DropDownPicker.setLanguage("BR");
 
 
 export function FreqRender(props) {
@@ -697,10 +706,36 @@ export function FreqRender(props) {
   const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
   const aulasDadas = task?.grade?.frequency?.aulasDadas||0
   const faltas = task?.grade?.frequency?.faltas||0
+  const [visible, setVisible] = React.useState(false);
+  
+  const showDialog = () => setVisible(true);
+
+  const hideDialog = () => setVisible(false);
+  const [open, setOpen] = useState(false);
+  const freqkeys = Object.keys(task?.grade?.frequency || {});
+  const aux = []
+  for (let i = 0; i < freqkeys.length; i++) {
+    aux.push({label: freqkeys[i], value: freqkeys[i]})
+  }
+  const [dropvalue, setDropalue] = useState(freqkeys[0]);
+  const [items, setItems] = useState(aux);
+  const [dict, setDict] = useState(task?.grade?.frequency || {});
+  const dispatch = useDispatch();
+
+  const submit = () => {
+    let auxdict = {}
+    for (let i = 0; i < freqkeys.length; i++) {
+      auxdict[freqkeys[i]] = parseFloat(dict[freqkeys[i]]) 
+    }
+
+    dispatch(updateEvent({...task, grade: {...task.grade, frequency: auxdict}}));
+    hideDialog();
+  }
+
   return (<TouchableOpacity style={styles.card} onPress={edit}>
     <View style={styles.headerline}>
       <Text style={styles.name}>{task.name}</Text>
-      <TouchableOpacity style={styles.editarbtn}>
+      <TouchableOpacity style={styles.editarbtn} onPress={showDialog}>
         <Text style={styles.editar}>Editar</Text>
       </TouchableOpacity>
     </View>
@@ -716,7 +751,7 @@ export function FreqRender(props) {
         {isDefault && <>
         <Text style={styles.texto}>quantidade de presenças: {aulasDadas - faltas}</Text>
         <Text style={styles.texto}>quantidade de faltas: {faltas}</Text>
-        <Text style={styles.texto}>faltas disponiveis: {Math.floor(0.25*aulasDadas-faltas)}</Text>
+        <Text style={styles.texto}>faltas disponiveis: {Math.max(0,Math.floor(0.25*aulasDadas-faltas))}</Text>
         </>}
       </View>
       <View style={styles.percentcontainer}>
@@ -727,7 +762,79 @@ export function FreqRender(props) {
     <View style={styles.bar}>
         <View style={styles.barprogress}></View>
     </View>
+    <Portal>
+    <Dialog visible={visible} onDismiss={hideDialog}>
+      <Dialog.Title>Escolha os meios de presença dessa matéria:</Dialog.Title>
+      <Dialog.Content>
+      <Text>Variável</Text>
+      <DropDownPicker
+          open={open}
+          value={dropvalue}
+          items={items}
+          setOpen={setOpen}
+          setValue={setDropalue}
+          setItems={setItems}
+          
+        />
+      <Text>{dropvalue != null && dropvalue != undefined? dropvalue: ""}</Text>
+      <View style={{alignItems:'center', justifyContent:'center'}}>
+      <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+        <TouchableOpacity style={{backgroundColor:'red', minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
+          if(dropvalue != null && dropvalue != undefined){
+            let auxdict = {...dict}
+            try{
+            const aux = parseFloat(dict[dropvalue])
+            auxdict[dropvalue] = isNaN(aux) ? '0' : (aux-1).toString()
+            setDict(auxdict)
+          }catch (e){
 
+          }
+        }}}>
+        <Text style={{fontSize:20,}}>-</Text>
+        </TouchableOpacity>
+        <TextInput style={{textAlign:'center'}} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString():''} onChangeText={(text) => {
+          if(dropvalue != null && dropvalue != undefined){
+            console.log(dict)
+            let auxdict = {...dict}
+            try{
+            const aux = parseFloat(text)
+            auxdict[dropvalue] = isNaN(aux) ? '0' : text
+            setDict(auxdict)
+          }catch (e){
+
+          }
+          }
+        }}></TextInput>
+        <TouchableOpacity style={{backgroundColor:'red', minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
+          if(dropvalue != null && dropvalue != undefined){
+            let auxdict = {...dict}
+            try{
+            const aux = parseFloat(dict[dropvalue])
+            auxdict[dropvalue] = isNaN(aux) ? '0' : (aux+1).toString()
+            setDict(auxdict)
+          }catch (e){
+
+          }
+        }}}>
+        <Text style={{fontSize:20,}}>+</Text>
+        </TouchableOpacity>
+      </View>
+      </View>
+      </Dialog.Content>
+      <Dialog.Actions>
+      <TouchableOpacity onPress={hideDialog} style={{padding: 10, margin:5}}>
+          <Text>
+          Cancelar
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{padding: 10, margin:5}} onPress={submit}>
+          <Text>
+          Salvar
+          </Text>
+        </TouchableOpacity>
+      </Dialog.Actions>
+    </Dialog>
+    </Portal>
 
 
   </TouchableOpacity>)
