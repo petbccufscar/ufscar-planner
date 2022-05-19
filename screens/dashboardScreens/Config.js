@@ -61,13 +61,17 @@ export default function Config() {
     }
 
   });
+  const [money, setMoney] = useState(user.meal.toString());
   const handleMoneyChange = (value) => {
     try {
       const valor = parseFloat(value.substring(3))
-      if (!isNaN(valor))
+      if (!isNaN(valor)){
+        setMoney(value.substring(3))
         dispatch(updateUser({ ...user, meal: valor }))
-      else
+      }else {
+        setMoney('0')
         dispatch(updateUser({ ...user, meal: 0 }))
+      }
     } catch (e) {
     }
   }
@@ -104,7 +108,7 @@ export default function Config() {
           <Text style={styles.text}>Valor padrão da refeição</Text>
         </View>
       </View>
-      <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
+      <TextInput style={styles.textInput} value={"R$ " + money} onChangeText={handleMoneyChange}></TextInput>
       
       <View style={styles.opcao}>
         <View style={styles.linha}>
