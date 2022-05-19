@@ -437,9 +437,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  variableOperatorContainer: {
-    padding: 8,
-  },
 
   buttonContainer: {
     marginLeft: 8,

@@ -689,14 +689,6 @@ export default function EditScreen({ route, navigation }) {
       paddingBottom: 20,
     },
   
-    sectionContainer: {
-      flexDirection: "row",
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: "#ddd",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     colorContainer: {
       flexDirection: "row",
       justifyContent: 'flex-start',
@@ -712,32 +704,13 @@ export default function EditScreen({ route, navigation }) {
       color: colors.onSurface
     },
   
-    details: {
-      flex: 1,
-    },
   
-    xButton: {
-      marginLeft: "auto",
-    },
   
-    detail: {
-      marginBottom: 20,
-    },
   
-    reminder: {
-      flex: 1,
-    },
   
     data: {
       textAlignVertical: "center",
       color: colors.onPrimary,
-    },
-    notification: {
-      marginBottom: 20,
-      flexDirection: "row",
-      height: 40,
-      alignContent: "center",
-      alignItems: "center",
     },
   
     description: {
@@ -752,15 +725,6 @@ export default function EditScreen({ route, navigation }) {
       padding: 10,
       backgroundColor: colors.surface,
       color: colors.onSurface,
-    },
-    actionButton: {
-      backgroundColor: "#e8243c",
-      borderRadius: 10,
-      width: 200,
-    },
-    spacingDate: {
-      marginTop: 10,
-      marginBottom: 10,
     },
   
     dateAndDatepicker: {
@@ -795,97 +759,6 @@ export default function EditScreen({ route, navigation }) {
     },
     calendar: {
       marginRight: 10,
-    },
-    actionButtonLabel: {
-      color: "white",
-    },
-    tituloDetail:{
-      color: colors.onSurface,
-      fontSize:16,
-      fontWeight: 'bold',
-      marginBottom: 5
-    },
-    medfreqcontainer:{
-      paddingRight: 30
-    },
-    corpoDetail:{
-      color: colors.onSurfaceVariant,
-      fontSize: 14,
-    },
-    turmaDetail:{
-      color: colors.primary
-    },
-    corDetail: {
-      height: 20,
-      marginRight:5,
-      borderRadius: 5,
-      aspectRatio: 1,
-    },
-    deleteButton:{
-      marginTop: 30,
-      backgroundColor: colors.surface,
-      padding:10,
-      borderRadius: 100,
-      borderColor: colors.outline,
-      borderWidth: 1
-    },
-    iconDetail:{
-      marginRight: 2,
-      height: 24,
-      width:24,
-      
-    },
-    deleteFont:{
-      color: colors.error
-    },
-    linecenter:{
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    cortainer:{
-      margin:10,
-      marginLeft: 20,
-      
-    },
-    linhaEsquerdaDetail:{
-      flexDirection:'row',
-      alignItems: 'center'
-    },
-    containerSectionDetail:{
-      borderBottomWidth: 1,
-      borderBottomColor: colors.outline,
-      padding: 20,
-      paddingLeft: 0,
-      marginLeft: 20
-    },
-    botaoDetail: {
-      backgroundColor: colors.surface,
-      padding: 5,
-      marginRight: 5,
-      marginTop: 20,
-      marginLeft: 0,
-      borderColor: colors.outline,
-      borderRadius: 8,
-      borderWidth: 1,
-    },
-    nomeEventoDetail:{
-      color: colors.onSurface,
-      fontSize: 22,
-
-    },
-    fab: {
-      position: 'absolute',
-      shadowOpacity: 10,
-      borderRadius: 10,
-      backgroundColor: colors.surface3,
-      margin: 16,
-      right: 0,
-      bottom: 0,
-    },
-    containername:{
-      paddingLeft: 20,
-
     },
     choice:{
       marginBottom: 10,

@@ -61,29 +61,6 @@ export function Days(props) {
         justifyContent: "space-around",
         backgroundColor: theme.colors.primaryContainer,
       },
-      semana: {
-        height: hourHeight,
-        width: wp("100%"),
-        backgroundColor: bgColor,
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-      },
-      planilha: {
-        backgroundColor: bgColor,
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-      },
-      scroll: {
-        width: wp("100%"),
-        backgroundColor: bgColor,
-        flex: 1,
-        flexGrow: 1,
-      },
-      column: {
-        flexDirection: "column",
-      },
       dias: {
         width: hourWidth,
         height: hourHeight,
@@ -91,16 +68,6 @@ export function Days(props) {
         alignItems: "center",
         justifyContent: "center",
         alignSelf: "center",
-      },
-      circulo: {
-        height: 24 * (hourHeight + dividerHeight),
-        width: hourWidth,
-        backgroundColor: bgColor,
-      },
-      horario: {
-        height: 24 * (hourHeight + dividerHeight),
-        width: hourWidth,
-        backgroundColor: "#F4F",
       },
     });
 

@@ -24,15 +24,6 @@ export default function FreqScreen(props) {
     const navigation = useNavigation()
 
     const styles = StyleSheet.create({
-        fab: {
-            position: 'absolute',
-            shadowOpacity: 10,
-            borderRadius: 10,
-            backgroundColor: colors.surface3,
-            margin: 16,
-            right: 0,
-            bottom: 0,
-        },
         container:{ 
             flex: 1, 
             alignItems: 'center',

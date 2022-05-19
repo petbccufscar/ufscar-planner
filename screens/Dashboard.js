@@ -35,12 +35,6 @@ export default function Dashboard() {
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
     },
-    fab: {
-      position: 'absolute',
-      margin: 16,
-      right: 0,
-      bottom: 0,
-    }, 
     button: {
       flexDirection: "row",
       borderRadius: 10,
@@ -219,9 +213,6 @@ function MediaCard(props) {
     },
     row: {
       flexDirection: 'row'
-    },
-    col: {
-      flexDirection: 'column'
     },
     square: {
       width: 4,

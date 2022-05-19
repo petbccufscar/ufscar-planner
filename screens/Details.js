@@ -108,116 +108,14 @@ export default function Details({ route, navigation }) {
       paddingBottom: 20,
     },
   
-    sectionContainer: {
-      flexDirection: "row",
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: "#ddd",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    colorContainer: {
-      flexDirection: "row",
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      marginHorizontal: 18,
-      marginTop: 5,
-    },
-    sectionIcon: {
-      margin: 10,
-    },
-    title:{
-      fontSize: 20,
-      color: colors.onSurface
-    },
   
-    details: {
-      flex: 1,
-    },
   
-    xButton: {
-      marginLeft: "auto",
-    },
   
-    detail: {
-      marginBottom: 20,
-    },
   
-    reminder: {
-      flex: 1,
-    },
   
-    data: {
-      textAlignVertical: "center",
-      color: colors.onPrimary,
-    },
-    notification: {
-      marginBottom: 20,
-      flexDirection: "row",
-      height: 40,
-      alignContent: "center",
-      alignItems: "center",
-    },
   
-    description: {
-      flex: 1,
-      flexDirection: "row",
-    },
-    textInput: {
-      marginHorizontal: 20,
-      marginVertical: 5,
-      borderRadius: 12,
-      borderBottomWidth:0,
-      padding: 10,
-      backgroundColor: colors.surface,
-      color: colors.onSurface,
-    },
-    actionButton: {
-      backgroundColor: "#e8243c",
-      borderRadius: 10,
-      width: 200,
-    },
-    spacingDate: {
-      marginTop: 10,
-      marginBottom: 10,
-    },
   
-    dateAndDatepicker: {
-      flexDirection: "row",
-      textAlignVertical: "center",
-      backgroundColor: colors.primary,
-      padding: 8,
-      borderRadius: 10,
-    },
   
-    rbutton:{
-      padding: 10,
-      borderWidth: 1,
-      borderRadius: 10,
-      marginLeft: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.surface,
-      borderColor: colors.outline
-  
-    },
-    rbuttonAct:{
-      marginLeft: 10,
-      padding: 10,
-      backgroundColor: colors.secondaryContainer,
-      borderRadius: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-  
-    },
-    calendar: {
-      marginRight: 10,
-    },
-    actionButtonLabel: {
-      color: "white",
-    },
     tituloDetail:{
       color: colors.onSurface,
       fontSize:16,
@@ -306,9 +204,6 @@ export default function Details({ route, navigation }) {
       paddingLeft: 20,
 
     },
-    choice:{
-      marginBottom: 10,
-    }
   
   
   })

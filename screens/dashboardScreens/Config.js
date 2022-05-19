@@ -142,12 +142,6 @@ export function ConfigSemester(){
   const dispatch = useDispatch();
   
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.surface1,
-      padding: 20,
-
-    },
     icon: {
       marginRight: 10
     },
