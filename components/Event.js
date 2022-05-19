@@ -937,7 +937,8 @@ export default function Event({ route, navigation }) {
   const materias = events.filter(event => event.is_subject === true);
     if(!editMode){
       return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.container}>
+        <ScrollView>
           <View style={styles.trueContainer}>
           <View style={styles.cortainer}>
           <View style={styles.linhaEsquerdaDetail}>
@@ -1048,16 +1049,15 @@ export default function Event({ route, navigation }) {
               </View>  
             </TouchableOpacity>
           </View>
-
-          <FAB
+        </View>
+      </ScrollView>
+      <FAB
             style={styles.fab}
             color={colors.primary}
             icon="pencil"
             onPress={() =>setEditMode(true)}
           />
-
-        </View>
-      </ScrollView>)
+      </View>)
     }
 
   
