@@ -111,7 +111,10 @@ function Loader() {
       <PreferencesContext.Provider value={preferences}>
         <PaperProvider theme={theme}>
           <NavigationContainer theme={theme}>
-            <HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Navigator screenOptions={() => ({headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,})}>
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
                 <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
@@ -119,10 +122,6 @@ function Loader() {
                 name="Event"
                 component={Event}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   headerTitleAlign: "center",
                 })}
               />
@@ -131,10 +130,6 @@ function Loader() {
                 component={Restaurant}
                 options={() => ({
                   title: "Carteirinha",
-                  // headerStyle: {
-                  //   backgroundColor: "#e8243c",
-                  // },
-                  // headerTintColor: "#fff",
                   headerTitleAlign: "center",
                 })}
               />
@@ -142,11 +137,6 @@ function Loader() {
                 name="Subject"
                 component={Subject}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
-
                   title: "Média",
                   headerTitleAlign: "center",
                 })}
@@ -164,10 +154,6 @@ function Loader() {
                 name="Eventos"
                 component={EventScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Eventos",
                 })}
             />
@@ -175,10 +161,6 @@ function Loader() {
                 name="Materias"
                 component={SubjectScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Matérias",
                 })}
               />
@@ -186,10 +168,6 @@ function Loader() {
                 name="Notas"
                 component={NotasScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Notas",
                 })}
                 />
@@ -197,10 +175,6 @@ function Loader() {
                 name="Frequencia"
                 component={FreqScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Frequência",
                 })}
                 />
@@ -208,10 +182,6 @@ function Loader() {
                 name="Siga"
                 component={SigaScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Siga",
                 })}
                 />
