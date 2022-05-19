@@ -3,7 +3,7 @@ import { InteractionManager, View, StyleSheet } from "react-native";
 import { Agenda as AAgenda, LocaleConfig, CalendarProps } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
 import Agenda from '../components/Agenda';
-import { CalendarTask } from '../components/CalendarTask';
+import { EventCards } from '../components/EventCards';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
 import Toast from 'react-native-toast-message';

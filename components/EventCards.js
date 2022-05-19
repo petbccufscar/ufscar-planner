@@ -186,7 +186,7 @@ export function Task(props) {
 
 }
 
-export function CalendarTask(props) {
+export function EventCards(props) {
   const mostrarData = props.show || false
   let task = props.task;
   const navigation = useNavigation();

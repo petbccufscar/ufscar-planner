@@ -12,7 +12,7 @@ import {
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
-import { FreqRender } from "../../components/CalendarTask"; 
+import { FreqRender } from "../../components/EventCards";
 import { defaultSubject, parseTime, weekDaysFullNames } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";

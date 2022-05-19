@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useTheme } from "react-native-paper";
 import { floorDate, monthNames, offsetDate, weekDaysNames } from "../helpers/helper";
-import { CalendarTask } from './CalendarTask';
+import { EventCards } from './EventCards';
 import { FlatList } from "react-native-bidirectional-infinite-scroll";
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -136,7 +136,7 @@ function RenderDay(props) {
         </View>
         <View style={styles.taskContainer}>
             {
-                items.map((item, index) => (<CalendarTask style={{ marginTop: 0 }} key={index} task={item}></CalendarTask>))
+                items.map((item, index) => (<EventCards style={{ marginTop: 0 }} key={index} task={item}></EventCards>))
             }
         </View>
 

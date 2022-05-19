@@ -13,7 +13,7 @@ import {
 import ScrollView from '../components/ScrollView'
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
-import { Task } from '../components/CalendarTask'
+import { Task } from '../components/EventCards'
 import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
 import { Provider, useDispatch, useSelector } from "react-redux";

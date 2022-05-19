@@ -1,26 +1,22 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
-import React, { useEffect, useRef } from "react";
-import { Platform, StyleSheet, UIManager, AppRegistry } from "react-native";
-import { Provider as PaperProvider } from "react-native-paper";
+import React, {useEffect, useRef} from "react";
+import {AppRegistry, Platform, StyleSheet, UIManager} from "react-native";
+import {Provider as PaperProvider} from "react-native-paper";
 import Toast from "react-native-toast-message";
-import {
-  Provider as ReduxProvider,
-  useDispatch,
-  useSelector,
-} from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import {Provider as ReduxProvider, useDispatch, useSelector,} from "react-redux";
+import {PersistGate} from "redux-persist/integration/react";
 import Details from "./screens/Details";
 
 import Subject from "./components/NewSubject";
 
-import { loadEvents } from "./redux/actions/eventActions";
-import { persistor, store } from "./redux/store";
+import {loadEvents} from "./redux/actions/eventActions";
+import {persistor, store} from "./redux/store";
 import Restaurant from "./screens/Restaurant";
-import { PreferencesContext } from "./theme/PreferencesContext";
+import {PreferencesContext} from "./theme/PreferencesContext";
 
-import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
+import {CombinedDarkTheme, CombinedDefaultTheme} from "./theme/Themes";
 import BottomNavBar from "./navigation/BottomNavBar"
 
 import Config from "./screens/dashboardScreens/Config";
