@@ -730,8 +730,8 @@ export default function Event({ route, navigation }) {
       flexDirection: "row",
       justifyContent: 'flex-start',
       alignItems: 'center',
-      marginLeft: 18,
-      marginTop: 5
+      marginHorizontal: 18,
+      marginTop: 5,
     },
     sectionIcon: {
       margin: 10,
@@ -1073,7 +1073,7 @@ export default function Event({ route, navigation }) {
           <Text style={styles.title}>Cor</Text>
         </View>
       </View>
-      <View style={styles.colorContainer}>
+      <View style={{...styles.colorContainer, justifyContent:'space-between'}}>
       
         <SelGradSquare color={0} state={color} setState={setColor}/>
         <SelGradSquare color={1} state={color} setState={setColor}/>
@@ -1085,7 +1085,7 @@ export default function Event({ route, navigation }) {
         <SelGradSquare color={7} state={color} setState={setColor}/>
 
       </View>
-      <View style={styles.colorContainer}>
+      <View style={{...styles.colorContainer, justifyContent:'space-between'}}>
         <SelGradSquare color={8} state={color} setState={setColor}/>
         <SelGradSquare color={9} state={color} setState={setColor}/>
         <SelGradSquare color={10} state={color} setState={setColor}/>

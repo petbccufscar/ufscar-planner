@@ -60,7 +60,7 @@ export function SelGradSquare(props) {
         }
     })
     return (
-        <TouchableOpacity onPress={() => setState(props.color)} style={{borderRadius: 9,margin: 5,
+        <TouchableOpacity onPress={() => setState(props.color)} style={{borderRadius: 9,
             borderWidth: state == props.color?1:0, }}>
             <Gradient color={props.color} style={styles.square}>
                 {state == props.color && (<Feather name="check" size={24} color="white" />)}
@@ -78,7 +78,6 @@ export function PickerGradSquare(props) {
             alignItems: 'center',
             justifyContent: 'center',
             width: wp("8.5%"), height:  wp("8.5%"),
-            margin: 5,
             borderRadius: 8,
             borderWidth : isNaN(state)? 1: 0,
             ...(props.style||{})
