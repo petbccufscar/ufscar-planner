@@ -68,7 +68,6 @@ export default function NewSubject({ route, navigation }) {
 
       while (endingIndex > begginingIndex && !foundCharacter) {
         const character = meanExpression.substring(begginingIndex, endingIndex);
-        console.log(character);
         if (
           operators.includes(character) ||
           Object.keys(meanDict).includes(character)

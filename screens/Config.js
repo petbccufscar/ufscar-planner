@@ -64,7 +64,6 @@ export default function Config() {
   const handleMoneyChange = (value) => {
     try {
       const valor = parseFloat(value.substring(3))
-      console.log(valor)
       if (!isNaN(valor))
         dispatch(updateUser({ ...user, meal: valor }))
       else
@@ -83,6 +82,7 @@ export default function Config() {
     dispatch(updateUser({ ...user, campus: name }))
   }
   return (
+    <View style={{flex:1, backgroundColor:colors.surface1}}>
   <ScrollView>
     <View style={{...styles.container, paddingTop: 10}}>
       <View style={{...styles.opcao, marginTop:10, marginBottom: 0}}>
@@ -133,7 +133,7 @@ export default function Config() {
       <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
 
     </View>
-  </ScrollView>)
+  </ScrollView></View>)
 }
 
 

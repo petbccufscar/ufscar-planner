@@ -11,7 +11,7 @@ import {
   useSelector,
 } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import Event from "./components/Event";
+import Details from "./components/Details";
 
 import Subject from "./components/NewSubject";
 
@@ -31,6 +31,7 @@ import EventScreen from "./screens/dashboardScreens/Eventos";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SigaScreen from "./screens/dashboardScreens/Siga";
+import EditScreen from "./components/EditScreen";
 
 
 if (
@@ -120,11 +121,18 @@ function Loader() {
               </HomeStackRoutes.Group>
               <HomeStackRoutes.Screen
                 name="Event"
-                component={Event}
+                component={Details}
                 options={() => ({
                   headerTitleAlign: "center",
                 })}
               />
+                <HomeStackRoutes.Screen
+                    name="EditScreen"
+                    component={EditScreen}
+                    options={() => ({
+                        headerTitleAlign: "center",
+                    })}
+                />
               <HomeStackRoutes.Screen
                 name="Restaurant"
                 component={Restaurant}
