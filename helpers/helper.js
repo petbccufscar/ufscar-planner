@@ -1,4 +1,5 @@
 import React from "react";
+import {Text} from "react-native";
 
 export function Random() {
     const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -146,4 +147,8 @@ export function parseTime( t ) {
     d.setHours( parseInt( time[1]) + (time[3] ? 12 : 0) );
     d.setMinutes( parseInt( time[2]) || 0 );
     return d;
+}
+
+export function SIGA(){
+    return(<Text style={{fontFamily: 'sans-serif-condensed', color: '#F89837', fontWeight:'bold', fontSize:20}}>SIGA</Text>)
 }
