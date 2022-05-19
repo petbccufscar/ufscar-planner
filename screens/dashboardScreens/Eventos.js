@@ -61,7 +61,7 @@ export default function SubjectScreen(props) {
                 style={styles.fab}
                 color={colors.primary}
                 icon="plus"
-                onPress={ () => navigation.navigate("Event", { task: defaultTask })}
+                onPress={ () => navigation.navigate("EditScreen", { task: defaultTask })}
                 />
             </View>
         )

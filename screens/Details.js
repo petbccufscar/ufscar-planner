@@ -20,14 +20,11 @@ import ScrollView from "../components/ScrollView";
 export default function Details({ route, navigation }) {
   let task = { ...route.params.task };
 
-  const firstTime = task.id == null || task.id == undefined;
-  if( firstTime ) {
-    navigation.replace("EditScreen", { task: task })
-  } else {
-    task = items.find((e) => e.id == task.id);
-  }
-
   const items = useSelector((state) => state.events).events;
+
+  task = items.find((e) => e.id == task.id);
+
+
   const isSubject = task.is_subject||false;
   const weekly = task.weekly;
   const color = task.color||0;

@@ -45,7 +45,6 @@ function EventsScreen() {
 
   let stMarked = useSelector(state => state.cards).marked;
   let stItems = useSelector(state => state.cards).items;
-  console.log(Object.keys(stItems).length);
 
 
   const renderEmptyDate = () => {
@@ -91,14 +90,14 @@ function EventsScreen() {
               label: 'Matéria',
               style: styles.fab,
               color: colors.primary,
-              onPress: () => navigation.navigate("Event", { task: defaultSubject }),
+              onPress: () => navigation.navigate("EditScreen", { task: defaultSubject }),
             },
             {
               icon: 'calendar',
               label: 'Evento',
               style: styles.activedFAB,
               color: colors.onPrimary,
-              onPress: () => navigation.navigate("Event", { task: defaultTask }),
+              onPress: () => navigation.navigate("EditScreen", { task: defaultTask }),
               small: false,
             },
           ]}
