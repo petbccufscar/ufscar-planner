@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Colors, IconButton } from 'react-native-paper';
 // import { events } from '../../placeholder-data/data';
 import { useSelector } from 'react-redux';
-import { Calendar } from '../../components/Calendar'
+import { Calendar } from '../../screens/Calendar'
 import { addEvent } from '../../redux/actions/eventActions'
 import { useTheme } from 'react-native-paper';
 

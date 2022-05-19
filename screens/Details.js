@@ -10,8 +10,8 @@ import { formatDateWithHour } from "../helpers/helper";
 import {
   removeEvent
 } from "../redux/actions/eventActions";
-import { Gradient } from "./Gradient";
-import ScrollView from "./ScrollView";
+import { Gradient } from "../components/Gradient";
+import ScrollView from "../components/ScrollView";
   
 
 

@@ -12,7 +12,7 @@ import { formatDate } from '../helpers/helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dialog from "react-native-dialog";
-import { ConfigSemester } from './Config';
+import { ConfigSemester } from '../screens/dashboardScreens/Config';
 
 
 function Bar(props) {

@@ -7,7 +7,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import { magic } from '../helpers/ExpressionHelper';
 import ScrollView from "./../components/ScrollView";
-import Progress from './Progress';
+import Progress from '../components/Progress';
 import TextTicker from 'react-native-text-ticker'
 import { SIGA } from '../helpers/helper';
 

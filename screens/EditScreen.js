@@ -15,8 +15,8 @@ import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 import {
   addEvent, updateEvent
 } from "../redux/actions/eventActions";
-import { PickerGradSquare, SelGradSquare } from "./Gradient";
-import ScrollView from "./ScrollView";
+import { PickerGradSquare, SelGradSquare } from "../components/Gradient";
+import ScrollView from "../components/ScrollView";
   
 
 

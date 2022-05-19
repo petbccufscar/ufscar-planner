@@ -11,7 +11,7 @@ import {
   useSelector,
 } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import Details from "./components/Details";
+import Details from "./screens/Details";
 
 import Subject from "./components/NewSubject";
 
@@ -23,15 +23,15 @@ import { PreferencesContext } from "./theme/PreferencesContext";
 import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
 import BottomNavBar from "./navigation/BottomNavBar"
 
-import Config from "./screens/Config";
-import AboutUs from "./screens/AboutUs";
-import Contact from "./screens/Contact";
+import Config from "./screens/dashboardScreens/Config";
+import AboutUs from "./screens/dashboardScreens/AboutUs";
+import Contact from "./screens/dashboardScreens/Contact";
 import SubjectScreen from "./screens/dashboardScreens/Materias";
 import EventScreen from "./screens/dashboardScreens/Eventos";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SigaScreen from "./screens/dashboardScreens/Siga";
-import EditScreen from "./components/EditScreen";
+import EditScreen from "./screens/EditScreen";
 
 
 if (

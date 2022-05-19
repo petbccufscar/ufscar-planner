@@ -2,16 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { updateEvent } from '../redux/actions/eventActions'
+import { updateEvent } from '../../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
 import Dialog from "react-native-dialog";
 import { useTheme, Appbar, TouchableRipple, Switch, TextInput, Menu } from 'react-native-paper';
-import { updateUser } from '../redux/actions/userActions';
+import { updateUser } from '../../redux/actions/userActions';
 import { MaterialIcons } from '@expo/vector-icons';
-import { PreferencesContext } from '../theme/PreferencesContext';
+import { PreferencesContext } from '../../theme/PreferencesContext';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDate } from '../helpers/helper';
-import { updateSemester } from '../redux/actions/semesterActions';
+import { formatDate } from '../../helpers/helper';
+import { updateSemester } from '../../redux/actions/semesterActions';
 
 export default function Config() {
   const user = useSelector(state => state.user).user
