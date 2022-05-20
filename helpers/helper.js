@@ -1,5 +1,5 @@
 import React from "react";
-import {Text} from "react-native";
+import { Text } from "react-native";
 
 export function Random() {
     const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -131,24 +131,24 @@ export const monthNames = [
 export const minimum = (date) => {
     const td = new Date();
     return new Date(
-      td.getFullYear(),
-      td.getMonth(),
-      td.getDate(),
-      date.getHours(),
-      date.getMinutes()
+        td.getFullYear(),
+        td.getMonth(),
+        td.getDate(),
+        date.getHours(),
+        date.getMinutes()
     );
-  };
+};
 
-export const  monthNamesShort= ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+export const monthNamesShort = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
-export function parseTime( t ) {
+export function parseTime(t) {
     var d = new Date();
-    var time = t.match( /(\d+)(?::(\d\d))?\s*(p?)/ );
-    d.setHours( parseInt( time[1]) + (time[3] ? 12 : 0) );
-    d.setMinutes( parseInt( time[2]) || 0 );
+    var time = t.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+    d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+    d.setMinutes(parseInt(time[2]) || 0);
     return d;
 }
 
-export function SIGA(){
-    return(<Text style={{fontFamily: 'sans-serif-condensed', color: '#F89837', fontWeight:'bold', fontSize:20}}>SIGA</Text>)
+export function SIGA() {
+    return (<Text style={{ fontFamily: 'sans-serif-condensed', color: '#F89837', fontWeight: 'bold', fontSize: 20 }}>SIGA</Text>)
 }

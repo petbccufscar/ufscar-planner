@@ -96,6 +96,14 @@ export const calendarReducer = (state = initialState, action) => {
         let marked = { ...st.marked };
         let keysMap = {}
 
+        if (action.payload.is_submited == true) {
+            return {
+                items: items,
+                cid: cid,
+                marked: marked
+            }
+        }
+
         for (let j = 0; j < action.payload.details.length; j++) {
             const obj = {
                 ...action.payload,
@@ -163,7 +171,7 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (iterador <= datef) {
             d = floorDate(iterador)
-            aux[d] = (newItems[d]||[]).filter((e) => e.id == event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
+            aux[d] = (newItems[d] || []).filter((e) => e.id == event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
             if (aux[d].length > 0) {
                 event = aux[d][0]
                 break
@@ -225,27 +233,28 @@ export const calendarReducer = (state = initialState, action) => {
         let events = action.payload
 
         for (let i = 0; i < events.length; i++) {
-            for (let j = 0; j < events[i].details.length; j++) {
-                const obj = {
-                    ...events[i],
-                    detail: events[i].details[j]
-                }
-                const aux = new Date(obj.detail.datetime_init)
-                const date = floorDate(aux)
-                if (events[i].weekly) {
-                    const aux4 = repeatPayload(obj, items, cid, {})
-                    items = { ...aux4.items }
-                    cid = aux4.cid
-                } else {
-                    if (items[date] == null) {
-                        items[date] = [obj]
-                    } else {
-                        items[date].push({ ...obj, cid: cid })
-                        cid++
+            if (events[i].is_submited != true)
+                for (let j = 0; j < events[i].details.length; j++) {
+                    const obj = {
+                        ...events[i],
+                        detail: events[i].details[j]
                     }
-                    marked[date] = { marked: true }
+                    const aux = new Date(obj.detail.datetime_init)
+                    const date = floorDate(aux)
+                    if (events[i].weekly) {
+                        const aux4 = repeatPayload(obj, items, cid, {})
+                        items = { ...aux4.items }
+                        cid = aux4.cid
+                    } else {
+                        if (items[date] == null) {
+                            items[date] = [obj]
+                        } else {
+                            items[date].push({ ...obj, cid: cid })
+                            cid++
+                        }
+                        marked[date] = { marked: true }
+                    }
                 }
-            }
         }
         const keys = Object.keys(items)
         for (let i = 0; i < keys.length; i++) {

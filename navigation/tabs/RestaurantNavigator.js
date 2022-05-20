@@ -11,12 +11,12 @@ export default function RestaurantsNavigator() {
     <restaurantsStack.Navigator
       screenOptions={{
         title: 'UFSCar Planner',
-            headerStyle: {
-                backgroundColor: colors.surface1,
-            },
-            headerShadowVisible: false,
-            headerTintColor: colors.onSurface,
-            headerTitleAlign: 'center'
+        headerStyle: {
+          backgroundColor: colors.surface1,
+        },
+        headerShadowVisible: false,
+        headerTintColor: colors.onSurface,
+        headerTitleAlign: 'center'
       }}
     >
       <restaurantsStack.Screen

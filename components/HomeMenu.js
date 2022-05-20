@@ -39,7 +39,7 @@ const Menu = (props) => {
       paddingHorizontal: 10,
       paddingTop: 10
     },
-  
+
     itemMenuSubject: {
       /* TODO fontFamily: '', */
       alignItems: "flex-start",
@@ -66,7 +66,7 @@ const Menu = (props) => {
       width: '100%',
     },
     ghostBox: {
-      flex:1
+      flex: 1
     },
     header: {
       flexDirection: "row",
@@ -89,7 +89,7 @@ const Menu = (props) => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-    
+
     }
   });
 
@@ -98,24 +98,24 @@ const Menu = (props) => {
     <View style={styles.item}>
       <View style={styles.itemLeft}>
         <View style={styles.header}>
-        <Text style={styles.title}>{props.mealTime}</Text>
-        <View style={styles.hour}>
-        <Feather name="clock" size={18} color={theme.colors.primary} />
-        {props.day != "6" ? (
-            props.mealTime == "Almoço" ? (
-              <Text style={styles.itemMenuSubject}>
-                {props.lunchStartTime} - {props.lunchEndTime}
-              </Text>
+          <Text style={styles.title}>{props.mealTime}</Text>
+          <View style={styles.hour}>
+            <Feather name="clock" size={18} color={theme.colors.primary} />
+            {props.day != "6" ? (
+              props.mealTime == "Almoço" ? (
+                <Text style={styles.itemMenuSubject}>
+                  {props.lunchStartTime} - {props.lunchEndTime}
+                </Text>
+              ) : (
+                <Text style={styles.itemMenuSubject}>
+                  {props.dinnerStartTime} - {props.dinnerEndTime}
+                </Text>
+              )
             ) : (
               <Text style={styles.itemMenuSubject}>
-                {props.dinnerStartTime} - {props.dinnerEndTime}
+                {props.saturdayLunchStartTime} - {props.saturdayLunchEndTime}
               </Text>
-            )
-          ) : (
-            <Text style={styles.itemMenuSubject}>
-              {props.saturdayLunchStartTime} - {props.saturdayLunchEndTime}
-            </Text>
-          )}
+            )}
           </View>
         </View>
 
@@ -129,14 +129,14 @@ const Menu = (props) => {
         </View>
         {shouldShow ? (
           <View>
-          <View>
-            <Text style={styles.subtitle}>Guarnicão:</Text>
-            <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
-          </View>
-          <View>
-            <Text style={styles.subtitle}>Arroz:</Text>
-            <Text style={styles.itemMenuSubject}>{props.rice}</Text>
-          </View>
+            <View>
+              <Text style={styles.subtitle}>Guarnicão:</Text>
+              <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
+            </View>
+            <View>
+              <Text style={styles.subtitle}>Arroz:</Text>
+              <Text style={styles.itemMenuSubject}>{props.rice}</Text>
+            </View>
             <View>
               <Text style={styles.subtitle}>Feijão:</Text>
               <Text style={styles.itemMenuSubject}>{props.bean}</Text>
@@ -156,21 +156,21 @@ const Menu = (props) => {
           </View>
         ) : null}
 
-          <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
-            <View style={styles.ghostBox}/>
-            {shouldShow ? (
-              <>
-                <Text style={styles.verText}> Ver menos</Text>
-                <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
-                </>
-            ) : (
-              <>
-                <Text style={styles.verText}> Ver mais</Text>
-                <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} /></>
-            )}
-            <View style={styles.ghostBox}/>
-          </TouchableOpacity>
- 
+        <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
+          <View style={styles.ghostBox} />
+          {shouldShow ? (
+            <>
+              <Text style={styles.verText}> Ver menos</Text>
+              <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
+            </>
+          ) : (
+            <>
+              <Text style={styles.verText}> Ver mais</Text>
+              <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} /></>
+          )}
+          <View style={styles.ghostBox} />
+        </TouchableOpacity>
+
 
       </View>
     </View>

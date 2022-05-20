@@ -56,6 +56,7 @@ export default function Dashboard() {
       marginVertical: 20,
     },
     miscCont: {
+      flex: 1,
       paddingTop: 0,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
@@ -66,14 +67,14 @@ export default function Dashboard() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
-      marginHorizontal: 20,
-      width: wp("26%"),
+      width: wp("35%"),
       height: wp("26%"),
       alignItems: "center",
+      justifyContent: 'center'
     },
     line: {
+      width: '100%',
       flexDirection: "row",
-      flex: 1,
       justifyContent: "space-evenly",
       paddingTop: 10,
 
@@ -92,54 +93,55 @@ export default function Dashboard() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Frequencia")}>
-            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
-            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Eventos")}>
-            <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
-            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Eventos</TextTicker>
-          </TouchableOpacity>
-          
-        </View>
-        <View style={styles.line}>
-
-        <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Notas")}>
-            <MaterialIcons name="star" size={50} color={theme.colors.onSurfaceVariant} />
-            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Notas</TextTicker>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Materias")}>
+          <TouchableOpacity style={styles.squareBtn} onPress={() => navigation.navigate("Materias")}>
             <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
             <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn} onPress={() => navigation.navigate("Eventos")}>
+            <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Eventos</TextTicker>
+          </TouchableOpacity>
+
+        </View>
+        <View style={styles.line}>
+
+          <TouchableOpacity style={styles.squareBtn} onPress={() => navigation.navigate("Notas")}>
+            <MaterialIcons name="star" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Notas</TextTicker>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.squareBtn} onPress={() => navigation.navigate("Frequencia")}>
+            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
+          </TouchableOpacity>
+
         </View>
 
-        <Progress/>
-        <Text style={{color: theme.colors.onSurface, fontSize: 20, margin: 10}}>Entre em sua conta do SIGA</Text>
-        <Text style={{color: theme.colors.onSurfaceVariant}}>Faça login com o SIGA para importar as matérias que você está cursando.</Text>
-        <TouchableOpacity style={{...styles.button, width:'100%', marginTop: 10}} onPress={()=> navigation.navigate("Siga")}>
-          <SIGA/>
-          <Text style={{...styles.buttonText, flex:1}}>Entrar com o SIGA</Text>
+        <Progress />
+        <Text style={{ color: theme.colors.onSurface, fontSize: 20, margin: 10 }}>Entre em sua conta do SIGA</Text>
+        <Text style={{ color: theme.colors.onSurfaceVariant }}>Faça login com o SIGA para importar as matérias que você está cursando.</Text>
+        <TouchableOpacity style={{ ...styles.button, width: '100%', marginTop: 10 }} onPress={() => navigation.navigate("Siga")}>
+          <SIGA />
+          <Text style={{ ...styles.buttonText, flex: 1 }}>Entrar com o SIGA</Text>
           <MaterialIcons name="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
         </TouchableOpacity>
       </View>
       <View style={styles.buttonCont}>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Configurações")}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Configurações")}>
           <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Configurações</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("AboutUs")}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AboutUs")}>
           <Feather name="info" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Sobre nós</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Contato")}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Contato")}>
           <Feather name="mail" size={24} color={theme.colors.onSurfaceVariant} />
           <Text style={styles.buttonText}>Fale conosco</Text>
         </TouchableOpacity>
       </View>
-      
+
     </ScrollView>
-    </> 
+  </>
   );
 }
 

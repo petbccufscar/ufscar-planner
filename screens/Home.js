@@ -33,7 +33,7 @@ const floorDate = (data) => {
 export default function App() {
   const today = floorDate(new Date());
   const items = useSelector((state) => state.cards).items;
-  const classes = (items[today]||[]).filter((e) => e.is_subject);
+  const classes = (items[today] || []).filter((e) => e.is_subject);
   const [acontecendoAgora, setAcontecendoAgora] = useState([]);
 
   let tasks = [];
@@ -46,24 +46,25 @@ export default function App() {
   const navigation = useNavigation();
   const theme = useTheme();
 
-  function calculateAcontecendoAgora () {  
+  function calculateAcontecendoAgora() {
     const aux1 = classes.filter((e) => {
-      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()})
-    const aux2 = tasks.filter((e) => {
-      
       return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()
-    
+    })
+    const aux2 = tasks.filter((e) => {
+
+      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()
+
     })
     const aux3 = [...aux1, ...aux2]
     if (JSON.stringify(acontecendoAgora) != JSON.stringify(aux3)) {
       setAcontecendoAgora(aux3)
     }
   }
-  setInterval(calculateAcontecendoAgora, 60*1000);
+  setInterval(calculateAcontecendoAgora, 60 * 1000);
   useEffect(() => {
     calculateAcontecendoAgora()
-  },[items])
-  
+  }, [items])
+
 
 
 
@@ -98,7 +99,7 @@ export default function App() {
           {/* Today's Tasks */}
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
-            <AcontecendoAgora list={acontecendoAgora}/>
+            <AcontecendoAgora list={acontecendoAgora} />
 
             <Text style={styles.sectionTitle}>Aulas de hoje</Text>
 
@@ -121,62 +122,62 @@ export default function App() {
 }
 
 
-function AcontecendoAgora(props){
+function AcontecendoAgora(props) {
 
   const colors = useTheme().colors;
   const mapsSrc = require('../assets/icons/maps.png')
   const list = props.list
 
   const styles = StyleSheet.create({
-  hourglassContainer: {
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 36,
-    height: 36,
-  },
-  acontecendoAgoraRow:{
-    flexDirection: "row",
-    justifyContent: "flex-start",  
-    alignItems: "center",
-  },
-  localContainer:{
-    borderWidth: 1,
-    borderColor: colors.outline,
-    borderRadius: 8,
-    backgroundColor: colors.surface,
-    flexDirection: 'row',
-    padding: 5,
-    paddingRight: 10,
-  },
-  emptyflex:{
-  },
-  localView:{
-    flexDirection: 'row'
-  },
-  acontecendoAgoraContainer:{
-    borderRadius: 12,
-    backgroundColor: colors.primaryContainer,
-    padding: 10,
-    marginVertical: 10
-  },
-  acontecendoAgoraText:{
-    color: colors.onPrimaryContainer,
-    marginVertical: 10,
-    fontSize: 20,
+    hourglassContainer: {
+      borderRadius: 12,
+      backgroundColor: colors.primary,
+      alignItems: "center",
+      justifyContent: "center",
+      width: 36,
+      height: 36,
+    },
+    acontecendoAgoraRow: {
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "center",
+    },
+    localContainer: {
+      borderWidth: 1,
+      borderColor: colors.outline,
+      borderRadius: 8,
+      backgroundColor: colors.surface,
+      flexDirection: 'row',
+      padding: 5,
+      paddingRight: 10,
+    },
+    emptyflex: {
+    },
+    localView: {
+      flexDirection: 'row'
+    },
+    acontecendoAgoraContainer: {
+      borderRadius: 12,
+      backgroundColor: colors.primaryContainer,
+      padding: 10,
+      marginVertical: 10
+    },
+    acontecendoAgoraText: {
+      color: colors.onPrimaryContainer,
+      marginVertical: 10,
+      fontSize: 20,
 
-  },
-  acontecendoAgoraMapsIcon:{
-    width: 24,
-    height: 24,
-  },
-  acontecendoAgoraTitle:{
-    fontSize: 24,
-    paddingLeft: 10,
-    color: colors.primary,
-  }
-})
+    },
+    acontecendoAgoraMapsIcon: {
+      width: 24,
+      height: 24,
+    },
+    acontecendoAgoraTitle: {
+      fontSize: 24,
+      paddingLeft: 10,
+      color: colors.primary,
+    }
+  })
   if (list.length == 0)
     return null
   return (<View style={styles.acontecendoAgoraContainer}>
@@ -187,17 +188,18 @@ function AcontecendoAgora(props){
       <Text style={styles.acontecendoAgoraTitle}>Acontecendo agora</Text>
     </View>
     {list.map((item, idx) => {
-      return(<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
-      <View style={styles.localView}>
-    
-    {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}>
-      <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc}/>
-      <Text style={{color: colors.onSurface}}>
-        {item.detail.local}
-      </Text>
-    </TouchableOpacity>
-    <View style={styles.emptyflex}/></>)}
-    
-      </View></View>)})}
+      return (<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
+        <View style={styles.localView}>
+
+          {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}>
+            <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
+            <Text style={{ color: colors.onSurface }}>
+              {item.detail.local}
+            </Text>
+          </TouchableOpacity>
+            <View style={styles.emptyflex} /></>)}
+
+        </View></View>)
+    })}
   </View>)
 }

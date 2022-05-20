@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { InteractionManager, View, StyleSheet } from "react-native";
-import { Agenda as AAgenda, LocaleConfig, CalendarProps } from 'react-native-calendars';
+import { useNavigation } from "@react-navigation/core";
+import React from 'react';
+import { StyleSheet, View } from "react-native";
+import { LocaleConfig } from 'react-native-calendars';
+import { FAB, useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import Agenda from '../components/Agenda';
-import { EventCards } from '../components/EventCards';
-import { FAB } from 'react-native-paper';
-import { useNavigation } from "@react-navigation/core";
-import Toast from 'react-native-toast-message';
-import { defaultTask, defaultSubject, floorDate } from '../helpers/helper';
-import { useTheme } from "react-native-paper";
+import { defaultSubject, defaultTask } from '../helpers/helper';
 
 export function Calendar() {
 
@@ -67,7 +64,7 @@ function EventsScreen() {
       borderRadius: 10,
       backgroundColor: colors.surface3
     },
-    activedFAB:{
+    activedFAB: {
       borderRadius: 10,
       backgroundColor: colors.primary
     }
@@ -75,39 +72,39 @@ function EventsScreen() {
   return (
     <>
       <Agenda items={stItems} marked={stMarked} />
-      
 
-<FAB.Group
-          open={open}
-          icon={'plus'}
-          fabStyle={open ?{width:0, height:0}: styles.fab}
-          visible={!open}
-          color={colors.primary}
-      
-          actions={[
-            {
-              icon: 'book',
-              label: 'Matéria',
-              style: styles.fab,
-              color: colors.primary,
-              onPress: () => navigation.navigate("EditScreen", { task: defaultSubject }),
-            },
-            {
-              icon: 'calendar',
-              label: 'Evento',
-              style: styles.activedFAB,
-              color: colors.onPrimary,
-              onPress: () => navigation.navigate("EditScreen", { task: defaultTask }),
-              small: false,
-            },
-          ]}
-          onStateChange={onStateChange}
-          onPress={() => {
-            if (open) {
-              // do something if the speed dial is open
-            }
-          }}
-        />
+
+      <FAB.Group
+        open={open}
+        icon={'plus'}
+        fabStyle={open ? { width: 0, height: 0 } : styles.fab}
+        visible={!open}
+        color={colors.primary}
+
+        actions={[
+          {
+            icon: 'book',
+            label: 'Matéria',
+            style: styles.fab,
+            color: colors.primary,
+            onPress: () => navigation.navigate("EditScreen", { task: defaultSubject }),
+          },
+          {
+            icon: 'calendar',
+            label: 'Evento',
+            style: styles.activedFAB,
+            color: colors.onPrimary,
+            onPress: () => navigation.navigate("EditScreen", { task: defaultTask }),
+            small: false,
+          },
+        ]}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+      />
 
     </>
   );
