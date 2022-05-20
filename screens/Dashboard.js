@@ -56,6 +56,7 @@ export default function Dashboard() {
       marginVertical: 20,
     },
     miscCont: {
+      flex: 1,
       paddingTop: 0,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
@@ -66,14 +67,14 @@ export default function Dashboard() {
       borderRadius: 10,
       backgroundColor: theme.colors.surface,
       padding: 5,
-      marginHorizontal: 20,
-      width: wp("26%"),
+      width: wp("35%"),
       height: wp("26%"),
       alignItems: "center",
+      justifyContent:'center'
     },
     line: {
+      width:'100%',
       flexDirection: "row",
-      flex: 1,
       justifyContent: "space-evenly",
       paddingTop: 10,
 
@@ -92,9 +93,9 @@ export default function Dashboard() {
 
       <View style={styles.miscCont}>
         <View style={styles.line}>
-          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Frequencia")}>
-            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
-            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
+        <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Materias")}>
+            <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
           </TouchableOpacity>
           <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Eventos")}>
             <MaterialIcons name="event" size={50} color={theme.colors.onSurfaceVariant} />
@@ -108,10 +109,11 @@ export default function Dashboard() {
             <MaterialIcons name="star" size={50} color={theme.colors.onSurfaceVariant} />
             <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Notas</TextTicker>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Materias")}>
-            <MaterialIcons name="class" size={50} color={theme.colors.onSurfaceVariant} />
-            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Matérias</TextTicker>
+          <TouchableOpacity style={styles.squareBtn}  onPress={()=> navigation.navigate("Frequencia")}>
+            <MaterialIcons name="date-range" size={50} color={theme.colors.onSurfaceVariant} />
+            <TextTicker style={styles.smallBtnText} marqueeDelay={0} animationType={'scroll'}>Frequência</TextTicker>
           </TouchableOpacity>
+          
         </View>
 
         <Progress/>
