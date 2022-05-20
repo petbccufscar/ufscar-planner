@@ -4,9 +4,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 import { formatReal } from "../helpers/helper";
-import Dialog from "react-native-dialog";
 import { updateUser } from "../redux/actions/userActions";
 import ScrollView from "./ScrollView";
+import { Portal, Button, Dialog, TextInput } from "react-native-paper";
 
 export default function RestaurantTickets() {
   const user = useSelector((state) => state.user).user;
@@ -113,6 +113,12 @@ export default function RestaurantTickets() {
       paddingRight: 10,
       flex: 1,
     },
+    input: {
+      height: 40, 
+      borderRadius: 5, 
+      marginBottom: 8,
+      backgroundColor: theme.colors.surface
+    },
   });
   return (
     <View style={styles.card}>
@@ -148,23 +154,26 @@ export default function RestaurantTickets() {
           </View>
         </ScrollView>
       </View>
-      <Dialog.Container visible={open}>
+      <Portal>
+        <Dialog style={{backgroundColor:theme.colors.surface3}} visible={open}  nDismiss={() => setOpen(false)}> 
+        
         <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description></Dialog.Description>
-        <Dialog.Input
+        <Dialog.Content>
+        <TextInput
+          style={styles.input}
           keyboardType="decimal-pad"
           value={value.toString()}
           onChangeText={setValue}
-        ></Dialog.Input>
-        <Dialog.Button
-          label="Cancel"
+        ></TextInput>
+        </Dialog.Content>
+        <Dialog.Actions>
+        <Button
           onPress={() => {
             setOpen(false);
             setValue(user.money.toString());
           }}
-        />
-        <Dialog.Button
-          label="Ok"
+        >Cancelar</Button>
+        <Button
           disabled={
             value.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
           }
@@ -172,8 +181,11 @@ export default function RestaurantTickets() {
             handleCashChange();
             setOpen(false);
           }}
-        />
-      </Dialog.Container>
+        >Ok</Button>
+        </Dialog.Actions>
+
+      </Dialog>
+      </Portal>
     </View>
   );
 }

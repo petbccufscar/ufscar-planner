@@ -570,17 +570,15 @@ export function NotaRender(props) {
           </TouchableOpacity>
           </View>
           <Portal>
-          <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog style={{backgroundColor:colors.surface3}} visible={visible} onDismiss={hideDialog}>
             <Dialog.Title>Editar</Dialog.Title>
             <Dialog.Content>
               <Paragraph>Editando nota</Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <TouchableOpacity onPress={hideDialog} style={{padding: 10}}>
-                <Text>
-                Done
-                </Text>
-              </TouchableOpacity>
+              <Button onPress={hideDialog} style={{padding: 10}}>
+                Ok
+              </Button>
             </Dialog.Actions>
           </Dialog>
           </Portal>
@@ -616,7 +614,7 @@ export function FreqRender(props) {
 
   resultFreq += "%";
 
-  styles = StyleSheet.create({
+  const styles = StyleSheet.create({
     headerline: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -700,7 +698,13 @@ export function FreqRender(props) {
     tabler:{
       marginRight:5,
       color: colors.onSurfaceVariant
-    }
+    },
+    input: {
+      minHeight: 40,
+      minWidth: '30%', 
+      borderRadius: 5, 
+      backgroundColor: colors.surface
+    },
   })
   const removeSpaces = (str) => str.replace(/\s/g, '');
   const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
@@ -763,10 +767,10 @@ export function FreqRender(props) {
         <View style={styles.barprogress}></View>
     </View>
     <Portal>
-    <Dialog visible={visible} onDismiss={hideDialog}>
-      <Dialog.Title>Escolha os meios de presença dessa matéria:</Dialog.Title>
+    <Dialog style={{backgroundColor:colors.surface3}}  visible={visible} onDismiss={hideDialog}>
+      <Dialog.Title style={{color: colors.onSurfaceVariant}}>Escolha os meios de presença dessa matéria:</Dialog.Title>
       <Dialog.Content>
-      <Text>Variável</Text>
+      <Text style={{color: colors.onSurfaceVariant, margin:5}}>Variável</Text>
       <DropDownPicker
           open={open}
           value={dropvalue}
@@ -779,7 +783,7 @@ export function FreqRender(props) {
       <Text>{dropvalue != null && dropvalue != undefined? dropvalue: ""}</Text>
       <View style={{alignItems:'center', justifyContent:'center'}}>
       <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-        <TouchableOpacity style={{backgroundColor:'red', minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
+        <TouchableOpacity style={{backgroundColor:colors.primary, minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
           if(dropvalue != null && dropvalue != undefined){
             let auxdict = {...dict}
             try{
@@ -790,9 +794,9 @@ export function FreqRender(props) {
 
           }
         }}}>
-        <Text style={{fontSize:20,}}>-</Text>
+        <Text style={{fontSize:20, color: colors.onPrimary}}>-</Text>
         </TouchableOpacity>
-        <TextInput style={{textAlign:'center'}} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString():''} onChangeText={(text) => {
+        <TextInput style={{...styles.input,textAlign:'center'}} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString():''} onChangeText={(text) => {
           if(dropvalue != null && dropvalue != undefined){
             let auxdict = {...dict}
             try{
@@ -804,7 +808,7 @@ export function FreqRender(props) {
           }
           }
         }}></TextInput>
-        <TouchableOpacity style={{backgroundColor:'red', minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
+        <TouchableOpacity style={{backgroundColor:colors.primary, minHeight:30, minWidth:30 ,margin:10, alignItems:'center', justifyContent:'center', borderRadius: 10}} onPress={() => {
           if(dropvalue != null && dropvalue != undefined){
             let auxdict = {...dict}
             try{
@@ -815,22 +819,18 @@ export function FreqRender(props) {
 
           }
         }}}>
-        <Text style={{fontSize:20,}}>+</Text>
+        <Text style={{fontSize:20,color: colors.onPrimary}}>+</Text>
         </TouchableOpacity>
       </View>
       </View>
       </Dialog.Content>
       <Dialog.Actions>
-      <TouchableOpacity onPress={hideDialog} style={{padding: 10, margin:5}}>
-          <Text>
+      <Button onPress={hideDialog} style={{padding: 10, margin:5}}>
           Cancelar
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{padding: 10, margin:5}} onPress={submit}>
-          <Text>
+        </Button>
+        <Button style={{padding: 10, margin:5}} onPress={submit}>
           Salvar
-          </Text>
-        </TouchableOpacity>
+        </Button>
       </Dialog.Actions>
     </Dialog>
     </Portal>

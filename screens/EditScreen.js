@@ -4,9 +4,8 @@ import {
   Alert, LayoutAnimation,
   Linking, StyleSheet, Text, TextInput, TouchableOpacity, View
 } from "react-native";
-import Dialog from "react-native-dialog";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { IconButton, Menu, useTheme } from "react-native-paper";
+import { IconButton, Menu, useTheme, Portal, Button, Dialog } from "react-native-paper";
 import ScrollPicker from "react-native-picker-scrollview";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
@@ -206,21 +205,25 @@ export default function EditScreen({ route, navigation }) {
     let novo = "";
 
     return (
-      <Dialog.Container visible={open}>
-        <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Description></Dialog.Description>
-        <Dialog.Input value={texto} onChangeText={setTexto}></Dialog.Input>
-        <Dialog.Button label="Cancel" onPress={() => setOpen(false)} />
-        <Dialog.Button
-          label="Ok"
+      <Portal>
+          <Dialog style={styles.dialog} visible={open} onDismis={() => setOpen(false)}>
+        <Dialog.Title style={{color:colors.onSurfaceVariant}}>Alterar</Dialog.Title>
+        <Dialog.Content>
+        <TextInput style={styles.input} value={texto} onChangeText={setTexto}></TextInput>
+        </Dialog.Content>
+        <Dialog.Actions>
+        <Button onPress={() => setOpen(false)} >Cancelar</Button>
+        <Button
           onPress={() => {
             if (texto.length > 0){
             fun(texto);
             setOpen(false);
           }
           }}
-        />
-      </Dialog.Container>
+        >Ok</Button>
+        </Dialog.Actions>
+      </Dialog>
+      </Portal>
     );
   }
 
@@ -231,8 +234,10 @@ export default function EditScreen({ route, navigation }) {
     const [mult, setMult] = useState(1);
     const multList = [1, 60, 60 * 24];
     return (
-      <Dialog.Container visible={openNotificationDialog}>
-        <Dialog.Title>Quando Notificar?</Dialog.Title>
+      <Portal>
+          <Dialog visible={openNotificationDialog} style={styles.dialog} onDismiss={() =>  setOpenNotificationDialog(false)}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Quando Notificar?</Dialog.Title>
+        <Dialog.Content>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <Roleta n={90} fun={setN} />
           <Roleta
@@ -241,18 +246,20 @@ export default function EditScreen({ route, navigation }) {
             fun={setMult}
           />
         </View>
-        <Dialog.Button
-          label="Cancel"
+        </Dialog.Content>
+        <Dialog.Actions>
+        <Button
           onPress={() => setOpenNotificationDialog(false)}
-        />
-        <Dialog.Button
-          label="Ok"
+        >Cancelar</Button>
+        <Button
           onPress={() => {
             setNotifications([...notifications, n * multList[mult]]);
             setOpenNotificationDialog(false);
           }}
-        />
-      </Dialog.Container>
+        >Ok</Button>
+        </Dialog.Actions>
+      </Dialog>
+      </Portal>
     );
   }
 
@@ -295,9 +302,10 @@ export default function EditScreen({ route, navigation }) {
       );
     }
     return (
-      <Dialog.Container visible={openHorarioDialog} contentStyle={{backgroundColor: colors.surface}}>
+      <Portal>
+        <Dialog style={styles.dialog} onDismiss={()=>setOpenHorarioDialog(false)} visible={openHorarioDialog} contentStyle={{backgroundColor: colors.surface}}>
         <Dialog.Title style={{color: colors.onSurfaceVariant}}>Quando e onde será o evento?</Dialog.Title>
-
+        <Dialog.Content>
         {props.weekly && (
           <>
             <View
@@ -445,16 +453,21 @@ export default function EditScreen({ route, navigation }) {
             />
           </>
         )}
-
-        <Dialog.Button
-          label="Cancel"
+        <Text style={{color: colors.onSurface, marginLeft: 10}}>Local</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={setText}
+          accessibilityHint={"local"}
+        ></TextInput>
+        </Dialog.Content>
+        <Dialog.Actions>
+        <Button
           color={colors.primary}
           onPress={() => {
             setOpenHorarioDialog(false);
           }}
-        />
-        <Dialog.Button
-          label="Ok"
+        >Cancelar</Button>
+        <Button
           color={colors.primary}
           onPress={() => {
             if (weekly){
@@ -480,13 +493,11 @@ export default function EditScreen({ route, navigation }) {
             }
             setOpenHorarioDialog(false);
           }}
-        />
-        <Text style={{color: colors.onSurface, marginLeft: 10}}>Local</Text>
-        <Dialog.Input
-          onChangeText={setText}
-          accessibilityHint={"local"}
-        ></Dialog.Input>
-      </Dialog.Container>
+        >OK</Button>
+        </Dialog.Actions>
+        
+      </Dialog>
+      </Portal>
     );
   }
 
@@ -688,7 +699,14 @@ export default function EditScreen({ route, navigation }) {
       flex: 1,
       paddingBottom: 20,
     },
-  
+    dialog:{
+      backgroundColor: colors.surface3},
+    input: {
+      height: 40, 
+      borderRadius: 5, 
+      marginBottom: 8,
+      backgroundColor: colors.surface
+    },
     colorContainer: {
       flexDirection: "row",
       justifyContent: 'flex-start',
@@ -703,10 +721,6 @@ export default function EditScreen({ route, navigation }) {
       fontSize: 20,
       color: colors.onSurface
     },
-  
-  
-  
-  
   
     data: {
       textAlignVertical: "center",

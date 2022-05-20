@@ -5,8 +5,8 @@ import { Entypo, Feather  } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 import { ColorPicker, fromHsv } from "react-native-color-picker";
-import Dialog from "react-native-dialog";
 import { BWFont } from "../helpers/ExpressionHelper";
+import { Dialog, Button, Portal } from 'react-native-paper'
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -93,26 +93,27 @@ export function PickerGradSquare(props) {
 
 
 
-            <Dialog.Container visible={openColorDialog}>
+            <Portal>
+            <Dialog visible={openColorDialog} onDismiss={() => setOpenColorDialog(false)}>
                 <Dialog.Title>Alterar</Dialog.Title>
-                <Dialog.Description></Dialog.Description>
                 <ColorPicker
                     onColorChange={(color) => (aux = color)}
                     defaultColor={props.color}
                     style={{ width: 300, height: 300 }}
                 />
-                <Dialog.Button
-                    label="Cancel"
+                <Dialog.Actions>
+                <Button
                     onPress={() => setOpenColorDialog(false)}
-                />
-                <Dialog.Button
-                    label="Ok"
+                >Cancelar</Button>
+                <Button
                     onPress={() => {
                         setState(fromHsv(aux));
                         setOpenColorDialog(false);
                     }}
-                />
-            </Dialog.Container>
+                >Ok</Button>
+                </Dialog.Actions>
+            </Dialog>
+            </Portal>
         </>
     )
 }

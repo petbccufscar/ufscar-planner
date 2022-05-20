@@ -32,7 +32,6 @@
     "react-native-calendars": "^1.1283.0",
     "react-native-cheerio": "^1.0.0-rc.4",
     "react-native-color-picker": "^0.6.0",
-    "react-native-dialog": "^9.2.1",
     "react-native-dropdown-picker": "^5.4.2",
     "react-native-gesture-handler": "~2.2.0",
     "react-native-modal-datetime-picker": "^13.0.0",

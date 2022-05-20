@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { TextInput } from "react-native";
 import { Text, View, StyleSheet } from "react-native";
-import { IconButton, useTheme } from "react-native-paper";
+import { IconButton, useTheme, Portal, Button, Dialog, TextInput } from "react-native-paper";
 import KeyboardButton from "./KeyboardButton";
 import ScrollView from "./ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import Dialog from "react-native-dialog";
 import { magic } from "../helpers/ExpressionHelper";
 
 export default function NewSubject({ route, navigation }) {
@@ -316,11 +314,14 @@ export default function NewSubject({ route, navigation }) {
           ))}
         </View>
       </View>
-      <Dialog.Container visible={isDialogVariableOpen}>
-        <Dialog.Title>Nova variável</Dialog.Title>
-        <Dialog.Input
+      <Portal>
+          <Dialog style={{backgroundColor: colors.surface3}} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Nova variável</Dialog.Title>
+        <Dialog.Content>
+        <TextInput
+          style={{...styles.input, backgroundColor: colors.surface}}
           onChangeText={(text) => setNewVariableName(text)}
-        ></Dialog.Input>
+        ></TextInput>
         {newVariableName.length > 0 && operators.includes(newVariableName) && (
           <Text
             style={{
@@ -333,25 +334,31 @@ export default function NewSubject({ route, navigation }) {
             Nome de variável inválido. Operadores não são permitidos.
           </Text>
         )}
-        <Dialog.Button
-          label="Cancel"
+        </Dialog.Content>
+            <Dialog.Actions>
+
+        <Button
           onPress={() => setIsDialogVariableOpen(false)}
-        />
-        <Dialog.Button
-          label="Ok"
+        >Cancelar</Button>
+        <Button
           onPress={() => handleVariableCreation()}
           disabled={
             newVariableName.length == 0 || operators.includes(newVariableName)
           }
-        />
-      </Dialog.Container>
+        >Ok</Button>
+            </Dialog.Actions>
 
-      <Dialog.Container visible={isDialogValueOpen}>
-        <Dialog.Title>Adicionar valor</Dialog.Title>
-        <Dialog.Input
+      </Dialog>
+      </Portal>
+      <Portal>
+          <Dialog style={{backgroundColor:colors.surface3}} visible={isDialogValueOpen}>
+        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Adicionar valor</Dialog.Title>
+        <Dialog.Content>
+        <TextInput
+        style={{...styles.input, backgroundColor: colors.surface}}
           onChangeText={(text) => setNewValue(text.replace(",", "."))}
           keyboardType="numeric"
-        ></Dialog.Input>
+        ></TextInput>
         {newValue.length > 0 &&
           newValue.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) <
             0 && (
@@ -366,20 +373,22 @@ export default function NewSubject({ route, navigation }) {
               Valor inválido. Apenas números são permitidos.
             </Text>
           )}
-        <Dialog.Button
-          label="Cancel"
+          </Dialog.Content>
+          <Dialog.Actions>
+        <Button
           onPress={() => setIsDialogValueOpen(false)}
-        />
-        <Dialog.Button
+        >Cancelar</Button>
+        <Button
           disabled={
             newValue.search(
               /^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/
             ) < 0
           }
-          label="Ok"
           onPress={() => handleValueAddition()}
-        />
-      </Dialog.Container>
+        >Ok</Button>
+        </Dialog.Actions>
+      </Dialog>
+      </Portal>
     </ScrollView>
   );
 }
@@ -399,6 +408,12 @@ const styles = StyleSheet.create({
 
   section: {
     marginBottom: 24,
+  },
+
+  input: {
+    height: 40, 
+    borderRadius: 5, 
+    marginBottom: 8
   },
 
   subtitle: {

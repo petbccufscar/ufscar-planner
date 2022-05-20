@@ -1,19 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Touchable, View, TouchableOpacity } from 'react-native';
-import { ProgressBar, Colors, useTheme } from 'react-native-paper';
-import Constants from 'expo-constants';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Calendar from '../assets/icons/calendar.svg';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateSemester } from '../redux/actions/semesterActions';
-import { useNavigation } from '@react-navigation/core'
-import { formatDate } from '../helpers/helper';
 import { MaterialIcons } from '@expo/vector-icons';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Dialog from "react-native-dialog";
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { useSelector } from 'react-redux';
 import { ConfigSemester } from '../screens/dashboardScreens/Config';
-
+import { Portal, Dialog, Button, TextInput} from 'react-native-paper';
 
 function Bar(props) {
   const text = props.text || "";
@@ -99,20 +92,22 @@ export default function Progress() {
         </View>
         <StatusBar style="auto" />
       </View>
-      <Dialog.Container contentStyle={{backgroundColor:colors.surface}} visible={showDialog}>
+      <Portal>
+          <Dialog style={{backgroundColor:colors.surface}} visible={showDialog} onDismiss={() => setShowDialog(false)}>
         <Dialog.Title style={{color: colors.onSurfaceVariant}}>Escolha as datas do semestre</Dialog.Title>
-          <View >
+          <View style={{marginHorizontal:20}}>
         <ConfigSemester></ConfigSemester>
         </View>
-        <Dialog.Button
+        <Dialog.Actions>
+        <Button
           color={colors.primary}
-          label="Ok"
           onPress={() => {
             setShowDialog(false);
           }}
-        />
-      </Dialog.Container>
-      
+        >Ok</Button>
+        </Dialog.Actions>
+      </Dialog>
+      </Portal>
     </View>
   </>);
 }
