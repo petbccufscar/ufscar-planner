@@ -9,9 +9,8 @@ import {
     LayoutAnimation,
     Linking,
     TextInput,
-    ActivityIndicator
 } from "react-native";
-import { useTheme } from "react-native-paper";
+import { useTheme , ActivityIndicator} from "react-native-paper";
 import { floorDate, monthNames, offsetDate, weekDaysNames } from "../helpers/helper";
 import { EventCards } from './EventCards';
 import { FlatList } from "react-native-bidirectional-infinite-scroll";
@@ -203,24 +202,25 @@ export default function Agenda(props){
     const loadAtStart = async () => {
         let aux = []
         let auxMonth = firstMonth
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 1; i++) {
             auxMonth = prevMonth(auxMonth)
             aux = [auxMonth, ...aux]
         }
         setFirstMonth(auxMonth)
-        await sleep(20)
+        await sleep(10)
         setLoadedMonth([...aux,...loadedMonth])
         return []
     }
-    if (loadedMonth.length < 3)
+    if (loadedMonth.length < 2)
         loadAtEnd()
 
     if (open){
-        return (<View style={{flex:1}}>
+        return (<View style={{flex:1, backgroundColor:colors.primaryContainer}}>
             <FlatList
             onStartReached={loadAtStart}
             data={loadedMonth}
             marked={marked}
+            HeaderLoadingIndicator={() => (<ActivityIndicator style={{padding:10}} animating={true} color={colors.primary} />)}
             onEndReached={loadAtEnd}
             renderItem={({ item }) => <RenderMonthCalendar marked={marked} open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month}/>}
             showDefaultLoadingIndicators={true}
@@ -355,8 +355,8 @@ export function AgendaList(props) {
         <FlatList 
         onEndReached={loadAtEnd}
         ref={flatlistRef}
-        onStartReached={loadAtStart}
-        onStartReachedThreshold={100}
+        // onStartReached={loadAtStart}
+        // onStartReachedThreshold={100}
         onViewableItemsChanged={_onViewableItemsChanged.current}
         keyExtractor={(_, index) => index.toString()}   
         showDefaultLoadingIndicators={true}
