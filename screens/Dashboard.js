@@ -7,8 +7,9 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import { magic } from '../helpers/ExpressionHelper';
 import ScrollView from "./../components/ScrollView";
-import Progress from './Progress';
+import Progress from '../components/Progress';
 import TextTicker from 'react-native-text-ticker'
+import { SIGA } from '../helpers/helper';
 
 export default function Dashboard() {
   let events = useSelector(state => state.events).events
@@ -34,12 +35,6 @@ export default function Dashboard() {
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
     },
-    fab: {
-      position: 'absolute',
-      margin: 16,
-      right: 0,
-      bottom: 0,
-    }, 
     button: {
       flexDirection: "row",
       borderRadius: 10,
@@ -61,7 +56,6 @@ export default function Dashboard() {
       marginVertical: 20,
     },
     miscCont: {
-      padding: 10,
       paddingTop: 0,
       borderBottomWidth: 1,
       borderColor: theme.colors.onSurfaceVariant,
@@ -121,12 +115,14 @@ export default function Dashboard() {
         </View>
 
         <Progress/>
-        <TouchableOpacity style={{...styles.button,flex:1, margin:10}} onPress={()=> navigation.navigate("Siga")}>
-          <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
-          <Text style={styles.buttonText}>Login no Siga</Text>
+        <Text style={{color: theme.colors.onSurface, fontSize: 20, margin: 10}}>Entre em sua conta do SIGA</Text>
+        <Text style={{color: theme.colors.onSurfaceVariant}}>Faça login com o SIGA para importar as matérias que você está cursando.</Text>
+        <TouchableOpacity style={{...styles.button, width:'100%', marginTop: 10}} onPress={()=> navigation.navigate("Siga")}>
+          <SIGA/>
+          <Text style={{...styles.buttonText, flex:1}}>Entrar com o SIGA</Text>
+          <MaterialIcons name="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
         </TouchableOpacity>
       </View>
-      
       <View style={styles.buttonCont}>
         <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Configurações")}>
           <Feather name="settings" size={24} color={theme.colors.onSurfaceVariant} />
@@ -217,9 +213,6 @@ function MediaCard(props) {
     },
     row: {
       flexDirection: 'row'
-    },
-    col: {
-      flexDirection: 'column'
     },
     square: {
       width: 4,

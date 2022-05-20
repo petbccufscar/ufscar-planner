@@ -2,16 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { updateEvent } from '../redux/actions/eventActions'
+import { updateEvent } from '../../redux/actions/eventActions'
 import * as Notifications from "expo-notifications";
 import Dialog from "react-native-dialog";
 import { useTheme, Appbar, TouchableRipple, Switch, TextInput, Menu } from 'react-native-paper';
-import { updateUser } from '../redux/actions/userActions';
+import { updateUser } from '../../redux/actions/userActions';
 import { MaterialIcons } from '@expo/vector-icons';
-import { PreferencesContext } from '../theme/PreferencesContext';
+import { PreferencesContext } from '../../theme/PreferencesContext';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDate } from '../helpers/helper';
-import { updateSemester } from '../redux/actions/semesterActions';
+import { formatDate } from '../../helpers/helper';
+import { updateSemester } from '../../redux/actions/semesterActions';
 
 export default function Config() {
   const user = useSelector(state => state.user).user
@@ -61,14 +61,17 @@ export default function Config() {
     }
 
   });
+  const [money, setMoney] = useState(user.meal.toString());
   const handleMoneyChange = (value) => {
     try {
       const valor = parseFloat(value.substring(3))
-      console.log(valor)
-      if (!isNaN(valor))
+      if (!isNaN(valor)){
+        setMoney(value.substring(3))
         dispatch(updateUser({ ...user, meal: valor }))
-      else
+      }else {
+        setMoney('0')
         dispatch(updateUser({ ...user, meal: 0 }))
+      }
     } catch (e) {
     }
   }
@@ -83,6 +86,7 @@ export default function Config() {
     dispatch(updateUser({ ...user, campus: name }))
   }
   return (
+    <View style={{flex:1, backgroundColor:colors.surface1}}>
   <ScrollView>
     <View style={{...styles.container, paddingTop: 10}}>
       <View style={{...styles.opcao, marginTop:10, marginBottom: 0}}>
@@ -104,7 +108,7 @@ export default function Config() {
           <Text style={styles.text}>Valor padrão da refeição</Text>
         </View>
       </View>
-      <TextInput style={styles.textInput} value={"R$ " + user.meal} onChangeText={handleMoneyChange}></TextInput>
+      <TextInput style={styles.textInput} value={"R$ " + money} onChangeText={handleMoneyChange}></TextInput>
       
       <View style={styles.opcao}>
         <View style={styles.linha}>
@@ -133,7 +137,7 @@ export default function Config() {
       <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
 
     </View>
-  </ScrollView>)
+  </ScrollView></View>)
 }
 
 
@@ -142,12 +146,6 @@ export function ConfigSemester(){
   const dispatch = useDispatch();
   
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.surface1,
-      padding: 20,
-
-    },
     icon: {
       marginRight: 10
     },

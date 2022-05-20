@@ -68,7 +68,6 @@ export default function NewSubject({ route, navigation }) {
 
       while (endingIndex > begginingIndex && !foundCharacter) {
         const character = meanExpression.substring(begginingIndex, endingIndex);
-        console.log(character);
         if (
           operators.includes(character) ||
           Object.keys(meanDict).includes(character)
@@ -438,9 +437,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  variableOperatorContainer: {
-    padding: 8,
-  },
 
   buttonContainer: {
     marginLeft: 8,

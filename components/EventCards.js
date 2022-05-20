@@ -186,7 +186,7 @@ export function Task(props) {
 
 }
 
-export function CalendarTask(props) {
+export function EventCards(props) {
   const mostrarData = props.show || false
   let task = props.task;
   const navigation = useNavigation();
@@ -794,7 +794,6 @@ export function FreqRender(props) {
         </TouchableOpacity>
         <TextInput style={{textAlign:'center'}} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString():''} onChangeText={(text) => {
           if(dropvalue != null && dropvalue != undefined){
-            console.log(dict)
             let auxdict = {...dict}
             try{
             const aux = parseFloat(text)

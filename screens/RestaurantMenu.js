@@ -142,13 +142,6 @@ export default function Wallet() {
       color: theme.colors.outline,
       fontSize: 11,
     },
-    weekRow: {
-      flexDirection: "row",
-    },
-    space: {
-      height: 20,
-      backgroundColor: theme.colors.surface1,
-    },
   });
 
   return (

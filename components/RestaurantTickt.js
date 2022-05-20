@@ -27,7 +27,6 @@ export default function RestaurantTickets() {
   function handleCashChange() {
     if (value.length > 0) {
       user.money = parseFloat(value.replace(",", "."));
-      console.log(user.money);
       dispatcher(updateUser(user));
     }
   }

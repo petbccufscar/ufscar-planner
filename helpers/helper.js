@@ -1,4 +1,5 @@
 import React from "react";
+import {Text} from "react-native";
 
 export function Random() {
     const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -110,7 +111,7 @@ export const offsetDate = (date, days) => {
 
 
 export const weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
-export const weekDaysFullNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
+export const weekDaysFullNames = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado']
 
 export const monthNames = [
     'Janeiro',
@@ -139,3 +140,15 @@ export const minimum = (date) => {
   };
 
 export const  monthNamesShort= ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+export function parseTime( t ) {
+    var d = new Date();
+    var time = t.match( /(\d+)(?::(\d\d))?\s*(p?)/ );
+    d.setHours( parseInt( time[1]) + (time[3] ? 12 : 0) );
+    d.setMinutes( parseInt( time[2]) || 0 );
+    return d;
+}
+
+export function SIGA(){
+    return(<Text style={{fontFamily: 'sans-serif-condensed', color: '#F89837', fontWeight:'bold', fontSize:20}}>SIGA</Text>)
+}

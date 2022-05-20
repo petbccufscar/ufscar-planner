@@ -1,36 +1,28 @@
+import { Entypo, Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  LayoutAnimation,
-  Linking,
-  TextInput
+  Alert, LayoutAnimation,
+  Linking, StyleSheet, Text, TextInput, TouchableOpacity, View
 } from "react-native";
-import ScrollView from "./ScrollView";
-import Toast from "react-native-toast-message";
-import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
-import { useSelector, useDispatch } from "react-redux";
-import {
-  updateEvent,
-  addEvent,
-  removeEvent,
-} from "../redux/actions/eventActions";
 import Dialog from "react-native-dialog";
-  
-import { Button, IconButton, useTheme, FAB, Menu, Divider } from "react-native-paper";
-
-import { BWFont, magic, getTime } from "../helpers/ExpressionHelper";
-import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import { IconButton, Menu, useTheme } from "react-native-paper";
 import ScrollPicker from "react-native-picker-scrollview";
-import { Gradient, PickerGradSquare, SelGradSquare } from "./Gradient";
-import { isString } from "mathjs";
-export default function Event({ route, navigation }) {
+import Toast from "react-native-toast-message";
+import { useDispatch, useSelector } from "react-redux";
+import { getTime, magic } from "../helpers/ExpressionHelper";
+import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
+import {
+  addEvent, updateEvent
+} from "../redux/actions/eventActions";
+import { PickerGradSquare, SelGradSquare } from "../components/Gradient";
+import ScrollView from "../components/ScrollView";
+  
+
+
+
+
+export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
   const [isSubject, setIsSubject] = useState(task.is_subject||false);
@@ -52,8 +44,6 @@ export default function Event({ route, navigation }) {
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
   const [name, setName] = useState(task.name||"");
-  const firstTime = task.id == null || task.id == undefined;
-  const [editMode, setEditMode] = useState(firstTime);
   const [details, setDetails] = useState(task.details);
   const [notifications, setNotifications] = useState(task.notification);
   const [description, setDescription] = useState(task.description);
@@ -68,16 +58,6 @@ export default function Event({ route, navigation }) {
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
   const colors = useTheme().colors;
-
-
-  const changeWeekly = (e) => {
-    if (!e) {
-      setWeekly(false);
-      setIsSubject(false);
-    } else {
-      setWeekly(true);
-    }
-  };
 
   const dispatch = useDispatch();
 
@@ -120,11 +100,10 @@ export default function Event({ route, navigation }) {
   useEffect(() => {
     navigation.setOptions({
       headerTintColor: colors.onSurface,
-      headerTitle: editMode? 
-      isSubject? "Editar Matéria": "Editar Evento":
-      isSubject? "Detalhes da Matéria": "Detalhes do Evento",
+      headerTitle: isSubject? "Editar Matéria": "Editar Evento",
+
       headerRight: () => (
-        editMode && (
+        (
         <TouchableOpacity
           style={{backgroundColor: colors.primary, padding: 10, 
             borderRadius: 30, justifyContent: 'center', alignItems:'center',
@@ -140,7 +119,7 @@ export default function Event({ route, navigation }) {
                 type: LayoutAnimation.Types.easeOut,
               },
             });
-            if (editMode && details.length == 0 && !isSubject) {
+            if (details.length == 0 && !isSubject) {
               Toast.show({
                 type: "error",
                 text1: "Você deve colocar ao menos um horário",
@@ -158,11 +137,8 @@ export default function Event({ route, navigation }) {
                 });
               }
               else{
-                if (editMode) {
                   sendData();
-                  navigation.pop(1);
-                }
-                setEditMode(!editMode);
+                  navigation.pop();
               }
             }
           }
@@ -174,7 +150,6 @@ export default function Event({ route, navigation }) {
     });
   }, [
     route.params,
-    editMode,
     details,
     weekly,
     frequency,
@@ -605,7 +580,7 @@ export default function Event({ route, navigation }) {
       </View>
       <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
       
-        {editMode && (
+
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -615,7 +590,6 @@ export default function Event({ route, navigation }) {
             }}
             size={18}
           />
-        )}
       </View>
       </View>
     )
@@ -661,8 +635,7 @@ export default function Event({ route, navigation }) {
     
       </View>
       <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
-      
-        {editMode && (
+
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -674,7 +647,6 @@ export default function Event({ route, navigation }) {
             }}
             size={18}
           />
-        )}
       </View>
       </View>
     )
@@ -691,7 +663,7 @@ export default function Event({ route, navigation }) {
       </View>
       <View style={{alignItems: 'flex-end', justifyContent:'center', flex:1}}>
       
-        {editMode && (
+
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -701,7 +673,6 @@ export default function Event({ route, navigation }) {
             }}
             size={18}
           />
-        )}
       </View>
       </View>
     )
@@ -718,20 +689,12 @@ export default function Event({ route, navigation }) {
       paddingBottom: 20,
     },
   
-    sectionContainer: {
-      flexDirection: "row",
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: "#ddd",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     colorContainer: {
       flexDirection: "row",
       justifyContent: 'flex-start',
       alignItems: 'center',
-      marginLeft: 18,
-      marginTop: 5
+      marginHorizontal: 18,
+      marginTop: 5,
     },
     sectionIcon: {
       margin: 10,
@@ -741,32 +704,13 @@ export default function Event({ route, navigation }) {
       color: colors.onSurface
     },
   
-    details: {
-      flex: 1,
-    },
   
-    xButton: {
-      marginLeft: "auto",
-    },
   
-    detail: {
-      marginBottom: 20,
-    },
   
-    reminder: {
-      flex: 1,
-    },
   
     data: {
       textAlignVertical: "center",
       color: colors.onPrimary,
-    },
-    notification: {
-      marginBottom: 20,
-      flexDirection: "row",
-      height: 40,
-      alignContent: "center",
-      alignItems: "center",
     },
   
     description: {
@@ -781,15 +725,6 @@ export default function Event({ route, navigation }) {
       padding: 10,
       backgroundColor: colors.surface,
       color: colors.onSurface,
-    },
-    actionButton: {
-      backgroundColor: "#e8243c",
-      borderRadius: 10,
-      width: 200,
-    },
-    spacingDate: {
-      marginTop: 10,
-      marginBottom: 10,
     },
   
     dateAndDatepicker: {
@@ -822,105 +757,8 @@ export default function Event({ route, navigation }) {
       justifyContent: 'center',
   
     },
-  
-    deleteButton: {
-      margin: 20,
-      width: "50%",
-      alignSelf: "center",
-    },
     calendar: {
       marginRight: 10,
-    },
-    actionButtonLabel: {
-      color: "white",
-    },
-    tituloDetail:{
-      color: colors.onSurface,
-      fontSize:16,
-      fontWeight: 'bold',
-      marginBottom: 5
-    },
-    medfreqcontainer:{
-      paddingRight: 30
-    },
-    corpoDetail:{
-      color: colors.onSurfaceVariant,
-      fontSize: 14,
-    },
-    turmaDetail:{
-      color: colors.primary
-    },
-    corDetail: {
-      height: 20,
-      marginRight:5,
-      borderRadius: 5,
-      aspectRatio: 1,
-    },
-    deleteButton:{
-      marginTop: 30,
-      backgroundColor: colors.surface,
-      padding:10,
-      borderRadius: 100,
-      borderColor: colors.outline,
-      borderWidth: 1
-    },
-    iconDetail:{
-      marginRight: 2,
-      height: 24,
-      width:24,
-      
-    },
-    deleteFont:{
-      color: colors.error
-    },
-    linecenter:{
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    cortainer:{
-      margin:10,
-      marginLeft: 20,
-      
-    },
-    linhaEsquerdaDetail:{
-      flexDirection:'row',
-      alignItems: 'center'
-    },
-    containerSectionDetail:{
-      borderBottomWidth: 1,
-      borderBottomColor: colors.outline,
-      padding: 20,
-      paddingLeft: 0,
-      marginLeft: 20
-    },
-    botaoDetail: {
-      backgroundColor: colors.surface,
-      padding: 5,
-      marginRight: 5,
-      marginTop: 20,
-      marginLeft: 0,
-      borderColor: colors.outline,
-      borderRadius: 8,
-      borderWidth: 1,
-    },
-    nomeEventoDetail:{
-      color: colors.onSurface,
-      fontSize: 22,
-
-    },
-    fab: {
-      position: 'absolute',
-      shadowOpacity: 10,
-      borderRadius: 10,
-      backgroundColor: colors.surface3,
-      margin: 16,
-      right: 0,
-      bottom: 0,
-    },
-    containername:{
-      paddingLeft: 20,
-
     },
     choice:{
       marginBottom: 10,
@@ -935,137 +773,12 @@ export default function Event({ route, navigation }) {
   const events = useSelector((state) => state.events).events;
 
   const materias = events.filter(event => event.is_subject === true);
-    if(!editMode){
-      return (
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={styles.trueContainer}>
-          <View style={styles.cortainer}>
-          <View style={styles.linhaEsquerdaDetail}>
-          <Gradient style={styles.corDetail} color={color}/>
 
-          {turma.length > 0 &&(<Text style={styles.turmaDetail}>{`${turma}`}</Text>)}
-          {turma.length === 0 &&(<Text style={styles.nomeEventoDetail}>{`${name}`}</Text>)}
-          </View>
-          </View>
-          {
-          turma.length > 0 && (<Text style={{...styles.nomeEventoDetail, ...styles.containername}}>{`${name}`}</Text>)}
-          {description.length > 0 &&(
-          <View style={styles.containerSectionDetail}>
-          <Text style={styles.tituloDetail}>Descrição</Text>
-          <Text style={styles.corpoDetail}>{description}</Text>
-          </View>
-          )}
-          <View style={styles.containerSectionDetail}>
-          <View style={styles.linhaEsquerdaDetail}>
-          <View style={styles.medfreqcontainer}>
-          <Text style={styles.tituloDetail}>Média</Text>
-          <Text style={styles.corpoDetail}>{resultMean}</Text>
-          </View><View style={styles.medfreqcontainer}>
-          <Text style={styles.tituloDetail}>Frequência</Text>
-          <Text style={styles.corpoDetail}>{resultFreq}</Text>
-          </View>
-          </View>
-          <ScrollView horizontal={true}>
-            <View style={styles.linhaEsquerdaDetail}>
-              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
-                navigation.navigate("Subject", {
-                  type:'editMean',
-                  task: {
-                    ...task,
-                    grade: grade,
-                    frequency: frequency,
-                    mean: mean,
-                  },
-                })}>
-                <Text style={{color:colors.onSurface}}>Editar média</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.botaoDetail}  onPress={() =>
-                navigation.navigate("Subject", {
-                  type:'editFrequency',
-                  task: {
-                    ...task,
-                    grade: grade,
-                    frequency: frequency,
-                    mean: mean,
-                  },
-                })}>
-                <Text style={{color:colors.onSurface}}>Editar frequência</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-          </View>
-          {isSubject && teachers.length > 0 &&(<View style={styles.containerSectionDetail}>
-          <View style={styles.linhaEsquerdaDetail}>
-            <View style={styles.iconDetail}>
-          <MaterialCommunityIcons name="account" size={24} color={colors.onSurfaceVariant} />
-          </View>
-          <Text style={styles.tituloDetail}>Professores</Text>
-          </View>
-          {teachers.map((teacher, index) => (
-          <Text style={styles.corpoDetail} key={index}>{teacher}</Text>))
-        }
-        </View>)}
-          <View style={styles.containerSectionDetail}>
-            <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}>
-                <MaterialCommunityIcons name="clock" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-              </View>
-              <Text style={styles.tituloDetail}>Horários</Text>
-              
-            </View>
-            {details.map((detail, index) => 
-            (<Text style={styles.corpoDetail} key={index}>{`${
-                weekly
-                  ? week[detail.day] + " " + `${formatHour(detail.datetime_init)}`
-                  : formatDateWithHour(detail.datetime_init)
-              }`} {` - ${formatHour(
-                detail.datetime_end
-              )}`}</Text>))
-            }
-          </View>
-          {
-          notifications.length > 0 &&(
-          <View style={styles.containerSectionDetail}>
-            <View style={styles.linhaEsquerdaDetail}>
-              <View style={styles.iconDetail}> 
-                <MaterialCommunityIcons name="bell" style={styles.iconDetail} size={24} color={colors.onSurfaceVariant} />
-              </View>
-              <Text style={styles.tituloDetail}>Notificações</Text>
-            </View>
-            { notifications.map((notification, index) => (
-            <Text style={styles.corpoDetail} key={index}>{notificationText(notification)}</Text>))
-            }
-          </View>)
-          }
-          <View style={styles.linecenter}>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => {
-          dispatch(removeEvent(task));
-          navigation.pop();
-          }}>
-              <View style={styles.linhaEsquerdaDetail}>
-                <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
-                <Text style={styles.deleteFont}>Excluir</Text>
-              </View>  
-            </TouchableOpacity>
-          </View>
-
-          <FAB
-            style={styles.fab}
-            color={colors.primary}
-            icon="pencil"
-            onPress={() =>setEditMode(true)}
-          />
-
-        </View>
-      </ScrollView>)
-    }
-
-  
   return (
     <ScrollView style={styles.container}>
       <View style={styles.trueContainer}>
       
-      {editMode && (<><View style={styles.colorContainer}>
+      {(<><View style={styles.colorContainer}>
         <View style={styles.sectionIcon}>
         <Ionicons name="color-palette" size={24} color={colors.onSurface} />
         </View>
@@ -1073,7 +786,7 @@ export default function Event({ route, navigation }) {
           <Text style={styles.title}>Cor</Text>
         </View>
       </View>
-      <View style={styles.colorContainer}>
+      <View style={{...styles.colorContainer, justifyContent:'space-between'}}>
       
         <SelGradSquare color={0} state={color} setState={setColor}/>
         <SelGradSquare color={1} state={color} setState={setColor}/>
@@ -1085,7 +798,7 @@ export default function Event({ route, navigation }) {
         <SelGradSquare color={7} state={color} setState={setColor}/>
 
       </View>
-      <View style={styles.colorContainer}>
+      <View style={{...styles.colorContainer, justifyContent:'space-between'}}>
         <SelGradSquare color={8} state={color} setState={setColor}/>
         <SelGradSquare color={9} state={color} setState={setColor}/>
         <SelGradSquare color={10} state={color} setState={setColor}/>
@@ -1108,7 +821,7 @@ export default function Event({ route, navigation }) {
             <Text style={styles.title}>Título</Text>
           </View>
         </View>
-        <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+        <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
           placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
           onChangeText={text => setName(text)}
           />
@@ -1124,7 +837,7 @@ export default function Event({ route, navigation }) {
                 <Text style={styles.title}>Turma</Text>
               </View>
           </View>
-          <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+          <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
           placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
           onChangeText={text => setTurma(text)}
         />
@@ -1142,7 +855,7 @@ export default function Event({ route, navigation }) {
               <Text style={styles.title}>Descrição</Text>
             </View>
         </View>
-        <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput} editable={editMode}
+        <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput}
         placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
         onChangeText={text => setDescription(text)}/>
       </View>
@@ -1164,7 +877,7 @@ export default function Event({ route, navigation }) {
 
       {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher}/>))
       }
-      {editMode && isSubject &&(
+      { isSubject &&(
         <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog}/>
       )}
 
@@ -1208,8 +921,8 @@ export default function Event({ route, navigation }) {
         <View style={{height: 10}}></View>
 
         {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail}/>))}
-        {editMode && (
-            <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>)}
+
+            <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog}/>
       </View>
 
       
@@ -1319,7 +1032,7 @@ export default function Event({ route, navigation }) {
         <View style={{height: 10}}></View>
 
         { notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification}/>))}
-        {editMode && (<BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>)}
+        <BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog}/>
       </View>
 
 

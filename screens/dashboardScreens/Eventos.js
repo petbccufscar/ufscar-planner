@@ -13,7 +13,7 @@ import {
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
-import { EventRender } from "../../components/CalendarTask"; 
+import { EventRender } from "../../components/EventCards";
 import { defaultSubject, defaultTask } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";
@@ -61,7 +61,7 @@ export default function SubjectScreen(props) {
                 style={styles.fab}
                 color={colors.primary}
                 icon="plus"
-                onPress={ () => navigation.navigate("Event", { task: defaultTask })}
+                onPress={ () => navigation.navigate("EditScreen", { task: defaultTask })}
                 />
             </View>
         )

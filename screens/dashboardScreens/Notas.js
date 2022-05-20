@@ -12,7 +12,7 @@ import {
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
 import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
-import { NotaRender } from "../../components/CalendarTask"; 
+import { NotaRender } from "../../components/EventCards";
 import { defaultSubject } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";
@@ -24,15 +24,6 @@ export default function NotasScreen(props) {
     const navigation = useNavigation()
 
     const styles = StyleSheet.create({
-        fab: {
-            position: 'absolute',
-            shadowOpacity: 10,
-            borderRadius: 10,
-            backgroundColor: colors.surface3,
-            margin: 16,
-            right: 0,
-            bottom: 0,
-        },
         container:{ 
             flex: 1, 
             alignItems: 'center',

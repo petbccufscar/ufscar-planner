@@ -1,36 +1,33 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {NavigationContainer} from "@react-navigation/native";
+import {createStackNavigator} from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
-import React, { useEffect, useRef } from "react";
-import { Platform, StyleSheet, UIManager, AppRegistry } from "react-native";
-import { Provider as PaperProvider } from "react-native-paper";
+import React, {useEffect, useRef} from "react";
+import {AppRegistry, Platform, StyleSheet, UIManager} from "react-native";
+import {Provider as PaperProvider} from "react-native-paper";
 import Toast from "react-native-toast-message";
-import {
-  Provider as ReduxProvider,
-  useDispatch,
-  useSelector,
-} from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import Event from "./components/Event";
+import {Provider as ReduxProvider, useDispatch, useSelector,} from "react-redux";
+import {PersistGate} from "redux-persist/integration/react";
+import Details from "./screens/Details";
 
 import Subject from "./components/NewSubject";
 
-import { loadEvents } from "./redux/actions/eventActions";
-import { persistor, store } from "./redux/store";
+import {loadEvents} from "./redux/actions/eventActions";
+import {persistor, store} from "./redux/store";
 import Restaurant from "./screens/Restaurant";
-import { PreferencesContext } from "./theme/PreferencesContext";
+import {PreferencesContext} from "./theme/PreferencesContext";
 
-import {CombinedDefaultTheme, CombinedDarkTheme} from "./theme/Themes";
+import {CombinedDarkTheme, CombinedDefaultTheme} from "./theme/Themes";
 import BottomNavBar from "./navigation/BottomNavBar"
 
-import Config from "./screens/Config";
-import AboutUs from "./screens/AboutUs";
-import Contact from "./screens/Contact";
+import Config from "./screens/dashboardScreens/Config";
+import AboutUs from "./screens/dashboardScreens/AboutUs";
+import Contact from "./screens/dashboardScreens/Contact";
 import SubjectScreen from "./screens/dashboardScreens/Materias";
 import EventScreen from "./screens/dashboardScreens/Eventos";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SigaScreen from "./screens/dashboardScreens/Siga";
+import EditScreen from "./screens/EditScreen";
 
 
 if (
@@ -111,30 +108,32 @@ function Loader() {
       <PreferencesContext.Provider value={preferences}>
         <PaperProvider theme={theme}>
           <NavigationContainer theme={theme}>
-            <HomeStackRoutes.Navigator>
+            <HomeStackRoutes.Navigator screenOptions={() => ({headerStyle: {
+                    backgroundColor: theme.colors.surface1,
+                  },
+                  headerTintColor: theme.colors.onSurface,})}>
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
                 <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
               <HomeStackRoutes.Screen
                 name="Event"
-                component={Event}
+                component={Details}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   headerTitleAlign: "center",
                 })}
               />
+                <HomeStackRoutes.Screen
+                    name="EditScreen"
+                    component={EditScreen}
+                    options={() => ({
+                        headerTitleAlign: "center",
+                    })}
+                />
               <HomeStackRoutes.Screen
                 name="Restaurant"
                 component={Restaurant}
                 options={() => ({
                   title: "Carteirinha",
-                  // headerStyle: {
-                  //   backgroundColor: "#e8243c",
-                  // },
-                  // headerTintColor: "#fff",
                   headerTitleAlign: "center",
                 })}
               />
@@ -142,11 +141,6 @@ function Loader() {
                 name="Subject"
                 component={Subject}
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
-
                   title: "Média",
                   headerTitleAlign: "center",
                 })}
@@ -164,10 +158,6 @@ function Loader() {
                 name="Eventos"
                 component={EventScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Eventos",
                 })}
             />
@@ -175,10 +165,6 @@ function Loader() {
                 name="Materias"
                 component={SubjectScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Matérias",
                 })}
               />
@@ -186,10 +172,6 @@ function Loader() {
                 name="Notas"
                 component={NotasScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Notas",
                 })}
                 />
@@ -197,10 +179,6 @@ function Loader() {
                 name="Frequencia"
                 component={FreqScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Frequência",
                 })}
                 />
@@ -208,10 +186,6 @@ function Loader() {
                 name="Siga"
                 component={SigaScreen} 
                 options={() => ({
-                  headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,
                   title: "Siga",
                 })}
                 />
@@ -225,10 +199,4 @@ function Loader() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });

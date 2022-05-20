@@ -12,7 +12,7 @@ import { formatDate } from '../helpers/helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dialog from "react-native-dialog";
-import { ConfigSemester } from './Config';
+import { ConfigSemester } from '../screens/dashboardScreens/Config';
 
 
 function Bar(props) {
@@ -129,11 +129,6 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
 
-  progressTitle: {
-    fontWeight: "bold",
-    fontSize: 25,
-    textAlign: "center",
-  },
 
   progress: {
     flex: 1,
@@ -148,42 +143,10 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
 
-  line: {
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: "center",
-    alignSelf: "center",
-    borderRadius: 15
-  },
 
-  semestre: {
-    marginRight: 40,
-  },
 
-  spacing: {
-    marginTop: 18,
-  },
 
-  spacingDate: {
-    marginTop: 10,
-  },
 
-  dateAndDatepicker: {
-    flexDirection: "row",
-    textAlignVertical: 'center',
-    backgroundColor: "#e8243c",
-    padding: 8,
-    borderRadius: 10
-  },
 
-  calendar: {
-    color: "black",
-    flex: 1,
-    marginRight: 10,
-  },
 
-  data: {
-    textAlignVertical: 'center',
-    color: "white",
-  }
 });

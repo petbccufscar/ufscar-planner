@@ -13,7 +13,7 @@ import {
 import ScrollView from '../components/ScrollView'
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants'
-import { Task } from '../components/CalendarTask'
+import { Task } from '../components/EventCards'
 import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
 import { Provider, useDispatch, useSelector } from "react-redux";
@@ -83,34 +83,6 @@ export default function App() {
     items: {
       marginTop: 10,
     },
-    writeTaskWrapper: {
-      position: "absolute",
-      bottom: 30,
-      width: "100%",
-      flexDirection: "column",
-      justifyContent: "space-around",
-      alignItems: "center",
-    },
-    input: {
-      paddingVertical: 15,
-      paddingHorizontal: 15,
-      backgroundColor: "#FFF",
-      borderRadius: 60,
-      borderColor: "#C0C0C0",
-      borderWidth: 1,
-      width: 250,
-    },
-    addWrapper: {
-      width: 60,
-      height: 60,
-      backgroundColor: "#FFF",
-      borderRadius: 60,
-      justifyContent: "center",
-      alignItems: "center",
-      borderColor: "#C0C0C0",
-      borderWidth: 1,
-    },
-    addText: {},
   });
 
   return (

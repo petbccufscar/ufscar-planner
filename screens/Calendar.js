@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { InteractionManager, View, StyleSheet } from "react-native";
 import { Agenda as AAgenda, LocaleConfig, CalendarProps } from 'react-native-calendars';
 import { useSelector } from 'react-redux';
-import Agenda from './Agenda';
-import { CalendarTask } from './CalendarTask';
+import Agenda from '../components/Agenda';
+import { EventCards } from '../components/EventCards';
 import { FAB } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/core";
 import Toast from 'react-native-toast-message';
@@ -45,7 +45,6 @@ function EventsScreen() {
 
   let stMarked = useSelector(state => state.cards).marked;
   let stItems = useSelector(state => state.cards).items;
-  console.log(Object.keys(stItems).length);
 
 
   const renderEmptyDate = () => {
@@ -91,14 +90,14 @@ function EventsScreen() {
               label: 'Matéria',
               style: styles.fab,
               color: colors.primary,
-              onPress: () => navigation.navigate("Event", { task: defaultSubject }),
+              onPress: () => navigation.navigate("EditScreen", { task: defaultSubject }),
             },
             {
               icon: 'calendar',
               label: 'Evento',
               style: styles.activedFAB,
               color: colors.onPrimary,
-              onPress: () => navigation.navigate("Event", { task: defaultTask }),
+              onPress: () => navigation.navigate("EditScreen", { task: defaultTask }),
               small: false,
             },
           ]}

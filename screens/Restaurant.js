@@ -147,11 +147,6 @@ const styles = StyleSheet.create({
   pressable: {
     paddingTop: 20,
   },
-  pressableEdit: {
-    color: "grey",
-    padding: 10,
-    marginRight: 0,
-  },
   textPessable: {
     fontSize: 35,
     color: "#E8243C",
