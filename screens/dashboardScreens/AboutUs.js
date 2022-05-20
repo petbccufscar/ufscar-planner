@@ -52,17 +52,17 @@ export default function AboutUs() {
     <>
       <ScrollView>
         <View style={styles.background}>
-          <View style= {{alignItems: "center", marginBottom: 5}}>
+          <View style={{ alignItems: "center", marginBottom: 5 }}>
             <MaterialIcons name="info" size={54} color={theme.colors.primary} />
           </View>
 
-          <View style={styles.textWall}> 
+          <View style={styles.textWall}>
             <Text style={styles.title}>O UFSCar Planner</Text>
 
             <Text style={styles.text}>O aplicativo UFSCar Planner foi desenvolvido pelo grupo PET do curso de Ciência da Computação do campus de São Carlos com o objetivo de ajudar os alunos a organizarem seus estudos e se integrarem das atvididades oferecidas pela universidade.</Text>
           </View>
 
-          <View style={styles.textWall}> 
+          <View style={styles.textWall}>
             <Text style={styles.title}>Os colaboradores</Text>
 
             <Text style={styles.text}>Esse projeto contou com a colaboração dos alunos:</Text>
@@ -78,11 +78,11 @@ export default function AboutUs() {
     • Vinicius Quaresma da Luz`}</Text>
 
             <Text style={styles.text}>Também contou com a supervisão do tutor:</Text>
-            
+
             <Text style={[styles.contentText]}>{`    • Renato Bueno`}</Text>
           </View>
 
-          <View style={styles.textWall}> 
+          <View style={styles.textWall}>
             <Text style={styles.title}>O PET</Text>
 
             <Text style={styles.text}>Conheça mais sobre o PET-BCC:</Text>

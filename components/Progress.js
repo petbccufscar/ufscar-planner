@@ -6,7 +6,7 @@ import { useTheme } from 'react-native-paper';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useSelector } from 'react-redux';
 import { ConfigSemester } from '../screens/dashboardScreens/Config';
-import { Portal, Dialog, Button, TextInput} from 'react-native-paper';
+import { Portal, Dialog, Button, TextInput } from 'react-native-paper';
 
 function Bar(props) {
   const text = props.text || "";
@@ -36,7 +36,7 @@ export default function Progress() {
   let message = '';
   let progress = 0;
   calculateProgress();
-  const colors = useTheme().colors 
+  const colors = useTheme().colors
   const [showDialog, setShowDialog] = useState(false);
 
 
@@ -79,13 +79,13 @@ export default function Progress() {
         <Bar style={styles.progress} progress={progress * 100} text={'Progresso do Semestre'} >
         </Bar>
         <View style={{ flexDirection: 'row' }}>
-          <View style={{ alignItems: 'flex-start',flex:1,}}>
-            <Text style={{color:colors.onSurfaceVariant, ...styles.message}}>{message}</Text>
+          <View style={{ alignItems: 'flex-start', flex: 1, }}>
+            <Text style={{ color: colors.onSurfaceVariant, ...styles.message }}>{message}</Text>
           </View>
-          <View style={{ alignItems: 'flex-end',flex:1, }}>
-            <TouchableOpacity onPress={() => setShowDialog(true)} style={{borderWidth:1, borderColor: colors.outline ,borderRadius: 8, backgroundColor: colors.surface, alignItems:'center', justifyContent:'center' ,flexDirection:'row', paddingHorizontal: 10, paddingVertical:5}}>
-              <MaterialIcons name="settings" size={18} color={colors.primary} style={{paddingRight:5}} />
-              <Text style={{color: colors.onSurface}}>Ajustar</Text>
+          <View style={{ alignItems: 'flex-end', flex: 1, }}>
+            <TouchableOpacity onPress={() => setShowDialog(true)} style={{ borderWidth: 1, borderColor: colors.outline, borderRadius: 8, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
+              <MaterialIcons name="settings" size={18} color={colors.primary} style={{ paddingRight: 5 }} />
+              <Text style={{ color: colors.onSurface }}>Ajustar</Text>
 
             </TouchableOpacity>
           </View>
@@ -93,20 +93,20 @@ export default function Progress() {
         <StatusBar style="auto" />
       </View>
       <Portal>
-          <Dialog style={{backgroundColor:colors.surface}} visible={showDialog} onDismiss={() => setShowDialog(false)}>
-        <Dialog.Title style={{color: colors.onSurfaceVariant}}>Escolha as datas do semestre</Dialog.Title>
-          <View style={{marginHorizontal:20}}>
-        <ConfigSemester></ConfigSemester>
-        </View>
-        <Dialog.Actions>
-        <Button
-          color={colors.primary}
-          onPress={() => {
-            setShowDialog(false);
-          }}
-        >Ok</Button>
-        </Dialog.Actions>
-      </Dialog>
+        <Dialog style={{ backgroundColor: colors.surface }} visible={showDialog} onDismiss={() => setShowDialog(false)}>
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha as datas do semestre</Dialog.Title>
+          <View style={{ marginHorizontal: 20 }}>
+            <ConfigSemester></ConfigSemester>
+          </View>
+          <Dialog.Actions>
+            <Button
+              color={colors.primary}
+              onPress={() => {
+                setShowDialog(false);
+              }}
+            >Ok</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
     </View>
   </>);

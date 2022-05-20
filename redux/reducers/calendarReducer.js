@@ -95,8 +95,8 @@ export const calendarReducer = (state = initialState, action) => {
         let cid = st.cid;
         let marked = { ...st.marked };
         let keysMap = {}
-        
-        if (action.payload.is_submited == true){
+
+        if (action.payload.is_submited == true) {
             return {
                 items: items,
                 cid: cid,
@@ -171,7 +171,7 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (iterador <= datef) {
             d = floorDate(iterador)
-            aux[d] = (newItems[d]||[]).filter((e) => e.id == event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
+            aux[d] = (newItems[d] || []).filter((e) => e.id == event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
             if (aux[d].length > 0) {
                 event = aux[d][0]
                 break

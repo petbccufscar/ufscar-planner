@@ -41,72 +41,72 @@ export function Days(props) {
   let days = [];
   const week = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-    let i = props.days["begin"];
-    // Percorrendo os dias da semana
-    do {
-      days.push({
-        date: i,
-        title: week[i.getDay()],
-        day: i.getDate(),
-        today: props.selectedDay.getDay() == i.getDay(),
-      });
-      i = new Date(i.getTime() + 24 * 60 * 60 * 1000);
-    } while (i.getDay() != props.days["end"].getDay());
-
-
-    // Estilo
-    const styles = StyleSheet.create({
-      weekDays: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        backgroundColor: theme.colors.primaryContainer,
-      },
-      dias: {
-        width: hourWidth,
-        height: hourHeight,
-        backgroundColor: 'transparent',
-        alignItems: "center",
-        justifyContent: "center",
-        alignSelf: "center",
-      },
+  let i = props.days["begin"];
+  // Percorrendo os dias da semana
+  do {
+    days.push({
+      date: i,
+      title: week[i.getDay()],
+      day: i.getDate(),
+      today: props.selectedDay.getDay() == i.getDay(),
     });
+    i = new Date(i.getTime() + 24 * 60 * 60 * 1000);
+  } while (i.getDay() != props.days["end"].getDay());
+
+
+  // Estilo
+  const styles = StyleSheet.create({
+    weekDays: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      backgroundColor: theme.colors.primaryContainer,
+    },
+    dias: {
+      width: hourWidth,
+      height: hourHeight,
+      backgroundColor: 'transparent',
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+  });
 
 
 
 
 
 
-    return (
-      <View style={styles.weekDays}>
-        {days.map((day, i) => {
-          return (
-            <Pressable
-              onPress={() => props.setSelectedDay(day.date)}
-              style={styles.dias}
-              key={day.day}
+  return (
+    <View style={styles.weekDays}>
+      {days.map((day, i) => {
+        return (
+          <Pressable
+            onPress={() => props.setSelectedDay(day.date)}
+            style={styles.dias}
+            key={day.day}
+          >
+            <Text style={{ color: theme.colors.onPrimaryContainer, fontWeight: 'bold', fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                alignContent: "center",
+                width: width,
+                height: height,
+                borderRadius: 100,
+                backgroundColor: day.today ? theme.colors.primary : "transparent",
+              }}
             >
-              <Text style={{color: theme.colors.onPrimaryContainer, fontWeight: 'bold', fontSize: 14, paddingBottom: 5}}>{day.title}</Text>
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  width: width,
-                  height: height,
-                  borderRadius: 100,
-                  backgroundColor: day.today ? theme.colors.primary : "transparent",
-                }}
+              <Text
+                style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onPrimaryContainer }}
               >
-                <Text
-                  style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onPrimaryContainer }}
-                >
-                  {day.day}
-                </Text>
-              </View>
-            </Pressable>
-          );
-        })}
-      </View>
-    );
-  
+                {day.day}
+              </Text>
+            </View>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+
 }

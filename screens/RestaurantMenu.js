@@ -202,7 +202,7 @@ export default function Wallet() {
           ></Menu>
         ) : null}
 
-        <View style={{height: 10}}></View>
+        <View style={{ height: 10 }}></View>
 
       </ScrollView>
     </View>

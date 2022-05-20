@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Linking } from 'react-native';
-import {useTheme} from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 export default function Contato() {
   const colors = useTheme().colors;
@@ -16,13 +16,15 @@ export default function Contato() {
       },
       headerRight: () => (
         <TouchableOpacity
-          style={{backgroundColor: colors.primary, padding: 10, 
-            borderRadius: 30, justifyContent: 'center', alignItems:'center',
-            marginRight: 10}}
+          style={{
+            backgroundColor: colors.primary, padding: 10,
+            borderRadius: 30, justifyContent: 'center', alignItems: 'center',
+            marginRight: 10
+          }}
           onPress={() => Linking.openURL(`mailto:petbcc@ufscar.br?subject=Fale conosco: Ufscar Planner&body=${text}`)}
         >
 
-          <Text style={{color: colors.onPrimary}}>Enviar</Text>
+          <Text style={{ color: colors.onPrimary }}>Enviar</Text>
         </TouchableOpacity>),
     });
   }, [
@@ -41,10 +43,10 @@ export default function Contato() {
     },
     input: {
       backgroundColor: colors.surface5,
-      width:'100%',
+      width: '100%',
       minHeight: '25%',
       borderRadius: 9,
-      padding:5,
+      padding: 5,
       textAlignVertical: 'top'
     }
   });

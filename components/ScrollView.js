@@ -12,11 +12,11 @@ export default function ScrollView(props) {
     const colors = useTheme().colors;
     const [onTop, setOnTop] = useState(true);
     const navigation = useNavigation();
-    
+
     function changeHeaderColor(position) {
         navigation.setOptions({
             headerStyle: {
-                backgroundColor: position == 0 ? colors.surface1 :colors.surface5,
+                backgroundColor: position == 0 ? colors.surface1 : colors.surface5,
             },
             headerShadowVisible: false,
             headerTintColor: colors.onSurface,

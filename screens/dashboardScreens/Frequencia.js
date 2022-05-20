@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  LayoutAnimation,
-  Linking,
-  TextInput,
+    Text,
+    View,
+    TouchableOpacity,
+    Alert,
+    StyleSheet,
+    LayoutAnimation,
+    Linking,
+    TextInput,
 } from "react-native";
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
@@ -24,31 +24,31 @@ export default function FreqScreen(props) {
     const navigation = useNavigation()
 
     const styles = StyleSheet.create({
-        container:{ 
-            flex: 1, 
+        container: {
+            flex: 1,
             alignItems: 'center',
-            backgroundColor:  colors.surface1, 
-            paddingHorizontal:20,
+            backgroundColor: colors.surface1,
+            paddingHorizontal: 20,
             paddingBottom: 60
         },
-        scroll:{ 
-            flex: 1, 
-            backgroundColor: 'red', 
+        scroll: {
+            flex: 1,
+            backgroundColor: 'red',
         },
 
     })
     return (
-    <View style={styles.scroll}>  
-    <ScrollView>
-        <View style={styles.container}>
-        {classes.map((item, idx) => {
-            return <FreqRender key={idx} task={item} />;
-        })}
-        {classes.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhuma aula registrada</Text>}
+        <View style={styles.scroll}>
+            <ScrollView>
+                <View style={styles.container}>
+                    {classes.map((item, idx) => {
+                        return <FreqRender key={idx} task={item} />;
+                    })}
+                    {classes.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhuma aula registrada</Text>}
+                </View>
+
+            </ScrollView>
         </View>
-        
-    </ScrollView>
-    </View>
     )
 
 }

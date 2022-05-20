@@ -114,8 +114,8 @@ export default function RestaurantTickets() {
       flex: 1,
     },
     input: {
-      height: 40, 
-      borderRadius: 5, 
+      height: 40,
+      borderRadius: 5,
       marginBottom: 8,
       backgroundColor: theme.colors.surface
     },
@@ -155,36 +155,36 @@ export default function RestaurantTickets() {
         </ScrollView>
       </View>
       <Portal>
-        <Dialog style={{backgroundColor:theme.colors.surface3}} visible={open}  nDismiss={() => setOpen(false)}> 
-        
-        <Dialog.Title>Alterar</Dialog.Title>
-        <Dialog.Content>
-        <TextInput
-          style={styles.input}
-          keyboardType="decimal-pad"
-          value={value.toString()}
-          onChangeText={setValue}
-        ></TextInput>
-        </Dialog.Content>
-        <Dialog.Actions>
-        <Button
-          onPress={() => {
-            setOpen(false);
-            setValue(user.money.toString());
-          }}
-        >Cancelar</Button>
-        <Button
-          disabled={
-            value.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
-          }
-          onPress={() => {
-            handleCashChange();
-            setOpen(false);
-          }}
-        >Ok</Button>
-        </Dialog.Actions>
+        <Dialog style={{ backgroundColor: theme.colors.surface3 }} visible={open} nDismiss={() => setOpen(false)}>
 
-      </Dialog>
+          <Dialog.Title>Alterar</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              style={styles.input}
+              keyboardType="decimal-pad"
+              value={value.toString()}
+              onChangeText={setValue}
+            ></TextInput>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                setOpen(false);
+                setValue(user.money.toString());
+              }}
+            >Cancelar</Button>
+            <Button
+              disabled={
+                value.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
+              }
+              onPress={() => {
+                handleCashChange();
+                setOpen(false);
+              }}
+            >Ok</Button>
+          </Dialog.Actions>
+
+        </Dialog>
       </Portal>
     </View>
   );

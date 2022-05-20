@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Entypo, Feather  } from '@expo/vector-icons';
+import { Entypo, Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 import { ColorPicker, fromHsv } from "react-native-color-picker";
@@ -53,15 +53,17 @@ export function SelGradSquare(props) {
         square: {
             alignItems: 'center',
             justifyContent: 'center',
-            width: wp("8.5%"), height:  wp("8.5%"),
+            width: wp("8.5%"), height: wp("8.5%"),
             borderRadius: 8,
-            ...(props.style||{})
-            
+            ...(props.style || {})
+
         }
     })
     return (
-        <TouchableOpacity onPress={() => setState(props.color)} style={{borderRadius: 9,
-            borderWidth: state == props.color?1:0, }}>
+        <TouchableOpacity onPress={() => setState(props.color)} style={{
+            borderRadius: 9,
+            borderWidth: state == props.color ? 1 : 0,
+        }}>
             <Gradient color={props.color} style={styles.square}>
                 {state == props.color && (<Feather name="check" size={24} color="white" />)}
             </Gradient>
@@ -77,10 +79,10 @@ export function PickerGradSquare(props) {
         square: {
             alignItems: 'center',
             justifyContent: 'center',
-            width: wp("8.5%"), height:  wp("8.5%"),
+            width: wp("8.5%"), height: wp("8.5%"),
             borderRadius: 8,
-            borderWidth : isNaN(state)? 1: 0,
-            ...(props.style||{})
+            borderWidth: isNaN(state) ? 1 : 0,
+            ...(props.style || {})
         }
     })
     return (
@@ -94,25 +96,25 @@ export function PickerGradSquare(props) {
 
 
             <Portal>
-            <Dialog visible={openColorDialog} onDismiss={() => setOpenColorDialog(false)}>
-                <Dialog.Title>Alterar</Dialog.Title>
-                <ColorPicker
-                    onColorChange={(color) => (aux = color)}
-                    defaultColor={props.color}
-                    style={{ width: 300, height: 300 }}
-                />
-                <Dialog.Actions>
-                <Button
-                    onPress={() => setOpenColorDialog(false)}
-                >Cancelar</Button>
-                <Button
-                    onPress={() => {
-                        setState(fromHsv(aux));
-                        setOpenColorDialog(false);
-                    }}
-                >Ok</Button>
-                </Dialog.Actions>
-            </Dialog>
+                <Dialog visible={openColorDialog} onDismiss={() => setOpenColorDialog(false)}>
+                    <Dialog.Title>Alterar</Dialog.Title>
+                    <ColorPicker
+                        onColorChange={(color) => (aux = color)}
+                        defaultColor={props.color}
+                        style={{ width: 300, height: 300 }}
+                    />
+                    <Dialog.Actions>
+                        <Button
+                            onPress={() => setOpenColorDialog(false)}
+                        >Cancelar</Button>
+                        <Button
+                            onPress={() => {
+                                setState(fromHsv(aux));
+                                setOpenColorDialog(false);
+                            }}
+                        >Ok</Button>
+                    </Dialog.Actions>
+                </Dialog>
             </Portal>
         </>
     )

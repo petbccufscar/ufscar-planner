@@ -1,22 +1,22 @@
-import {NavigationContainer} from "@react-navigation/native";
-import {createStackNavigator} from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
-import React, {useEffect, useRef} from "react";
-import {AppRegistry, Platform, StyleSheet, UIManager} from "react-native";
-import {Provider as PaperProvider} from "react-native-paper";
+import React, { useEffect, useRef } from "react";
+import { AppRegistry, Platform, StyleSheet, UIManager } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
-import {Provider as ReduxProvider, useDispatch, useSelector,} from "react-redux";
-import {PersistGate} from "redux-persist/integration/react";
+import { Provider as ReduxProvider, useDispatch, useSelector, } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import Details from "./screens/Details";
 
 import Subject from "./components/NewSubject";
 
-import {loadEvents} from "./redux/actions/eventActions";
-import {persistor, store} from "./redux/store";
+import { loadEvents } from "./redux/actions/eventActions";
+import { persistor, store } from "./redux/store";
 import Restaurant from "./screens/Restaurant";
-import {PreferencesContext} from "./theme/PreferencesContext";
+import { PreferencesContext } from "./theme/PreferencesContext";
 
-import {CombinedDarkTheme, CombinedDefaultTheme} from "./theme/Themes";
+import { CombinedDarkTheme, CombinedDefaultTheme } from "./theme/Themes";
 import BottomNavBar from "./navigation/BottomNavBar"
 
 import Config from "./screens/dashboardScreens/Config";
@@ -108,10 +108,12 @@ function Loader() {
       <PreferencesContext.Provider value={preferences}>
         <PaperProvider theme={theme}>
           <NavigationContainer theme={theme}>
-            <HomeStackRoutes.Navigator screenOptions={() => ({headerStyle: {
-                    backgroundColor: theme.colors.surface1,
-                  },
-                  headerTintColor: theme.colors.onSurface,})}>
+            <HomeStackRoutes.Navigator screenOptions={() => ({
+              headerStyle: {
+                backgroundColor: theme.colors.surface1,
+              },
+              headerTintColor: theme.colors.onSurface,
+            })}>
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
                 <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
@@ -122,13 +124,13 @@ function Loader() {
                   headerTitleAlign: "center",
                 })}
               />
-                <HomeStackRoutes.Screen
-                    name="EditScreen"
-                    component={EditScreen}
-                    options={() => ({
-                        headerTitleAlign: "center",
-                    })}
-                />
+              <HomeStackRoutes.Screen
+                name="EditScreen"
+                component={EditScreen}
+                options={() => ({
+                  headerTitleAlign: "center",
+                })}
+              />
               <HomeStackRoutes.Screen
                 name="Restaurant"
                 component={Restaurant}
@@ -145,55 +147,55 @@ function Loader() {
                   headerTitleAlign: "center",
                 })}
               />
-            <HomeStackRoutes.Screen
+              <HomeStackRoutes.Screen
                 name="Configurações"
                 component={Config} />
-            <HomeStackRoutes.Screen
+              <HomeStackRoutes.Screen
                 name="AboutUs"
                 component={AboutUs} />
-            <HomeStackRoutes.Screen
+              <HomeStackRoutes.Screen
                 name="Contato"
                 component={Contact} />
-            <HomeStackRoutes.Screen
+              <HomeStackRoutes.Screen
                 name="Eventos"
-                component={EventScreen} 
+                component={EventScreen}
                 options={() => ({
                   title: "Eventos",
                 })}
-            />
-            <HomeStackRoutes.Screen
+              />
+              <HomeStackRoutes.Screen
                 name="Materias"
-                component={SubjectScreen} 
+                component={SubjectScreen}
                 options={() => ({
                   title: "Matérias",
                 })}
               />
-            <HomeStackRoutes.Screen
+              <HomeStackRoutes.Screen
                 name="Notas"
-                component={NotasScreen} 
+                component={NotasScreen}
                 options={() => ({
                   title: "Notas",
                 })}
-                />
-            <HomeStackRoutes.Screen
+              />
+              <HomeStackRoutes.Screen
                 name="Frequencia"
-                component={FreqScreen} 
+                component={FreqScreen}
                 options={() => ({
                   title: "Frequência",
                 })}
-                />
-            <HomeStackRoutes.Screen
+              />
+              <HomeStackRoutes.Screen
                 name="Siga"
-                component={SigaScreen} 
+                component={SigaScreen}
                 options={() => ({
                   title: "Siga",
                 })}
-                />
-                </HomeStackRoutes.Navigator>
+              />
+            </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>
       </PreferencesContext.Provider>
-      <Toast bottomOffset={20} text1NumberOfLines={2}/>
+      <Toast bottomOffset={20} text1NumberOfLines={2} />
     </>
   );
 }

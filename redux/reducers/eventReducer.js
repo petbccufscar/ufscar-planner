@@ -78,7 +78,7 @@ export const eventReducer = (state = initialState, action) => {
             auxid = action.payload.id || state.nextId
             aux = {
                 ...state,
-                events: [...state.events, { ...action.payload, id: auxid}],
+                events: [...state.events, { ...action.payload, id: auxid }],
                 nextId: state.nextId + 1
             }
             refazerNotificações(aux)
