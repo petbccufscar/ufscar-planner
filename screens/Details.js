@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
-import { FAB, useTheme } from "react-native-paper";
+import { FAB, useTheme, Checkbox } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime, magic } from "../helpers/ExpressionHelper";
 import { formatDateWithHour } from "../helpers/helper";
 import {
-  removeEvent
+  removeEvent, updateEvent
 } from "../redux/actions/eventActions";
 import { Gradient } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
@@ -25,6 +25,7 @@ export default function Details({ route, navigation }) {
 
   task = items.find((e) => e.id == task.id) || {};
 
+  const [isSubmited, setIsSubmited] = useState(task.is_submited || false);
   const isSubject = task.is_subject || false;
   const weekly = task.weekly;
   const color = task.color || 0;
@@ -36,17 +37,20 @@ export default function Details({ route, navigation }) {
   const grade = task.grade || {};
   const frequency = (task.frequency || "(aulasDadas - faltas)/aulasDadas");
   const mean = task.mean || "(p1+p2+p3)/3";
+  const whenSubmit = task.when_submit || null;
 
   const name = task.name || "";
   const details = task.details || [];
   const notifications = task.notification || [];
   const description = task.description || "";
 
-
-
   const colors = useTheme().colors;
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateEvent({...task, is_submited: isSubmited}));
+  },[isSubmited])
 
   const week = [
     "Domingo",
@@ -106,15 +110,6 @@ export default function Details({ route, navigation }) {
       flex: 1,
       paddingBottom: 20,
     },
-
-
-
-
-
-
-
-
-
     tituloDetail: {
       color: colors.onSurface,
       fontSize: 16,
@@ -227,6 +222,20 @@ export default function Details({ route, navigation }) {
               <Text style={styles.corpoDetail}>{description}</Text>
             </View>
           )}
+          {whenSubmit != null && (
+            <View style={styles.containerSectionDetail}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{...styles.tituloDetail, marginBottom:0, flex:1}}>Concluído</Text>
+              <Checkbox
+                status={isSubmited ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setIsSubmited(!isSubmited);
+                }}
+              />
+              </View>
+            </View>
+          )}
+
           <View style={styles.containerSectionDetail}>
             <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.medfreqcontainer}>
