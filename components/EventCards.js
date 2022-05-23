@@ -8,7 +8,7 @@ import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@exp
 import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDown from "react-native-paper-dropdown";
 const mapsSrc = require('../assets/icons/maps.png')
 
 export function Task(props) {
@@ -587,19 +587,12 @@ export function NotaRender(props) {
     </TouchableOpacity>
   );
 }
-DropDownPicker.addTranslation("BR", {
-  PLACEHOLDER: "Selecione um item",
-  SEARCH_PLACEHOLDER: "Digite algo...",
-  SELECTED_ITEMS_COUNT_TEXT: "{count} itens foram selecionados", // See below for advanced options
-  NOTHING_TO_SHOW: "Nada a mostrar"
-});
 
-// Set as default
-DropDownPicker.setLanguage("BR");
 
 
 export function FreqRender(props) {
-  const colors = useTheme().colors
+  const theme = useTheme()
+  const colors = theme.colors
 
   let resultFreq = "";
   let task = props.task;
@@ -769,17 +762,19 @@ export function FreqRender(props) {
       <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
         <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha os meios de presença dessa matéria:</Dialog.Title>
         <Dialog.Content>
-          <Text style={{ color: colors.onSurfaceVariant, margin: 5 }}>Variável</Text>
-          <DropDownPicker
-            open={open}
+          <DropDown
+            label={"Variável"}
+            mode={"outlined"}
+            visible={open}
+            showDropDown={() => setOpen(true)}
+            onDismiss={() => setOpen(false)}
             value={dropvalue}
-            items={items}
-            setOpen={setOpen}
+            list={items}
             setValue={setDropalue}
-            setItems={setItems}
+            theme={theme}
 
           />
-          <Text>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
+          <Text style={{color:colors.onSurface}}>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={() => {
