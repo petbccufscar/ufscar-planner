@@ -98,10 +98,12 @@ export default function EditScreen({ route, navigation }) {
       is_submited: isSubmited,
       when_submit: whenSubmit
     };
-    if (task.id != undefined && task.id != null) {
-      dispatch(updateEvent(task));
-    } else {
-      dispatch(addEvent(task));
+    if (name.length > 0){
+      if (task.id != undefined && task.id != null) {
+        dispatch(updateEvent(task));
+      } else {
+        dispatch(addEvent(task));
+      }
     }
   };
 
