@@ -130,10 +130,10 @@ export default function EditScreen({ route, navigation }) {
                     type: "error",
                     text1: "Você deve colocar um nome no evento",
                   });
-                } else if (isSubject && (name.length == 0 || teachers.length == 0 || turma.length == 0)) {
+                } else if (isSubject && (name.length == 0 || turma.length == 0)) {
                   Toast.show({
                     type: "error",
-                    text2: "Você deve colocar um nome, um professor e uma turma",
+                    text2: "Você deve colocar um nome e uma turma",
                   });
                 }
                 else {
