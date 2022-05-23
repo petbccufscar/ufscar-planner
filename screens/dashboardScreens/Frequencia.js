@@ -33,7 +33,7 @@ export default function FreqScreen(props) {
         },
         scroll: {
             flex: 1,
-            backgroundColor: 'red',
+            backgroundColor: colors.surface1,
         },
 
     })
