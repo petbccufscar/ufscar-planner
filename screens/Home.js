@@ -43,7 +43,6 @@ export default function App() {
     tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject && floorDate(new Date(e.detail.datetime_init)) == today)];
   }
   const nome = useSelector((state) => state.user).user.name;
-  const navigation = useNavigation();
   const theme = useTheme();
 
   function calculateAcontecendoAgora() {
@@ -84,6 +83,16 @@ export default function App() {
     items: {
       marginTop: 10,
     },
+    infoRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 10,
+    },
+    infoText: {
+      color: theme.colors.primary,
+      marginLeft: 10,
+    }
+
   });
 
   return (
@@ -100,15 +109,26 @@ export default function App() {
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
             <AcontecendoAgora list={acontecendoAgora} />
-
+            <View style={styles.infoRow}>
+              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+              <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
+            </View>
             <Text style={styles.sectionTitle}>Aulas de hoje</Text>
-
+            {classes.length == 0 && (<View style={styles.infoRow}>
+              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+              <Text style={styles.infoText}>Não há aulas para hoje.</Text>
+            </View>)
+            }
             {classes.map((item, idx) => {
               return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} />;
             })}
 
             <Text style={styles.sectionTitle}>Eventos de hoje</Text>
-
+            {tasks.length == 0 && (<View style={styles.infoRow}>
+              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+              <Text style={styles.infoText}>Não há eventos para hoje.</Text>
+            </View>)
+            }
             <View style={styles.items}>
               {tasks.map((item, idx) => {
                 return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
