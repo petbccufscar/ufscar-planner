@@ -662,7 +662,6 @@ export function FreqRender(props) {
     },
     barprogress: {
       height: 25,
-      backgroundColor: 'red',
       borderRadius: 20,
       width: resultFreq
     },
@@ -764,7 +763,7 @@ export function FreqRender(props) {
 
     </View>
     <View style={styles.bar}>
-      <View style={styles.barprogress}></View>
+      <Gradient style={styles.barprogress} color={task.color}></Gradient>
     </View>
     <Portal>
       <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
