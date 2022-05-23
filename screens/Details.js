@@ -25,7 +25,6 @@ export default function Details({ route, navigation }) {
 
   task = items.find((e) => e.id == task.id) || {};
 
-  const [isSubmited, setIsSubmited] = useState(task.is_submited || false);
   const isSubject = task.is_subject || false;
   const weekly = task.weekly;
   const color = task.color || 0;
@@ -48,9 +47,6 @@ export default function Details({ route, navigation }) {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(updateEvent({...task, is_submited: isSubmited}));
-  },[isSubmited])
 
   const week = [
     "Domingo",
@@ -220,19 +216,6 @@ export default function Details({ route, navigation }) {
             <View style={styles.containerSectionDetail}>
               <Text style={styles.tituloDetail}>Descrição</Text>
               <Text style={styles.corpoDetail}>{description}</Text>
-            </View>
-          )}
-          {whenSubmit != null && (
-            <View style={styles.containerSectionDetail}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{...styles.tituloDetail, marginBottom:0, flex:1}}>Concluído</Text>
-              <Checkbox
-                status={isSubmited ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setIsSubmited(!isSubmited);
-                }}
-              />
-              </View>
             </View>
           )}
 

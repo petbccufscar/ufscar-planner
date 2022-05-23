@@ -791,7 +791,14 @@ export default function EditScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.trueContainer}>
+      {(whenSubmit != null || isSubject) && (<>
+          <View style={styles.colorContainer}>
+            <TouchableOpacity style={!isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(!isSubmited)}>
+              {isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
+              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Concluído</Text>
 
+            </TouchableOpacity>
+          </View></>)}
         {(<><View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
             <Ionicons name="color-palette" size={24} color={colors.onSurface} />
@@ -1008,30 +1015,7 @@ export default function EditScreen({ route, navigation }) {
           confirmTextIOS={"Confirmar"}
           headerTextIOS={"Escolha uma data/hora"}
         />
-        {(whenSubmit != null || isSubject) && (<>
-          <View style={styles.colorContainer}>
-            <View style={styles.sectionIcon}>
-              <MaterialCommunityIcons name="file-check" size={24} color={colors.onSurface} />
 
-            </View>
-            <View style={styles.description}>
-              {!isSubject && (<Text style={styles.title}>Já foi entregue?</Text>)}
-              {isSubject && (<Text style={styles.title}>Já foi finalizada?</Text>)}
-            </View>
-          </View>
-
-          <View style={styles.colorContainer}>
-            <TouchableOpacity style={!isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(true)}>
-              {isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Sim</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity style={isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(false)}>
-              {!isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Não</Text>
-
-            </TouchableOpacity>
-          </View></>)}
 
         <View style={styles.choice}>
           <View style={styles.colorContainer}>

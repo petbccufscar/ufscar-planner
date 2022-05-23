@@ -64,10 +64,6 @@ export default function App() {
     calculateAcontecendoAgora()
   }, [items])
 
-
-
-
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
