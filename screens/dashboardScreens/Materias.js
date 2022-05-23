@@ -42,7 +42,7 @@ export default function SubjectScreen(props) {
         },
         scroll: {
             flex: 1,
-            backgroundColor: 'red',
+            backgroundColor: colors.surface1,
         },
 
     })

@@ -3,15 +3,16 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
-import { FAB, useTheme } from "react-native-paper";
+import { FAB, useTheme, Checkbox } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime, magic } from "../helpers/ExpressionHelper";
 import { formatDateWithHour } from "../helpers/helper";
 import {
-  removeEvent
+  removeEvent, updateEvent
 } from "../redux/actions/eventActions";
 import { Gradient } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
+import { withPreventDoubleClick } from '../helpers/withPreventDoubleClick';
 
 
 
@@ -22,8 +23,7 @@ export default function Details({ route, navigation }) {
 
   const items = useSelector((state) => state.events).events;
 
-  task = items.find((e) => e.id == task.id);
-
+  task = items.find((e) => e.id == task.id) || {};
 
   const isSubject = task.is_subject || false;
   const weekly = task.weekly;
@@ -36,17 +36,17 @@ export default function Details({ route, navigation }) {
   const grade = task.grade || {};
   const frequency = (task.frequency || "(aulasDadas - faltas)/aulasDadas");
   const mean = task.mean || "(p1+p2+p3)/3";
+  const whenSubmit = task.when_submit || null;
 
   const name = task.name || "";
-  const details = task.details;
-  const notifications = task.notification;
-  const description = task.description;
-
-
+  const details = task.details || [];
+  const notifications = task.notification || [];
+  const description = task.description || "";
 
   const colors = useTheme().colors;
 
   const dispatch = useDispatch();
+
 
   const week = [
     "Domingo",
@@ -78,6 +78,8 @@ export default function Details({ route, navigation }) {
   let resultMean = "";
   let resultFreq = "";
 
+  const TouchableOpacityD = withPreventDoubleClick(TouchableOpacity);
+
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
     resultMean = "" + (meanRes.result || 0);
@@ -104,15 +106,6 @@ export default function Details({ route, navigation }) {
       flex: 1,
       paddingBottom: 20,
     },
-
-
-
-
-
-
-
-
-
     tituloDetail: {
       color: colors.onSurface,
       fontSize: 16,
@@ -225,6 +218,7 @@ export default function Details({ route, navigation }) {
               <Text style={styles.corpoDetail}>{description}</Text>
             </View>
           )}
+
           <View style={styles.containerSectionDetail}>
             <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.medfreqcontainer}>
@@ -307,15 +301,15 @@ export default function Details({ route, navigation }) {
               </View>)
           }
           <View style={styles.linecenter}>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => {
-              dispatch(removeEvent(task));
+            <TouchableOpacityD style={styles.deleteButton} onPress={() => {
               navigation.pop();
+              dispatch(removeEvent(task));
             }}>
               <View style={styles.linhaEsquerdaDetail}>
                 <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
                 <Text style={styles.deleteFont}>Excluir</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacityD>
           </View>
         </View>
       </ScrollView>

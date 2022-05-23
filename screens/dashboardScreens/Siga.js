@@ -13,7 +13,7 @@ import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontA
 import { useSelector, useDispatch } from "react-redux";
 import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
 import { FreqRender } from "../../components/EventCards";
-import { defaultSubject, parseTime, weekDaysFullNames } from "../../helpers/helper";
+import { defaultSubject, parseTime, SIGA, weekDaysFullNames } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";
 import { addEvent } from "../../redux/actions/eventActions";
@@ -22,7 +22,8 @@ export default function SigaScreen() {
   const navigation = useNavigation();
   const [messageE, setMessageE] = useState("");
   const [messageS, setMessageS] = useState("");
-  const colors = useTheme().colors;
+  const theme = useTheme()
+  const colors = theme.colors;
   const [visible, setVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -154,7 +155,8 @@ export default function SigaScreen() {
     description: {
       padding: 20,
       textAlign: 'justify',
-
+      color: colors.onSurface,
+      width:'100%'
     },
     btn: {
       padding: 10,
@@ -175,11 +177,26 @@ export default function SigaScreen() {
     }
   })
   return (<View style={{ flex: 1, backgroundColor: colors.surface3, alignItems: 'center' }}>
-    <Text style={styles.description}>Ao conectar no siga, suas matérias anteriores registradas pelo siga serão substituidas pelas atuais</Text>
+    <SIGA size={30} style={{marginTop: 20}}/>
+    <Text style={{...styles.description, paddingBottom:0}}>Faça login usando as mesmas credenciais que você utiliza ao entrar no SIGA.
+    </Text><Text style={{...styles.description, paddingTop:0}}>Ao conectar, suas matérias anteriores registradas pelo siga serão substituidas pelas atuais</Text>
     {messageE.length > 0 && (<Text style={styles.message}>{messageE}</Text>)}
     {messageS.length > 0 && (<Text style={styles.messageS}>{messageS}</Text>)}
+
+    <View style={{flexDirection:'row', alignItems:'center', marginBottom:5, marginTop:10, marginLeft:20}}>
+    <MaterialIcons name="account-circle" size={24} color={colors.onSurfaceVariant} />
+      <Text style={{color:colors.onSurfaceVariant, marginLeft: 5, flex:1}}>
+        Número UFSCar ou CPF
+      </Text>
+    </View>
     <View style={styles.pssdRow}>
       <TextInput style={styles.textInput} value={username} onChangeText={setUsername} placeholder={"CPF ou RA"}></TextInput>
+    </View>
+    <View style={{flexDirection:'row', alignItems:'center', marginBottom:5, marginTop:10, marginLeft:20}}>
+    <MaterialIcons name="lock" size={24} color={colors.onSurfaceVariant} />
+      <Text style={{color:colors.onSurfaceVariant, marginLeft: 5, flex:1}}>
+      Senha
+      </Text>
     </View>
     <View style={styles.pssdRow}>
       <TextInput style={styles.pssdInput} value={password} onChangeText={setPassword} placeholder={"Senha do SIGA"} secureTextEntry={!visible}>

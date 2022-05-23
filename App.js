@@ -84,9 +84,9 @@ export default function App() {
 }
 
 function Loader() {
-  const events = useSelector((state) => state.events).events;
+  const eventsSt = useSelector((state) => state.events);
   const dispatch = useDispatch();
-  dispatch(loadEvents(events));
+  dispatch(loadEvents(eventsSt));
 
   const [isThemeDark, setIsThemeDark] = React.useState(false);
 

@@ -20,7 +20,6 @@ import ScrollView from "../components/ScrollView";
 
 
 
-
 export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -34,7 +33,6 @@ export default function EditScreen({ route, navigation }) {
   const [turma, setTurma] = useState(task.turma || "");
   const [teachers, setTeachers] = useState(task.teachers || []);
   const [whenSubmit, setWhenSubmit] = useState(task.when_submit || null);
-
 
 
   // tela separada
@@ -55,6 +53,17 @@ export default function EditScreen({ route, navigation }) {
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
+
+
+  const [sendingData, setSendingData] = useState(false);
+
+  useEffect(() => {
+    if (sendingData){
+      sendData()
+      navigation.pop();
+    }
+
+  }, [sendingData])
 
   const colors = useTheme().colors;
 
@@ -89,10 +98,12 @@ export default function EditScreen({ route, navigation }) {
       is_submited: isSubmited,
       when_submit: whenSubmit
     };
-    if (task.id != undefined && task.id != null) {
-      dispatch(updateEvent(task));
-    } else {
-      dispatch(addEvent(task));
+    if (name.length > 0){
+      if (task.id != undefined && task.id != null) {
+        dispatch(updateEvent(task));
+      } else {
+        dispatch(addEvent(task));
+      }
     }
   };
 
@@ -110,16 +121,6 @@ export default function EditScreen({ route, navigation }) {
               marginRight: 10
             }}
             onPress={() => {
-              LayoutAnimation.configureNext({
-                duration: 200,
-                create: {
-                  type: LayoutAnimation.Types.easeIn,
-                  property: LayoutAnimation.Properties.opacity,
-                },
-                update: {
-                  type: LayoutAnimation.Types.easeOut,
-                },
-              });
               if (details.length == 0 && !isSubject) {
                 Toast.show({
                   type: "error",
@@ -131,15 +132,14 @@ export default function EditScreen({ route, navigation }) {
                     type: "error",
                     text1: "Você deve colocar um nome no evento",
                   });
-                } else if (isSubject && (name.length == 0 || teachers.length == 0 || turma.length == 0)) {
+                } else if (isSubject && (name.length == 0 || turma.length == 0)) {
                   Toast.show({
                     type: "error",
-                    text2: "Você deve colocar um nome, um professor e uma turma",
+                    text2: "Você deve colocar um nome e uma turma",
                   });
                 }
                 else {
-                  sendData();
-                  navigation.pop();
+                  setSendingData(true)
                 }
               }
             }
@@ -793,7 +793,14 @@ export default function EditScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.trueContainer}>
+      {(whenSubmit != null || isSubject) && (<>
+          <View style={styles.colorContainer}>
+            <TouchableOpacity style={!isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(!isSubmited)}>
+              {isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
+              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Concluído</Text>
 
+            </TouchableOpacity>
+          </View></>)}
         {(<><View style={styles.colorContainer}>
           <View style={styles.sectionIcon}>
             <Ionicons name="color-palette" size={24} color={colors.onSurface} />
@@ -1010,30 +1017,7 @@ export default function EditScreen({ route, navigation }) {
           confirmTextIOS={"Confirmar"}
           headerTextIOS={"Escolha uma data/hora"}
         />
-        {(whenSubmit != null || isSubject) && (<>
-          <View style={styles.colorContainer}>
-            <View style={styles.sectionIcon}>
-              <MaterialCommunityIcons name="file-check" size={24} color={colors.onSurface} />
 
-            </View>
-            <View style={styles.description}>
-              {!isSubject && (<Text style={styles.title}>Já foi entregue?</Text>)}
-              {isSubject && (<Text style={styles.title}>Já foi finalizada?</Text>)}
-            </View>
-          </View>
-
-          <View style={styles.colorContainer}>
-            <TouchableOpacity style={!isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(true)}>
-              {isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Sim</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity style={isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(false)}>
-              {!isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Não</Text>
-
-            </TouchableOpacity>
-          </View></>)}
 
         <View style={styles.choice}>
           <View style={styles.colorContainer}>

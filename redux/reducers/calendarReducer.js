@@ -230,7 +230,8 @@ export const calendarReducer = (state = initialState, action) => {
         let marked = {}
         let items = {}
         let cid = 0
-        let events = action.payload
+        let events = action.payload.events
+        const nextId = action.payload.nextId
 
         for (let i = 0; i < events.length; i++) {
             if (events[i].is_submited != true)
@@ -276,6 +277,7 @@ export const calendarReducer = (state = initialState, action) => {
             ...st,
             items: items,
             marked: marked,
+            nextId: nextId,
             cid: cid,
             load: true
         }
