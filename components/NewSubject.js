@@ -174,7 +174,7 @@ export default function NewSubject({ route, navigation }) {
           { borderColor: colors.outline, backgroundColor: colors.surface },
         ]}
       >
-        <Text style={styles.subtitle}>{`${type == "editMean" ? "Média" : "Frequência"
+        <Text style={{...styles.subtitle, color:colors.onSurface}}>{`${type == "editMean" ? "Média" : "Frequência"
           } atual`}</Text>
         {meanExpressionArray.join("") &&
           validExpression(meanExpressionArray.join("")) ? (
@@ -197,7 +197,7 @@ export default function NewSubject({ route, navigation }) {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.subtitle}>
+        <Text style={{...styles.subtitle, color:colors.onSurface}}>
           Fórmula da {type == "editMean" ? "média" : "frequência"}
         </Text>
         <View style={styles.sectionContent}>
@@ -220,7 +220,7 @@ export default function NewSubject({ route, navigation }) {
                   </KeyboardButton>
                 );
               } else {
-                return <Text key={index} style={styles.operator}>{character}</Text>;
+                return <Text key={index} style={{...styles.operator, color:colors.onSurface}}>{character}</Text>;
               }
             })}
           </View>
@@ -228,7 +228,7 @@ export default function NewSubject({ route, navigation }) {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.subtitle}>Operadores</Text>
+        <Text style={{...styles.subtitle,color:colors.onSurface}}>Operadores</Text>
         <View style={[styles.sectionContent, styles.row, { marginLeft: -8 }]}>
           {operators.map((operator, index) => (
             <View style={styles.buttonContainer} key={index}>
@@ -264,7 +264,7 @@ export default function NewSubject({ route, navigation }) {
 
       <View style={styles.section}>
         <View style={styles.row}>
-          <Text style={styles.subtitle}>
+          <Text style={{...styles.subtitle, color:colors.onSurface}}>
             Variáveis da {type == "editMean" ? "média" : "frequência"}
           </Text>
           <TouchableOpacity
