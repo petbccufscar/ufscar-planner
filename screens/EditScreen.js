@@ -20,7 +20,6 @@ import ScrollView from "../components/ScrollView";
 
 
 
-
 export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
@@ -34,7 +33,6 @@ export default function EditScreen({ route, navigation }) {
   const [turma, setTurma] = useState(task.turma || "");
   const [teachers, setTeachers] = useState(task.teachers || []);
   const [whenSubmit, setWhenSubmit] = useState(task.when_submit || null);
-
 
 
   // tela separada
@@ -55,6 +53,17 @@ export default function EditScreen({ route, navigation }) {
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
+
+
+  const [sendingData, setSendingData] = useState(false);
+
+  useEffect(() => {
+    if (sendingData){
+      sendData()
+      navigation.pop();
+    }
+
+  }, [sendingData])
 
   const colors = useTheme().colors;
 
@@ -110,16 +119,6 @@ export default function EditScreen({ route, navigation }) {
               marginRight: 10
             }}
             onPress={() => {
-              LayoutAnimation.configureNext({
-                duration: 200,
-                create: {
-                  type: LayoutAnimation.Types.easeIn,
-                  property: LayoutAnimation.Properties.opacity,
-                },
-                update: {
-                  type: LayoutAnimation.Types.easeOut,
-                },
-              });
               if (details.length == 0 && !isSubject) {
                 Toast.show({
                   type: "error",
@@ -138,8 +137,7 @@ export default function EditScreen({ route, navigation }) {
                   });
                 }
                 else {
-                  sendData();
-                  navigation.pop();
+                  setSendingData(true)
                 }
               }
             }
