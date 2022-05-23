@@ -28,6 +28,7 @@ import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SigaScreen from "./screens/dashboardScreens/Siga";
 import EditScreen from "./screens/EditScreen";
+import Welcome from "./screens/Welcome";
 
 
 if (
@@ -114,6 +115,14 @@ function Loader() {
               },
               headerTintColor: theme.colors.onSurface,
             })}>
+              <HomeStackRoutes.Screen
+                name="Welcome"
+                component={Welcome}
+                options={() => ({
+                  headerTitleAlign: "center",
+                  headerShown:false
+                })}
+              />
               <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
                 <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
               </HomeStackRoutes.Group>
