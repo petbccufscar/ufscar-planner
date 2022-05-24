@@ -603,7 +603,7 @@ export function NotaRender(props) {
                 inputProps={{style:styles.inputText}}
                 theme={{colors: {primary: colors.primary}}}
               />
-              <TextInput label="Valor" placeholder="0.0" style={styles.inputText} keyboardType="number-pad"
+              <TextInput label="Valor" placeholder="0.0" placeholderTextColor={colors.outline} style={styles.inputText} keyboardType="number-pad"
               value={selected != undefined && selected != null ? dict[selected].toString() : ''} 
               onChangeText={(text) => {
                 if (selected != null && selected != undefined) {
@@ -840,7 +840,7 @@ export function FreqRender(props) {
               }}>
                 <Text style={{ fontSize: 20, color: colors.onPrimary }}>-</Text>
               </TouchableOpacity>
-              <TextInput style={{ ...styles.input, textAlign: 'center' }} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString() : ''} onChangeText={(text) => {
+              <TextInput style={{ ...styles.input, textAlign: 'center' }} placeholderTextColor={colors.outline} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString() : ''} onChangeText={(text) => {
                 if (dropvalue != null && dropvalue != undefined) {
                   let auxdict = { ...dict }
                   try {

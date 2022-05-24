@@ -190,7 +190,7 @@ export default function SigaScreen() {
       </Text>
     </View>
     <View style={styles.pssdRow}>
-      <TextInput style={styles.textInput} value={username} onChangeText={setUsername} placeholder={"CPF ou RA"}></TextInput>
+      <TextInput style={styles.textInput} value={username} onChangeText={setUsername} placeholder={"CPF ou RA"} placeholderTextColor={colors.outline}></TextInput>
     </View>
     <View style={{flexDirection:'row', alignItems:'center', marginBottom:5, marginTop:10, marginLeft:20}}>
     <MaterialIcons name="lock" size={24} color={colors.onSurfaceVariant} />
@@ -199,7 +199,7 @@ export default function SigaScreen() {
       </Text>
     </View>
     <View style={styles.pssdRow}>
-      <TextInput style={styles.pssdInput} value={password} onChangeText={setPassword} placeholder={"Senha do SIGA"} secureTextEntry={!visible}>
+      <TextInput style={styles.pssdInput} value={password} onChangeText={setPassword} placeholder={"Senha do SIGA"} placeholderTextColor={colors.outline} secureTextEntry={!visible}>
       </TextInput>
       <TouchableOpacity style={styles.pssdBtn} onPress={() => setVisible(!visible)}>
         {!visible && <MaterialIcons name="visibility" size={24} color={colors.onSurface} />}

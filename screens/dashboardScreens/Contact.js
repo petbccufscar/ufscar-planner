@@ -43,6 +43,7 @@ export default function Contato() {
     },
     input: {
       backgroundColor: colors.surface5,
+      color: colors.onSurface,
       width: '100%',
       minHeight: '25%',
       borderRadius: 9,
@@ -55,7 +56,7 @@ export default function Contato() {
     <View style={styles.container}>
       <Text style={styles.text}>Escreva aqui sua sugestão, dúvida ou problema:</Text>
       {/* multiline textInput*/}
-      <TextInput style={styles.input} multiline={true} numberOfLines={4} onChangeText={(text) => setText(text)} value={text} />
+      <TextInput style={styles.input} selectionColor={colors.primary} multiline={true} numberOfLines={4} onChangeText={(text) => setText(text)} value={text} />
 
       <StatusBar style="auto" />
     </View>

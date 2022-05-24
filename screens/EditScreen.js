@@ -2,8 +2,9 @@ import { Entypo, Feather, FontAwesome, Ionicons, MaterialCommunityIcons, Materia
 import React, { useEffect, useState } from "react";
 import {
   Alert, LayoutAnimation,
-  Linking, StyleSheet, Text, TextInput, TouchableOpacity, View
+  Linking, StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from "react-native";
+import {ScrollView as DefaultScrollView} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { IconButton, Menu, useTheme, Portal, Button, Dialog } from "react-native-paper";
 import ScrollPicker from "react-native-picker-scrollview";
@@ -285,7 +286,7 @@ export default function EditScreen({ route, navigation }) {
     }
 
     function Bolinha(props) {
-      const cor = day.includes(props.index) ? colors.primary : colors.surface3;
+      const cor = day.includes(props.index) ? colors.primary : colors.secondaryContainer;
       return (
         <TouchableOpacity
           style={{
@@ -310,18 +311,22 @@ export default function EditScreen({ route, navigation }) {
           <Dialog.Content>
             {props.weekly && (
               <>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    height: 30,
-                    margin: 5,
-                    marginBottom: 20,
-                  }}
-                >
-                  {week.map((item, idx) => {
-                    return <Bolinha index={idx} text={item} key={idx} />;
-                  })}
-                </View>
+                <DefaultScrollView contentContainerStyle={{flex:1, justifyContent:"center", alignItems: "center"}} horizontal={true}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 30,
+                      margin: 5,
+                      marginBottom: 20,
+                    }}
+                  >
+                    {week.map((item, idx) => {
+                      return <Bolinha index={idx} text={item} key={idx} />;
+                    })}
+                  </View>
+                </DefaultScrollView>
                 <TouchableOpacity
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
                   onPress={() => setShowPicker(true)}
@@ -707,7 +712,8 @@ export default function EditScreen({ route, navigation }) {
       height: 40,
       borderRadius: 5,
       marginBottom: 8,
-      backgroundColor: colors.surface
+      backgroundColor: colors.surface,
+      color: colors.onSurface
     },
     colorContainer: {
       flexDirection: "row",
@@ -845,7 +851,7 @@ export default function EditScreen({ route, navigation }) {
             </View>
           </View>
           <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
-            placeholder="Novo Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+            placeholder="Novo Evento..." placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
             onChangeText={text => setName(text)}
           />
 
@@ -861,7 +867,7 @@ export default function EditScreen({ route, navigation }) {
                 </View>
               </View>
               <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
-                placeholder="Turma A" underlineColor="transparent" underlineColorAndroid={"transparent"}
+                placeholder="Turma A" placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
                 onChangeText={text => setTurma(text)}
               />
             </>)}
@@ -879,7 +885,7 @@ export default function EditScreen({ route, navigation }) {
             </View>
           </View>
           <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput}
-            placeholder="Detalhes do Evento..." underlineColor="transparent" underlineColorAndroid={"transparent"}
+            placeholder="Detalhes do Evento..." placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
             onChangeText={text => setDescription(text)} />
         </View>
 

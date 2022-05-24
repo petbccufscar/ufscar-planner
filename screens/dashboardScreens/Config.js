@@ -33,13 +33,13 @@ export default function Config() {
     textInput: {
       width: '100%',
       backgroundColor: colors.surface5,
-      color: colors.onSurfaceVariant,
+      color: colors.onSurface,
       height: 40,
     },
     datePickerInput: {
       width: '100%',
       backgroundColor: colors.surface5,
-      color: colors.onSurfaceVariant,
+      color: colors.onSurface,
       padding: 10,
       borderRadius: 5,
     },
@@ -146,7 +146,7 @@ export function ConfigSemester() {
       marginRight: 10
     },
     text: {
-      color: colors.onSurfaceVariant,
+      color: colors.onSurface,
 
     },
     datePickerInput: {
