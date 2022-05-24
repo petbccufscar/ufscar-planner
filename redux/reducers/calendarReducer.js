@@ -306,7 +306,6 @@ export const calendarReducer = (state = initialState, action) => {
 
         case ActionsTypes.REMOVE_SIGA:
             let visit = []
-            console.log(state)
             const items = []
             const keys = Object.keys(state.items)
             for (let i = 0; i < keys.length; i++) {

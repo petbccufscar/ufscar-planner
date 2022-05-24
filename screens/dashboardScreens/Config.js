@@ -8,6 +8,7 @@ import { formatDate } from '../../helpers/helper';
 import { updateSemester } from '../../redux/actions/semesterActions';
 import { updateUser } from '../../redux/actions/userActions';
 import {toggleTheme as tg} from '../../redux/actions/themeActions';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Config() {
   const user = useSelector(state => state.user).user
@@ -81,6 +82,7 @@ export default function Config() {
   const [showMenu, setShowMenu] = useState(false);
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
+  const navigation = useNavigation()
   const setCampus = (name) => {
     dispatch(updateUser({ ...user, campus: name }))
   }
@@ -135,6 +137,14 @@ export default function Config() {
           </View>
           <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange}></TextInput>
 
+          <TouchableOpacity style={styles.opcao} onPress={() => {
+            dispatch(updateUser({ ...user, welcome: true }))
+            navigation.navigate('Welcome')}}>
+            <View style={styles.linha}>
+              <MaterialIcons style={styles.icon} name="follow-the-signs" size={24} color={colors.onSurfaceVariant} />
+              <Text style={styles.text}>Ir para as Boas Vindas</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView></View>)
 }

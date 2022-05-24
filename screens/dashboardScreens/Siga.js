@@ -19,6 +19,35 @@ import ScrollView from "../../components/ScrollView";
 import { addEvent, removeEvent, removeSIGA } from "../../redux/actions/eventActions";
 import Toast from "react-native-toast-message";
 
+
+
+export const addSigaSubject = (subject, dispatch) => {
+
+  let auxdetails = []
+  for (let i = 0; i < subject.horarios.length; i++) {
+    const aux = {
+      datetime_init: parseTime(subject.horarios[i].inicio).toString(),
+      datetime_end: parseTime(subject.horarios[i].fim).toString(),
+      local: subject.horarios[i].sala,
+      day: weekDaysSIGA.indexOf(subject.horarios[i].dia)
+    }
+
+    auxdetails.push(aux)
+  }
+  
+  const task = {
+    ...defaultSubject,
+    "siga": true,
+    "details": [...auxdetails],
+    "name": subject.atividade,
+    "color": 4,
+    "turma": "turma " + subject.turma,
+  }
+
+  dispatch(addEvent(task))
+}
+
+
 export default function SigaScreen() {
   const navigation = useNavigation();
   const [messageE, setMessageE] = useState("");
@@ -40,32 +69,6 @@ export default function SigaScreen() {
         setMessageS("");
       }
     }
-  }
-
-  const addSigaSubject = (subject) => {
-
-    let auxdetails = []
-    for (let i = 0; i < subject.horarios.length; i++) {
-      const aux = {
-        datetime_init: parseTime(subject.horarios[i].inicio).toString(),
-        datetime_end: parseTime(subject.horarios[i].fim).toString(),
-        local: subject.horarios[i].sala,
-        day: weekDaysSIGA.indexOf(subject.horarios[i].dia)
-      }
-
-      auxdetails.push(aux)
-    }
-    
-    const task = {
-      ...defaultSubject,
-      "siga": true,
-      "details": [...auxdetails],
-      "name": subject.atividade,
-      "color": 4,
-      "turma": "turma " + subject.turma,
-    }
-
-    dispatch(addEvent(task))
   }
 
   async function Login(user, pssw) {
@@ -92,10 +95,8 @@ export default function SigaScreen() {
           const subjects = data.data
           try {
             dispatch(removeSIGA())
-
-
             for (let i = 0; i < subjects.length; i++) {
-              addSigaSubject(subjects[i])
+              addSigaSubject(subjects[i], dispatch)
             }
             Toast.show({
               type: "success",

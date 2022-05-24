@@ -6,6 +6,7 @@ const initialState = {
         name: "estudante",
         email: "estudante@estudante",
         campus: "São Carlos",
+        welcome: true,
         config: {
             theme: "black",
             font_size: 14,
