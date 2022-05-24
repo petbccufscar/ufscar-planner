@@ -9,7 +9,7 @@ import {
     Provider as PaperProvider,
 } from "react-native-paper";
 
-export const CombinedDefaultTheme = {
+export const CombinedDefaultThemes = [{
     ...PaperDefaultTheme,
     ...NavigationDefaultTheme,
     colors: {
@@ -44,8 +44,9 @@ export const CombinedDefaultTheme = {
         surface4: '#F3E2E3',
         surface5: '#F2DDDE'
     },
-};
-export const CombinedDarkTheme = {
+}];
+
+export const CombinedDarkThemes = [{
     ...PaperDarkTheme,
     ...NavigationDarkTheme,
     colors: {
@@ -80,4 +81,4 @@ export const CombinedDarkTheme = {
         surface4: '#352E2E',
         surface5: '#393131'
     },
-};
+}];
