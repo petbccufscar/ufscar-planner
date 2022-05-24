@@ -513,10 +513,11 @@ export function NotaRender(props) {
       alignItems: 'center',
       flex: 1,
       margin: 10
-    }
+    },
+    inputText:{backgroundColor: colors.surface1, marginVertical: 10 }
 
   });
-  const dict = task?.grades?.mean || {}
+  const [dict, setDict] = useState(task?.grade?.mean || {})
 
   let resultMean = "";
 
@@ -529,8 +530,25 @@ export function NotaRender(props) {
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
+  const [dropOrd, setDropOrd] = useState(false)
+  const [selected, setSelected] = useState(null)
+  let listItems = []
+  let keys = Object.keys(dict)
+  for (let i = 0; i < keys.length; i++) {
+    listItems.push({label: keys[i], value: keys[i]})
+  }
 
+  const dispatch = useDispatch()
   const hideDialog = () => setVisible(false);
+  const submit = () => {
+    let auxdict = {}
+    for (let i = 0; i < keys.length; i++) {
+      auxdict[keys[i]] = parseFloat(dict[keys[i]])
+    }
+    setDict(auxdict)
+    dispatch(updateEvent({ ...task, grade: { ...task.grade, mean: auxdict } }));
+    hideDialog();
+  }
   return (
     <TouchableOpacity style={{ ...styles.itemLeft }} onPress={edit}>
       <Gradient style={{ ...styles.square }} color={task.color} />
@@ -571,14 +589,45 @@ export function NotaRender(props) {
         </View>
         <Portal>
           <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title>Editar</Dialog.Title>
+            <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha qual nota você deseja editar, e informe o valor.</Dialog.Title>
             <Dialog.Content>
-              <Paragraph>Editando nota</Paragraph>
+              <DropDown
+                mode={"flat"}
+                visible={dropOrd}
+                showDropDown={() => setDropOrd(true)}
+                onDismiss={() => setDropOrd(false)}
+                value={selected}
+                list={listItems}
+                setValue={setSelected}
+                label={"Escolha uma nota"}
+                inputProps={{style:styles.inputText}}
+                theme={{colors: {primary: colors.primary}}}
+              />
+              <TextInput label="Valor" placeholder="0.0" style={styles.inputText} keyboardType="number-pad"
+              value={selected != undefined && selected != null ? dict[selected].toString() : ''} 
+              onChangeText={(text) => {
+                if (selected != null && selected != undefined) {
+                let auxdict = { ...dict }
+                try {
+                  
+                  const aux = parseFloat(text)
+
+                  auxdict[selected] = isNaN(aux) ? '0' : text
+                  setDict(auxdict)
+                } catch (e) {
+
+                }
+              }}}
+              />
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog} style={{ padding: 10 }}>
+            <Button onPress={hideDialog} style={{ padding: 10 }}>
+                Cancelar
+              </Button>
+              <Button onPress={submit} style={{ padding: 10 }}>
                 Ok
               </Button>
+              
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -623,7 +672,7 @@ export function FreqRender(props) {
       color: colors.primary
     },
     editarbtn: {
-
+      padding:10,
     },
     texto: {
       color: colors.onSurfaceVariant,

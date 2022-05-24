@@ -300,7 +300,7 @@ export default function NewSubject({ route, navigation }) {
                 }}
               />
               <TouchableOpacity
-                style={{ marginLeft: "auto", width: 90, alignItems: "center" }}
+                style={{ marginLeft: "auto",marginLeft:2, alignItems: "center" }}
                 onPress={() => handleVariableDelete(key)}
               >
                 <MaterialIcons
@@ -464,8 +464,8 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    width: 150,
     marginLeft: 8,
+    flex: 1,
     paddingHorizontal: 8,
     borderRadius: 8,
     height: 40,
