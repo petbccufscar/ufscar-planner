@@ -623,7 +623,7 @@ export function FreqRender(props) {
       color: colors.primary
     },
     editarbtn: {
-
+      padding:10,
     },
     texto: {
       color: colors.onSurfaceVariant,
