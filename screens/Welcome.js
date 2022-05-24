@@ -117,7 +117,7 @@ function ScreenOne({ navigation, setPage }) {
             padding: 20
         },
         secBtnText: {
-            color: colors.onSurfacVariant
+            color: colors.onSurfaceVariant
         },
         btnPlace: {
             alignSelf: 'center',
@@ -236,7 +236,7 @@ function ScreenTwo({setPage}) {
         <TextInput style={styles.textInput} placeholder="Senha do SIGA" />
         <View style={styles.btnPlace}>
             <TouchableOpacity  onPress={() => setPage(1)}>
-                <Text>
+                <Text style={styles.secBtnText}>
                     Voltar
                 </Text>
             </TouchableOpacity>
@@ -300,7 +300,7 @@ function ScreenThree({setPage}) {
             padding: 20
         },
         secBtnText: {
-            color: colors.onSurfacVariant
+            color: colors.onSurfaceVariant
         },
         btnPlace: {
             alignItems: 'center',
@@ -315,7 +315,7 @@ function ScreenThree({setPage}) {
         textInput: {
             flex: 1,
             marginVertical: 8,
-            borderRadius: 12,
+            borderRadius: 6,
             borderBottomWidth: 0,
             borderColor: 'transparent',
             backgroundColor: colors.surfaceVariant,
@@ -336,7 +336,8 @@ function ScreenThree({setPage}) {
         dispatch(updateUser({ ...user, name: value }))
       }
 
-    return (<View style={styles.container}>
+    return (
+    <View style={styles.container}>
         <Text style={styles.h3}>
             Digite como você deseja ser chamado(a) e o seu campus UFSCar:
         </Text>
@@ -352,11 +353,12 @@ function ScreenThree({setPage}) {
             setValue={setSelected}
             label={<Text style={{color: colors.outline, fontSize:15}}>Escolha um campus</Text>}
             inputProps={{style:styles.textInput}}
-            theme={{colors: {primary: colors.primary}}}
+            theme={{colors: {primary: colors.primary, onSurface: colors.onSurface, background: colors.surfaceVariant, text: colors.onSurface}}}
         />
+        
         <View style={styles.btnPlace}>
             <TouchableOpacity onPress={() => setPage(1)}>
-                <Text>
+                <Text style={styles.secBtnText}>
                     Voltar
                 </Text>
             </TouchableOpacity>
