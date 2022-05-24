@@ -5,30 +5,29 @@ import React, { useEffect, useRef } from "react";
 import { AppRegistry, Platform, StyleSheet, UIManager } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
-import { Provider as ReduxProvider, useDispatch, useSelector, } from "react-redux";
+import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import Details from "./screens/Details";
-
 import Subject from "./components/NewSubject";
-
+import BottomNavBar from "./navigation/BottomNavBar";
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
-import Restaurant from "./screens/Restaurant";
-import { PreferencesContext } from "./theme/PreferencesContext";
-
-import { CombinedDarkTheme, CombinedDefaultTheme } from "./theme/Themes";
-import BottomNavBar from "./navigation/BottomNavBar"
-
-import Config from "./screens/dashboardScreens/Config";
 import AboutUs from "./screens/dashboardScreens/AboutUs";
+import Config from "./screens/dashboardScreens/Config";
 import Contact from "./screens/dashboardScreens/Contact";
-import SubjectScreen from "./screens/dashboardScreens/Materias";
 import EventScreen from "./screens/dashboardScreens/Eventos";
-import NotasScreen from "./screens/dashboardScreens/Notas";
 import FreqScreen from "./screens/dashboardScreens/Frequencia";
+import SubjectScreen from "./screens/dashboardScreens/Materias";
+import NotasScreen from "./screens/dashboardScreens/Notas";
 import SigaScreen from "./screens/dashboardScreens/Siga";
+import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
+import Restaurant from "./screens/Restaurant";
 import Welcome from "./screens/Welcome";
+import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
+
+
+
+
 
 
 if (
@@ -89,24 +88,12 @@ function Loader() {
   const dispatch = useDispatch();
   dispatch(loadEvents(eventsSt));
 
-  const [isThemeDark, setIsThemeDark] = React.useState(false);
+  const themeConfig = useSelector((state) => state.theme);
 
-  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
-
-  const toggleTheme = React.useCallback(() => {
-    return setIsThemeDark(!isThemeDark);
-  }, [isThemeDark]);
-
-  const preferences = React.useMemo(() => {
-    return {
-      toggleTheme,
-      isThemeDark,
-    };
-  }, [toggleTheme, isThemeDark]);
-
+  let theme = themeConfig.isDark ? CombinedDarkThemes[themeConfig.themeIdx] : CombinedDefaultThemes[themeConfig.themeIdx];
+  
   return (
     <>
-      <PreferencesContext.Provider value={preferences}>
         <PaperProvider theme={theme}>
           <NavigationContainer theme={theme}>
             <HomeStackRoutes.Navigator screenOptions={() => ({
@@ -203,7 +190,6 @@ function Loader() {
             </HomeStackRoutes.Navigator>
           </NavigationContainer>
         </PaperProvider>
-      </PreferencesContext.Provider>
       <Toast bottomOffset={20} text1NumberOfLines={2} />
     </>
   );
