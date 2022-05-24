@@ -154,8 +154,7 @@ export const calendarReducer = (state = initialState, action) => {
         }
     }
 
-    const removePayload = (st, redefine = true) => {
-        let event = action.payload
+    const removePayload = (st,event,redefine = true) => {
         let newItems = { ...st.items }
 
         // buscar os dados antigos de event
@@ -171,7 +170,7 @@ export const calendarReducer = (state = initialState, action) => {
 
         while (iterador <= datef) {
             d = floorDate(iterador)
-            aux[d] = (newItems[d] || []).filter((e) => e.id == event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
+            aux[d] = (newItems[d] || []).filter((e) => e.id == event.id).map(evt => evt.subject === event.id ? { ...evt, subject: null } : evt)
             if (aux[d].length > 0) {
                 event = aux[d][0]
                 break
@@ -211,7 +210,7 @@ export const calendarReducer = (state = initialState, action) => {
                     while (datei.getTime() <= datef.getTime()) {
                         const d = floorDate(datei)
                         // Filtra os itens
-                        newItems[d] = newItems[d].filter((e) => e.id != event.id).map(event => event.subject === action.payload.id ? { ...event, subject: null } : event)
+                        newItems[d] = newItems[d].filter((e) => e.id != event.id).map(evt => evt.subject === event.id ? { ...evt, subject: null } : evt)
                         datei = offsetDate(datei, 7)
                     }
                     weekVisit[event.details[i].day] = 1
@@ -291,11 +290,11 @@ export const calendarReducer = (state = initialState, action) => {
             aux = { ...state, ...insertPayload(state), nextId: state.nextId + 1 }
             return aux
         case ActionsTypes.REMOVE_EVENT:
-            aux = { ...removePayload(state) }
+            aux = { ...removePayload(state, action.payload) }
             return aux
 
         case ActionsTypes.UPDATE_EVENT:
-            aux = removePayload(state, false)
+            aux = removePayload(state, action.payload, false)
             return { ...state, ...insertPayload(aux) }
 
 
@@ -305,7 +304,25 @@ export const calendarReducer = (state = initialState, action) => {
             aux = setup(state)
             return aux
 
+        case ActionsTypes.REMOVE_SIGA:
+            let visit = []
+            console.log(state)
+            const items = []
+            const keys = Object.keys(state.items)
+            for (let i = 0; i < keys.length; i++) {
+                items.push(...state.items[keys[i]].filter(e => e.siga == true))
+            }
 
+            aux = state
+            for (let i = 0; i < items.length; i++) {
+                if (visit.indexOf(items[i].id) == -1) {
+                    aux = { ...removePayload(aux, items[i]) }
+                    visit.push(items[i].id)
+                }
+            }
+            
+
+            return aux
 
         default:
             return state;

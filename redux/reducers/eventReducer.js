@@ -90,6 +90,20 @@ export const eventReducer = (state = initialState, action) => {
             }
             refazerNotificações(aux)
             return aux
+
+        case ActionsTypes.REMOVE_SIGA:
+            const siga = state.events.filter(event => event.siga == true)
+            let events = state.events
+            for (let i = 0; i < siga.length; i++) {
+                events = events.filter(event => event.id !== siga[i].id).map(event => event.subject === siga[i].id ? { ...event, subject: null } : event)
+            }
+
+            aux = {
+                ...state,
+                events: events
+            }
+            refazerNotificações(aux)
+            return aux
         case ActionsTypes.UPDATE_EVENT:
             aux = {
                 ...state,

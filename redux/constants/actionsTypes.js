@@ -9,4 +9,5 @@ export const ActionsTypes = {
     LOAD_EVENTS: 'LOAD_EVENTS',
     SET_THEME: 'SET_THEME',
     TOGGLE_THEME: 'TOGGLE_THEME',
+    REMOVE_SIGA: 'REMOVE_SIGA',
 }

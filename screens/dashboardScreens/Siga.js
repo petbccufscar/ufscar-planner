@@ -13,10 +13,11 @@ import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontA
 import { useSelector, useDispatch } from "react-redux";
 import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
 import { FreqRender } from "../../components/EventCards";
-import { defaultSubject, parseTime, SIGA, weekDaysFullNames } from "../../helpers/helper";
+import { defaultSubject, parseTime, SIGA, weekDaysSIGA } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";
-import { addEvent } from "../../redux/actions/eventActions";
+import { addEvent, removeEvent, removeSIGA } from "../../redux/actions/eventActions";
+import Toast from "react-native-toast-message";
 
 export default function SigaScreen() {
   const navigation = useNavigation();
@@ -42,36 +43,19 @@ export default function SigaScreen() {
   }
 
   const addSigaSubject = (subject) => {
-    const placeholder = {
-      "id": 2324234,
-      "atividade": "NOME DA MATERIA",
-      "turma": "NOME DA TURMA",
-      "periodo": 2,
-      "ano": 2022,
-      "horarios": [{
-        "dia": "Segunda-Feira",
-        "inicio": "10:00",
-        "fim": "12:00",
-        "sala": "SALA",
-      },
-      {
-        "dia": "Terça-Feira",
-        "inicio": "10:00",
-        "fim": "12:00",
-        "sala": "SALA2",
-      }
-      ]
-    }
+
     let auxdetails = []
     for (let i = 0; i < subject.horarios.length; i++) {
       const aux = {
         datetime_init: parseTime(subject.horarios[i].inicio).toString(),
         datetime_end: parseTime(subject.horarios[i].fim).toString(),
         local: subject.horarios[i].sala,
-        day: weekDaysFullNames.indexOf(subject.horarios[i].dia)
+        day: weekDaysSIGA.indexOf(subject.horarios[i].dia)
       }
+
       auxdetails.push(aux)
     }
+    
     const task = {
       ...defaultSubject,
       "siga": true,
@@ -105,8 +89,22 @@ export default function SigaScreen() {
           setMessageE("Aparentemente você não possui nenhum deferimento no Periodo letivo atual, por acaso está de férias?");
           setMessageS("");
         } else {
-          for (let i = 0; i < data.length; i++) {
-            addSigaSubject(data[i])
+          const subjects = data.data
+          try {
+            dispatch(removeSIGA())
+
+
+            for (let i = 0; i < subjects.length; i++) {
+              addSigaSubject(subjects[i])
+            }
+            Toast.show({
+              type: "success",
+              text1: "Suas matérias foram importadas!",
+            });
+          } catch (e) {
+            setMessageE("Aconteceu um problema na comunicação com o SIGA");
+            setMessageS("");
+            console.log(e)
           }
         }
       } else {

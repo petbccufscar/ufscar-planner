@@ -14,6 +14,13 @@ export const removeEvent = (event) => {
     };
 };
 
+export const removeSIGA = (event) => {
+    return {
+        type: ActionsTypes.REMOVE_SIGA,
+        payload: event
+    };
+};
+
 export const updateEvent = (event) => {
     return {
         type: ActionsTypes.UPDATE_EVENT,
