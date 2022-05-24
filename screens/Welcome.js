@@ -232,8 +232,8 @@ function ScreenTwo({setPage}) {
             Faça login usando as mesmas credenciais que você utiliza ao entrar no SIGA.
         </Text>
 
-        <TextInput style={styles.textInput} placeholder="CPF ou RA" />
-        <TextInput style={styles.textInput} placeholder="Senha do SIGA" />
+        <TextInput style={styles.textInput} placeholder="CPF ou RA" placeholderTextColor={colors.outline} />
+        <TextInput style={styles.textInput} placeholder="Senha do SIGA" placeholderTextColor={colors.outline} />
         <View style={styles.btnPlace}>
             <TouchableOpacity  onPress={() => setPage(1)}>
                 <Text style={styles.secBtnText}>
@@ -342,7 +342,7 @@ function ScreenThree({setPage}) {
             Digite como você deseja ser chamado(a) e o seu campus UFSCar:
         </Text>
 
-        <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange} placeholder="Digite seu nome" />
+        <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange} placeholder="Digite seu nome" placeholderTextColor={colors.outline} />
         <DropDown
             mode={"flat"}
             visible={dropOrd}

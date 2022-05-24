@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ScrollView as DefaultScrollView
 } from 'react-native';
@@ -28,6 +28,9 @@ export default function ScrollView(props) {
         }
     }
 
+    useEffect(() => {
+        changeHeaderColor(onTop?0:10)
+    }, [colors])
 
     return (
         <DefaultScrollView

@@ -7,6 +7,7 @@ import {
   Pre,
   Pressable,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
@@ -78,6 +79,7 @@ export default function Wallet() {
                 onChangeText={(newValue) => editValue(newValue)}
                 keyboardType="numeric"
                 placeholder="Editar o saldo da Carteirinha"
+                placeholderTextColor={colors.outline}
                 onEndEditing={() => setShouldShow(!shouldShow)}
               />
             </React.Fragment>

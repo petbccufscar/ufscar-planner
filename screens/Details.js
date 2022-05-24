@@ -218,7 +218,7 @@ export default function Details({ route, navigation }) {
               <Text style={styles.corpoDetail}>{description}</Text>
             </View>
           )}
-
+          {isSubject && (<>
           <View style={styles.containerSectionDetail}>
             <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.medfreqcontainer}>
@@ -258,6 +258,7 @@ export default function Details({ route, navigation }) {
               </View>
             </ScrollView>
           </View>
+          </>)}
           {isSubject && teachers.length > 0 && (<View style={styles.containerSectionDetail}>
             <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.iconDetail}>
