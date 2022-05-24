@@ -137,7 +137,7 @@ export function Task(props) {
             </Text>
           </View>
         </>)}
-        {task.is_subject && task.teachers.length > 0 && (
+        {task.is_subject && task.teachers && task.teachers.length > 0 && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <FontAwesome name="user" size={24} style={{ margin: 5 }} color={theme.colors.onSurfaceVariant} />
             <Text style={{ color: theme.colors.onSurfaceVariant }}>{task.teachers[0]}{task.teachers.length > 1 ? " +" : ""}</Text>
