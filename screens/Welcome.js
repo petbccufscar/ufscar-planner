@@ -204,7 +204,7 @@ function ScreenTwo({setPage}) {
             padding: 20
         },
         secBtnText: {
-            color: colors.onSurfacVariant
+            color: colors.onSurfaceVariant
         },
         btnPlace: {
             alignItems: 'center',
