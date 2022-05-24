@@ -1,13 +1,15 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-    Image, StyleSheet, View, Text, LayoutAnimation
+    Image, LayoutAnimation, StyleSheet, Text, View
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TextInput, useTheme } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
-import ScrollView from "../components/ScrollView";
-import { useNavigation } from "@react-navigation/native";
+import { updateUser } from '../redux/actions/userActions';
 import { SIGA } from "../helpers/helper";
+import { useDispatch, useSelector } from "react-redux";
+
 
 export default function Welcome() {
     const colors = useTheme().colors
@@ -328,25 +330,30 @@ function ScreenThree({setPage}) {
         , { label: 'São Carlos', value: 'São Carlos' }
         , { label: 'Sorocaba', value: 'Sorocaba' }
     ]
+    const user = useSelector(state => state.user).user
+    const dispatch = useDispatch()
+    const handleNameChange = (value) => {
+        dispatch(updateUser({ ...user, name: value }))
+      }
 
     return (<View style={styles.container}>
         <Text style={styles.h3}>
             Digite como você deseja ser chamado(a) e o seu campus UFSCar:
         </Text>
 
-        <TextInput style={styles.textInput} placeholder="Digite seu nome" />
+        <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange} placeholder="Digite seu nome" />
         <DropDown
-            label="Escolha um campus"
-            mode={"outlined"}
+            mode={"flat"}
             visible={dropOrd}
             showDropDown={() => setDropOrd(true)}
             onDismiss={() => setDropOrd(false)}
             value={selected}
             list={listItems}
             setValue={setSelected}
-            theme={theme}
+            label={<Text style={{color: colors.outline, fontSize:15}}>Escolha um campus</Text>}
+            inputProps={{style:styles.textInput}}
+            theme={{colors: {primary: colors.primary}}}
         />
-
         <View style={styles.btnPlace}>
             <TouchableOpacity onPress={() => setPage(1)}>
                 <Text>

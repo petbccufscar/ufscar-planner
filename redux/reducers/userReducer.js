@@ -3,8 +3,8 @@ import { ActionsTypes } from '../constants/actionsTypes';
 
 const initialState = {
     user: {
-        name: "fulano",
-        email: "fulano@f.lano",
+        name: "estudante",
+        email: "estudante@estudante",
         campus: "São Carlos",
         config: {
             theme: "black",
