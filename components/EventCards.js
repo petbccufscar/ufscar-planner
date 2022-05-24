@@ -538,8 +538,17 @@ export function NotaRender(props) {
     listItems.push({label: keys[i], value: keys[i]})
   }
 
-
+  const dispatch = useDispatch()
   const hideDialog = () => setVisible(false);
+  const submit = () => {
+    let auxdict = {}
+    for (let i = 0; i < keys.length; i++) {
+      auxdict[keys[i]] = parseFloat(dict[keys[i]])
+    }
+    setDict(auxdict)
+    dispatch(updateEvent({ ...task, grade: { ...task.grade, mean: auxdict } }));
+    hideDialog();
+  }
   return (
     <TouchableOpacity style={{ ...styles.itemLeft }} onPress={edit}>
       <Gradient style={{ ...styles.square }} color={task.color} />
@@ -612,9 +621,13 @@ export function NotaRender(props) {
               />
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={hideDialog} style={{ padding: 10 }}>
+            <Button onPress={hideDialog} style={{ padding: 10 }}>
+                Cancelar
+              </Button>
+              <Button onPress={submit} style={{ padding: 10 }}>
                 Ok
               </Button>
+              
             </Dialog.Actions>
           </Dialog>
         </Portal>
