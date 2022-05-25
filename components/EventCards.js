@@ -229,8 +229,8 @@ export function EventCards(props) {
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row'
-
+      flexDirection: 'row',
+      alignItems: 'center'
     },
     atumalaca: {
       padding: 10,
