@@ -32,11 +32,17 @@ async function loadNotifications(task) {
                     minute: timeAux.getMinutes(),
                     repeats: true
                 }
+                let auxT = getTime(task.notification[j])
+                if (auxT.length != 0){
+                    auxT = " em " + auxT
+                } else {
+                    auxT = " agora"
+                }
                 const id = await Notifications.scheduleNotificationAsync(
                     {
                         identifier: "" + task.id + "_" + i + "_" + j,
                         content: {
-                            title: task.name + " em " + getTime(task.notification[j]),
+                            title: task.name + auxT,
                             body: 'Local: ' + task.details[i].local,
                         },
                         // TODO Fazer outro trigger pra IOS
