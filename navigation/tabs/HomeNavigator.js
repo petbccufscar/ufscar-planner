@@ -15,7 +15,7 @@ export default function HomeNavigator() {
                 backgroundColor: colors.headerInactive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onHeader,
+            headerTintColor: colors.onHeaderInactive,
             headerTitleAlign: 'center',
         }}>
             <homeStack.Screen name="Home" component={Home} />

@@ -16,7 +16,7 @@ export default function DashboardNavigator() {
                 backgroundColor: colors.headerInactive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onHeader,
+            headerTintColor: colors.onHeaderInactive,
             headerTitleAlign: 'center',
         }}>
             <taskStack.Screen name="Task" component={Dashboard} />

@@ -15,7 +15,7 @@ export default function RestaurantsNavigator() {
           backgroundColor: colors.headerInactive,
         },
         headerShadowVisible: false,
-        headerTintColor: colors.onHeader,
+        headerTintColor: colors.onHeaderInactive,
         headerTitleAlign: 'center'
       }}
     >

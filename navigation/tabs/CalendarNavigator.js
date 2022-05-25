@@ -38,7 +38,7 @@ export default function CalendarNavigator({ navigation }) {
                     backgroundColor: colors.headerInactive,
                 },
                 headerShadowVisible: false,
-                headerTintColor: colors.onHeader,
+                headerTintColor: colors.onHeaderInactive,
                 headerTitleAlign: 'center',
             })}>
                 {props => <Calendar />}

@@ -62,7 +62,7 @@ export default function Config() {
     }
 
   });
-  const [money, setMoney] = useState(user.meal.toString());
+  const [money, setMoney] = useState(user?.meal?.toString() || "0");
   const handleMoneyChange = (value) => {
     try {
       const valor = parseFloat(value.substring(3))
@@ -161,10 +161,10 @@ export default function Config() {
                           marginTop: 5, 
                           justifyContent: 'space-between' }}>
 
-            <SelGradSquare color={0} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={1} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={2} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={3} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={0} style={{backgroundColor: "#930010"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={1} style={{backgroundColor: "#93000A"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={2} style={{backgroundColor: "#5E3280"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={3} style={{backgroundColor: "#832046"}} state={themeConfig.themeIdx} setState={setColor} />
             {/* <SelGradSquare color={4} state={themeConfig.themeIdx} setState={setColor} />
             <SelGradSquare color={5} state={themeConfig.themeIdx} setState={setColor} />
             <SelGradSquare color={6} state={themeConfig.themeIdx} setState={setColor} />

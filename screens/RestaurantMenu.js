@@ -18,7 +18,8 @@ import RestaurantTickets from "../components/RestaurantTickt";
 export default function Wallet() {
   const navigation = useNavigation();
   const timeWidth = wp("100%") - 7.5 * hourWidth;
-  const today = new Date(2020, 2,18);
+  // const today = new Date(2020, 2,18);
+  const today = new Date();
   const first = new Date(
     today.getTime() - (today.getDay() - 1) * 24 * 60 * 60 * 1000
   );
@@ -67,10 +68,13 @@ export default function Wallet() {
     priceDefault: "R$ ???",
     priceVisit: "R$ ???"
   });
+  const user = useSelector((state) => state.user).user;
 
   useEffect(() => {
     menuScrapping(selectedDay);
-  }, [selectedDay]);
+    console.log("carregando!!")
+
+  }, [selectedDay, user]);
 
 
   function getMenuItem(menu, itemName) {
@@ -93,7 +97,6 @@ export default function Wallet() {
       return "Não Definido";
     }
   }
-  const user = useSelector((state) => state.user).user;
 
   async function menuScrapping(date) {
     const dateString = formatDate(date);
@@ -127,7 +130,8 @@ export default function Wallet() {
         'satEnd':"13h00"
       }
     };
-    const local = user.campus.toLocaleLowerCase()
+    const local = user.campus.toLocaleLowerCase();
+    console.log('location: ',local)
     const searchUrl = campus[local]['urlCard'];
     const priceUrl = campus[local]['urlPrice'];
     const response = await fetch(searchUrl);
@@ -141,14 +145,17 @@ export default function Wallet() {
     
     $ = cheerio.load(priceHtmlString);
     const priceMenu = $(".col-sm-12");
-    console.log(priceMenu.length);
+    console.log(priceMenu.length, weekMenu.length);
     
     let prices = priceMenu.eq(0).text();
+
     prices = prices.split("\n").filter(x => x !== "");
 
     for (let i = 0; i < weekMenu.length; i++) {
       const menu = weekMenu.eq(i).text();
+      
       if (menu.includes(dateString)) {
+
         let dayMenu = {
           mainMeal: "Não Definido.",
           mainMealVegan: "Não Definido.",
@@ -159,10 +166,15 @@ export default function Wallet() {
           salad: "Não Definido.",
           desert: "Não Definido.",
           priceDefault: "R$ ???",
-          priceVisit: "R$ ???"
+          priceVisit: "R$ ???",
+          // lunchStartTime: '??h??',
+          // lunchEndTime: '??h??',
+          // dinnerStartTime: '??h??',
+          // dinnerEndTime: '??h??',
         };
+        // let dayMenu = {...defaultMenu}
+
         dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
-        
         dayMenu.mainMealVegetarian = getMenuItem(
           menu,
           "Prato Principal - Vegetariano"
@@ -171,6 +183,7 @@ export default function Wallet() {
           menu,
           "Prato Principal - Intolerante/Vegano"
         );
+
         dayMenu.garrison = getMenuItem(menu, "Guarnição");
         dayMenu.rice = getMenuItem(menu, "Arroz");
         dayMenu.bean = getMenuItem(menu, "Feijão");
@@ -180,7 +193,7 @@ export default function Wallet() {
           dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
         else
           dayMenu.priceDefault =  prices[prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length) + 1];
-        prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length)
+  
         dayMenu.priceVisit = getPrice(prices, "Visitante");
         let timeStart;
           let timeEnd;

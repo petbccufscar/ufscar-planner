@@ -120,7 +120,7 @@ export default function NewSubject({ route, navigation }) {
           icon={"check"}
           disabled={!validExpression(meanExpressionArray.join(""))}
           size={24}
-          color={colors.onHeader}
+          color={colors.onHeaderInactive}
           onPress={() => {
             navigation.navigate({
               name: "Event",

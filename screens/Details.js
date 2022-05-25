@@ -60,7 +60,7 @@ export default function Details({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onHeader,
+      headerTintColor: colors.onHeaderInactive,
       headerTitle: isSubject ? "Detalhes da Matéria" : "Detalhes do Evento",
     });
   }, []);

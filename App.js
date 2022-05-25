@@ -102,7 +102,7 @@ function Loader() {
               headerStyle: {
                 backgroundColor: theme.colors.headerInactive,
               },
-              headerTintColor: theme.colors.onHeader,
+              headerTintColor: theme.colors.onHeaderInactive,
             })}>
               <HomeStackRoutes.Screen
                 name="Welcome"

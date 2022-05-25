@@ -110,7 +110,7 @@ export default function EditScreen({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onHeader,
+      headerTintColor: colors.onHeaderInactive,
       headerTitle: isSubject ? "Editar Matéria" : "Editar Evento",
 
       headerRight: () => (

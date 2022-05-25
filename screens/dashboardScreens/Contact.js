@@ -9,7 +9,7 @@ export default function Contato() {
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onHeader,
+      headerTintColor: colors.onHeaderInactive,
       headerStyle: {
         backgroundColor: colors.headerInactive,
       },

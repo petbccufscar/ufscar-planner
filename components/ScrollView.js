@@ -19,7 +19,7 @@ export default function ScrollView(props) {
                 backgroundColor: position == 0 ? colors.headerInactive : colors.headerActive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onHeader,
+            headerTintColor:  position == 0 ? colors.onHeaderInactive : colors.onHeader,
         });
         if (position > 0 && onTop) {
             setOnTop(false);
