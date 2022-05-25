@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { addEvent, removeEvent, removeSIGA } from "../redux/actions/eventActions";
 import { addSigaSubject } from "./dashboardScreens/Siga";
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
+
 
 export default function Welcome() {
     const colors = useTheme().colors
@@ -294,14 +296,33 @@ function ScreenTwo({ setPage }) {
             flex: 1,
             marginVertical: 8,
             borderRadius: 12,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
             borderBottomWidth: 0,
             borderColor: 'transparent',
             backgroundColor: colors.surfaceVariant,
             color: colors.onSurface,
+            flex:1,
         },
+        pssdBtn: {
+            marginVertical: 8,
+            borderTopRightRadius: 12,
+            borderBottomRightRadius: 12,
+            borderBottomWidth: 0,
+            padding: 10,
+            flex:1,
+            backgroundColor: colors.surfaceVariant,
+            color: colors.onSurface,
+            alignItems:'center',
+            justifyContent:'center'
+          },
+          pssdRow: {
+            flexDirection: "row",
+          },
     })
     const [username, setUsername] = useState("")
     const [pssw, setPssw] = useState("")
+    const [visible, setVisible] = useState(false)
 
     return (<View style={styles.container}>
         <SIGA size={40} style={styles.siga} />
@@ -310,7 +331,14 @@ function ScreenTwo({ setPage }) {
         </Text>
 
         <TextInput onChangeText={setUsername} style={styles.textInput} placeholder="CPF ou RA" placeholderTextColor={colors.outline} />
-        <TextInput secureTextEntry={true} onChangeText={setPssw} style={styles.textInput} placeholder="Senha do SIGA" placeholderTextColor={colors.outline} />
+        <View style={styles.pssdRow}>
+        <TextInput secureTextEntry={!visible} onChangeText={setPssw} style={styles.textInput} placeholder="Senha do SIGA" placeholderTextColor={colors.outline} />
+        <TouchableOpacity style={styles.pssdBtn} onPress={() => setVisible(!visible)}>
+        {!visible && <MaterialIcons name="visibility" size={24} color={colors.onSurface} />}
+        {visible && <MaterialIcons name="visibility-off" size={24} color={colors.onSurface} />}
+        </TouchableOpacity>
+        </View>  
+        
         <View style={styles.btnPlace}>
             <TouchableOpacity onPress={() => setPage(1)}>
                 <Text style={styles.secBtnText}>
