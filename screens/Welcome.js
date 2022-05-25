@@ -18,8 +18,7 @@ export default function Welcome() {
     const [page, setPage] = useState(1);
     const user = useSelector(state => state.user).user;
     const navigation = useNavigation()
-    if (!user.welcome)
-        navigation.navigate('BottomNav')
+    
     const styles = StyleSheet.create({
         image: {
             width: '100%'
@@ -60,7 +59,6 @@ export default function Welcome() {
         });
         setPage(pageAux);
     }
-
 
     return (<View style={styles.container}>
         <View style={styles.imageContainer}>
