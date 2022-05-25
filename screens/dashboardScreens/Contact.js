@@ -9,21 +9,21 @@ export default function Contato() {
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onSurface,
+      headerTintColor: colors.onHeader,
       headerStyle: {
-        backgroundColor: colors.surface5,
+        backgroundColor: colors.headerInactive,
       },
       headerRight: () => (
         <TouchableOpacity
           style={{
-            backgroundColor: colors.primary, padding: 10,
+            backgroundColor: colors.primaryContainer, padding: 10,
             borderRadius: 30, justifyContent: 'center', alignItems: 'center',
             marginRight: 10
           }}
           onPress={() => Linking.openURL(`mailto:petbcc@ufscar.br?subject=Fale conosco: Ufscar Planner&body=${text}`)}
         >
 
-          <Text style={{ color: colors.onPrimary }}>Enviar</Text>
+          <Text style={{ color: colors.onPrimaryContainer }}>Enviar</Text>
         </TouchableOpacity>),
     });
   }, [

@@ -100,9 +100,9 @@ function Loader() {
           <NavigationContainer theme={theme}>
             <HomeStackRoutes.Navigator initialRouteName={user.welcome? "Welcome": "BottomNav"} screenOptions={() => ({
               headerStyle: {
-                backgroundColor: theme.colors.surface1,
+                backgroundColor: theme.colors.headerInactive,
               },
-              headerTintColor: theme.colors.onSurface,
+              headerTintColor: theme.colors.onHeader,
             })}>
               <HomeStackRoutes.Screen
                 name="Welcome"

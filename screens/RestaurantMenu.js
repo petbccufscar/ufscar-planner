@@ -72,6 +72,7 @@ export default function Wallet() {
     menuScrapping(selectedDay);
   }, [selectedDay]);
 
+
   function getMenuItem(menu, itemName) {
     try {
       const result = (menu.split(itemName+":")[1].split("\n")[0]).trim()
@@ -92,28 +93,43 @@ export default function Wallet() {
       return "Não Definido";
     }
   }
+  const user = useSelector((state) => state.user).user;
 
   async function menuScrapping(date) {
     const dateString = formatDate(date);
     const campus = {
       "sorocaba" : {
         'urlCard':`https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio`,
-        'urlPrice':'https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes'
+        'urlPrice':`https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+        'lunchStart':"11h00",
+        'lunchEnd':"13h30",
+        'dinnerStart':"17h30",
+        'dinnerEnd':"19h00",
+        'satStart':"11h00",
+        'satEnd':"13h00"
       },
       "araras" : {
         'urlCard':`https://www.araras.ufscar.br/restaurante-universitario/cardapio`,
-        'urlPrice':'https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes'
-
+        'urlPrice':`https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+        'lunchStart':"11h00",
+        'lunchEnd':"13h30",
+        'dinnerStart':"18h00",
+        'dinnerEnd':"19h30",
       },
       "são carlos" : {
         'urlCard':`https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
-        'urlPrice':'https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos'
-
+        'urlPrice':`https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
+        'lunchStart':"11h15",
+        'lunchEnd':"13h30",
+        'dinnerStart':"17h15",
+        'dinnerEnd':"19h30",
+        'satStart':"11h30",
+        'satEnd':"13h00"
       }
     };
-
-    const searchUrl = campus['araras']['urlCard'];
-    const priceUrl = campus['sorocaba']['urlPrice'];
+    const local = user.campus.toLocaleLowerCase()
+    const searchUrl = campus[local]['urlCard'];
+    const priceUrl = campus[local]['urlPrice'];
     const response = await fetch(searchUrl);
     const priceResponse = await fetch(priceUrl);
 
@@ -128,11 +144,12 @@ export default function Wallet() {
     console.log(priceMenu.length);
     
     let prices = priceMenu.eq(0).text();
-    prices = prices.split("\n").filter(x => x !== "")
+    prices = prices.split("\n").filter(x => x !== "");
+
     for (let i = 0; i < weekMenu.length; i++) {
       const menu = weekMenu.eq(i).text();
       if (menu.includes(dateString)) {
-        const dayMenu = {
+        let dayMenu = {
           mainMeal: "Não Definido.",
           mainMealVegan: "Não Definido.",
           mainMealVegetarian: "Não Definido.",
@@ -163,12 +180,48 @@ export default function Wallet() {
           dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
         else
           dayMenu.priceDefault =  prices[prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length) + 1];
-
+        prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length)
         dayMenu.priceVisit = getPrice(prices, "Visitante");
+        let timeStart;
+          let timeEnd;
         if (menu.includes("ALMOÇO")){
+          
+          if(lunchMenu.day == 6){
+            try{
+              timeStart = campus[local]['satStart'];
+              timeEnd = campus[local]['satEnd'];
+            }
+            catch(e){
+              timeStart = "Não Definido";
+              timeEnd = "Não Definido";
+            }
+          }
+          else {
+            timeStart = campus[local]['lunchStart'];
+            timeEnd = campus[local]['lunchEnd'];
+          }
+          dayMenu.lunchStartTime = timeStart
+          dayMenu.lunchEndTime = timeEnd
+
           setLunchMenu({ ...dayMenu });
         } 
         else if (menu.includes("JANTAR")){
+          if(dinnerMenu.day == 6){
+            try{
+              timeStart = campus[local]['satStart'];
+              timeEnd = campus[local]['satEnd'];
+            }
+            catch(e){
+              timeStart = "Não Definido";
+              timeEnd = "Não Definido";
+            }
+          }
+          else {
+            timeStart = campus[local]['dinnerStart'];
+            timeEnd = campus[local]['dinnerEnd'];
+          }
+          dayMenu.dinnerStartTime = timeStart,
+          dayMenu.dinnerEndTime = timeEnd
           setDinnerMenu({ ...dayMenu });
         } 
       }
@@ -212,7 +265,7 @@ export default function Wallet() {
   });
 
   return (
-    <View style={styles.backgroundColor}>
+    <View style={{...styles.backgroundColor, flex:1}}>
       <ScrollView>
         <RestaurantTickets />
         <View style={styles.infoView}>
@@ -221,6 +274,7 @@ export default function Wallet() {
             Edite o valor de cada refeição nas configurações.
           </Text>
         </View>
+        {user.campus.toLocaleLowerCase() != "lagoa do sino" && <>
         <View style={styles.cardapioView}>
           <Text style={styles.cardapioText}>Cardápio</Text>
           <Text style={styles.cardapioSubText}>
@@ -270,7 +324,7 @@ export default function Wallet() {
             price={dinnerMenu.priceVisit}
           ></Menu>
         ) : null}
-
+        </>}
         <View style={{ height: 10 }}></View>
 
       </ScrollView>

@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from '../../helpers/helper';
 import { updateSemester } from '../../redux/actions/semesterActions';
 import { updateUser } from '../../redux/actions/userActions';
-import {toggleTheme as tg} from '../../redux/actions/themeActions';
+import {setTheme, toggleTheme as tg} from '../../redux/actions/themeActions';
 import { useNavigation } from '@react-navigation/native';
+import { SelGradSquare } from '../../components/Gradient';
 
 export default function Config() {
   const user = useSelector(state => state.user).user
@@ -86,6 +87,7 @@ export default function Config() {
   const setCampus = (name) => {
     dispatch(updateUser({ ...user, campus: name }))
   }
+  const setColor = (idx) => dispatch(setTheme(idx)) 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface1 }}>
       <ScrollView>
@@ -145,6 +147,32 @@ export default function Config() {
               <Text style={styles.text}>Ir para as Boas Vindas</Text>
             </View>
           </TouchableOpacity>
+
+          <View style={styles.opcao}>
+            <View style={styles.linha}>
+              <MaterialIcons style={styles.icon} name="color-lens" size={24} color={colors.onSurfaceVariant} />
+              <Text style={styles.text}>Temas</Text>
+            </View>
+          </View>
+
+          <View style={{  flexDirection: "row",
+                          alignItems: 'center',
+                          marginHorizontal: 18,
+                          marginTop: 5, 
+                          justifyContent: 'space-between' }}>
+
+            <SelGradSquare color={0} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={1} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={2} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={3} state={themeConfig.themeIdx} setState={setColor} />
+            {/* <SelGradSquare color={4} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={5} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={6} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={7} state={themeConfig.themeIdx} setState={setColor} /> */}
+
+          </View>
+
+
         </View>
       </ScrollView></View>)
 }

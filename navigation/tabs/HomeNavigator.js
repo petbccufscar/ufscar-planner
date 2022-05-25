@@ -12,10 +12,10 @@ export default function HomeNavigator() {
         <homeStack.Navigator screenOptions={{
             title: 'UFSCar Planner',
             headerStyle: {
-                backgroundColor: colors.surface1,
+                backgroundColor: colors.headerInactive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onSurface,
+            headerTintColor: colors.onHeader,
             headerTitleAlign: 'center',
         }}>
             <homeStack.Screen name="Home" component={Home} />
