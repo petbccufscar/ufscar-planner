@@ -84,6 +84,15 @@ export default function Wallet() {
     }
   }
 
+  function getPrice(prices, typeName){
+    try{
+      return prices[prices.indexOf(typeName) + 1].trim();
+    }
+    catch (e){
+      return "Não Definido";
+    }
+  }
+
   async function menuScrapping(date) {
     const dateString = formatDate(date);
     const campus = {
@@ -104,12 +113,22 @@ export default function Wallet() {
     };
 
     const searchUrl = campus['araras']['urlCard'];
+    const priceUrl = campus['sorocaba']['urlPrice'];
     const response = await fetch(searchUrl);
+    const priceResponse = await fetch(priceUrl);
 
     const htmlString = await response.text();
-    const $ = cheerio.load(htmlString);
-
+    const priceHtmlString = await priceResponse.text();
+    
+    let $ = cheerio.load(htmlString);
     const weekMenu = $(".col-lg-7.metade.periodo");
+    
+    $ = cheerio.load(priceHtmlString);
+    const priceMenu = $(".col-sm-12");
+    console.log(priceMenu.length);
+    
+    let prices = priceMenu.eq(0).text();
+    prices = prices.split("\n").filter(x => x !== "")
     for (let i = 0; i < weekMenu.length; i++) {
       const menu = weekMenu.eq(i).text();
       if (menu.includes(dateString)) {
@@ -122,6 +141,8 @@ export default function Wallet() {
           bean: "Não Definido.",
           salad: "Não Definido.",
           desert: "Não Definido.",
+          priceDefault: "R$ ???",
+          priceVisit: "R$ ???"
         };
         dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
         
@@ -138,6 +159,12 @@ export default function Wallet() {
         dayMenu.bean = getMenuItem(menu, "Feijão");
         dayMenu.salad = getMenuItem(menu, "Saladas");
         dayMenu.desert = getMenuItem(menu, "Sobremesa");
+        if(prices.indexOf("Estudante (UFSCar)") != -1)
+          dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
+        else
+          dayMenu.priceDefault =  prices[prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length) + 1];
+
+        dayMenu.priceVisit = getPrice(prices, "Visitante");
         if (menu.includes("ALMOÇO")){
           setLunchMenu({ ...dayMenu });
         } 
