@@ -20,10 +20,10 @@ function Bar(props) {
       <View style={{ width: `${progress}%`, backgroundColor: colorInside }}></View>
       <View style={{ width: `${100 - progress}%`, backgroundColor: colorOutside }}></View>
       <View style={{ left: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: colors.onSurface }}>{text}</Text>
+        <Text style={{}}>{text}</Text>
       </View>
       <View style={{ right: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: colors.onSurface }}>{`${progress.toFixed(2)}%`}</Text>
+        <Text style={{}}>{`${progress.toFixed(2)}%`}</Text>
       </View>
     </View>)
 
