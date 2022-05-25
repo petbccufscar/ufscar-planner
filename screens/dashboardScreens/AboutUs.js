@@ -24,19 +24,19 @@ export default function AboutUs() {
     },
     title: {
       fontSize: 18,
-      color: theme.colors.primary,
+      color: theme.colors.onSurface,
     },
     text: {
       padding: 5,
       fontSize: 16,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurfaceVariant,
       flexDirection: "row",
       alignItems: "center",
     },
     contentText: {
       padding: 10,
       fontSize: 16,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurfaceVariant,
       flexDirection: "row",
       alignItems: "center",
     },

@@ -151,27 +151,70 @@ export default function Wallet() {
 
     prices = prices.split("\n").filter(x => x !== "");
 
+    let dayMenu = {
+      mainMeal: "Não Definido.",
+      mainMealVegan: "Não Definido.",
+      mainMealVegetarian: "Não Definido.",
+      garrison: "Não Definido.",
+      rice: "Não Definido.",
+      bean: "Não Definido.",
+      salad: "Não Definido.",
+      desert: "Não Definido.",
+      priceDefault: "R$ ???",
+      priceVisit: "R$ ???",
+    };
+    if(prices.indexOf("Estudante (UFSCar)") != -1)
+      dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
+    else
+      dayMenu.priceDefault =  prices[prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length) + 1];
+    dayMenu.priceVisit = getPrice(prices, "Visitante");
+
+    let timeStart;
+    let timeEnd;
+
+    if(lunchMenu.day == 6){
+      try{
+        timeStart = campus[local]['satStart'];
+        timeEnd = campus[local]['satEnd'];
+      }
+      catch(e){
+        timeStart = "Não Definido";
+        timeEnd = "Não Definido";
+      }
+    }
+    else {
+      timeStart = campus[local]['lunchStart'];
+      timeEnd = campus[local]['lunchEnd'];
+    }
+    dayMenu.lunchStartTime = timeStart
+    dayMenu.lunchEndTime = timeEnd
+
+    if(dinnerMenu.day == 6){
+      try{
+        timeStart = campus[local]['satStart'];
+        timeEnd = campus[local]['satEnd'];
+      }
+      catch(e){
+        timeStart = "Não Definido";
+        timeEnd = "Não Definido";
+      }
+    }
+    else {
+      timeStart = campus[local]['dinnerStart'];
+      timeEnd = campus[local]['dinnerEnd'];
+    }
+    dayMenu.dinnerStartTime = timeStart,
+    dayMenu.dinnerEndTime = timeEnd
+
+
+    let foundLunch = false
+    let foundDinner = false
+
     for (let i = 0; i < weekMenu.length; i++) {
       const menu = weekMenu.eq(i).text();
       
       if (menu.includes(dateString)) {
 
-        let dayMenu = {
-          mainMeal: "Não Definido.",
-          mainMealVegan: "Não Definido.",
-          mainMealVegetarian: "Não Definido.",
-          garrison: "Não Definido.",
-          rice: "Não Definido.",
-          bean: "Não Definido.",
-          salad: "Não Definido.",
-          desert: "Não Definido.",
-          priceDefault: "R$ ???",
-          priceVisit: "R$ ???",
-          // lunchStartTime: '??h??',
-          // lunchEndTime: '??h??',
-          // dinnerStartTime: '??h??',
-          // dinnerEndTime: '??h??',
-        };
         // let dayMenu = {...defaultMenu}
 
         dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
@@ -189,56 +232,22 @@ export default function Wallet() {
         dayMenu.bean = getMenuItem(menu, "Feijão");
         dayMenu.salad = getMenuItem(menu, "Saladas");
         dayMenu.desert = getMenuItem(menu, "Sobremesa");
-        if(prices.indexOf("Estudante (UFSCar)") != -1)
-          dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
-        else
-          dayMenu.priceDefault =  prices[prices.findIndex( x => 0 < (x.match(/Aluno/g) || []).length) + 1];
-  
-        dayMenu.priceVisit = getPrice(prices, "Visitante");
-        let timeStart;
-          let timeEnd;
-        if (menu.includes("ALMOÇO")){
-          
-          if(lunchMenu.day == 6){
-            try{
-              timeStart = campus[local]['satStart'];
-              timeEnd = campus[local]['satEnd'];
-            }
-            catch(e){
-              timeStart = "Não Definido";
-              timeEnd = "Não Definido";
-            }
-          }
-          else {
-            timeStart = campus[local]['lunchStart'];
-            timeEnd = campus[local]['lunchEnd'];
-          }
-          dayMenu.lunchStartTime = timeStart
-          dayMenu.lunchEndTime = timeEnd
 
+        if (menu.includes("ALMOÇO")){
           setLunchMenu({ ...dayMenu });
+          foundLunch = true;
         } 
         else if (menu.includes("JANTAR")){
-          if(dinnerMenu.day == 6){
-            try{
-              timeStart = campus[local]['satStart'];
-              timeEnd = campus[local]['satEnd'];
-            }
-            catch(e){
-              timeStart = "Não Definido";
-              timeEnd = "Não Definido";
-            }
-          }
-          else {
-            timeStart = campus[local]['dinnerStart'];
-            timeEnd = campus[local]['dinnerEnd'];
-          }
-          dayMenu.dinnerStartTime = timeStart,
-          dayMenu.dinnerEndTime = timeEnd
           setDinnerMenu({ ...dayMenu });
+          foundDinner = true;
         } 
       }
     }
+    if(!foundLunch)
+      setLunchMenu({ ...dayMenu });
+    if(!foundDinner)
+      setDinnerMenu({ ...dayMenu });
+
 
   }
 

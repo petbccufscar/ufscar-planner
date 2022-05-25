@@ -187,7 +187,7 @@ export function ConfigSemester() {
       marginRight: 10
     },
     text: {
-      color: colors.onSurface,
+      color: colors.onSurfaceVariant,
 
     },
     datePickerInput: {
@@ -227,7 +227,7 @@ export function ConfigSemester() {
     </View>
     <DateTimePickerModal
       style={{ width: "100%" }}
-      textColor={colors.onSurfaceVariant}
+      textColor={colors.onSurface}
       isVisible={showEndPicker}
       mode={"date"}
       value={new Date(semester.end)}
