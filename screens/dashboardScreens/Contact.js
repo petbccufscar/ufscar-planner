@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Linking } from 'react-native';
 import { useTheme } from "react-native-paper";
@@ -58,7 +57,6 @@ export default function Contato() {
       {/* multiline textInput*/}
       <TextInput style={styles.input} selectionColor={colors.primary} multiline={true} numberOfLines={4} onChangeText={(text) => setText(text)} value={text} />
 
-      <StatusBar style="auto" />
     </View>
   );
 }

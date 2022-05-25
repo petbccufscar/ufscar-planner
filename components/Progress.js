@@ -1,5 +1,4 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -90,7 +89,6 @@ export default function Progress() {
             </TouchableOpacity>
           </View>
         </View>
-        <StatusBar style="auto" />
       </View>
       <Portal>
         <Dialog style={{ backgroundColor: colors.surface }} visible={showDialog} onDismiss={() => setShowDialog(false)}>
