@@ -127,6 +127,10 @@ const Menu = (props) => {
           <Text style={styles.subtitle}>Prato Principal - Vegetariano:</Text>
           <Text style={styles.itemMenuSubject}>{props.mainMealVegetarian}</Text>
         </View>
+        <View>
+          <Text style={styles.subtitle}>Prato Principal - Intolerante/Vegano:</Text>
+          <Text style={styles.itemMenuSubject}>{props.mainMealVegan}</Text>
+        </View>
         {shouldShow ? (
           <View>
             <View>

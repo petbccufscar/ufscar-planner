@@ -18,7 +18,7 @@ import RestaurantTickets from "../components/RestaurantTickt";
 export default function Wallet() {
   const navigation = useNavigation();
   const timeWidth = wp("100%") - 7.5 * hourWidth;
-  const today = new Date();
+  const today = new Date(2020, 2,18);
   const first = new Date(
     today.getTime() - (today.getDay() - 1) * 24 * 60 * 60 * 1000
   );
@@ -37,12 +37,15 @@ export default function Wallet() {
     saturdayLunchStartTime: "11:30h",
     saturdayLunchEndTime: "13:00h",
     mainMeal: "Não Definido.",
+    mainMealVegan: "Não Definido.",
     mainMealVegetarian: "Não Definido.",
     garrison: "Não Definido.",
     rice: "Não Definido.",
     bean: "Não Definido.",
     salad: "Não Definido.",
     desert: "Não Definido.",
+    priceDefault: "R$ ???",
+    priceVisit: "R$ ???"
   });
   const [selectedDay, setSelectedDay] = useState(today);
 
@@ -55,11 +58,14 @@ export default function Wallet() {
     dinnerEndTime: "19:00h",
     mainMeal: "Não Definido.",
     mainMealVegetarian: "Não Definido.",
+    mainMealVegan: "Não Definido.",
     garrison: "Não Definido.",
     rice: "Não Definido.",
     bean: "Não Definido.",
     salad: "Não Definido.",
     desert: "Não Definido.",
+    priceDefault: "R$ ???",
+    priceVisit: "R$ ???"
   });
 
   useEffect(() => {
@@ -67,12 +73,37 @@ export default function Wallet() {
   }, [selectedDay]);
 
   function getMenuItem(menu, itemName) {
-    return menu.split(itemName + ": ")[1].split("\n")[0];
+    try {
+      const result = (menu.split(itemName+":")[1].split("\n")[0]).trim()
+      if (result.trim().length > 0)
+        return result.trim();
+      else
+        return "Não Definido."
+    } catch (e){
+      return "Não Definido."
+    }
   }
 
   async function menuScrapping(date) {
     const dateString = formatDate(date);
-    const searchUrl = `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`;
+    const campus = {
+      "sorocaba" : {
+        'urlCard':`https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio`,
+        'urlPrice':'https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes'
+      },
+      "araras" : {
+        'urlCard':`https://www.araras.ufscar.br/restaurante-universitario/cardapio`,
+        'urlPrice':'https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes'
+
+      },
+      "são carlos" : {
+        'urlCard':`https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
+        'urlPrice':'https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos'
+
+      }
+    };
+
+    const searchUrl = campus['araras']['urlCard'];
     const response = await fetch(searchUrl);
 
     const htmlString = await response.text();
@@ -84,6 +115,7 @@ export default function Wallet() {
       if (menu.includes(dateString)) {
         const dayMenu = {
           mainMeal: "Não Definido.",
+          mainMealVegan: "Não Definido.",
           mainMealVegetarian: "Não Definido.",
           garrison: "Não Definido.",
           rice: "Não Definido.",
@@ -91,22 +123,30 @@ export default function Wallet() {
           salad: "Não Definido.",
           desert: "Não Definido.",
         };
-
         dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
+        
         dayMenu.mainMealVegetarian = getMenuItem(
           menu,
           "Prato Principal - Vegetariano"
+        );
+        dayMenu.mainMealVegan = getMenuItem(
+          menu,
+          "Prato Principal - Intolerante/Vegano"
         );
         dayMenu.garrison = getMenuItem(menu, "Guarnição");
         dayMenu.rice = getMenuItem(menu, "Arroz");
         dayMenu.bean = getMenuItem(menu, "Feijão");
         dayMenu.salad = getMenuItem(menu, "Saladas");
         dayMenu.desert = getMenuItem(menu, "Sobremesa");
-
-        if (menu.includes("ALMOÇO")) setLunchMenu({ ...dayMenu });
-        else if (menu.includes("JANTAR")) setDinnerMenu({ ...dayMenu });
+        if (menu.includes("ALMOÇO")){
+          setLunchMenu({ ...dayMenu });
+        } 
+        else if (menu.includes("JANTAR")){
+          setDinnerMenu({ ...dayMenu });
+        } 
       }
     }
+
   }
 
   const theme = useTheme();
@@ -176,13 +216,14 @@ export default function Wallet() {
           saturdayLunchEndTime={lunchMenu.saturdayLunchEndTime}
           mainMeal={lunchMenu.mainMeal}
           mainMealVegetarian={lunchMenu.mainMealVegetarian}
+          mainMealVegan={lunchMenu.mainMealVegan}
           garrison={lunchMenu.garrison}
           rice={lunchMenu.rice}
           bean={lunchMenu.bean}
           salad={lunchMenu.salad}
           desert={lunchMenu.desert}
-          studentPrice={"RS 5,20"}
-          price={"RS 10,40"}
+          studentPrice={lunchMenu.priceDefault}
+          price={lunchMenu.priceVisit}
         ></Menu>
         {lunchMenu.day != "6" ? (
           <Menu
@@ -191,14 +232,15 @@ export default function Wallet() {
             dinnerStartTime={dinnerMenu.dinnerStartTime}
             dinnerEndTime={dinnerMenu.dinnerEndTime}
             mainMeal={dinnerMenu.mainMeal}
+            mainMealVegan={lunchMenu.mainMealVegan}
             mainMealVegetarian={dinnerMenu.mainMealVegetarian}
             garrison={dinnerMenu.garrison}
             rice={dinnerMenu.rice}
             bean={dinnerMenu.bean}
             salad={dinnerMenu.salad}
             desert={dinnerMenu.desert}
-            studentPrice={"RS 5,20"}
-            price={"RS 10,40"}
+            studentPrice={dinnerMenu.priceDefault}
+            price={dinnerMenu.priceVisit}
           ></Menu>
         ) : null}
 
