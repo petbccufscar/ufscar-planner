@@ -590,7 +590,7 @@ export function NotaRender(props) {
           </TouchableOpacity>
         </View>
         <Portal>
-          <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
+          <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
             <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha qual nota você deseja editar, e informe o valor.</Dialog.Title>
             <Dialog.Content>
               <DropDown
@@ -809,7 +809,7 @@ export function FreqRender(props) {
       <Gradient style={styles.barprogress} color={task.color}></Gradient>
     </View>
     <Portal>
-      <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
+      <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
         <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha os meios de presença dessa matéria:</Dialog.Title>
         <Dialog.Content>
           <DropDown

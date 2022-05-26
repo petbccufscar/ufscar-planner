@@ -706,7 +706,7 @@ export default function EditScreen({ route, navigation }) {
       paddingBottom: 20,
     },
     dialog: {
-      backgroundColor: colors.surface3
+      backgroundColor: colors.dialog
     },
     input: {
       height: 40,

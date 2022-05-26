@@ -91,7 +91,7 @@ export default function Progress() {
         </View>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.surface }} visible={showDialog} onDismiss={() => setShowDialog(false)}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={showDialog} onDismiss={() => setShowDialog(false)}>
           <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha as datas do semestre</Dialog.Title>
           <View style={{ marginHorizontal: 20 }}>
             <ConfigSemester></ConfigSemester>

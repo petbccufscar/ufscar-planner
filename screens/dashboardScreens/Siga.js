@@ -215,7 +215,7 @@ export default function SigaScreen() {
     </TouchableOpacity>
     
     <Portal>
-      <Dialog style={{ backgroundColor: colors.surface3 }} visible={openSigaDialog} onDismiss={() => setOpenSigaDialog(false)}>
+      <Dialog style={{ backgroundColor: colors.dialog }} visible={openSigaDialog} onDismiss={() => setOpenSigaDialog(false)}>
         <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Tem certeza que quer prosseguir?</Dialog.Title>
         <Dialog.Content>
           <Text style={{ color: colors.onSurfaceVariant }}>

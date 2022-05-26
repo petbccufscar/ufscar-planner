@@ -315,7 +315,7 @@ export default function NewSubject({ route, navigation }) {
         </View>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.surface3 }} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
           <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Nova variável</Dialog.Title>
           <Dialog.Content>
             <TextInput
@@ -351,7 +351,7 @@ export default function NewSubject({ route, navigation }) {
         </Dialog>
       </Portal>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.surface3 }} visible={isDialogValueOpen}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogValueOpen}>
           <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Adicionar valor</Dialog.Title>
           <Dialog.Content>
             <TextInput

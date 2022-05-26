@@ -321,7 +321,7 @@ export default function Details({ route, navigation }) {
             </TouchableOpacityD>
 
             <Portal>
-              <Dialog style={{ backgroundColor: colors.surface3 }} visible={openDeleteDialog} onDismiss={() => setOpenDeleteDialog(false)}>
+              <Dialog style={{ backgroundColor: colors.dialog }} visible={openDeleteDialog} onDismiss={() => setOpenDeleteDialog(false)}>
                 <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Tem certeza que quer excluir?</Dialog.Title>
                 <Dialog.Actions>
                   <Button onPress={() => setOpenDeleteDialog(false)}>
