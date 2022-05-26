@@ -178,7 +178,8 @@ export default function SigaScreen() {
 
   const [openSigaDialog, setOpenSigaDialog] = useState(false);
 
-  return (<View style={{ flex: 1, backgroundColor: colors.surface3, alignItems: 'center' }}>
+  return (
+  <View style={{ flex: 1, backgroundColor: colors.surface1, alignItems: 'center' }}>
     <SIGA size={30} style={{marginTop: 20}}/>
     <Text style={{...styles.description, paddingBottom:0}}>Faça login usando as mesmas credenciais que você utiliza ao entrar no SIGA.
     </Text><Text style={{...styles.description, paddingTop:0}}>Ao conectar, suas matérias anteriores registradas pelo siga serão substituidas pelas atuais</Text>

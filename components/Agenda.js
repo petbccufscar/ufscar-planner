@@ -261,7 +261,7 @@ function RenderMonthCalendar(props) {
                 <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`${monthNames[props.month]} ${props.year}`}</Text>
             </View> */}
             <View style={{ flexDirection: 'row' }}>
-                {weekDaysNames.map((day, index) => (<Text style={{ flex: 1, color: colors.onPrimaryContainer, textAlign: 'center', fontWeight: 'bold' }} key={index}>{day}</Text>))}
+                {weekDaysNames.map((day, index) => (<Text style={{ flex: 1, color: colors.onSurface, textAlign: 'center', fontWeight: 'bold' }} key={index}>{day}</Text>))}
             </View>
             <RenderCalendarRow marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month} />
 

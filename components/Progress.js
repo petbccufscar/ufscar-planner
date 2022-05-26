@@ -11,7 +11,7 @@ function Bar(props) {
   const text = props.text || "";
   const progress = props.progress || 0;
   const colors = useTheme().colors
-  const colorOutside = props.colorOutside || colors.surface5;
+  const colorOutside = props.colorOutside || "#fdfdfd";
   const colorInside = props.colorInside || "#73FCB2";
   const style = props.style || {};
   return (

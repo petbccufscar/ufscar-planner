@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Menu, Switch, TextInput, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { updateUser } from '../../redux/actions/userActions';
 import {setTheme, toggleTheme as tg} from '../../redux/actions/themeActions';
 import { useNavigation } from '@react-navigation/native';
 import { SelGradSquare } from '../../components/Gradient';
+import ScrollView from "./../../components/ScrollView";
 
 export default function Config() {
   const user = useSelector(state => state.user).user
@@ -190,6 +191,10 @@ export function ConfigSemester() {
       color: colors.onSurfaceVariant,
 
     },
+    textInput: {
+      color: colors.onSurface,
+
+    },
     datePickerInput: {
       width: '100%',
       backgroundColor: colors.surface5,
@@ -268,7 +273,7 @@ export function ConfigSemester() {
       headerTextIOS={"Escolha as datas"}
     />
     <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowBeginPicker(true)}>
-      <Text style={styles.text}>{formatDate(new Date(semester.init))}</Text>
+      <Text style={styles.textInput}>{formatDate(new Date(semester.init))}</Text>
     </TouchableOpacity>
 
     <View style={{ ...styles.opcao, marginBottom: 10 }}>
@@ -278,7 +283,7 @@ export function ConfigSemester() {
       </View>
     </View>
     <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowEndPicker(true)}>
-      <Text style={styles.text}>{formatDate(new Date(semester.end))}</Text>
+      <Text style={styles.textInput}>{formatDate(new Date(semester.end))}</Text>
     </TouchableOpacity></>)
 
 }
