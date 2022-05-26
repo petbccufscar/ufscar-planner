@@ -287,7 +287,7 @@ export default function Wallet() {
   });
 
   return (
-    <View style={{...styles.backgroundColor, flex:1}}>
+    <View style={{...styles.backgroundColor, flex:1 }}>
       <ScrollView>
         <RestaurantTickets />
         <View style={styles.infoView}>
@@ -347,7 +347,7 @@ export default function Wallet() {
           ></Menu>
         ) : null}
         </>}
-        <View style={{ height: 10 }}></View>
+        <View style={{ height: 30 }}></View>
 
       </ScrollView>
     </View>

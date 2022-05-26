@@ -91,7 +91,7 @@ export default function Config() {
   const setColor = (idx) => dispatch(setTheme(idx)) 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface1 }}>
-      <ScrollView>
+      <ScrollView style={{backgroundColor: colors.surface1}}>
         <View style={{ ...styles.container, paddingTop: 10 }}>
           <View style={{ ...styles.opcao, marginTop: 10, marginBottom: 0 }}>
             <View style={styles.linha}>
@@ -163,15 +163,22 @@ export default function Config() {
                           justifyContent: 'space-between' }}>
 
             <SelGradSquare color={0} style={{backgroundColor: "#930010"}} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={1} style={{backgroundColor: "#93000A"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={1} style={{backgroundColor: "red"}} state={themeConfig.themeIdx} setState={setColor} />
             <SelGradSquare color={2} style={{backgroundColor: "#5E3280"}} state={themeConfig.themeIdx} setState={setColor} />
             <SelGradSquare color={3} style={{backgroundColor: "#832046"}} state={themeConfig.themeIdx} setState={setColor} />
-            {/* <SelGradSquare color={4} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={5} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={6} state={themeConfig.themeIdx} setState={setColor} />
-            <SelGradSquare color={7} state={themeConfig.themeIdx} setState={setColor} /> */}
-
-          </View>
+            <SelGradSquare color={4} style={{backgroundColor: "blue"}} state={themeConfig.themeIdx} setState={setColor} />
+            </View><View style={{  flexDirection: "row",
+                          alignItems: 'center',
+                          marginHorizontal: 18,
+                          marginTop: 5, 
+                          justifyContent: 'space-between' }}>
+            <SelGradSquare color={5} style={{backgroundColor: "purple"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={6} style={{backgroundColor: "green"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={7} style={{backgroundColor: "yellow"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare theme={"cyan"} color={8} style={{backgroundColor: "cyan"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare theme={"#C4F18C"} color={9} state={themeConfig.themeIdx} setState={setColor} />
+          
+          </View> 
 
 
         </View>

@@ -795,9 +795,9 @@ export function FreqRender(props) {
     <View style={styles.body}>
       <View style={styles.textocontainer}>
         {isDefault && <>
-          <Text style={styles.texto}>quantidade de presenças: {aulasDadas - faltas}</Text>
-          <Text style={styles.texto}>quantidade de faltas: {faltas}</Text>
-          <Text style={styles.texto}>faltas disponiveis: {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}</Text>
+          <Text style={styles.texto}>Quantidade de presenças: {aulasDadas - faltas}</Text>
+          <Text style={styles.texto}>Quantidade de faltas: {faltas}</Text>
+          <Text style={styles.texto}>Faltas disponiveis: {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}</Text>
         </>}
       </View>
       <View style={styles.percentcontainer}>

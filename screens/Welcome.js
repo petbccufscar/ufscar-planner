@@ -13,7 +13,7 @@ import Toast from "react-native-toast-message";
 import { addEvent, removeEvent, removeSIGA } from "../redux/actions/eventActions";
 import { addSigaSubject } from "./dashboardScreens/Siga";
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
-
+import { useEffect } from "react";
 
 export default function Welcome() {
     const colors = useTheme().colors
@@ -429,27 +429,32 @@ function ScreenThree({ setPage }) {
             color: colors.onSurface,
         },
     })
-
-    const [selected, setSelected] = useState('São Carlos')
+    const user = useSelector(state => state.user).user
+    const [selected, setSelected] = useState(user.campus)
     const listItems = [
         { label: 'Araras', value: 'Araras' }
         , { label: 'Lagoa do Sino', value: 'Lagoa do Sino' }
         , { label: 'São Carlos', value: 'São Carlos' }
         , { label: 'Sorocaba', value: 'Sorocaba' }
     ]
-    const user = useSelector(state => state.user).user
+    
     const dispatch = useDispatch()
     const handleNameChange = (value) => {
         dispatch(updateUser({ ...user, name: value }))
     }
+    
+    useEffect(() => {
+        dispatch(updateUser({ ...user, campus: selected }))
+    }, [selected])
 
     return (
         <View style={styles.container}>
             <Text style={styles.h3}>
                 Digite como você deseja ser chamado(a) e o seu campus UFSCar:
             </Text>
-
+            <Text style={{ color: colors.outline, fontSize: 15 }}>Escolha seu apelido</Text>
             <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange} placeholder="Digite seu nome" placeholderTextColor={colors.outline} />
+            <Text style={{ color: colors.outline, fontSize: 15 }}>Escolha um campus</Text>
             <DropDown
                 mode={"flat"}
                 visible={dropOrd}
@@ -458,7 +463,6 @@ function ScreenThree({ setPage }) {
                 value={selected}
                 list={listItems}
                 setValue={setSelected}
-                label={<Text style={{ color: colors.outline, fontSize: 15 }}>Escolha um campus</Text>}
                 inputProps={{ style: styles.textInput }}
                 theme={{ colors: { primary: colors.primary, onSurface: colors.onSurface, background: colors.surfaceVariant, text: colors.onSurface } }}
             />

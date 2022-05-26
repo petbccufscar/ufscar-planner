@@ -190,7 +190,7 @@ export default function NewSubject({ route, navigation }) {
                   : styles.meanValidValueText
             }
           >
-            {magic(meanDict, meanExpressionArray.join("")).result?.toFixed(2)}
+            {magic(meanDict, meanExpressionArray.join("")).result* (type == "editMean"?1:100).toFixed(2) + ((type == "editMean")?"" : "%")}
           </Text>
         ) : (
           <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>

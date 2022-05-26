@@ -51,7 +51,7 @@ export default function AboutUs() {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{backgroundColor: theme.colors.surface1}}>
         <View style={styles.background}>
           <View style={{ alignItems: "center", marginBottom: 5 }}>
             <MaterialIcons name="info" size={54} color={theme.colors.primary} />
