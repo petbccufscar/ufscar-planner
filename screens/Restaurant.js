@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import {
   StyleSheet,
@@ -87,7 +86,6 @@ export default function Wallet() {
         </View>
         <View style={styles.line} />
         <Text style={styles.balance}>{formatReal(user.money)}</Text>
-        <StatusBar style="auto" />
         <View style={styles.changeValue}>
           <View style={styles.line} />
           <Pressable

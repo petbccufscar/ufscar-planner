@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from "react-redux";
-import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface } from "react-native-paper";
+import { Button, IconButton, useTheme, FAB, Menu, Divider, Surface, Portal, Dialog } from "react-native-paper";
 import { FreqRender } from "../../components/EventCards";
 import { defaultSubject, parseTime, SIGA, weekDaysSIGA } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
@@ -175,7 +175,11 @@ export default function SigaScreen() {
       color: colors.tertiary
     }
   })
-  return (<View style={{ flex: 1, backgroundColor: colors.surface3, alignItems: 'center' }}>
+
+  const [openSigaDialog, setOpenSigaDialog] = useState(false);
+
+  return (
+  <View style={{ flex: 1, backgroundColor: colors.surface1, alignItems: 'center' }}>
     <SIGA size={30} style={{marginTop: 20}}/>
     <Text style={{...styles.description, paddingBottom:0}}>Faça login usando as mesmas credenciais que você utiliza ao entrar no SIGA.
     </Text><Text style={{...styles.description, paddingTop:0}}>Ao conectar, suas matérias anteriores registradas pelo siga serão substituidas pelas atuais</Text>
@@ -206,9 +210,29 @@ export default function SigaScreen() {
 
       </TouchableOpacity>
     </View>
-    <TouchableOpacity style={styles.btn} onPress={() => Login(username, password)}>
+    <TouchableOpacity style={styles.btn} onPress={() => setOpenSigaDialog(true)}>
       <Text style={{ color: colors.onPrimary }}>Logar</Text>
     </TouchableOpacity>
-
+    
+    <Portal>
+      <Dialog style={{ backgroundColor: colors.dialog }} visible={openSigaDialog} onDismiss={() => setOpenSigaDialog(false)}>
+        <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Tem certeza que quer prosseguir?</Dialog.Title>
+        <Dialog.Content>
+          <Text style={{ color: colors.onSurfaceVariant }}>
+          Isso deletará as matérias importadas anteriormente !</Text>
+          </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={() => setOpenSigaDialog(false)}>
+            Não
+          </Button>
+          <Button onPress={() => {
+            setOpenSigaDialog(false);
+            Login(username, password);
+            }}>
+            Sim
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   </View>)
 }

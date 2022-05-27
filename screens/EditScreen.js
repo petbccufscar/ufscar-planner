@@ -110,14 +110,14 @@ export default function EditScreen({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onSurface,
+      headerTintColor: colors.onHeaderInactive,
       headerTitle: isSubject ? "Editar Matéria" : "Editar Evento",
 
       headerRight: () => (
         (
           <TouchableOpacity
             style={{
-              backgroundColor: colors.primary, padding: 10,
+              backgroundColor: colors.primaryContainer, padding: 10,
               borderRadius: 30, justifyContent: 'center', alignItems: 'center',
               marginRight: 10
             }}
@@ -146,7 +146,7 @@ export default function EditScreen({ route, navigation }) {
             }
             }
           >
-            <Text style={{ color: colors.onPrimary }}>Salvar</Text>
+            <Text style={{ color: colors.onPrimaryContainer }}>Salvar</Text>
           </TouchableOpacity>)
       ),
     });
@@ -706,7 +706,7 @@ export default function EditScreen({ route, navigation }) {
       paddingBottom: 20,
     },
     dialog: {
-      backgroundColor: colors.surface3
+      backgroundColor: colors.dialog
     },
     input: {
       height: 40,

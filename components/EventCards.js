@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from 'react-redux';
-import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames } from '../helpers/helper';
+import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames, SIGA } from '../helpers/helper';
 import { useTheme, Checkbox, Paragraph, Dialog, Portal, Button, TextInput } from "react-native-paper";
 import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { Gradient } from "./Gradient";
@@ -57,8 +57,8 @@ export function Task(props) {
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row'
-
+      flexDirection: 'row',
+      alignItems: 'center'
     },
     atumalaca: {
       padding: 10,
@@ -117,8 +117,10 @@ export function Task(props) {
 
       <View style={styles.atumalaca}>
         <View style={styles.linhaAcontecendoTitulo}>
-          <Text style={styles.itemTaskSubject}>{task.name}</Text>
-
+          <View style={{flexDirection:'row', alignItems:'center', flex:1}}>
+          <Text style={{...styles.itemTaskSubject, alignSelf:'flex-start', flex:1}}>{task.name}</Text>
+          {subjectScreen && task.siga && <SIGA/>}
+          </View>
           <View style={styles.AcontecendoView}>
             {acontecendoAgora && (<View style={styles.AcontecendoIcon}>
               <MaterialIcons name="hourglass-bottom" size={20} color={colors.onPrimary} />
@@ -227,8 +229,8 @@ export function EventCards(props) {
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row'
-
+      flexDirection: 'row',
+      alignItems: 'center'
     },
     atumalaca: {
       padding: 10,
@@ -588,7 +590,7 @@ export function NotaRender(props) {
           </TouchableOpacity>
         </View>
         <Portal>
-          <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
+          <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
             <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha qual nota você deseja editar, e informe o valor.</Dialog.Title>
             <Dialog.Content>
               <DropDown
@@ -636,7 +638,6 @@ export function NotaRender(props) {
     </TouchableOpacity>
   );
 }
-
 
 
 export function FreqRender(props) {
@@ -794,9 +795,9 @@ export function FreqRender(props) {
     <View style={styles.body}>
       <View style={styles.textocontainer}>
         {isDefault && <>
-          <Text style={styles.texto}>quantidade de presenças: {aulasDadas - faltas}</Text>
-          <Text style={styles.texto}>quantidade de faltas: {faltas}</Text>
-          <Text style={styles.texto}>faltas disponiveis: {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}</Text>
+          <Text style={styles.texto}>Quantidade de presenças: {aulasDadas - faltas}</Text>
+          <Text style={styles.texto}>Quantidade de faltas: {faltas}</Text>
+          <Text style={styles.texto}>Faltas disponiveis: {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}</Text>
         </>}
       </View>
       <View style={styles.percentcontainer}>
@@ -808,7 +809,7 @@ export function FreqRender(props) {
       <Gradient style={styles.barprogress} color={task.color}></Gradient>
     </View>
     <Portal>
-      <Dialog style={{ backgroundColor: colors.surface3 }} visible={visible} onDismiss={hideDialog}>
+      <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
         <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha os meios de presença dessa matéria:</Dialog.Title>
         <Dialog.Content>
           <DropDown

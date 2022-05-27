@@ -12,14 +12,15 @@ import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { addEvent, removeEvent, removeSIGA } from "../redux/actions/eventActions";
 import { addSigaSubject } from "./dashboardScreens/Siga";
+import { Ionicons, Entypo, MaterialIcons, MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
+import { useEffect } from "react";
 
 export default function Welcome() {
     const colors = useTheme().colors
     const [page, setPage] = useState(1);
     const user = useSelector(state => state.user).user;
     const navigation = useNavigation()
-    if (!user.welcome)
-        navigation.navigate('BottomNav')
+    
     const styles = StyleSheet.create({
         image: {
             width: '100%'
@@ -60,7 +61,6 @@ export default function Welcome() {
         });
         setPage(pageAux);
     }
-
 
     return (<View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -296,14 +296,33 @@ function ScreenTwo({ setPage }) {
             flex: 1,
             marginVertical: 8,
             borderRadius: 12,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
             borderBottomWidth: 0,
             borderColor: 'transparent',
             backgroundColor: colors.surfaceVariant,
             color: colors.onSurface,
+            flex:1,
         },
+        pssdBtn: {
+            marginVertical: 8,
+            borderTopRightRadius: 12,
+            borderBottomRightRadius: 12,
+            borderBottomWidth: 0,
+            padding: 10,
+            flex:1,
+            backgroundColor: colors.surfaceVariant,
+            color: colors.onSurface,
+            alignItems:'center',
+            justifyContent:'center'
+          },
+          pssdRow: {
+            flexDirection: "row",
+          },
     })
     const [username, setUsername] = useState("")
     const [pssw, setPssw] = useState("")
+    const [visible, setVisible] = useState(false)
 
     return (<View style={styles.container}>
         <SIGA size={40} style={styles.siga} />
@@ -312,7 +331,14 @@ function ScreenTwo({ setPage }) {
         </Text>
 
         <TextInput onChangeText={setUsername} style={styles.textInput} placeholder="CPF ou RA" placeholderTextColor={colors.outline} />
-        <TextInput secureTextEntry={true} onChangeText={setPssw} style={styles.textInput} placeholder="Senha do SIGA" placeholderTextColor={colors.outline} />
+        <View style={styles.pssdRow}>
+        <TextInput secureTextEntry={!visible} onChangeText={setPssw} style={styles.textInput} placeholder="Senha do SIGA" placeholderTextColor={colors.outline} />
+        <TouchableOpacity style={styles.pssdBtn} onPress={() => setVisible(!visible)}>
+        {!visible && <MaterialIcons name="visibility" size={24} color={colors.onSurface} />}
+        {visible && <MaterialIcons name="visibility-off" size={24} color={colors.onSurface} />}
+        </TouchableOpacity>
+        </View>  
+        
         <View style={styles.btnPlace}>
             <TouchableOpacity onPress={() => setPage(1)}>
                 <Text style={styles.secBtnText}>
@@ -403,27 +429,32 @@ function ScreenThree({ setPage }) {
             color: colors.onSurface,
         },
     })
-
-    const [selected, setSelected] = useState('São Carlos')
+    const user = useSelector(state => state.user).user
+    const [selected, setSelected] = useState(user.campus)
     const listItems = [
         { label: 'Araras', value: 'Araras' }
         , { label: 'Lagoa do Sino', value: 'Lagoa do Sino' }
         , { label: 'São Carlos', value: 'São Carlos' }
         , { label: 'Sorocaba', value: 'Sorocaba' }
     ]
-    const user = useSelector(state => state.user).user
+    
     const dispatch = useDispatch()
     const handleNameChange = (value) => {
         dispatch(updateUser({ ...user, name: value }))
     }
+    
+    useEffect(() => {
+        dispatch(updateUser({ ...user, campus: selected }))
+    }, [selected])
 
     return (
         <View style={styles.container}>
             <Text style={styles.h3}>
                 Digite como você deseja ser chamado(a) e o seu campus UFSCar:
             </Text>
-
+            <Text style={{ color: colors.outline, fontSize: 15 }}>Escolha seu apelido</Text>
             <TextInput style={styles.textInput} value={user.name} onChangeText={handleNameChange} placeholder="Digite seu nome" placeholderTextColor={colors.outline} />
+            <Text style={{ color: colors.outline, fontSize: 15 }}>Escolha um campus</Text>
             <DropDown
                 mode={"flat"}
                 visible={dropOrd}
@@ -432,7 +463,6 @@ function ScreenThree({ setPage }) {
                 value={selected}
                 list={listItems}
                 setValue={setSelected}
-                label={<Text style={{ color: colors.outline, fontSize: 15 }}>Escolha um campus</Text>}
                 inputProps={{ style: styles.textInput }}
                 theme={{ colors: { primary: colors.primary, onSurface: colors.onSurface, background: colors.surfaceVariant, text: colors.onSurface } }}
             />

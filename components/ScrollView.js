@@ -16,10 +16,10 @@ export default function ScrollView(props) {
     function changeHeaderColor(position) {
         navigation.setOptions({
             headerStyle: {
-                backgroundColor: position == 0 ? colors.surface1 : colors.surface5,
+                backgroundColor: position == 0 ? colors.headerInactive : colors.headerActive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onSurface,
+            headerTintColor:  position == 0 ? colors.onHeaderInactive : colors.onHeader,
         });
         if (position > 0 && onTop) {
             setOnTop(false);

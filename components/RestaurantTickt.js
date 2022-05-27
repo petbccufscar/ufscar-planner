@@ -155,7 +155,7 @@ export default function RestaurantTickets() {
         </ScrollView>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: theme.colors.surface3 }} visible={open} nDismiss={() => setOpen(false)}>
+        <Dialog style={{ backgroundColor: theme.colors.dialog }} visible={open} nDismiss={() => setOpen(false)}>
 
           <Dialog.Title>Alterar</Dialog.Title>
           <Dialog.Content>

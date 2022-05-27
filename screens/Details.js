@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet, Text, TouchableOpacity, View
 } from "react-native";
-import { FAB, useTheme, Checkbox } from "react-native-paper";
+import { FAB, useTheme, Checkbox, Portal, Dialog, Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime, magic } from "../helpers/ExpressionHelper";
-import { formatDateWithHour } from "../helpers/helper";
+import { formatDateWithHour, SIGA } from "../helpers/helper";
 import {
   removeEvent, updateEvent
 } from "../redux/actions/eventActions";
@@ -60,7 +60,7 @@ export default function Details({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onSurface,
+      headerTintColor: colors.onHeaderInactive,
       headerTitle: isSubject ? "Detalhes da Matéria" : "Detalhes do Evento",
     });
   }, []);
@@ -110,7 +110,6 @@ export default function Details({ route, navigation }) {
       color: colors.onSurface,
       fontSize: 16,
       fontWeight: 'bold',
-      marginBottom: 5
     },
     medfreqcontainer: {
       paddingRight: 30
@@ -140,7 +139,9 @@ export default function Details({ route, navigation }) {
       marginRight: 2,
       height: 24,
       width: 24,
-
+      justifyContent:'center',
+      alignItems:'center',
+      alignSelf:'center',
     },
     deleteFont: {
       color: colors.error
@@ -157,7 +158,8 @@ export default function Details({ route, navigation }) {
     },
     linhaEsquerdaDetail: {
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      marginBottom: 5,
     },
     containerSectionDetail: {
       borderBottomWidth: 1,
@@ -197,11 +199,18 @@ export default function Details({ route, navigation }) {
 
 
   })
-
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.trueContainer}>
+          {task.siga && <View style={styles.cortainer}>
+            <View style={styles.linhaEsquerdaDetail}>
+            <SIGA style={{marginRight: 5}}/>
+            <Text style={{ color: colors.onSurface }}>Cadastrado pelo SIGA</Text>
+            
+            </View>
+          </View>}
           <View style={styles.cortainer}>
             <View style={styles.linhaEsquerdaDetail}>
               <Gradient style={styles.corDetail} color={color} />
@@ -303,14 +312,31 @@ export default function Details({ route, navigation }) {
           }
           <View style={styles.linecenter}>
             <TouchableOpacityD style={styles.deleteButton} onPress={() => {
-              navigation.pop();
-              dispatch(removeEvent(task));
+              setOpenDeleteDialog(true)
             }}>
-              <View style={styles.linhaEsquerdaDetail}>
+              <View style={{...styles.linhaEsquerdaDetail, marginBottom: 0}}>
                 <MaterialCommunityIcons name="trash-can" style={styles.iconDetail} size={24} color={colors.error} />
                 <Text style={styles.deleteFont}>Excluir</Text>
               </View>
             </TouchableOpacityD>
+
+            <Portal>
+              <Dialog style={{ backgroundColor: colors.dialog }} visible={openDeleteDialog} onDismiss={() => setOpenDeleteDialog(false)}>
+                <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Tem certeza que quer excluir?</Dialog.Title>
+                <Dialog.Actions>
+                  <Button onPress={() => setOpenDeleteDialog(false)}>
+                    Não
+                  </Button>
+                  <Button onPress={() => {
+                    navigation.pop();
+                    dispatch(removeEvent(task));
+                  }}>
+                    Sim
+                  </Button>
+                </Dialog.Actions>
+              </Dialog>
+            </Portal>
+
           </View>
         </View>
       </ScrollView>

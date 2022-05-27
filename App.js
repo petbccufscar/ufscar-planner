@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef } from "react";
 import { AppRegistry, Platform, StyleSheet, UIManager } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -87,20 +88,21 @@ function Loader() {
   const eventsSt = useSelector((state) => state.events);
   const dispatch = useDispatch();
   dispatch(loadEvents(eventsSt));
-
+  const user = useSelector((state) => state.user).user;
   const themeConfig = useSelector((state) => state.theme);
 
   let theme = themeConfig.isDark ? CombinedDarkThemes[themeConfig.themeIdx] : CombinedDefaultThemes[themeConfig.themeIdx];
   
   return (
     <>
+      <StatusBar style={themeConfig.isDark?"light":"dark"}/>
         <PaperProvider theme={theme}>
           <NavigationContainer theme={theme}>
-            <HomeStackRoutes.Navigator screenOptions={() => ({
+            <HomeStackRoutes.Navigator initialRouteName={user.welcome? "Welcome": "BottomNav"} screenOptions={() => ({
               headerStyle: {
-                backgroundColor: theme.colors.surface1,
+                backgroundColor: theme.colors.headerInactive,
               },
-              headerTintColor: theme.colors.onSurface,
+              headerTintColor: theme.colors.onHeaderInactive,
             })}>
               <HomeStackRoutes.Screen
                 name="Welcome"

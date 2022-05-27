@@ -85,7 +85,7 @@ export function Days(props) {
             style={styles.dias}
             key={day.day}
           >
-            <Text style={{ color: theme.colors.onPrimaryContainer, fontWeight: 'bold', fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
+            <Text style={{ color: theme.colors.onSurface, fontWeight: 'bold', fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
             <View
               style={{
                 alignItems: "center",
@@ -98,7 +98,7 @@ export function Days(props) {
               }}
             >
               <Text
-                style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onPrimaryContainer }}
+                style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onSurface }}
               >
                 {day.day}
               </Text>

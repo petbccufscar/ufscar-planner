@@ -25,11 +25,11 @@ export function Gradient(props) {
     else {
         color = gradients[props.color]
     }
-    if (color.length == 1) {
+    if (color.length == 1 || props.theme != undefined) {
         return (
             <View
                 colors={color}
-                style={{ backgroundColor: color[0], ...(props.style || {}) }}
+                style={props.theme != undefined ?{ backgroundColor:  props.theme, ...(props.style || {})} : {backgroundColor: color[0], ...(props.style || {}) }}
             >
                 {props.children}
             </View>
@@ -64,7 +64,7 @@ export function SelGradSquare(props) {
             borderRadius: 9,
             borderWidth: state == props.color ? 1 : 0,
         }}>
-            <Gradient color={props.color} style={styles.square}>
+            <Gradient color={props.color} theme={props.theme} style={styles.square}>
                 {state == props.color && (<Feather name="check" size={24} color="white" />)}
             </Gradient>
         </TouchableOpacity>

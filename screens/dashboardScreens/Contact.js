@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Linking } from 'react-native';
 import { useTheme } from "react-native-paper";
@@ -10,21 +9,21 @@ export default function Contato() {
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTintColor: colors.onSurface,
+      headerTintColor: colors.onHeaderInactive,
       headerStyle: {
-        backgroundColor: colors.surface5,
+        backgroundColor: colors.headerInactive,
       },
       headerRight: () => (
         <TouchableOpacity
           style={{
-            backgroundColor: colors.primary, padding: 10,
+            backgroundColor: colors.primaryContainer, padding: 10,
             borderRadius: 30, justifyContent: 'center', alignItems: 'center',
             marginRight: 10
           }}
           onPress={() => Linking.openURL(`mailto:petbcc@ufscar.br?subject=Fale conosco: Ufscar Planner&body=${text}`)}
         >
 
-          <Text style={{ color: colors.onPrimary }}>Enviar</Text>
+          <Text style={{ color: colors.onPrimaryContainer }}>Enviar</Text>
         </TouchableOpacity>),
     });
   }, [
@@ -58,7 +57,6 @@ export default function Contato() {
       {/* multiline textInput*/}
       <TextInput style={styles.input} selectionColor={colors.primary} multiline={true} numberOfLines={4} onChangeText={(text) => setText(text)} value={text} />
 
-      <StatusBar style="auto" />
     </View>
   );
 }

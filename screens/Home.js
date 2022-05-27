@@ -105,7 +105,14 @@ export default function App() {
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
             <AcontecendoAgora list={acontecendoAgora} />
-            <View style={styles.infoRow}>
+            {classes.length + tasks.length == 0 && (
+                <View style={{...styles.infoRow, paddingVertical:30, paddingHorizontal:30,borderRadius:10, backgroundColor: theme.colors.surface, justifyContent:'center', marginVertical:20}}>
+                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+                <Text style={{...styles.infoText}}>Não há nenhuma atividade agendada para hoje.</Text>
+              </View>
+
+            )}
+            {classes.length + tasks.length > 0 && (<><View style={styles.infoRow}>
               <MaterialIcons name="info" size={24} color={theme.colors.primary} />
               <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
             </View>
@@ -129,7 +136,7 @@ export default function App() {
               {tasks.map((item, idx) => {
                 return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
               })}
-            </View>
+            </View></>)}
           </View>
         </ScrollView>
       </View>

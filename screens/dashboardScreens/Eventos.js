@@ -122,7 +122,7 @@ export default function SubjectScreen(props) {
         </TouchableOpacity>
         </View>
         <Portal>
-        <Dialog style={{ backgroundColor: colors.surface3 }} visible={showFilter} onDismiss={() => setShowFilter(false)}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={showFilter} onDismiss={() => setShowFilter(false)}>
             <Dialog.Title>Aplique os filtros abaixo</Dialog.Title>
             <Dialog.Content>
             <DropDown

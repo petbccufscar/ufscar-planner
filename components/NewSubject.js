@@ -120,6 +120,7 @@ export default function NewSubject({ route, navigation }) {
           icon={"check"}
           disabled={!validExpression(meanExpressionArray.join(""))}
           size={24}
+          color={colors.onHeaderInactive}
           onPress={() => {
             navigation.navigate({
               name: "Event",
@@ -189,7 +190,7 @@ export default function NewSubject({ route, navigation }) {
                   : styles.meanValidValueText
             }
           >
-            {magic(meanDict, meanExpressionArray.join("")).result?.toFixed(2)}
+            {magic(meanDict, meanExpressionArray.join("")).result* (type == "editMean"?1:100).toFixed(2) + ((type == "editMean")?"" : "%")}
           </Text>
         ) : (
           <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
@@ -314,7 +315,7 @@ export default function NewSubject({ route, navigation }) {
         </View>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.surface3 }} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
           <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Nova variável</Dialog.Title>
           <Dialog.Content>
             <TextInput
@@ -350,7 +351,7 @@ export default function NewSubject({ route, navigation }) {
         </Dialog>
       </Portal>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.surface3 }} visible={isDialogValueOpen}>
+        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogValueOpen}>
           <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Adicionar valor</Dialog.Title>
           <Dialog.Content>
             <TextInput

@@ -5,12 +5,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen'
-import { ScrollView } from 'react-native-gesture-handler'
+// import { ScrollView } from 'react-native-gesture-handler'
 import { FontAwesome } from '@expo/vector-icons'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from '@expo/vector-icons';
+import ScrollView from "./../../components/ScrollView";
 
 export default function AboutUs() {
   const navigation = useNavigation()
@@ -23,20 +24,20 @@ export default function AboutUs() {
       padding: 20,
     },
     title: {
-      fontSize: 18,
-      color: theme.colors.primary,
+      fontSize: 16,
+      color: theme.colors.onSurface,
     },
     text: {
       padding: 5,
-      fontSize: 16,
-      color: theme.colors.onSurface,
+      fontSize: 14,
+      color: theme.colors.onSurfaceVariant,
       flexDirection: "row",
       alignItems: "center",
     },
     contentText: {
       padding: 10,
-      fontSize: 16,
-      color: theme.colors.onSurface,
+      fontSize: 14,
+      color: theme.colors.onSurfaceVariant,
       flexDirection: "row",
       alignItems: "center",
     },
@@ -50,7 +51,7 @@ export default function AboutUs() {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={{backgroundColor: theme.colors.surface1}}>
         <View style={styles.background}>
           <View style={{ alignItems: "center", marginBottom: 5 }}>
             <MaterialIcons name="info" size={54} color={theme.colors.primary} />

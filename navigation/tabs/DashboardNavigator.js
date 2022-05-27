@@ -13,10 +13,10 @@ export default function DashboardNavigator() {
         <taskStack.Navigator screenOptions={{
             title: 'UFSCar Planner',
             headerStyle: {
-                backgroundColor: colors.surface1,
+                backgroundColor: colors.headerInactive,
             },
             headerShadowVisible: false,
-            headerTintColor: colors.onSurface,
+            headerTintColor: colors.onHeaderInactive,
             headerTitleAlign: 'center',
         }}>
             <taskStack.Screen name="Task" component={Dashboard} />

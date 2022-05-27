@@ -1,14 +1,16 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Menu, Switch, TextInput, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from '../../helpers/helper';
 import { updateSemester } from '../../redux/actions/semesterActions';
 import { updateUser } from '../../redux/actions/userActions';
-import {toggleTheme as tg} from '../../redux/actions/themeActions';
+import {setTheme, toggleTheme as tg} from '../../redux/actions/themeActions';
 import { useNavigation } from '@react-navigation/native';
+import { SelGradSquare } from '../../components/Gradient';
+import ScrollView from "./../../components/ScrollView";
 
 export default function Config() {
   const user = useSelector(state => state.user).user
@@ -61,7 +63,7 @@ export default function Config() {
     }
 
   });
-  const [money, setMoney] = useState(user.meal.toString());
+  const [money, setMoney] = useState(user?.meal?.toString() || "0");
   const handleMoneyChange = (value) => {
     try {
       const valor = parseFloat(value.substring(3))
@@ -86,9 +88,10 @@ export default function Config() {
   const setCampus = (name) => {
     dispatch(updateUser({ ...user, campus: name }))
   }
+  const setColor = (idx) => dispatch(setTheme(idx)) 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface1 }}>
-      <ScrollView>
+      <ScrollView style={{backgroundColor: colors.surface1}}>
         <View style={{ ...styles.container, paddingTop: 10 }}>
           <View style={{ ...styles.opcao, marginTop: 10, marginBottom: 0 }}>
             <View style={styles.linha}>
@@ -145,6 +148,39 @@ export default function Config() {
               <Text style={styles.text}>Ir para as Boas Vindas</Text>
             </View>
           </TouchableOpacity>
+
+          <View style={styles.opcao}>
+            <View style={styles.linha}>
+              <MaterialIcons style={styles.icon} name="color-lens" size={24} color={colors.onSurfaceVariant} />
+              <Text style={styles.text}>Temas</Text>
+            </View>
+          </View>
+
+          <View style={{  flexDirection: "row",
+                          alignItems: 'center',
+                          marginHorizontal: 18,
+                          marginTop: 5, 
+                          justifyContent: 'space-between' }}>
+
+            <SelGradSquare color={0} style={{backgroundColor: "#930010"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={1} style={{backgroundColor: "red"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={2} style={{backgroundColor: "#5E3280"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={3} style={{backgroundColor: "#832046"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={4} style={{backgroundColor: "blue"}} state={themeConfig.themeIdx} setState={setColor} />
+            </View><View style={{  flexDirection: "row",
+                          alignItems: 'center',
+                          marginHorizontal: 18,
+                          marginTop: 5, 
+                          justifyContent: 'space-between' }}>
+            <SelGradSquare color={5} style={{backgroundColor: "purple"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={6} style={{backgroundColor: "green"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare color={7} style={{backgroundColor: "yellow"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare theme={"cyan"} color={8} style={{backgroundColor: "cyan"}} state={themeConfig.themeIdx} setState={setColor} />
+            <SelGradSquare theme={"#C4F18C"} color={9} state={themeConfig.themeIdx} setState={setColor} />
+          
+          </View> 
+
+
         </View>
       </ScrollView></View>)
 }
@@ -159,6 +195,10 @@ export function ConfigSemester() {
       marginRight: 10
     },
     text: {
+      color: colors.onSurfaceVariant,
+
+    },
+    textInput: {
       color: colors.onSurface,
 
     },
@@ -199,7 +239,7 @@ export function ConfigSemester() {
     </View>
     <DateTimePickerModal
       style={{ width: "100%" }}
-      textColor={colors.onSurfaceVariant}
+      textColor={colors.onSurface}
       isVisible={showEndPicker}
       mode={"date"}
       value={new Date(semester.end)}
@@ -240,7 +280,7 @@ export function ConfigSemester() {
       headerTextIOS={"Escolha as datas"}
     />
     <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowBeginPicker(true)}>
-      <Text style={styles.text}>{formatDate(new Date(semester.init))}</Text>
+      <Text style={styles.textInput}>{formatDate(new Date(semester.init))}</Text>
     </TouchableOpacity>
 
     <View style={{ ...styles.opcao, marginBottom: 10 }}>
@@ -250,7 +290,7 @@ export function ConfigSemester() {
       </View>
     </View>
     <TouchableOpacity style={styles.datePickerInput} onPress={() => setShowEndPicker(true)}>
-      <Text style={styles.text}>{formatDate(new Date(semester.end))}</Text>
+      <Text style={styles.textInput}>{formatDate(new Date(semester.end))}</Text>
     </TouchableOpacity></>)
 
 }
