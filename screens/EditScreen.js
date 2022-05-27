@@ -304,10 +304,11 @@ export default function EditScreen({ route, navigation }) {
         </TouchableOpacity>
       );
     }
+    const headerTitle = isSubject ? "Quando e onde será a aula?":"Quando e onde será o evento?";
     return (
       <Portal>
         <Dialog style={styles.dialog} onDismiss={() => setOpenHorarioDialog(false)} visible={openHorarioDialog} contentStyle={{ backgroundColor: colors.surface }}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Quando e onde será o evento?</Dialog.Title>
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>{headerTitle}</Dialog.Title>
           <Dialog.Content>
             {props.weekly && (
               <>
