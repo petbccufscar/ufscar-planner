@@ -24,8 +24,8 @@ import { updateCardapio } from "../redux/actions/restaurantActions";
 export default function Wallet() {
   const navigation = useNavigation();
   const timeWidth = wp("100%") - 7.5 * hourWidth;
-  const today = new Date(2020, 2, 18);
-  // const today = new Date();
+  // const today = new Date(2020, 2, 18);
+  const today = new Date();
   const first = new Date(
     today.getTime() - (today.getDay() - 1) * 24 * 60 * 60 * 1000
   );
