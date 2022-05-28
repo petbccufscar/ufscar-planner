@@ -1,25 +1,40 @@
-import { Entypo, Feather, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import {
+  Entypo,
+  Feather,
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-  Alert, LayoutAnimation,
-  Linking, StyleSheet, Text, TextInput, TouchableOpacity, View,
+  Alert,
+  LayoutAnimation,
+  Linking,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import {ScrollView as DefaultScrollView} from "react-native";
+import { ScrollView as DefaultScrollView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { IconButton, Menu, useTheme, Portal, Button, Dialog } from "react-native-paper";
+import {
+  IconButton,
+  Menu,
+  useTheme,
+  Portal,
+  Button,
+  Dialog,
+} from "react-native-paper";
 import ScrollPicker from "react-native-picker-scrollview";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime, magic } from "../helpers/ExpressionHelper";
 import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
-import {
-  addEvent, updateEvent
-} from "../redux/actions/eventActions";
+import { addEvent, updateEvent } from "../redux/actions/eventActions";
 import { PickerGradSquare, SelGradSquare } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
-
-
-
 
 export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
@@ -35,10 +50,11 @@ export default function EditScreen({ route, navigation }) {
   const [teachers, setTeachers] = useState(task.teachers || []);
   const [whenSubmit, setWhenSubmit] = useState(task.when_submit || null);
 
-
   // tela separada
   const [grade, setGrade] = useState(task.grade || {});
-  const [frequency, setFrequency] = useState(task.frequency || "(aulasDadas - faltas)/aulasDadas");
+  const [frequency, setFrequency] = useState(
+    task.frequency || "(aulasDadas - faltas)/aulasDadas"
+  );
   const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
 
   const [name, setName] = useState(task.name || "");
@@ -55,16 +71,14 @@ export default function EditScreen({ route, navigation }) {
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
-
   const [sendingData, setSendingData] = useState(false);
 
   useEffect(() => {
-    if (sendingData){
-      sendData()
+    if (sendingData) {
+      sendData();
       navigation.pop();
     }
-
-  }, [sendingData])
+  }, [sendingData]);
 
   const colors = useTheme().colors;
 
@@ -97,9 +111,9 @@ export default function EditScreen({ route, navigation }) {
       teachers: teachers,
       turma: turma,
       is_submited: isSubmited,
-      when_submit: whenSubmit
+      when_submit: whenSubmit,
     };
-    if (name.length > 0){
+    if (name.length > 0) {
       if (task.id != undefined && task.id != null) {
         dispatch(updateEvent(task));
       } else {
@@ -114,40 +128,40 @@ export default function EditScreen({ route, navigation }) {
       headerTitle: isSubject ? "Editar Matéria" : "Editar Evento",
 
       headerRight: () => (
-        (
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.primaryContainer, padding: 10,
-              borderRadius: 30, justifyContent: 'center', alignItems: 'center',
-              marginRight: 10
-            }}
-            onPress={() => {
-              if (details.length == 0 && !isSubject) {
+        <TouchableOpacity
+          style={{
+            backgroundColor: colors.primaryContainer,
+            padding: 10,
+            borderRadius: 30,
+            justifyContent: "center",
+            alignItems: "center",
+            marginRight: 10,
+          }}
+          onPress={() => {
+            if (details.length == 0 && !isSubject) {
+              Toast.show({
+                type: "error",
+                text1: "Você deve colocar ao menos um horário",
+              });
+            } else {
+              if (name.length == 0 && !isSubject) {
                 Toast.show({
                   type: "error",
-                  text1: "Você deve colocar ao menos um horário",
+                  text1: "Você deve colocar um nome no evento",
+                });
+              } else if (isSubject && (name.length == 0 || turma.length == 0)) {
+                Toast.show({
+                  type: "error",
+                  text2: "Você deve colocar um nome e uma turma",
                 });
               } else {
-                if (name.length == 0 && !isSubject) {
-                  Toast.show({
-                    type: "error",
-                    text1: "Você deve colocar um nome no evento",
-                  });
-                } else if (isSubject && (name.length == 0 || turma.length == 0)) {
-                  Toast.show({
-                    type: "error",
-                    text2: "Você deve colocar um nome e uma turma",
-                  });
-                }
-                else {
-                  setSendingData(true)
-                }
+                setSendingData(true);
               }
             }
-            }
-          >
-            <Text style={{ color: colors.onPrimaryContainer }}>Salvar</Text>
-          </TouchableOpacity>)
+          }}
+        >
+          <Text style={{ color: colors.onPrimaryContainer }}>Salvar</Text>
+        </TouchableOpacity>
       ),
     });
   }, [
@@ -166,8 +180,7 @@ export default function EditScreen({ route, navigation }) {
     isSubmited,
     turma,
     teachers,
-    whenSubmit
-
+    whenSubmit,
   ]);
 
   useEffect(() => {
@@ -177,7 +190,7 @@ export default function EditScreen({ route, navigation }) {
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
 
   useEffect(() => {
-    sendData()
+    sendData();
   }, [grade, mean, frequency]);
 
   function sortDetails(a, b) {
@@ -209,13 +222,19 @@ export default function EditScreen({ route, navigation }) {
 
     return (
       <Portal>
-        <Dialog style={styles.dialog} visible={open} onDismis={() => setOpen(false)}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Alterar</Dialog.Title>
+        <Dialog
+          style={styles.dialog}
+          visible={open}
+          onDismis={() => setOpen(false)}
+        >
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+            Alterar
+          </Dialog.Title>
           <Dialog.Content>
-            <TextInput style={styles.input} value={texto} onChangeText={setTexto}></TextInput>
+            <TextInput style={styles.input} onChangeText={setTexto}></TextInput>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setOpen(false)} >Cancelar</Button>
+            <Button onPress={() => setOpen(false)}>Cancelar</Button>
             <Button
               onPress={() => {
                 if (texto.length > 0) {
@@ -223,14 +242,14 @@ export default function EditScreen({ route, navigation }) {
                   setOpen(false);
                 }
               }}
-            >Ok</Button>
+            >
+              Ok
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
     );
   }
-
-
 
   function NotificationDialog() {
     const [n, setN] = useState(1);
@@ -238,8 +257,14 @@ export default function EditScreen({ route, navigation }) {
     const multList = [1, 60, 60 * 24];
     return (
       <Portal>
-        <Dialog visible={openNotificationDialog} style={styles.dialog} onDismiss={() => setOpenNotificationDialog(false)}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Quando Notificar?</Dialog.Title>
+        <Dialog
+          visible={openNotificationDialog}
+          style={styles.dialog}
+          onDismiss={() => setOpenNotificationDialog(false)}
+        >
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+            Quando Notificar?
+          </Dialog.Title>
           <Dialog.Content>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
               <Roleta n={90} fun={setN} />
@@ -251,15 +276,17 @@ export default function EditScreen({ route, navigation }) {
             </View>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button
-              onPress={() => setOpenNotificationDialog(false)}
-            >Cancelar</Button>
+            <Button onPress={() => setOpenNotificationDialog(false)}>
+              Cancelar
+            </Button>
             <Button
               onPress={() => {
                 setNotifications([...notifications, n * multList[mult]]);
                 setOpenNotificationDialog(false);
               }}
-            >Ok</Button>
+            >
+              Ok
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -272,21 +299,22 @@ export default function EditScreen({ route, navigation }) {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState([(new Date()).getDay()]);
+    const [day, setDay] = useState([new Date().getDay()]);
     const [endTime, setEndTime] = useState(new Date());
     const [text, setText] = useState("");
 
     const handleTouchDay = (aux) => {
       if (day.includes(aux)) {
-        if (day.length > 1)
-          setDay(day.filter((d) => d !== aux));
+        if (day.length > 1) setDay(day.filter((d) => d !== aux));
       } else {
         setDay([...day, aux]);
       }
-    }
+    };
 
     function Bolinha(props) {
-      const cor = day.includes(props.index) ? colors.primary : colors.secondaryContainer;
+      const cor = day.includes(props.index)
+        ? colors.primary
+        : colors.secondaryContainer;
       return (
         <TouchableOpacity
           style={{
@@ -300,19 +328,43 @@ export default function EditScreen({ route, navigation }) {
           }}
           onPress={() => handleTouchDay(props.index)}
         >
-          <Text style={{ color: day.includes(props.index) ? colors.onPrimary : colors.onSurface }}>{props.text}</Text>
+          <Text
+            style={{
+              color: day.includes(props.index)
+                ? colors.onPrimary
+                : colors.onSurface,
+            }}
+          >
+            {props.text}
+          </Text>
         </TouchableOpacity>
       );
     }
-    const headerTitle = isSubject ? "Quando e onde será a aula?":"Quando e onde será o evento?";
+    const headerTitle = isSubject
+      ? "Quando e onde será a aula?"
+      : "Quando e onde será o evento?";
     return (
       <Portal>
-        <Dialog style={styles.dialog} onDismiss={() => setOpenHorarioDialog(false)} visible={openHorarioDialog} contentStyle={{ backgroundColor: colors.surface }}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>{headerTitle}</Dialog.Title>
+        <Dialog
+          style={styles.dialog}
+          onDismiss={() => setOpenHorarioDialog(false)}
+          visible={openHorarioDialog}
+          contentStyle={{ backgroundColor: colors.surface }}
+        >
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+            {headerTitle}
+          </Dialog.Title>
           <Dialog.Content>
             {props.weekly && (
               <>
-                <DefaultScrollView contentContainerStyle={{flex:1, justifyContent:"center", alignItems: "center"}} horizontal={true}>
+                <DefaultScrollView
+                  contentContainerStyle={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  horizontal={true}
+                >
                   <View
                     style={{
                       flexDirection: "row",
@@ -332,7 +384,12 @@ export default function EditScreen({ route, navigation }) {
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
                   onPress={() => setShowPicker(true)}
                 >
-                  <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+                  <MaterialCommunityIcons
+                    name="calendar-edit"
+                    style={styles.calendar}
+                    size={24}
+                    color={colors.onPrimary}
+                  />
                   <Text style={styles.data}>
                     Horario inicial: {formatHour(date)}
                   </Text>
@@ -341,7 +398,12 @@ export default function EditScreen({ route, navigation }) {
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
                   onPress={() => setShowEndPicker(true)}
                 >
-                  <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+                  <MaterialCommunityIcons
+                    name="calendar-edit"
+                    style={styles.calendar}
+                    size={24}
+                    color={colors.onPrimary}
+                  />
 
                   <Text style={styles.data}>
                     Hora final:{" " + formatHour(endTime)}
@@ -400,7 +462,12 @@ export default function EditScreen({ route, navigation }) {
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
                   onPress={() => setShowPicker(true)}
                 >
-                  <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+                  <MaterialCommunityIcons
+                    name="calendar-edit"
+                    style={styles.calendar}
+                    size={24}
+                    color={colors.onPrimary}
+                  />
                   <Text style={styles.data}>
                     Inicio: {formatDateWithHour(date)}
                   </Text>
@@ -409,7 +476,12 @@ export default function EditScreen({ route, navigation }) {
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
                   onPress={() => setShowEndPicker(true)}
                 >
-                  <MaterialCommunityIcons name="calendar-edit" style={styles.calendar} size={24} color={colors.onPrimary} />
+                  <MaterialCommunityIcons
+                    name="calendar-edit"
+                    style={styles.calendar}
+                    size={24}
+                    color={colors.onPrimary}
+                  />
                   <Text style={styles.data}>
                     Hora final:{" " + formatHour(endTime)}
                   </Text>
@@ -461,7 +533,9 @@ export default function EditScreen({ route, navigation }) {
                 />
               </>
             )}
-            <Text style={{ color: colors.onSurface, marginLeft: 10 }}>Local</Text>
+            <Text style={{ color: colors.onSurface, marginLeft: 10 }}>
+              Local
+            </Text>
             <TextInput
               style={styles.input}
               onChangeText={setText}
@@ -474,12 +548,14 @@ export default function EditScreen({ route, navigation }) {
               onPress={() => {
                 setOpenHorarioDialog(false);
               }}
-            >Cancelar</Button>
+            >
+              Cancelar
+            </Button>
             <Button
               color={colors.primary}
               onPress={() => {
                 if (weekly) {
-                  let aux = []
+                  let aux = [];
                   for (let i = 0; i < day.length; i++) {
                     let detail = {
                       day: day[i],
@@ -487,7 +563,7 @@ export default function EditScreen({ route, navigation }) {
                       datetime_end: endTime.toUTCString(),
                       local: text,
                     };
-                    aux.push(detail)
+                    aux.push(detail);
                   }
                   setDetails([...details, ...aux]);
                 } else {
@@ -501,9 +577,10 @@ export default function EditScreen({ route, navigation }) {
                 }
                 setOpenHorarioDialog(false);
               }}
-            >OK</Button>
+            >
+              OK
+            </Button>
           </Dialog.Actions>
-
         </Dialog>
       </Portal>
     );
@@ -515,7 +592,7 @@ export default function EditScreen({ route, navigation }) {
     const list = props.list || range(props.n || 60);
     const width = props.width || props.size || 60;
     const height = props.height || props.size || 60;
-    const defun = () => { };
+    const defun = () => {};
     const fun = props.fun || defun;
     let p;
     return (
@@ -547,29 +624,53 @@ export default function EditScreen({ route, navigation }) {
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
     resultMean = "" + (meanRes.result || 0);
-  } catch (e) { }
+  } catch (e) {}
 
   try {
     const freqRes = magic(grade.frequency || {}, frequency || "");
     resultFreq = "" + (freqRes.result || 0);
-  } catch (e) { }
+  } catch (e) {}
 
-  const user = useSelector(state => state.user).user
+  const user = useSelector((state) => state.user).user;
 
   function DetailRender(props) {
-    const index = props.index
-    const detail = props.detail
+    const index = props.index;
+    const detail = props.detail;
     return (
-      <View key={index} style={{ marginHorizontal: 20, marginBottom: 15, backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 10, padding: 5, flexDirection: 'row' }}>
-        <View style={{ justifyContent: 'center' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-            <Feather name="repeat" size={18} color={colors.onSurface} style={{ paddingRight: 8 }} />
-            <Text style={{ color: colors.onSurface }}>{`${weekly
-              ? week[detail.day]
-              : formatDate(detail.datetime_init)
-              } `} {`${formatHour(detail.datetime_init)} - ${formatHour(
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 15,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          paddingHorizontal: 10,
+          padding: 5,
+          flexDirection: "row",
+        }}
+      >
+        <View style={{ justifyContent: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Feather
+              name="repeat"
+              size={18}
+              color={colors.onSurface}
+              style={{ paddingRight: 8 }}
+            />
+            <Text style={{ color: colors.onSurface }}>
+              {`${
+                weekly ? week[detail.day] : formatDate(detail.datetime_init)
+              } `}{" "}
+              {`${formatHour(detail.datetime_init)} - ${formatHour(
                 detail.datetime_end
-              )}`}</Text>
+              )}`}
+            </Text>
           </View>
           {detail.local.length > 0 && (
             <TouchableOpacity
@@ -588,17 +689,26 @@ export default function EditScreen({ route, navigation }) {
                   Alert.alert(`Don't know how to open this URL: ${url}`);
                 }
               }}
-
-              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 5 }}>
-              <MaterialIcons name="location-pin" size={20} color={colors.primary} style={{ paddingRight: 8 }} />
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                paddingTop: 5,
+              }}
+            >
+              <MaterialIcons
+                name="location-pin"
+                size={20}
+                color={colors.primary}
+                style={{ paddingRight: 8 }}
+              />
               <Text style={{ color: colors.primary }}>{`${detail.local}`}</Text>
-
-
-            </TouchableOpacity>)}
+            </TouchableOpacity>
+          )}
         </View>
-        <View style={{ alignItems: 'flex-end', justifyContent: 'center', flex: 1 }}>
-
-
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -610,50 +720,87 @@ export default function EditScreen({ route, navigation }) {
           />
         </View>
       </View>
-    )
+    );
   }
 
-
   function BotaoAdicionarQueAbreUmDialogo(props) {
-    const setState = props.setState
+    const setState = props.setState;
     return (
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: "row" }}>
         <View style={{ flex: 1 }} />
         <TouchableOpacity
           onPress={() => {
             setState(true);
           }}
-          style={{ marginTop: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: colors.outline }}
+          style={{
+            marginTop: 0,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: colors.surface,
+            borderRadius: 10,
+            padding: 10,
+            borderWidth: 1,
+            borderColor: colors.outline,
+          }}
         >
-          <Feather name="plus" size={24} color={colors.primary} style={{ paddingRight: 10 }} />
+          <Feather
+            name="plus"
+            size={24}
+            color={colors.primary}
+            style={{ paddingRight: 10 }}
+          />
           <Text style={{ color: colors.onSurface }}>Adicionar</Text>
-
         </TouchableOpacity>
         <View style={{ flex: 1 }} />
-
-      </View>)
+      </View>
+    );
   }
 
   function notificationText(notification) {
-    if (notification != 0)
-      return getTime(notification) + " antes"
-    return "Assim que começar"
+    if (notification != 0) return getTime(notification) + " antes";
+    return "Assim que começar";
   }
 
   function NotificationRender(props) {
-    const index = props.index
-    const notification = props.notification
+    const index = props.index;
+    const notification = props.notification;
     return (
-      <View key={index} style={{ marginHorizontal: 20, marginBottom: 15, backgroundColor: colors.surface, borderRadius: 10, padding: 10, paddingVertical: 5, flexDirection: 'row' }}>
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 15,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          padding: 10,
+          paddingVertical: 5,
+          flexDirection: "row",
+        }}
+      >
         <View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-            <Feather name="repeat" size={18} color={colors.onSurface} style={{ paddingRight: 8 }} />
-            <Text style={{ color: colors.onSurface }}>{`${notificationText(notification)}`}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              flex: 1,
+            }}
+          >
+            <Feather
+              name="repeat"
+              size={18}
+              color={colors.onSurface}
+              style={{ paddingRight: 8 }}
+            />
+            <Text style={{ color: colors.onSurface }}>{`${notificationText(
+              notification
+            )}`}</Text>
           </View>
-
         </View>
-        <View style={{ alignItems: 'flex-end', justifyContent: 'center', flex: 1 }}>
-
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -667,21 +814,31 @@ export default function EditScreen({ route, navigation }) {
           />
         </View>
       </View>
-    )
+    );
   }
 
   function TeacherRender(props) {
-    const index = props.index
-    const teacher = props.teacher
+    const index = props.index;
+    const teacher = props.teacher;
     return (
-      <View key={index} style={{ marginHorizontal: 20, marginTop: 20, backgroundColor: colors.surface, borderRadius: 10, padding: 10, paddingVertical: 5, flexDirection: 'row' }}>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-
+      <View
+        key={index}
+        style={{
+          marginHorizontal: 20,
+          marginTop: 20,
+          backgroundColor: colors.surface,
+          borderRadius: 10,
+          padding: 10,
+          paddingVertical: 5,
+          flexDirection: "row",
+        }}
+      >
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
           <Text style={{ color: colors.onSurface }}>{`${teacher}`}</Text>
         </View>
-        <View style={{ alignItems: 'flex-end', justifyContent: 'center', flex: 1 }}>
-
-
+        <View
+          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+        >
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -693,9 +850,8 @@ export default function EditScreen({ route, navigation }) {
           />
         </View>
       </View>
-    )
+    );
   }
-
 
   const styles = StyleSheet.create({
     container: {
@@ -707,19 +863,19 @@ export default function EditScreen({ route, navigation }) {
       paddingBottom: 20,
     },
     dialog: {
-      backgroundColor: colors.dialog
+      backgroundColor: colors.dialog,
     },
     input: {
       height: 40,
       borderRadius: 5,
       marginBottom: 8,
       backgroundColor: colors.surface,
-      color: colors.onSurface
+      color: colors.onSurface,
     },
     colorContainer: {
       flexDirection: "row",
-      justifyContent: 'flex-start',
-      alignItems: 'center',
+      justifyContent: "flex-start",
+      alignItems: "center",
       marginHorizontal: 18,
       marginTop: 5,
     },
@@ -728,7 +884,7 @@ export default function EditScreen({ route, navigation }) {
     },
     title: {
       fontSize: 20,
-      color: colors.onSurface
+      color: colors.onSurface,
     },
 
     data: {
@@ -763,83 +919,118 @@ export default function EditScreen({ route, navigation }) {
       borderWidth: 1,
       borderRadius: 10,
       marginLeft: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
       backgroundColor: colors.surface,
-      borderColor: colors.outline
-
+      borderColor: colors.outline,
     },
     rbuttonAct: {
       marginLeft: 10,
       padding: 10,
       backgroundColor: colors.secondaryContainer,
       borderRadius: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
     },
     calendar: {
       marginRight: 10,
     },
     choice: {
       marginBottom: 10,
-    }
-
-
-  })
+    },
+  });
   const [showMenu, setShowMenu] = useState(false);
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
 
   const events = useSelector((state) => state.events).events;
 
-  const materias = events.filter(event => event.is_subject === true);
+  const materias = events.filter((event) => event.is_subject === true);
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.trueContainer}>
-      {(whenSubmit != null || isSubject) && (<>
-          <View style={styles.colorContainer}>
-            <TouchableOpacity style={!isSubmited ? styles.rbutton : styles.rbuttonAct} onPress={() => setIsSubmited(!isSubmited)}>
-              {isSubmited && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-              <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Concluído</Text>
-
-            </TouchableOpacity>
-          </View></>)}
-        {(<><View style={styles.colorContainer}>
-          <View style={styles.sectionIcon}>
-            <Ionicons name="color-palette" size={24} color={colors.onSurface} />
-          </View>
-          <View style={styles.description}>
-            <Text style={styles.title}>Cor</Text>
-          </View>
-        </View>
-          <View style={{ ...styles.colorContainer, justifyContent: 'space-between' }}>
-
-            <SelGradSquare color={0} state={color} setState={setColor} />
-            <SelGradSquare color={1} state={color} setState={setColor} />
-            <SelGradSquare color={2} state={color} setState={setColor} />
-            <SelGradSquare color={3} state={color} setState={setColor} />
-            <SelGradSquare color={4} state={color} setState={setColor} />
-            <SelGradSquare color={5} state={color} setState={setColor} />
-            <SelGradSquare color={6} state={color} setState={setColor} />
-            <SelGradSquare color={7} state={color} setState={setColor} />
-
-          </View>
-          <View style={{ ...styles.colorContainer, justifyContent: 'space-between' }}>
-            <SelGradSquare color={8} state={color} setState={setColor} />
-            <SelGradSquare color={9} state={color} setState={setColor} />
-            <SelGradSquare color={10} state={color} setState={setColor} />
-            <SelGradSquare color={11} state={color} setState={setColor} />
-            <SelGradSquare color={12} state={color} setState={setColor} />
-            <SelGradSquare color={13} state={color} setState={setColor} />
-            <SelGradSquare color={14} state={color} setState={setColor} />
-            <PickerGradSquare color={isNaN(color) ? color : "#f0f"} state={color} setState={setColor} />
-
-          </View>
-        </>)
+        {(whenSubmit != null || isSubject) && (
+          <>
+            <View style={styles.colorContainer}>
+              <TouchableOpacity
+                style={!isSubmited ? styles.rbutton : styles.rbuttonAct}
+                onPress={() => setIsSubmited(!isSubmited)}
+              >
+                {isSubmited && (
+                  <Feather
+                    name="check"
+                    size={16}
+                    color={
+                      !weekly ? colors.onSecondaryContainer : colors.onSurface
+                    }
+                  />
+                )}
+                <Text
+                  style={{
+                    color:
+                      whenSubmit != null
+                        ? colors.onSurface
+                        : colors.onSecondaryContainer,
+                  }}
+                >
+                  Concluído
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        {
+          <>
+            <View style={styles.colorContainer}>
+              <View style={styles.sectionIcon}>
+                <Ionicons
+                  name="color-palette"
+                  size={24}
+                  color={colors.onSurface}
+                />
+              </View>
+              <View style={styles.description}>
+                <Text style={styles.title}>Cor</Text>
+              </View>
+            </View>
+            <View
+              style={{
+                ...styles.colorContainer,
+                justifyContent: "space-between",
+              }}
+            >
+              <SelGradSquare color={0} state={color} setState={setColor} />
+              <SelGradSquare color={1} state={color} setState={setColor} />
+              <SelGradSquare color={2} state={color} setState={setColor} />
+              <SelGradSquare color={3} state={color} setState={setColor} />
+              <SelGradSquare color={4} state={color} setState={setColor} />
+              <SelGradSquare color={5} state={color} setState={setColor} />
+              <SelGradSquare color={6} state={color} setState={setColor} />
+              <SelGradSquare color={7} state={color} setState={setColor} />
+            </View>
+            <View
+              style={{
+                ...styles.colorContainer,
+                justifyContent: "space-between",
+              }}
+            >
+              <SelGradSquare color={8} state={color} setState={setColor} />
+              <SelGradSquare color={9} state={color} setState={setColor} />
+              <SelGradSquare color={10} state={color} setState={setColor} />
+              <SelGradSquare color={11} state={color} setState={setColor} />
+              <SelGradSquare color={12} state={color} setState={setColor} />
+              <SelGradSquare color={13} state={color} setState={setColor} />
+              <SelGradSquare color={14} state={color} setState={setColor} />
+              <PickerGradSquare
+                color={isNaN(color) ? color : "#f0f"}
+                state={color}
+                setState={setColor}
+              />
+            </View>
+          </>
         }
 
         <View style={styles.choice}>
@@ -851,9 +1042,16 @@ export default function EditScreen({ route, navigation }) {
               <Text style={styles.title}>Título</Text>
             </View>
           </View>
-          <TextInput value={name} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
-            placeholder="Novo Evento..." placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
-            onChangeText={text => setName(text)}
+          <TextInput
+            value={name}
+            multiline={false}
+            style={styles.textInput}
+            inputContainerStyle={styles.textInput}
+            placeholder="Novo Evento..."
+            placeholderTextColor={colors.outline}
+            underlineColor="transparent"
+            underlineColorAndroid={"transparent"}
+            onChangeText={(text) => setName(text)}
           />
 
           {isSubject && (
@@ -861,87 +1059,144 @@ export default function EditScreen({ route, navigation }) {
               <View style={styles.colorContainer}>
                 <View style={styles.sectionIcon}>
                   <Ionicons name="school" size={24} color={colors.onSurface} />
-
                 </View>
                 <View style={styles.description}>
                   <Text style={styles.title}>Turma</Text>
                 </View>
               </View>
-              <TextInput value={turma} multiline={false} style={styles.textInput} inputContainerStyle={styles.textInput}
-                placeholder="Turma A" placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
-                onChangeText={text => setTurma(text)}
+              <TextInput
+                value={turma}
+                multiline={false}
+                style={styles.textInput}
+                inputContainerStyle={styles.textInput}
+                placeholder="Turma A"
+                placeholderTextColor={colors.outline}
+                underlineColor="transparent"
+                underlineColorAndroid={"transparent"}
+                onChangeText={(text) => setTurma(text)}
               />
-            </>)}
+            </>
+          )}
         </View>
-
 
         <View style={styles.choice}>
           <View style={styles.colorContainer}>
             <View style={styles.sectionIcon}>
               <Entypo name="text" size={24} color={colors.onSurface} />
-
             </View>
             <View style={styles.description}>
               <Text style={styles.title}>Descrição</Text>
             </View>
           </View>
-          <TextInput value={description} multiline={true} style={styles.textInput} inputContainerStyle={styles.textInput}
-            placeholder="Detalhes do Evento..." placeholderTextColor={colors.outline} underlineColor="transparent" underlineColorAndroid={"transparent"}
-            onChangeText={text => setDescription(text)} />
+          <TextInput
+            value={description}
+            multiline={true}
+            style={styles.textInput}
+            inputContainerStyle={styles.textInput}
+            placeholder="Detalhes do Evento..."
+            placeholderTextColor={colors.outline}
+            underlineColor="transparent"
+            underlineColorAndroid={"transparent"}
+            onChangeText={(text) => setDescription(text)}
+          />
         </View>
 
-        {isSubject &&
-          (
-            <View style={styles.choice}>
-              <View style={styles.colorContainer}>
-                <View style={styles.sectionIcon}>
-                  <FontAwesome name="user" size={24} color={colors.onSurface} />
-
-                </View>
-                <View style={styles.description}>
-                  <Text style={styles.title}>Professores</Text>
-                </View>
+        {isSubject && (
+          <View style={styles.choice}>
+            <View style={styles.colorContainer}>
+              <View style={styles.sectionIcon}>
+                <FontAwesome name="user" size={24} color={colors.onSurface} />
+              </View>
+              <View style={styles.description}>
+                <Text style={styles.title}>Professores</Text>
               </View>
             </View>
-          )}
+          </View>
+        )}
 
-        {isSubject && teachers.map((teacher, index) => (<TeacherRender key={index} index={index} teacher={teacher} />))
-        }
+        {isSubject &&
+          teachers.map((teacher, index) => (
+            <TeacherRender key={index} index={index} teacher={teacher} />
+          ))}
         {isSubject && (
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog} />
         )}
-
-
 
         {!isSubject && (
           <>
             <View style={styles.choice}>
               <View style={styles.colorContainer}>
                 <View style={styles.sectionIcon}>
-                  <MaterialCommunityIcons name="history" size={24} color={colors.onSurface} />
-
+                  <MaterialCommunityIcons
+                    name="history"
+                    size={24}
+                    color={colors.onSurface}
+                  />
                 </View>
                 <View style={styles.description}>
                   <Text style={styles.title}>Recorrência</Text>
                 </View>
               </View>
               <View style={styles.colorContainer}>
-                <TouchableOpacity style={weekly ? styles.rbutton : styles.rbuttonAct} onPress={() => setWeekly(false)}>
-                  {!weekly && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-                  <Text style={{ color: !weekly ? colors.onSecondaryContainer : colors.onSurface }}>Evento único</Text></TouchableOpacity>
-                <TouchableOpacity style={!weekly ? styles.rbutton : styles.rbuttonAct} onPress={() => setWeekly(true)}>
-                  {weekly && (<Feather name="check" size={16} color={weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-                  <Text style={{ color: weekly ? colors.onSecondaryContainer : colors.onSurface }}>Evento recorrente</Text></TouchableOpacity>
-
+                <TouchableOpacity
+                  style={weekly ? styles.rbutton : styles.rbuttonAct}
+                  onPress={() => setWeekly(false)}
+                >
+                  {!weekly && (
+                    <Feather
+                      name="check"
+                      size={16}
+                      color={
+                        !weekly ? colors.onSecondaryContainer : colors.onSurface
+                      }
+                    />
+                  )}
+                  <Text
+                    style={{
+                      color: !weekly
+                        ? colors.onSecondaryContainer
+                        : colors.onSurface,
+                    }}
+                  >
+                    Evento único
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={!weekly ? styles.rbutton : styles.rbuttonAct}
+                  onPress={() => setWeekly(true)}
+                >
+                  {weekly && (
+                    <Feather
+                      name="check"
+                      size={16}
+                      color={
+                        weekly ? colors.onSecondaryContainer : colors.onSurface
+                      }
+                    />
+                  )}
+                  <Text
+                    style={{
+                      color: weekly
+                        ? colors.onSecondaryContainer
+                        : colors.onSurface,
+                    }}
+                  >
+                    Evento recorrente
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </>)}
+          </>
+        )}
 
         <View style={styles.choice}>
           <View style={styles.colorContainer}>
             <View style={styles.sectionIcon}>
-              <MaterialCommunityIcons name="clock" size={24} color={colors.onSurface} />
-
+              <MaterialCommunityIcons
+                name="clock"
+                size={24}
+                color={colors.onSurface}
+              />
             </View>
             <View style={styles.description}>
               <Text style={styles.title}>Horários</Text>
@@ -950,60 +1205,133 @@ export default function EditScreen({ route, navigation }) {
 
           <View style={{ height: 10 }}></View>
 
-          {details.sort(sortDetails).map((detail, index) => (<DetailRender key={index} index={index} detail={detail} />))}
+          {details.sort(sortDetails).map((detail, index) => (
+            <DetailRender key={index} index={index} detail={detail} />
+          ))}
 
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog} />
         </View>
 
-
-        {!isSubject && (<>
-          <View style={styles.choice}>
-            <View style={styles.colorContainer}>
-              <View style={styles.sectionIcon}>
-                <MaterialCommunityIcons name="book" size={24} color={colors.onSurface} />
-
+        {!isSubject && (
+          <>
+            <View style={styles.choice}>
+              <View style={styles.colorContainer}>
+                <View style={styles.sectionIcon}>
+                  <MaterialCommunityIcons
+                    name="book"
+                    size={24}
+                    color={colors.onSurface}
+                  />
+                </View>
+                <View style={styles.description}>
+                  <Text style={styles.title}>Pertence a uma matéria?</Text>
+                </View>
               </View>
-              <View style={styles.description}>
-                <Text style={styles.title}>Pertence a uma matéria?</Text>
+              <Menu
+                visible={showMenu}
+                onDismiss={closeMenu}
+                style={{ width: "100%" }}
+                anchor={
+                  <TouchableOpacity onPress={openMenu}>
+                    <Text style={styles.textInput}>
+                      {materias.filter((event) => event.id == subject)[0]
+                        ?.name || "Nenhuma matéria"}
+                    </Text>
+                  </TouchableOpacity>
+                }
+              >
+                <Menu.Item
+                  onPress={() => {
+                    setSubject(null);
+                    setShowMenu(false);
+                  }}
+                  title="Nenhuma matéria"
+                />
+                {materias.map((materia, index) => (
+                  <Menu.Item
+                    key={index}
+                    onPress={() => {
+                      setSubject(materia.id);
+                      setShowMenu(false);
+                    }}
+                    title={materia.name}
+                  />
+                ))}
+              </Menu>
+            </View>
+          </>
+        )}
+
+        {!isSubject && (
+          <>
+            <View style={styles.choice}>
+              <View style={styles.colorContainer}>
+                <View style={styles.sectionIcon}>
+                  <MaterialCommunityIcons
+                    name="message-question-outline"
+                    size={24}
+                    color={colors.onSurface}
+                  />
+                </View>
+                <View style={styles.description}>
+                  <Text style={styles.title}>Tem data de entrega?</Text>
+                </View>
+              </View>
+              <View style={styles.colorContainer}>
+                <TouchableOpacity
+                  style={
+                    whenSubmit == null ? styles.rbutton : styles.rbuttonAct
+                  }
+                  onPress={() => setOpenWhenDialog(true)}
+                >
+                  {whenSubmit != null && (
+                    <Feather
+                      name="check"
+                      size={16}
+                      color={
+                        !weekly ? colors.onSecondaryContainer : colors.onSurface
+                      }
+                    />
+                  )}
+                  {whenSubmit == null && (
+                    <Text style={{ color: colors.onSurface }}>Sim</Text>
+                  )}
+                  {whenSubmit != null && (
+                    <Text style={{ color: colors.onSecondaryContainer }}>
+                      {formatDateWithHour(new Date(whenSubmit))}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={
+                    whenSubmit != null ? styles.rbutton : styles.rbuttonAct
+                  }
+                  onPress={() => setWhenSubmit(null)}
+                >
+                  {whenSubmit == null && (
+                    <Feather
+                      name="check"
+                      size={16}
+                      color={
+                        !weekly ? colors.onSecondaryContainer : colors.onSurface
+                      }
+                    />
+                  )}
+                  <Text
+                    style={{
+                      color:
+                        whenSubmit != null
+                          ? colors.onSurface
+                          : colors.onSecondaryContainer,
+                    }}
+                  >
+                    Não
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
-            <Menu
-              visible={showMenu}
-              onDismiss={closeMenu}
-              style={{ width: '100%' }}
-              anchor={<TouchableOpacity onPress={openMenu}><Text style={styles.textInput} >{materias.filter(event => event.id == subject)[0]?.name || "Nenhuma matéria"}</Text></TouchableOpacity>}>
-              <Menu.Item onPress={() => { setSubject(null); setShowMenu(false) }} title="Nenhuma matéria" />
-              {materias.map((materia, index) => (<Menu.Item key={index} onPress={() => { setSubject(materia.id); setShowMenu(false) }} title={materia.name} />
-              ))}
-            </Menu>
-          </View>
-        </>)}
-
-        {!isSubject && (<>
-          <View style={styles.choice}>
-            <View style={styles.colorContainer}>
-              <View style={styles.sectionIcon}>
-                <MaterialCommunityIcons name="message-question-outline" size={24} color={colors.onSurface} />
-
-              </View>
-              <View style={styles.description}>
-                <Text style={styles.title}>Tem data de entrega?</Text>
-              </View>
-            </View>
-            <View style={styles.colorContainer}>
-              <TouchableOpacity style={whenSubmit == null ? styles.rbutton : styles.rbuttonAct} onPress={() => setOpenWhenDialog(true)}>
-                {whenSubmit != null && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-                {whenSubmit == null && (<Text style={{ color: colors.onSurface }}>Sim</Text>)}
-                {whenSubmit != null && (<Text style={{ color: colors.onSecondaryContainer }}>{formatDateWithHour(new Date(whenSubmit))}</Text>)}
-
-              </TouchableOpacity>
-              <TouchableOpacity style={whenSubmit != null ? styles.rbutton : styles.rbuttonAct} onPress={() => setWhenSubmit(null)}>
-                {whenSubmit == null && (<Feather name="check" size={16} color={!weekly ? colors.onSecondaryContainer : colors.onSurface} />)}
-                <Text style={{ color: whenSubmit != null ? colors.onSurface : colors.onSecondaryContainer }}>Não</Text>
-
-              </TouchableOpacity>
-            </View>
-          </View></>)}
+          </>
+        )}
 
         <DateTimePickerModal
           style={{ width: "100%" }}
@@ -1025,11 +1353,14 @@ export default function EditScreen({ route, navigation }) {
           headerTextIOS={"Escolha uma data/hora"}
         />
 
-
         <View style={styles.choice}>
           <View style={styles.colorContainer}>
             <View style={styles.sectionIcon}>
-              <MaterialCommunityIcons name="bell" size={24} color={colors.onSurface} />
+              <MaterialCommunityIcons
+                name="bell"
+                size={24}
+                color={colors.onSurface}
+              />
             </View>
             <View style={styles.description}>
               <Text style={styles.title}>Notificações</Text>
@@ -1038,10 +1369,17 @@ export default function EditScreen({ route, navigation }) {
 
           <View style={{ height: 10 }}></View>
 
-          {notifications.map((notification, index) => (<NotificationRender key={index} index={index} notification={notification} />))}
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenNotificationDialog} />
+          {notifications.map((notification, index) => (
+            <NotificationRender
+              key={index}
+              index={index}
+              notification={notification}
+            />
+          ))}
+          <BotaoAdicionarQueAbreUmDialogo
+            setState={setOpenNotificationDialog}
+          />
         </View>
-
 
         <HorarioDialog weekly={weekly} />
         <NotificationDialog />
@@ -1070,7 +1408,6 @@ export default function EditScreen({ route, navigation }) {
           open={openSubjectDialog}
           setOpen={setOpenSubjectDialog}
         />
-
       </View>
     </ScrollView>
   );

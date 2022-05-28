@@ -11,6 +11,7 @@
     "@expo/metro-config": "^0.2.6",
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-community/datetimepicker": "6.1.2",
+    "@react-native-community/netinfo": "^8.3.0",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.x",
     "@react-navigation/drawer": "^6.x",

@@ -20,9 +20,11 @@ import { useTheme } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
 import RestaurantTickets from "../components/RestaurantTickt";
 import { updateCardapio } from "../redux/actions/restaurantActions";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 export default function Wallet() {
   const navigation = useNavigation();
+  const netInfo = useNetInfo();
   const timeWidth = wp("100%") - 7.5 * hourWidth;
   // const today = new Date(2020, 2, 18);
   const today = new Date();
@@ -41,8 +43,6 @@ export default function Wallet() {
 
   const user = useSelector((state) => state.user).user;
 
-  const [loading, setLoading] = useState(true);
-
   const dispatch = useDispatch();
 
   function setWeekMenu(data) {
@@ -52,7 +52,10 @@ export default function Wallet() {
   }
 
   async function getWeekMenu() {
-    setLoading(true);
+    if (!netInfo.isConnected) {
+      return;
+    }
+
     let auxWeekMenu = {};
     for (let i = 0; i < 7; i++) {
       const newDate = offsetDate(days.begin, i);
@@ -61,13 +64,11 @@ export default function Wallet() {
     }
     console.log(auxWeekMenu);
     setWeekMenu(auxWeekMenu);
-    setLoading(false);
-    console.log("carregando!!");
   }
 
   useEffect(() => {
     getWeekMenu();
-  }, [user]);
+  }, [user, netInfo.isConnected]);
 
   function getMenuItem(menu, itemName) {
     try {
@@ -123,7 +124,6 @@ export default function Wallet() {
       },
     };
     const local = user.campus.toLocaleLowerCase();
-    console.log("location: ", local);
     const searchUrl = campus[local]["urlCard"];
     const priceUrl = campus[local]["urlPrice"];
     const response = await fetch(searchUrl);
@@ -137,7 +137,6 @@ export default function Wallet() {
 
     $ = cheerio.load(priceHtmlString);
     const priceMenu = $(".col-sm-12");
-    console.log(priceMenu.length, weekMenu.length);
 
     let prices = priceMenu.eq(0).text();
 
@@ -281,13 +280,16 @@ export default function Wallet() {
             Edite o valor de cada refeição nas configurações.
           </Text>
         </View>
-        {user.campus.toLocaleLowerCase() != "lagoa do sino" && !loading && (
+        {user.campus.toLocaleLowerCase() != "lagoa do sino" && (
           <>
             <View style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
               <Text style={styles.cardapioSubText}>
-                Informações obtidas pela última em{" "}
-                {formatDateWithHour(new Date(restaurant.updatedAt))}.
+                {restaurant.updatedAt
+                  ? `Informações obtidas pela última em ${formatDateWithHour(
+                      new Date(restaurant.updatedAt)
+                    )}.`
+                  : "Não foi possível obter as informações. Dispositivo offline."}
               </Text>
             </View>
 
