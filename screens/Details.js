@@ -63,14 +63,15 @@ export default function Details({ route, navigation }) {
   }, []);
 
   useEffect(() => {
-    dispatch(
-      updateEvent({
-        ...task,
-        grade: route?.params?.grade ?? task.grade,
-        frequency: route?.params?.frequency ?? task.frequency,
-        mean: route?.params?.mean ?? task.mean,
-      })
-    );
+    if (route?.params?.grade || route?.params?.frequency || route?.params?.mean)
+      dispatch(
+        updateEvent({
+          ...task,
+          grade: route?.params?.grade ?? task.grade,
+          frequency: route?.params?.frequency ?? task.frequency,
+          mean: route?.params?.mean ?? task.mean,
+        })
+      );
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
 
   function formatHour(date) {

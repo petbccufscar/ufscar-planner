@@ -183,16 +183,6 @@ export default function EditScreen({ route, navigation }) {
     whenSubmit,
   ]);
 
-  useEffect(() => {
-    if (route?.params?.grade) setGrade(route.params.grade);
-    if (route?.params?.frequency) setFrequency(route.params.frequency);
-    if (route?.params?.mean) setMean(route.params.mean);
-  }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
-
-  useEffect(() => {
-    sendData();
-  }, [grade, mean, frequency]);
-
   function sortDetails(a, b) {
     if (a.day < b.day) return -1;
     if (a.day > b.day) return 1;
