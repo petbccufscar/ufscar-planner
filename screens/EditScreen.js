@@ -72,6 +72,14 @@ export default function EditScreen({ route, navigation }) {
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
 
   const [sendingData, setSendingData] = useState(false);
+  const [detail, setDetail] = useState({
+    horarioDate: new Date(),
+    horarioDay: [new Date().getDay()],
+    horarioEndTime: new Date(),
+    horarioLocal: "",
+    id: 0,
+  });
+  const [currentTeacherIndex, setCurrentTeacherIndex] = useState(null);
 
   useEffect(() => {
     if (sendingData) {
@@ -202,7 +210,7 @@ export default function EditScreen({ route, navigation }) {
     );
   }
 
-  function SimpleDialog(props) {
+  function TeacherDialog(props) {
     const fun = props.fun;
     const old = props.old || "";
     const setOpen = props.setOpen;
@@ -288,21 +296,31 @@ export default function EditScreen({ route, navigation }) {
     const [showPicker, setShowPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
 
-    const [date, setDate] = useState(new Date());
-    const [day, setDay] = useState([new Date().getDay()]);
-    const [endTime, setEndTime] = useState(new Date());
-    const [text, setText] = useState("");
+    const horarioDate = detail.horarioDate;
+    const horarioDay = detail.horarioDay;
+    const horarioEndTime = detail.horarioEndTime;
+    const horarioLocal = detail.horarioLocal;
+    const id = detail.id;
+
+    const setHorarioDate = (e) => setDetail({ ...detail, horarioDate: e });
+    const setHorarioDay = (e) => setDetail({ ...detail, horarioDay: e });
+    const setHorarioEndTime = (e) =>
+      setDetail({ ...detail, horarioEndTime: e });
+    const setHorarioLocal = (e) => setDetail({ ...detail, horarioLocal: e });
+
+    let local = horarioLocal;
 
     const handleTouchDay = (aux) => {
-      if (day.includes(aux)) {
-        if (day.length > 1) setDay(day.filter((d) => d !== aux));
+      if (horarioDay.includes(aux)) {
+        if (horarioDay.length > 1)
+          setHorarioDay(horarioDay.filter((d) => d !== aux));
       } else {
-        setDay([...day, aux]);
+        setHorarioDay([...horarioDay, aux]);
       }
     };
 
     function Bolinha(props) {
-      const cor = day.includes(props.index)
+      const cor = horarioDay.includes(props.index)
         ? colors.primary
         : colors.secondaryContainer;
       return (
@@ -320,7 +338,7 @@ export default function EditScreen({ route, navigation }) {
         >
           <Text
             style={{
-              color: day.includes(props.index)
+              color: horarioDay.includes(props.index)
                 ? colors.onPrimary
                 : colors.onSurface,
             }}
@@ -330,6 +348,8 @@ export default function EditScreen({ route, navigation }) {
         </TouchableOpacity>
       );
     }
+    const isEditing = openHorarioDialog == 2;
+    const indice = props.indice;
     const headerTitle = isSubject
       ? "Quando e onde será a aula?"
       : "Quando e onde será o evento?";
@@ -381,7 +401,7 @@ export default function EditScreen({ route, navigation }) {
                     color={colors.onPrimary}
                   />
                   <Text style={styles.data}>
-                    Horario inicial: {formatHour(date)}
+                    Horario inicial: {formatHour(horarioDate)}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -396,7 +416,7 @@ export default function EditScreen({ route, navigation }) {
                   />
 
                   <Text style={styles.data}>
-                    Hora final:{" " + formatHour(endTime)}
+                    Hora final:{" " + formatHour(horarioEndTime)}
                   </Text>
                 </TouchableOpacity>
                 <DateTimePickerModal
@@ -414,9 +434,9 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
-                    setDate(date);
-                    if (minimum(date) > endTime.getTime()) {
-                      setEndTime(date);
+                    setHorarioDate(date);
+                    if (minimum(date) > horarioEndTime.getTime()) {
+                      setHorarioEndTime(date);
                     }
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -436,8 +456,10 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
-                    setEndTime(
-                      ndate.getTime() < minimum(date) ? minimum(date) : ndate
+                    setHorarioEndTime(
+                      ndate.getTime() < minimum(horarioDate)
+                        ? minimum(horarioDate)
+                        : ndate
                     );
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -459,7 +481,7 @@ export default function EditScreen({ route, navigation }) {
                     color={colors.onPrimary}
                   />
                   <Text style={styles.data}>
-                    Inicio: {formatDateWithHour(date)}
+                    Inicio: {formatDateWithHour(horarioDate)}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -473,7 +495,7 @@ export default function EditScreen({ route, navigation }) {
                     color={colors.onPrimary}
                   />
                   <Text style={styles.data}>
-                    Hora final:{" " + formatHour(endTime)}
+                    Hora final:{" " + formatHour(horarioEndTime)}
                   </Text>
                 </TouchableOpacity>
                 <DateTimePickerModal
@@ -491,9 +513,9 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
-                    setDate(date);
-                    if (minimum(date) > endTime.getTime()) {
-                      setEndTime(date);
+                    setHorarioDate(date);
+                    if (minimum(date) > horarioEndTime.getTime()) {
+                      setHorarioEndTime(date);
                     }
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -513,8 +535,10 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
-                    setEndTime(
-                      ndate.getTime() < minimum(date) ? minimum(date) : ndate
+                    setHorarioEndTime(
+                      ndate.getTime() < minimum(horarioDate)
+                        ? minimum(horarioDate)
+                        : ndate
                     );
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -528,7 +552,11 @@ export default function EditScreen({ route, navigation }) {
             </Text>
             <TextInput
               style={styles.input}
-              onChangeText={setText}
+              defaultValue={horarioLocal}
+              onChangeText={(e) => {
+                local = e;
+              }}
+              onEndEditing={(e) => setHorarioLocal(e.nativeEvent.text)}
               accessibilityHint={"local"}
             ></TextInput>
           </Dialog.Content>
@@ -541,35 +569,69 @@ export default function EditScreen({ route, navigation }) {
             >
               Cancelar
             </Button>
-            <Button
-              color={colors.primary}
-              onPress={() => {
-                if (weekly) {
-                  let aux = [];
-                  for (let i = 0; i < day.length; i++) {
+            {!isEditing && (
+              <Button
+                color={colors.primary}
+                onPress={() => {
+                  if (weekly) {
+                    let aux = [];
+                    for (let i = 0; i < horarioDay.length; i++) {
+                      let detail = {
+                        day: horarioDay[i],
+                        datetime_init: horarioDate.toUTCString(),
+                        datetime_end: horarioEndTime.toUTCString(),
+                        local: local,
+                      };
+                      aux.push(detail);
+                    }
+                    setDetails([...details, ...aux]);
+                  } else {
                     let detail = {
-                      day: day[i],
-                      datetime_init: date.toUTCString(),
-                      datetime_end: endTime.toUTCString(),
-                      local: text,
+                      day: new Date(horarioDate).getDay(),
+                      datetime_init: horarioDate.toUTCString(),
+                      datetime_end: horarioEndTime.toUTCString(),
+                      local: local,
                     };
-                    aux.push(detail);
+                    setDetails([...details, detail]);
                   }
-                  setDetails([...details, ...aux]);
-                } else {
-                  let detail = {
-                    day: new Date(date).getDay(),
-                    datetime_init: date.toUTCString(),
-                    datetime_end: endTime.toUTCString(),
-                    local: text,
-                  };
-                  setDetails([...details, detail]);
-                }
-                setOpenHorarioDialog(false);
-              }}
-            >
-              OK
-            </Button>
+                  setOpenHorarioDialog(false);
+                }}
+              >
+                OK
+              </Button>
+            )}
+            {isEditing && (
+              <Button
+                color={colors.primary}
+                onPress={() => {
+                  if (weekly) {
+                    let aux = details.filter((d, idx) => idx != id);
+                    for (let i = 0; i < horarioDay.length; i++) {
+                      let detail = {
+                        day: horarioDay[i],
+                        datetime_init: horarioDate.toUTCString(),
+                        datetime_end: horarioEndTime.toUTCString(),
+                        local: local,
+                      };
+                      aux.push(detail);
+                    }
+                    setDetails([...aux]);
+                  } else {
+                    let aux = details.filter((d, idx) => idx != id);
+                    let detail = {
+                      day: new Date(horarioDate).getDay(),
+                      datetime_init: horarioDate.toUTCString(),
+                      datetime_end: horarioEndTime.toUTCString(),
+                      local: local,
+                    };
+                    setDetails([...aux, detail]);
+                  }
+                  setOpenHorarioDialog(false);
+                }}
+              >
+                Editar
+              </Button>
+            )}
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -627,7 +689,7 @@ export default function EditScreen({ route, navigation }) {
     const index = props.index;
     const detail = props.detail;
     return (
-      <View
+      <TouchableOpacity
         key={index}
         style={{
           marginHorizontal: 20,
@@ -637,6 +699,16 @@ export default function EditScreen({ route, navigation }) {
           paddingHorizontal: 10,
           padding: 5,
           flexDirection: "row",
+        }}
+        onPress={() => {
+          setDetail({
+            horarioDate: new Date(detail.datetime_init),
+            horarioDay: [detail.day],
+            horarioEndTime: new Date(detail.datetime_end),
+            horarioLocal: detail.local,
+            id: index,
+          });
+          setOpenHorarioDialog(2);
         }}
       >
         <View style={{ justifyContent: "center" }}>
@@ -681,6 +753,7 @@ export default function EditScreen({ route, navigation }) {
               }}
               style={{
                 flexDirection: "row",
+                alignSelf: "flex-start",
                 alignItems: "center",
                 justifyContent: "flex-start",
                 paddingTop: 5,
@@ -709,7 +782,7 @@ export default function EditScreen({ route, navigation }) {
             size={18}
           />
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -810,12 +883,13 @@ export default function EditScreen({ route, navigation }) {
   function TeacherRender(props) {
     const index = props.index;
     const teacher = props.teacher;
+
     return (
       <View
         key={index}
         style={{
           marginHorizontal: 20,
-          marginTop: 20,
+          marginBottom: 20,
           backgroundColor: colors.surface,
           borderRadius: 10,
           padding: 10,
@@ -823,12 +897,28 @@ export default function EditScreen({ route, navigation }) {
           flexDirection: "row",
         }}
       >
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ color: colors.onSurface }}>{`${teacher}`}</Text>
-        </View>
         <View
-          style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
+          style={{
+            justifyContent: "center",
+            flex: 1,
+          }}
         >
+          <TextInput
+            value={teacher}
+            onEndEditing={(e) => {
+              if (e.nativeEvent.text != "") {
+                let newTeachers = [...teachers];
+                newTeachers[index] = e.nativeEvent.text;
+                setTeachers([...newTeachers]);
+              } else {
+                let newTeachers = teachers.filter((v, idx) => idx != index);
+                setTeachers([...newTeachers]);
+              }
+            }}
+            style={{ color: colors.onSurface, flex: 1 }}
+          />
+        </View>
+        <View style={{ alignItems: "flex-end", justifyContent: "center" }}>
           <IconButton
             icon="minus-circle-outline"
             color={colors.onSurface}
@@ -859,6 +949,7 @@ export default function EditScreen({ route, navigation }) {
       height: 40,
       borderRadius: 5,
       marginBottom: 8,
+      paddingLeft: 10,
       backgroundColor: colors.surface,
       color: colors.onSurface,
     },
@@ -1199,7 +1290,18 @@ export default function EditScreen({ route, navigation }) {
             <DetailRender key={index} index={index} detail={detail} />
           ))}
 
-          <BotaoAdicionarQueAbreUmDialogo setState={setOpenHorarioDialog} />
+          <BotaoAdicionarQueAbreUmDialogo
+            setState={(e) => {
+              setDetail({
+                horarioDate: new Date(),
+                horarioDay: [new Date().getDay()],
+                horarioEndTime: new Date(),
+                horarioLocal: "",
+                id: 0,
+              });
+              setOpenHorarioDialog(e);
+            }}
+          />
         </View>
 
         {!isSubject && (
@@ -1373,30 +1475,11 @@ export default function EditScreen({ route, navigation }) {
 
         <HorarioDialog weekly={weekly} />
         <NotificationDialog />
-        <SimpleDialog
-          fun={setName}
-          old={name}
-          open={openNameDialog}
-          setOpen={setOpenNameDialog}
-        />
-        <SimpleDialog
-          fun={setDescription}
-          old={description}
-          open={openDescriptionDialog}
-          setOpen={setOpenDescriptionDialog}
-        />
 
-        <SimpleDialog
+        <TeacherDialog
           fun={(novoProf) => setTeachers([...teachers, novoProf])}
           open={openTeacherDialog}
           setOpen={setOpenTeacherDialog}
-        />
-
-        <SimpleDialog
-          fun={setSubject}
-          old={subject}
-          open={openSubjectDialog}
-          setOpen={setOpenSubjectDialog}
         />
       </View>
     </ScrollView>
