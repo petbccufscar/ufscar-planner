@@ -434,9 +434,10 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
-                    setHorarioDate(date);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setHorarioEndTime(date);
+                      setDetail({...detail, horarioDate: date, horarioEndTime: date});
+                    } else {
+                      setHorarioDate(date)
                     }
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -459,7 +460,8 @@ export default function EditScreen({ route, navigation }) {
                     setHorarioEndTime(
                       ndate.getTime() < minimum(horarioDate)
                         ? minimum(horarioDate)
-                        : ndate
+                        : 
+                        ndate
                     );
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -1009,7 +1011,9 @@ export default function EditScreen({ route, navigation }) {
     rbuttonAct: {
       marginLeft: 10,
       padding: 10,
+      borderWidth: 1,
       backgroundColor: colors.secondaryContainer,
+      borderColor: colors.secondaryContainer,
       borderRadius: 10,
       flexDirection: "row",
       alignItems: "center",
@@ -1052,12 +1056,12 @@ export default function EditScreen({ route, navigation }) {
                 <Text
                   style={{
                     color:
-                      whenSubmit != null
+                      isSubmited != null
                         ? colors.onSurface
                         : colors.onSecondaryContainer,
                   }}
                 >
-                  Concluído
+                  { `${isSubmited != false?'Concluído' : 'Marcar como Concluído'}`}
                 </Text>
               </TouchableOpacity>
             </View>

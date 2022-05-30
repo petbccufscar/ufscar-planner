@@ -99,7 +99,6 @@ export function Task(props) {
     AcontecendoView: {
       alignItems: 'flex-end',
       right: 0,
-      position: 'absolute',
     },
     AcontecendoIcon: {
       justifyContent: 'center',

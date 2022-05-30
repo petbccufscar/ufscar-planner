@@ -536,7 +536,7 @@ export const CombinedDarkThemes = [{
         "onErrorContainer": "#FFDAD4",
         "onHeader": "#FFFFFF",
         "onPrimary": "#FFFFFF",
-        "onPrimaryContainer": "#95F0FF",
+        "onPrimaryContainer": "#FFFFFF",
         "onSecondary": "#001F24",
         "onSecondaryContainer": "#FFDAD6",
         "onSurface": "#EDE0DE",

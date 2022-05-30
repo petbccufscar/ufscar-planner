@@ -91,39 +91,41 @@ export default function Wallet() {
     }
   }
 
+  const campus = {
+    sorocaba: {
+      urlCard: `https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio`,
+      urlPrice: `https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+      lunchStart: "11h00",
+      lunchEnd: "13h30",
+      dinnerStart: "17h30",
+      dinnerEnd: "19h00",
+      satStart: "11h00",
+      satEnd: "13h00",
+    },
+    araras: {
+      urlCard: `https://www.araras.ufscar.br/restaurante-universitario/cardapio`,
+      urlPrice: `https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+      lunchStart: "11h00",
+      lunchEnd: "13h30",
+      dinnerStart: "18h00",
+      dinnerEnd: "19h30",
+    },
+    "são carlos": {
+      urlCard: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
+      urlPrice: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
+      lunchStart: "11h15",
+      lunchEnd: "13h30",
+      dinnerStart: "17h15",
+      dinnerEnd: "19h30",
+      satStart: "11h30",
+      satEnd: "13h00",
+    },
+  };
+
+  const local = user.campus.toLocaleLowerCase();
   async function menuScrapping(date) {
     const dateString = formatDate(date);
-    const campus = {
-      sorocaba: {
-        urlCard: `https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio`,
-        urlPrice: `https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
-        lunchStart: "11h00",
-        lunchEnd: "13h30",
-        dinnerStart: "17h30",
-        dinnerEnd: "19h00",
-        satStart: "11h00",
-        satEnd: "13h00",
-      },
-      araras: {
-        urlCard: `https://www.araras.ufscar.br/restaurante-universitario/cardapio`,
-        urlPrice: `https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
-        lunchStart: "11h00",
-        lunchEnd: "13h30",
-        dinnerStart: "18h00",
-        dinnerEnd: "19h30",
-      },
-      "são carlos": {
-        urlCard: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
-        urlPrice: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
-        lunchStart: "11h15",
-        lunchEnd: "13h30",
-        dinnerStart: "17h15",
-        dinnerEnd: "19h30",
-        satStart: "11h30",
-        satEnd: "13h00",
-      },
-    };
-    const local = user.campus.toLocaleLowerCase();
+
     const searchUrl = campus[local]["urlCard"];
     const priceUrl = campus[local]["urlPrice"];
     const response = await fetch(searchUrl);
@@ -159,7 +161,7 @@ export default function Wallet() {
     else
       dayMenu.priceDefault =
         prices[
-          prices.findIndex((x) => 0 < (x.match(/Aluno/g) || []).length) + 1
+        prices.findIndex((x) => 0 < (x.match(/Aluno/g) || []).length) + 1
         ];
     dayMenu.priceVisit = getPrice(prices, "Visitante");
 
@@ -287,8 +289,10 @@ export default function Wallet() {
               <Text style={styles.cardapioSubText}>
                 {restaurant.updatedAt
                   ? `Informações obtidas pela última em ${formatDateWithHour(
-                      new Date(restaurant.updatedAt)
-                    )}.`
+                    new Date(restaurant.updatedAt)
+                  )}.
+fonte: ${campus[local]["urlCard"]}
+                    `
                   : "Não foi possível obter as informações. Dispositivo offline."}
               </Text>
             </View>

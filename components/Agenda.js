@@ -98,8 +98,8 @@ function RenderDay(props) {
     const Divisor = () => {
         const yesterday = offsetDate(day, -1)
         return (<View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 20, color: colors.onPrimaryContainer }}>{`Fim de ${monthNames[yesterday.getMonth()]} ${yesterday.getFullYear()}`}</Text>
-            <Text style={{ fontSize: 20, color: colors.onPrimaryContainer }}>{`Inicio de ${monthNames[day.getMonth()]} ${day.getFullYear()}`}</Text>
+            <Text style={{ fontSize: 20, color: colors.onSurface }}>{`Fim de ${monthNames[yesterday.getMonth()]} ${yesterday.getFullYear()}`}</Text>
+            <Text style={{ fontSize: 20, color: colors.onSurface }}>{`Inicio de ${monthNames[day.getMonth()]} ${day.getFullYear()}`}</Text>
         </View>)
     }
 
