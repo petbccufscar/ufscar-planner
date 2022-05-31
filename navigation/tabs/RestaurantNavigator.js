@@ -14,6 +14,9 @@ export default function RestaurantsNavigator() {
         headerStyle: {
           backgroundColor: colors.headerInactive,
         },
+        headerTitleStyle:{
+          fontFamily: 'RobotoCondensed_400Regular',
+        },
         headerShadowVisible: false,
         headerTintColor: colors.onHeaderInactive,
         headerTitleAlign: 'center'

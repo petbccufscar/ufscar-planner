@@ -10,6 +10,7 @@ import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux
 import { PersistGate } from "redux-persist/integration/react";
 import Subject from "./components/NewSubject";
 import BottomNavBar from "./navigation/BottomNavBar";
+import AppLoading from 'expo-app-loading';
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
 import AboutUs from "./screens/dashboardScreens/AboutUs";
@@ -25,7 +26,15 @@ import EditScreen from "./screens/EditScreen";
 import Restaurant from "./screens/Restaurant";
 import Welcome from "./screens/Welcome";
 import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
-
+import {
+  useFonts,
+  RobotoCondensed_300Light,
+  RobotoCondensed_300Light_Italic,
+  RobotoCondensed_400Regular,
+  RobotoCondensed_400Regular_Italic,
+  RobotoCondensed_700Bold,
+  RobotoCondensed_700Bold_Italic,
+} from '@expo-google-fonts/roboto-condensed';
 
 
 
@@ -92,7 +101,16 @@ function Loader() {
   const themeConfig = useSelector((state) => state.theme);
 
   let theme = themeConfig.isDark ? CombinedDarkThemes[themeConfig.themeIdx] : CombinedDefaultThemes[themeConfig.themeIdx];
-  
+  let [fontsLoaded] = useFonts({
+    RobotoCondensed_300Light,
+    RobotoCondensed_300Light_Italic,
+    RobotoCondensed_400Regular,
+    RobotoCondensed_400Regular_Italic,
+    RobotoCondensed_700Bold,
+    RobotoCondensed_700Bold_Italic,
+  });
+  if (!fontsLoaded)
+    return <AppLoading />;
   return (
     <>
       <StatusBar style={themeConfig.isDark?"light":"dark"}/>

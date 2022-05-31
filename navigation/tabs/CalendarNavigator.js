@@ -34,8 +34,12 @@ export default function CalendarNavigator({ navigation }) {
         }}>
             <calendarStack.Screen name="Calendar" options={({ navigation }) => ({
                 title: 'UFSCar Planner',
+
                 headerStyle: {
                     backgroundColor: colors.headerInactive,
+                },
+                headerTitleStyle:{
+                    fontFamily: 'RobotoCondensed_400Regular',
                 },
                 headerShadowVisible: false,
                 headerTintColor: colors.onHeaderInactive,
