@@ -515,9 +515,10 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
-                    setHorarioDate(date);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setHorarioEndTime(date);
+                      setDetail({...detail, horarioEndTime: date, horarioDate: date});
+                    } else {
+                      setHorarioDate(date);
                     }
                   }}
                   cancelTextIOS={"Cancelar"}
