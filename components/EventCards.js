@@ -79,7 +79,7 @@ export function Task(props) {
       flexDirection: "row",
       justifyContent: "flex-start",
       alignItems: "center",
-    },
+      },
     localContainer: {
       borderWidth: 1,
       borderColor: theme.colors.outline,
@@ -107,6 +107,7 @@ export function Task(props) {
       width: 30,
       height: 30,
       borderRadius: 8,
+      marginLeft: 5
     }
   });
 
