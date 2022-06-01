@@ -745,12 +745,11 @@ export default function EditScreen({ route, navigation }) {
                   "https://www.google.com/maps/search/?api=1&query=" +
                   encodeURI(place);
 
-                const supported = await Linking.canOpenURL(url);
 
-                if (supported) {
+                try {
                   await Linking.openURL(url);
-                } else {
-                  Alert.alert(`Don't know how to open this URL: ${url}`);
+                } catch (e){
+                  console.log(e)
                 }
               }}
               style={{

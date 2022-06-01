@@ -163,14 +163,11 @@ export function Task(props) {
                   "https://www.google.com/maps/search/?api=1&query=" +
                   encodeURI(place);
 
-                const supported = await Linking.canOpenURL(url);
 
-                if (supported) {
+                try {
                   await Linking.openURL(url);
-                } else {
-                  Alert.alert(`Don't know how to open this URL: 
-                  ${url}`);
-                  console.log(url)
+                } catch (e){
+                  console.log(e)
                 }
               }}
 
@@ -290,16 +287,12 @@ export function EventCards(props) {
                 "https://www.google.com/maps/search/?api=1&query=" +
                 encodeURI(place);
 
-              const supported = await Linking.canOpenURL(url);
-
-              if (supported) {
-                await Linking.openURL(url);
-              } else {
-                Alert.alert(`Don't know how to open this URL: 
-                ${url}`);
-                console.log(url)
-
-              }
+                try {
+                  await Linking.openURL(url);
+                } catch (e){
+                  console.log(e)
+                }
+              
             }}
 
           >

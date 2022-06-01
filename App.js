@@ -3,14 +3,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef } from "react";
-import { AppRegistry, Platform, StyleSheet, UIManager } from "react-native";
+import { AppRegistry, Platform, StyleSheet, UIManager, View } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Subject from "./components/NewSubject";
 import BottomNavBar from "./navigation/BottomNavBar";
-import AppLoading from 'expo-app-loading';
 import { loadEvents } from "./redux/actions/eventActions";
 import { persistor, store } from "./redux/store";
 import AboutUs from "./screens/dashboardScreens/AboutUs";
@@ -110,7 +109,7 @@ function Loader() {
     RobotoCondensed_700Bold_Italic,
   });
   if (!fontsLoaded)
-    return <AppLoading />;
+    return <View style={{flex:1, backgroundColor: '#E8243C'}} />;
   return (
     <>
       <StatusBar style={themeConfig.isDark?"light":"dark"}/>
