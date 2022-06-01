@@ -73,9 +73,7 @@ function EventsScreen() {
   const th = useTheme();
   const colors = th.colors;
   const [state, setState] = React.useState({ open: false });
-
   const onStateChange = ({ open }) => setState({ open });
-
   const { open } = state;
   const styles = StyleSheet.create({
     fab: {

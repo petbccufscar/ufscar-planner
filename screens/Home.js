@@ -18,7 +18,8 @@ import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "react-native-paper";
-import { useTheme } from "react-native-paper";
+import { useTheme, FAB } from "react-native-paper";
+import { defaultSubject, defaultTask } from "../helpers/helper";
 
 const floorDate = (data) => {
   return (
@@ -35,7 +36,7 @@ export default function App() {
   const items = useSelector((state) => state.cards).items;
   const classes = (items[today] || []).filter((e) => e.is_subject);
   const [acontecendoAgora, setAcontecendoAgora] = useState([]);
-
+  const navigation = useNavigation();
   let tasks = [];
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
@@ -87,9 +88,22 @@ export default function App() {
     infoText: {
       color: theme.colors.primary,
       marginLeft: 10,
-    }
+    },
+    fab: {
+      borderRadius: 10,
+      backgroundColor: theme.colors.surface3,
+    },
+    activedFAB: {
+      borderRadius: 10,
+      backgroundColor: theme.colors.primary,
+    },
 
   });
+
+  const [state, setState] = React.useState({ open: false });
+  const onStateChange = ({ open }) => setState({ open });
+  const { open } = state;
+
 
   return (
     <>
@@ -140,6 +154,33 @@ export default function App() {
           </View>
         </ScrollView>
       </View>
+      <FAB.Group
+        open={open}
+        icon={"plus"}
+        fabStyle={open ? { width: 0, height: 0 } : styles.fab}
+        visible={!open}
+        color={theme.colors.primary}
+        actions={[
+          {
+            icon: "book",
+            label: "Matéria",
+            style: styles.fab,
+            color: theme.colors.primary,
+            onPress: () =>
+              navigation.navigate("EditScreen", { task: defaultSubject }),
+          },
+          {
+            icon: "calendar",
+            label: "Evento",
+            style: styles.activedFAB,
+            color: theme.colors.onPrimary,
+            onPress: () =>
+              navigation.navigate("EditScreen", { task: defaultTask }),
+            small: false,
+          },
+        ]}
+        onStateChange={onStateChange}
+      />
     </>
   );
 }

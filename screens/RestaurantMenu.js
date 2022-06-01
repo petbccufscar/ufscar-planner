@@ -62,7 +62,7 @@ export default function Wallet() {
       const dayMenu = await menuScrapping(newDate);
       auxWeekMenu[formatDate(newDate)] = dayMenu;
     }
-    console.log(auxWeekMenu);
+    // console.log(auxWeekMenu);
     setWeekMenu(auxWeekMenu);
   }
 

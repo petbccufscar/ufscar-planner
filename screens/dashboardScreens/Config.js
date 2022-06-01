@@ -65,7 +65,7 @@ export default function Config() {
   const [money, setMoney] = useState(user?.meal?.toString() || "0");
   const handleMoneyChange = (value) => {
     try {
-      const valor = parseFloat(value.substring(3));
+      const valor = parseFloat(value.substring(3).replace(/,/, '.'));
       if (!isNaN(valor)) {
         setMoney(value.substring(3));
         dispatch(updateUser({ ...user, meal: valor }));

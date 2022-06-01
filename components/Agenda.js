@@ -227,6 +227,9 @@ export default function Agenda(props) {
                 renderItem={({ item }) => <RenderMonthCalendar marked={marked} open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month} />}
                 showDefaultLoadingIndicators={true}
             />
+            <TouchableOpacity onPress={() => setOpen(false)} style={{ alignItems: 'center', justifyContent: 'center', padding:20 }}>
+                <MaterialIcons name="expand-less" size={24} color={colors.primary} />
+            </TouchableOpacity>
         </View>)
     }
     return (<View style={{ flex: 1 }}>
@@ -257,9 +260,6 @@ function RenderMonthCalendar(props) {
     }
     if (!open) {
         return (<View style={{ backgroundColor: colors.primaryContainer, padding: 20, maargin: 20 }}>
-            {/* <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', padding: 10}}>
-                <Text style={{fontSize:20, color: colors.onPrimaryContainer}}>{`${monthNames[props.month]} ${props.year}`}</Text>
-            </View> */}
             <View style={{ flexDirection: 'row' }}>
                 {weekDaysNames.map((day, index) => (<Text style={{ flex: 1, color: colors.onSurface, textAlign: 'center', fontWeight: 'bold' }} key={index}>{day}</Text>))}
             </View>
