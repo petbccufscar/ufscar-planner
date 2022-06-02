@@ -69,9 +69,9 @@ export default function AboutUs() {
 
             <Text style={styles.text}>
               O aplicativo UFSCar Planner foi desenvolvido pelo grupo PET do
-              curso de Ciência da Computação do campus de São Carlos com o
-              objetivo de ajudar os alunos a organizarem seus estudos e se
-              integrarem das atvididades oferecidas pela universidade.
+              curso de Ciência da Computação da UFSCar, campus de São Carlos, com o
+              objetivo de ajudar os alunos a organizarem seus estudos e 
+              integrarem-se às atvididades oferecidas pela universidade.
             </Text>
           </View>
 
@@ -79,7 +79,7 @@ export default function AboutUs() {
             <Text style={styles.title}>Os colaboradores</Text>
 
             <Text style={styles.text}>
-              Esse projeto contou com a colaboração dos alunos:
+              Esse projeto contou com a colaboração de:
             </Text>
 
             <Text style={[styles.contentText]}>{`    • Carlos Eduardo Fontaneli
@@ -88,15 +88,26 @@ export default function AboutUs() {
     • João Victor Bueno de Caldas
     • Lucas Machado Cid
     • Matheus Ramos de Carvalho
+    • Miguel Antônio de Oliveira
     • Natália Bachiega Magalhães
+    • Renato Bueno (tutor)
     • Vanderlei de Brito Junior
     • Vinicius Quaresma da Luz`}</Text>
 
-            <Text style={styles.text}>
-              Também contou com a supervisão do tutor:
-            </Text>
 
-            <Text style={[styles.contentText]}>{`    • Renato Bueno`}</Text>
+            <Text style={[styles.contentText]}>{`Este aplicativo foi baseado no aplicativo UFSCar Planner lançado em 2017, desenvolvido no LINCE - Departamento de Computação - UFSCar, sob supervisão do Prof. Dr. Cesar Augusto Camillo Teixeira, com apoio e participação da empresa TokenLab.
+
+Colaboradores do aplicativo UFSCar Planner 2017:
+
+    • Ana Lucia Cardoso
+    • Carlos Augusto Santo Andréa Junior
+    • Daniel Willian de Souza Cunha
+    • Felipe José Bento
+    • Mateus Barros
+    • Ruan Willer
+
+            `}</Text>
+
           </View>
 
           <View style={styles.textWall}>

@@ -167,6 +167,9 @@ function Loader() {
                 component={Config} />
               <HomeStackRoutes.Screen
                 name="AboutUs"
+                options={() => ({
+                  title: "Sobre nós",
+                })}
                 component={AboutUs} />
               <HomeStackRoutes.Screen
                 name="Contato"
