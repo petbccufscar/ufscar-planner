@@ -88,7 +88,7 @@ export default function AboutUs() {
     • João Victor Bueno de Caldas
     • Lucas Machado Cid
     • Matheus Ramos de Carvalho
-    • Miguel Antônio de Oliveira
+    • Miguel Antonio de Oliveira
     • Natália Bachiega Magalhães
     • Renato Bueno (tutor)
     • Vanderlei de Brito Junior
@@ -104,9 +104,7 @@ Colaboradores do aplicativo UFSCar Planner 2017:
     • Daniel Willian de Souza Cunha
     • Felipe José Bento
     • Mateus Barros
-    • Ruan Willer
-
-            `}</Text>
+    • Ruan Willer`}</Text>
 
           </View>
 

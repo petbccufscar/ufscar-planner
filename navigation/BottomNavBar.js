@@ -70,7 +70,7 @@ export default function MyTabs() {
         title: 'UFSCar Planner',
         tabBarLabel: 'Home',
         headerTitleStyle:{
-          fontFamily: 'RobotoCondensed_400Regular',
+          
         },
         headerShown: false,
         tabBarIcon: ({ color }) => (
@@ -80,7 +80,7 @@ export default function MyTabs() {
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         headerTitleStyle:{
-          fontFamily: 'RobotoCondensed_400Regular',
+          
         },
         tabBarLabel: 'Planner',
         headerShown: false,
@@ -91,7 +91,7 @@ export default function MyTabs() {
       <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         headerTitleStyle:{
-          fontFamily: 'RobotoCondensed_400Regular',
+          
         },
         headerShown: false,
         tabBarLabel: 'Dashboard',
@@ -102,7 +102,7 @@ export default function MyTabs() {
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         headerTitleStyle:{
-          fontFamily: 'RobotoCondensed_400Regular',
+          
         },
         headerShown: false,
         tabBarLabel: 'Restaurante',
