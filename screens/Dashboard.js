@@ -204,6 +204,17 @@ export default function Dashboard() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
+            onPress={() => navigation.navigate("Links")}
+          >
+            <Feather
+              name="link"
+              size={24}
+              color={theme.colors.onSurfaceVariant}
+            />
+            <Text style={styles.buttonText}>Links Úteis</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => navigation.navigate("AboutUs")}
           >
             <Feather

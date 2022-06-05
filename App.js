@@ -34,6 +34,7 @@ import {
   RobotoCondensed_700Bold,
   RobotoCondensed_700Bold_Italic,
 } from '@expo-google-fonts/roboto-condensed';
+import Links from "./screens/dashboardScreens/Links";
 
 
 
@@ -171,6 +172,12 @@ function Loader() {
                   title: "Sobre nós",
                 })}
                 component={AboutUs} />
+              <HomeStackRoutes.Screen
+                name="Links"
+                options={() => ({
+                  title: "Links Úteis",
+                })}
+                component={Links} />
               <HomeStackRoutes.Screen
                 name="Contato"
                 component={Contact} />
