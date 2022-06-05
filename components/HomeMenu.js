@@ -142,12 +142,8 @@ const Menu = (props) => {
               <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
             </View>
             <View>
-              <Text style={styles.subtitle}>Arroz:</Text>
+              <Text style={styles.subtitle}>Acompanhamento:</Text>
               <Text style={styles.itemMenuSubject}>{props.rice}</Text>
-            </View>
-            <View>
-              <Text style={styles.subtitle}>Feijão:</Text>
-              <Text style={styles.itemMenuSubject}>{props.bean}</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Saladas:</Text>

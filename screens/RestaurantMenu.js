@@ -28,14 +28,9 @@ export default function Wallet() {
   const timeWidth = wp("100%") - 7.5 * hourWidth;
   // const today = new Date(2020, 2, 18);
   const today = new Date();
-  const first = new Date(
-    today.getTime() - (today.getDay() - 1) * 24 * 60 * 60 * 1000
-  );
-  const last = new Date(
-    today.getTime() + (7 - today.getDay() + 1) * 24 * 60 * 60 * 1000
-  );
+  const first = offsetDate(today, -today.getDay());
+  const last =  offsetDate(today, 7-today.getDay());
   const days = { begin: first, end: last, today: today };
-
   const [selectedDay, setSelectedDay] = useState(today);
 
   const restaurant = useSelector((state) => state.restaurant);
@@ -120,14 +115,74 @@ export default function Wallet() {
       satStart: "11h30",
       satEnd: "13h00",
     },
+    "lagoa do sino": {
+      urlCard: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
+      urlPrice: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
+      lunchStart: "11h15",
+      lunchEnd: "13h30",
+      dinnerStart: "17h15",
+      dinnerEnd: "19h30",
+      satStart: "11h30",
+      satEnd: "13h00",
+    },
   };
 
   const local = user.campus.toLocaleLowerCase();
+  
+  let respostaAPI = []
+  let tried = null
+
+  async function apiDoRU(date, isLunch){
+    if (tried == null  || (new Date()).getTime() - tried.getTime() > 3600000 ){
+      tried = new Date()
+      const url = `https://ru-api.herokuapp.com/`
+
+      const response = await fetch(url)
+      const data = await response.json()
+
+      respostaAPI = data
+    }
+
+    const searchDate = date.toISOString().split('T')[0] 
+    const mealType = isLunch? "Almoço" : "Jantar"
+    for(let i = 0; i < respostaAPI.length; i++){
+      const r = respostaAPI[i]
+      if (respostaAPI[i].meal_type == mealType && respostaAPI[i].date == searchDate && r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()){
+        return {
+          mainMeal: r.main_dish_unrestricted,
+          mainMealVegan: "Não Definido.",
+          mainMealVegetarian: r.main_dish_vegetarian,
+          garrison: r.garnish,
+          rice: r.accompaniment,
+          bean: "Não Definido.",
+          salad: r.salads,
+          desert: r.dessert,
+        } 
+      }
+    }
+
+  }
+
+
+
   async function menuScrapping(date) {
     const dateString = formatDate(date);
 
     const searchUrl = campus[local]["urlCard"];
     const priceUrl = campus[local]["urlPrice"];
+    let dayMenu = {
+      mainMeal: "Não Definido.",
+      mainMealVegan: "Não Definido.",
+      mainMealVegetarian: "Não Definido.",
+      garrison: "Não Definido.",
+      rice: "Não Definido.",
+      bean: "Não Definido.",
+      salad: "Não Definido.",
+      desert: "Não Definido.",
+      priceDefault: "R$ ???",
+      priceVisit: "R$ ???",
+    };
+    
     const response = await fetch(searchUrl);
     const priceResponse = await fetch(priceUrl);
 
@@ -144,18 +199,6 @@ export default function Wallet() {
 
     prices = prices.split("\n").filter((x) => x !== "");
 
-    let dayMenu = {
-      mainMeal: "Não Definido.",
-      mainMealVegan: "Não Definido.",
-      mainMealVegetarian: "Não Definido.",
-      garrison: "Não Definido.",
-      rice: "Não Definido.",
-      bean: "Não Definido.",
-      salad: "Não Definido.",
-      desert: "Não Definido.",
-      priceDefault: "R$ ???",
-      priceVisit: "R$ ???",
-    };
     if (prices.indexOf("Estudante (UFSCar)") != -1)
       dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
     else
@@ -199,41 +242,59 @@ export default function Wallet() {
 
     let foundLunch = false;
     let foundDinner = false;
-
     let auxDayMenu = {};
-    for (let i = 0; i < weekMenu.length; i++) {
-      const menu = weekMenu.eq(i).text();
+    if (local.toLocaleLowerCase() != 'lagoa do sino'){
+      for (let i = 0; i < weekMenu.length; i++) {
+        const menu = weekMenu.eq(i).text();
 
-      if (menu.includes(dateString)) {
-        // let dayMenu = {...defaultMenu}
+        if (menu.includes(dateString)) {
+          // let dayMenu = {...defaultMenu}
 
-        dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
-        dayMenu.mainMealVegetarian = getMenuItem(
-          menu,
-          "Prato Principal - Vegetariano"
-        );
-        dayMenu.mainMealVegan = getMenuItem(
-          menu,
-          "Prato Principal - Intolerante/Vegano"
-        );
+          dayMenu.mainMeal = getMenuItem(menu, "Prato Principal");
+          dayMenu.mainMealVegetarian = getMenuItem(
+            menu,
+            "Prato Principal - Vegetariano"
+          );
+          dayMenu.mainMealVegan = getMenuItem(
+            menu,
+            "Prato Principal - Intolerante/Vegano"
+          );
 
-        dayMenu.garrison = getMenuItem(menu, "Guarnição");
-        dayMenu.rice = getMenuItem(menu, "Arroz");
-        dayMenu.bean = getMenuItem(menu, "Feijão");
-        dayMenu.salad = getMenuItem(menu, "Saladas");
-        dayMenu.desert = getMenuItem(menu, "Sobremesa");
+          dayMenu.garrison = getMenuItem(menu, "Guarnição");
+          dayMenu.rice = getMenuItem(menu, "Arroz") + ' e ' + getMenuItem(menu, "Feijão");
+          dayMenu.salad = getMenuItem(menu, "Saladas");
+          dayMenu.desert = getMenuItem(menu, "Sobremesa");
 
-        if (menu.includes("ALMOÇO")) {
-          auxDayMenu.lunch = dayMenu;
-          foundLunch = true;
-        } else if (menu.includes("JANTAR")) {
-          auxDayMenu.dinner = dayMenu;
-          foundDinner = true;
+          if (menu.includes("ALMOÇO")) {
+            auxDayMenu.lunch = dayMenu;
+            foundLunch = true;
+          } else if (menu.includes("JANTAR")) {
+            auxDayMenu.dinner = dayMenu;
+            foundDinner = true;
+          }
         }
       }
     }
-    if (!foundLunch) auxDayMenu.lunch = dayMenu;
-    if (!foundDinner) auxDayMenu.dinner = dayMenu;
+    if (!foundLunch){
+      try {
+        const r = await apiDoRU(date, true);
+        auxDayMenu.lunch = {...dayMenu, ...r};
+      }
+      catch (e)
+      {
+        auxDayMenu.lunch = dayMenu;
+      }
+    }
+    if (!foundDinner){
+      try {
+        const r = await apiDoRU(date, false)
+        auxDayMenu.dinner = {...dayMenu, ...r};
+      } 
+      catch (e)
+      {
+        auxDayMenu.dinner = dayMenu;
+      }
+    } 
     return auxDayMenu;
   }
 
@@ -282,7 +343,7 @@ export default function Wallet() {
             Edite o valor de cada refeição nas configurações.
           </Text>
         </View>
-        {user.campus.toLocaleLowerCase() != "lagoa do sino" && (
+        {(
           <>
             <View style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
@@ -291,7 +352,10 @@ export default function Wallet() {
                   ? `Informações obtidas pela última em ${formatDateWithHour(
                     new Date(restaurant.updatedAt)
                   )}.
-fonte: ${campus[local]["urlCard"]}
+fontes: 
+  ${campus[local]["urlCard"]},
+  ${campus[local]["urlPrice"]} e 
+  https://www.facebook.com/RU.UFSCar/
                     `
                   : "Não foi possível obter as informações. Dispositivo offline."}
               </Text>
@@ -327,7 +391,6 @@ fonte: ${campus[local]["urlCard"]}
               }
               garrison={weekMenu[formatDate(selectedDay)]?.lunch.garrison}
               rice={weekMenu[formatDate(selectedDay)]?.lunch.rice}
-              bean={weekMenu[formatDate(selectedDay)]?.lunch.bean}
               salad={weekMenu[formatDate(selectedDay)]?.lunch.salad}
               desert={weekMenu[formatDate(selectedDay)]?.lunch.desert}
               studentPrice={
