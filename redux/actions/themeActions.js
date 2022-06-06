@@ -8,8 +8,8 @@ export const setTheme = (theme) => {
 };
 
 export const toggleTheme = (theme) => {
-    return {
-      type: ActionsTypes.TOGGLE_THEME,
-      payload: theme,
-    };
+  return {
+    type: ActionsTypes.TOGGLE_THEME,
+    payload: theme,
   };
+};

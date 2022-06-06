@@ -23,54 +23,54 @@ export default function MyTabs() {
   });
 
   return (
-    <Tab.Navigator 
-    
-    tabBarPosition='bottom'
-    screenOptions={{
-      keyboardHidesTabBar: true,
-      headerLeft: () => (
-        <IconButton
-          icon={"menu"}
-          size={24}
-          onPress={() => {
-            navigation.openDrawer()
-          }}
-        />
-      ),
-      
-      tabBarActiveTintColor: theme.colors.onSecundaryContainer,
-      tabBarInactiveTintColor: theme.colors.onSurface,
-      headerPressColor: theme.colors.secundaryContainer,
-      tabBarStyle: {
-        backgroundColor: theme.colors.surface2,
-        paddingBottom: 8,
-        shadowColor: 'transparent',
-        shadowOpacity: 0.2,
-        borderTopColor: 'transparent',
-      },
-      
+    <Tab.Navigator
 
-      tabBarLabelStyle: {
-        fontSize: 10,
-        textTransform: 'none'
-      },
-      
-      tabBarItemStyle: {
-      },
-      tabBarIconStyle: {
-        width: '100%',
-      },
-      tabBarContentContainerStyle: {
-        width: '100%',
-      }
+      tabBarPosition='bottom'
+      screenOptions={{
+        keyboardHidesTabBar: true,
+        headerLeft: () => (
+          <IconButton
+            icon={"menu"}
+            size={24}
+            onPress={() => {
+              navigation.openDrawer()
+            }}
+          />
+        ),
+
+        tabBarActiveTintColor: theme.colors.onSecundaryContainer,
+        tabBarInactiveTintColor: theme.colors.onSurface,
+        headerPressColor: theme.colors.secundaryContainer,
+        tabBarStyle: {
+          backgroundColor: theme.colors.surface2,
+          paddingBottom: 8,
+          shadowColor: 'transparent',
+          shadowOpacity: 0.2,
+          borderTopColor: 'transparent',
+        },
 
 
-    }}>
+        tabBarLabelStyle: {
+          fontSize: 10,
+          textTransform: 'none'
+        },
+
+        tabBarItemStyle: {
+        },
+        tabBarIconStyle: {
+          width: '100%',
+        },
+        tabBarContentContainerStyle: {
+          width: '100%',
+        }
+
+
+      }}>
       <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         tabBarLabel: 'Home',
-        headerTitleStyle:{
-          
+        headerTitleStyle: {
+
         },
         headerShown: false,
         tabBarIcon: ({ color }) => (
@@ -79,8 +79,8 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
-        headerTitleStyle:{
-          
+        headerTitleStyle: {
+
         },
         tabBarLabel: 'Planner',
         headerShown: false,
@@ -90,8 +90,8 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
-        headerTitleStyle:{
-          
+        headerTitleStyle: {
+
         },
         headerShown: false,
         tabBarLabel: 'Dashboard',
@@ -101,8 +101,8 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
-        headerTitleStyle:{
-          
+        headerTitleStyle: {
+
         },
         headerShown: false,
         tabBarLabel: 'Restaurante',
@@ -127,9 +127,9 @@ function TabBarIcon(props) {
 
   return (
     <View style={styles.iconContainer}>
-        <View style={selectedStyle}>
-          <MaterialIcons name={props.name} size={24} color={props.active ? colors.onSecondaryContainer : colors.onSurface} />
-        </View>
+      <View style={selectedStyle}>
+        <MaterialIcons name={props.name} size={24} color={props.active ? colors.onSecondaryContainer : colors.onSurface} />
+      </View>
     </View>
   );
 }

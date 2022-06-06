@@ -67,7 +67,7 @@ const Menu = (props) => {
     },
     ghostBox: {
       flex: 1
-    }, 
+    },
     fixBox: {
       height: 1,
       width: 1,
@@ -134,7 +134,7 @@ const Menu = (props) => {
           <Text style={styles.subtitle}>Prato Principal - Intolerante/Vegano:</Text>
           <Text style={styles.itemMenuSubject}>{props.mainMealVegan}</Text>
         </View>
-        
+
         {shouldShow ? (
           <>
             <View>
@@ -158,20 +158,20 @@ const Menu = (props) => {
               <Text style={styles.itemMenuSubjectPrice}>{props.studentPrice} (estudante) ou {props.price} (visitante).</Text>
             </View>
             <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
-          
+
               <Text style={styles.verText}>Ver menos</Text>
               <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
-              
+
             </TouchableOpacity>
           </>
         ) : null}
         {!shouldShow && <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
-          
+
           <Text style={styles.verText}> Ver mais</Text>
           <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} />
-          
+
         </TouchableOpacity>}
-          <View style={styles.fixBox}/>
+        <View style={styles.fixBox} />
 
       </View>
     </View>

@@ -38,8 +38,8 @@ export default function CalendarNavigator({ navigation }) {
                 headerStyle: {
                     backgroundColor: colors.headerInactive,
                 },
-                headerTitleStyle:{
-                    
+                headerTitleStyle: {
+
                 },
                 headerShadowVisible: false,
                 headerTintColor: colors.onHeaderInactive,

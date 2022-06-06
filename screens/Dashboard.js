@@ -271,12 +271,12 @@ function MediaCard(props) {
   try {
     const meanRes = magic(task.grade.mean || {}, mediaform || "");
     media = meanRes.result || 0;
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const freqRes = magic(task.grade.frequency || {}, freqform || "");
     freq = freqRes.result || 0;
-  } catch (e) {}
+  } catch (e) { }
   if (freq > 0 && freq <= 1) freq *= 100;
   // if(media > 10) media /= 10
 

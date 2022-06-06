@@ -91,12 +91,12 @@ export default function Details({ route, navigation }) {
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
     resultMean = "" + (meanRes.result || 0);
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const freqRes = magic(grade.frequency || {}, frequency || "");
     resultFreq = "" + (freqRes.result || 0);
-  } catch (e) {}
+  } catch (e) { }
 
   function notificationText(notification) {
     if (notification != 0) return getTime(notification) + " antes";
@@ -327,13 +327,12 @@ export default function Details({ route, navigation }) {
             </View>
             {details.map((detail, index) => (
               <Text style={styles.corpoDetail} key={index}>
-                {`${
-                  weekly
+                {`${weekly
                     ? week[detail.day] +
-                      " " +
-                      `${formatHour(detail.datetime_init)}`
+                    " " +
+                    `${formatHour(detail.datetime_init)}`
                     : formatDateWithHour(detail.datetime_init)
-                }`}{" "}
+                  }`}{" "}
                 {` - ${formatHour(detail.datetime_end)}`}
               </Text>
             ))}

@@ -1,11 +1,11 @@
-import { useNavigation } from "@react-navigation/core";
+import {useNavigation} from "@react-navigation/core";
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { LocaleConfig } from "react-native-calendars";
-import { FAB, useTheme } from "react-native-paper";
-import { useSelector } from "react-redux";
+import {StyleSheet, View} from "react-native";
+import {LocaleConfig} from "react-native-calendars";
+import {FAB, useTheme} from "react-native-paper";
+import {useSelector} from "react-redux";
 import Agenda from "../components/Agenda";
-import { defaultSubject, defaultTask } from "../helpers/helper";
+import {defaultSubject, defaultTask} from "../helpers/helper";
 
 export function Calendar() {
   LocaleConfig.locales["br"] = {

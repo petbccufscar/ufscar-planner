@@ -182,11 +182,10 @@ export default function NewSubject({ route, navigation }) {
           { borderColor: colors.outline, backgroundColor: colors.surface },
         ]}
       >
-        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>{`${
-          type == "editMean" ? "Média" : "Frequência"
-        } atual`}</Text>
+        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>{`${type == "editMean" ? "Média" : "Frequência"
+          } atual`}</Text>
         {meanExpressionArray.join("") &&
-        validExpression(meanExpressionArray.join("")) ? (
+          validExpression(meanExpressionArray.join("")) ? (
           <Text
             style={
               type == "editMean"
@@ -194,8 +193,8 @@ export default function NewSubject({ route, navigation }) {
                   ? styles.meanInvalidValueText
                   : styles.meanValidValueText
                 : magic(meanDict, meanExpressionArray.join("")).result < 0.75
-                ? styles.meanInvalidValueText
-                : styles.meanValidValueText
+                  ? styles.meanInvalidValueText
+                  : styles.meanValidValueText
             }
           >
             {(

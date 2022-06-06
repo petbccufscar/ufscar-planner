@@ -227,7 +227,7 @@ export default function Agenda(props) {
                 renderItem={({ item }) => <RenderMonthCalendar marked={marked} open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month} />}
                 showDefaultLoadingIndicators={true}
             />
-            <TouchableOpacity onPress={() => setOpen(false)} style={{ alignItems: 'center', justifyContent: 'center', padding:20 }}>
+            <TouchableOpacity onPress={() => setOpen(false)} style={{ alignItems: 'center', justifyContent: 'center', padding: 20 }}>
                 <MaterialIcons name="expand-less" size={24} color={colors.primary} />
             </TouchableOpacity>
         </View>)

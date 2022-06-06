@@ -15,8 +15,8 @@ export default function DashboardNavigator() {
             headerStyle: {
                 backgroundColor: colors.headerInactive,
             },
-            headerTitleStyle:{
-                
+            headerTitleStyle: {
+
             },
             headerShadowVisible: false,
             headerTintColor: colors.onHeaderInactive,

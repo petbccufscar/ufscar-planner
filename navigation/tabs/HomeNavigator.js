@@ -14,8 +14,8 @@ export default function HomeNavigator() {
             headerStyle: {
                 backgroundColor: colors.headerInactive,
             },
-            headerTitleStyle:{
-                
+            headerTitleStyle: {
+
             },
             headerShadowVisible: false,
             headerTintColor: colors.onHeaderInactive,
