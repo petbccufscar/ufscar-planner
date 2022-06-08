@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Keyboard,
   Image,
+  Linking
 
 } from 'react-native'
 import ScrollView from '../components/ScrollView'
@@ -18,7 +19,8 @@ import Menu from '../components/HomeMenu'
 import { useNavigation } from '@react-navigation/core'
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "react-native-paper";
-import { useTheme } from "react-native-paper";
+import { useTheme, FAB } from "react-native-paper";
+import { defaultSubject, defaultTask } from "../helpers/helper";
 
 const floorDate = (data) => {
   return (
@@ -35,7 +37,7 @@ export default function App() {
   const items = useSelector((state) => state.cards).items;
   const classes = (items[today] || []).filter((e) => e.is_subject);
   const [acontecendoAgora, setAcontecendoAgora] = useState([]);
-
+  const navigation = useNavigation();
   let tasks = [];
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
@@ -87,9 +89,22 @@ export default function App() {
     infoText: {
       color: theme.colors.primary,
       marginLeft: 10,
-    }
+    },
+    fab: {
+      borderRadius: 10,
+      backgroundColor: theme.colors.surface3,
+    },
+    activedFAB: {
+      borderRadius: 10,
+      backgroundColor: theme.colors.primary,
+    },
 
   });
+
+  const [state, setState] = React.useState({ open: false });
+  const onStateChange = ({ open }) => setState({ open });
+  const { open } = state;
+
 
   return (
     <>
@@ -106,9 +121,9 @@ export default function App() {
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
             <AcontecendoAgora list={acontecendoAgora} />
             {classes.length + tasks.length == 0 && (
-                <View style={{...styles.infoRow, paddingVertical:30, paddingHorizontal:30,borderRadius:10, backgroundColor: theme.colors.surface, justifyContent:'center', marginVertical:20}}>
+              <View style={{ ...styles.infoRow, paddingVertical: 30, paddingHorizontal: 30, borderRadius: 10, backgroundColor: theme.colors.surface, justifyContent: 'center', marginVertical: 20 }}>
                 <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-                <Text style={{...styles.infoText}}>Não há nenhuma atividade agendada para hoje.</Text>
+                <Text style={{ ...styles.infoText }}>Não há nenhuma atividade agendada para hoje.</Text>
               </View>
 
             )}
@@ -116,30 +131,57 @@ export default function App() {
               <MaterialIcons name="info" size={24} color={theme.colors.primary} />
               <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
             </View>
-            <Text style={styles.sectionTitle}>Aulas de hoje</Text>
-            {classes.length == 0 && (<View style={styles.infoRow}>
-              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-              <Text style={styles.infoText}>Não há aulas para hoje.</Text>
-            </View>)
-            }
-            {classes.map((item, idx) => {
-              return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} />;
-            })}
-
-            <Text style={styles.sectionTitle}>Eventos de hoje</Text>
-            {tasks.length == 0 && (<View style={styles.infoRow}>
-              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-              <Text style={styles.infoText}>Não há eventos para hoje.</Text>
-            </View>)
-            }
-            <View style={styles.items}>
-              {tasks.map((item, idx) => {
-                return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
+              <Text style={styles.sectionTitle}>Aulas de hoje</Text>
+              {classes.length == 0 && (<View style={styles.infoRow}>
+                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+                <Text style={styles.infoText}>Não há aulas para hoje.</Text>
+              </View>)
+              }
+              {classes.map((item, idx) => {
+                return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} />;
               })}
-            </View></>)}
+
+              <Text style={styles.sectionTitle}>Eventos de hoje</Text>
+              {tasks.length == 0 && (<View style={styles.infoRow}>
+                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+                <Text style={styles.infoText}>Não há eventos para hoje.</Text>
+              </View>)
+              }
+              <View style={styles.items}>
+                {tasks.map((item, idx) => {
+                  return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
+                })}
+              </View></>)}
           </View>
         </ScrollView>
       </View>
+      <FAB.Group
+        open={open}
+        icon={"plus"}
+        fabStyle={open ? { width: 0, height: 0 } : styles.fab}
+        visible={!open}
+        color={theme.colors.primary}
+        actions={[
+          {
+            icon: "book",
+            label: "Matéria",
+            style: styles.fab,
+            color: theme.colors.primary,
+            onPress: () =>
+              navigation.navigate("EditScreen", { task: defaultSubject }),
+          },
+          {
+            icon: "calendar",
+            label: "Evento",
+            style: styles.activedFAB,
+            color: theme.colors.onPrimary,
+            onPress: () =>
+              navigation.navigate("EditScreen", { task: defaultTask }),
+            small: false,
+          },
+        ]}
+        onStateChange={onStateChange}
+      />
     </>
   );
 }
@@ -150,6 +192,7 @@ function AcontecendoAgora(props) {
   const colors = useTheme().colors;
   const mapsSrc = require('../assets/icons/maps.png')
   const list = props.list
+  const user = useSelector((state) => state.user).user
 
   const styles = StyleSheet.create({
     hourglassContainer: {
@@ -214,7 +257,22 @@ function AcontecendoAgora(props) {
       return (<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
         <View style={styles.localView}>
 
-          {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}>
+          {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}
+            onPress={async () => {
+              let place = user.campus + ", UFSCAR, " + item.detail.local;
+
+              const url =
+                "https://www.google.com/maps/search/?api=1&query=" +
+                encodeURI(place);
+
+
+              try {
+                await Linking.openURL(url);
+              } catch (e) {
+                console.log(e)
+              }
+
+            }}>
             <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
             <Text style={{ color: colors.onSurface }}>
               {item.detail.local}

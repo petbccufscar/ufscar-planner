@@ -99,7 +99,6 @@ export function Task(props) {
     AcontecendoView: {
       alignItems: 'flex-end',
       right: 0,
-      position: 'absolute',
     },
     AcontecendoIcon: {
       justifyContent: 'center',
@@ -108,6 +107,7 @@ export function Task(props) {
       width: 30,
       height: 30,
       borderRadius: 8,
+      marginLeft: 5
     }
   });
 
@@ -117,9 +117,9 @@ export function Task(props) {
 
       <View style={styles.atumalaca}>
         <View style={styles.linhaAcontecendoTitulo}>
-          <View style={{flexDirection:'row', alignItems:'center', flex:1}}>
-          <Text style={{...styles.itemTaskSubject, alignSelf:'flex-start', flex:1}}>{task.name}</Text>
-          {subjectScreen && task.siga && <SIGA/>}
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <Text style={{ ...styles.itemTaskSubject, alignSelf: 'flex-start', flex: 1 }}>{task.name}</Text>
+            {subjectScreen && task.siga && <SIGA />}
           </View>
           <View style={styles.AcontecendoView}>
             {acontecendoAgora && (<View style={styles.AcontecendoIcon}>
@@ -164,12 +164,11 @@ export function Task(props) {
                   "https://www.google.com/maps/search/?api=1&query=" +
                   encodeURI(place);
 
-                const supported = await Linking.canOpenURL(url);
 
-                if (supported) {
+                try {
                   await Linking.openURL(url);
-                } else {
-                  Alert.alert(`Don't know how to open this URL: ${url}`);
+                } catch (e) {
+                  console.log(e)
                 }
               }}
 
@@ -289,13 +288,12 @@ export function EventCards(props) {
                 "https://www.google.com/maps/search/?api=1&query=" +
                 encodeURI(place);
 
-              const supported = await Linking.canOpenURL(url);
-
-              if (supported) {
+              try {
                 await Linking.openURL(url);
-              } else {
-                Alert.alert(`Don't know how to open this URL: ${url}`);
+              } catch (e) {
+                console.log(e)
               }
+
             }}
 
           >
@@ -516,7 +514,7 @@ export function NotaRender(props) {
       flex: 1,
       margin: 10
     },
-    inputText:{backgroundColor: colors.surface1, marginVertical: 10 }
+    inputText: { backgroundColor: colors.surface1, marginVertical: 10 }
 
   });
   const [dict, setDict] = useState(task?.grade?.mean || {})
@@ -537,7 +535,7 @@ export function NotaRender(props) {
   let listItems = []
   let keys = Object.keys(dict)
   for (let i = 0; i < keys.length; i++) {
-    listItems.push({label: keys[i], value: keys[i]})
+    listItems.push({ label: keys[i], value: keys[i] })
   }
 
   const dispatch = useDispatch()
@@ -602,34 +600,35 @@ export function NotaRender(props) {
                 list={listItems}
                 setValue={setSelected}
                 label={"Escolha uma nota"}
-                inputProps={{style:styles.inputText}}
-                theme={{colors: {primary: colors.primary}}}
+                inputProps={{ style: styles.inputText }}
+                theme={{ colors: { primary: colors.primary } }}
               />
               <TextInput label="Valor" placeholder="0.0" placeholderTextColor={colors.outline} style={styles.inputText} keyboardType="number-pad"
-              value={selected != undefined && selected != null ? dict[selected].toString() : ''} 
-              onChangeText={(text) => {
-                if (selected != null && selected != undefined) {
-                let auxdict = { ...dict }
-                try {
-                  
-                  const aux = parseFloat(text)
+                value={selected != undefined && selected != null ? dict[selected].toString() : ''}
+                onChangeText={(text) => {
+                  if (selected != null && selected != undefined) {
+                    let auxdict = { ...dict }
+                    try {
 
-                  auxdict[selected] = isNaN(aux) ? '0' : text
-                  setDict(auxdict)
-                } catch (e) {
+                      const aux = parseFloat(text)
 
-                }
-              }}}
+                      auxdict[selected] = isNaN(aux) ? '0' : text
+                      setDict(auxdict)
+                    } catch (e) {
+
+                    }
+                  }
+                }}
               />
             </Dialog.Content>
             <Dialog.Actions>
-            <Button onPress={hideDialog} style={{ padding: 10 }}>
+              <Button onPress={hideDialog} style={{ padding: 10 }}>
                 Cancelar
               </Button>
               <Button onPress={submit} style={{ padding: 10 }}>
                 Ok
               </Button>
-              
+
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -673,7 +672,7 @@ export function FreqRender(props) {
       color: colors.primary
     },
     editarbtn: {
-      padding:10,
+      padding: 10,
     },
     texto: {
       color: colors.onSurfaceVariant,
@@ -824,7 +823,7 @@ export function FreqRender(props) {
             theme={theme}
 
           />
-          <Text style={{color:colors.onSurface}}>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
+          <Text style={{ color: colors.onSurface }}>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={() => {

@@ -29,7 +29,7 @@ export function Gradient(props) {
         return (
             <View
                 colors={color}
-                style={props.theme != undefined ?{ backgroundColor:  props.theme, ...(props.style || {})} : {backgroundColor: color[0], ...(props.style || {}) }}
+                style={props.theme != undefined ? { backgroundColor: props.theme, ...(props.style || {}) } : { backgroundColor: color[0], ...(props.style || {}) }}
             >
                 {props.children}
             </View>

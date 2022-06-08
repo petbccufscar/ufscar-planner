@@ -19,7 +19,7 @@ export default function ScrollView(props) {
                 backgroundColor: position == 0 ? colors.headerInactive : colors.headerActive,
             },
             headerShadowVisible: false,
-            headerTintColor:  position == 0 ? colors.onHeaderInactive : colors.onHeader,
+            headerTintColor: position == 0 ? colors.onHeaderInactive : colors.onHeader,
         });
         if (position > 0 && onTop) {
             setOnTop(false);
@@ -29,7 +29,7 @@ export default function ScrollView(props) {
     }
 
     useEffect(() => {
-        changeHeaderColor(onTop?0:10)
+        changeHeaderColor(onTop ? 0 : 10)
     }, [colors])
 
     return (

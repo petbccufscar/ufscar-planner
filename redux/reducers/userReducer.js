@@ -12,7 +12,7 @@ const initialState = {
             font_size: 14,
         },
         money: 0,
-        meal: 5.20
+        meal: 4.20
     },
 };
 

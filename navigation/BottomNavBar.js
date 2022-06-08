@@ -8,10 +8,11 @@ import CalendarNavigator from './tabs/CalendarNavigator';
 import DashboardNavigator from './tabs/DashboardNavigator';
 import HomeNavigator from './tabs/HomeNavigator';
 import RestaurantNavigator from './tabs/RestaurantNavigator';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 export default function MyTabs() {
   const navigation = useNavigation()
@@ -22,32 +23,55 @@ export default function MyTabs() {
   });
 
   return (
-    <Tab.Navigator screenOptions={{
-      keyboardHidesTabBar: true,
-      headerLeft: () => (
-        <IconButton
-          icon={"menu"}
-          size={24}
-          onPress={() => {
-            navigation.openDrawer()
-          }}
-        />
-      ),
-      tabBarActiveTintColor: theme.colors.onSecundaryContainer,
-      tabBarInactiveTintColor: theme.colors.onSurface,
-      headerPressColor: theme.colors.secundaryContainer,
-      tabBarStyle: {
-        backgroundColor: theme.colors.surface2,
-        paddingBottom: 8,
-        shadowColor: 'transparent',
-        shadowOpacity: 0.2,
-        height: 60,
-        borderTopColor: 'transparent',
-      },
-    }}>
+    <Tab.Navigator
+
+      tabBarPosition='bottom'
+      screenOptions={{
+        keyboardHidesTabBar: true,
+        headerLeft: () => (
+          <IconButton
+            icon={"menu"}
+            size={24}
+            onPress={() => {
+              navigation.openDrawer()
+            }}
+          />
+        ),
+
+        tabBarActiveTintColor: theme.colors.onSecundaryContainer,
+        tabBarInactiveTintColor: theme.colors.onSurface,
+        headerPressColor: theme.colors.secundaryContainer,
+        tabBarStyle: {
+          backgroundColor: theme.colors.surface2,
+          paddingBottom: 8,
+          shadowColor: 'transparent',
+          shadowOpacity: 0.2,
+          borderTopColor: 'transparent',
+        },
+
+
+        tabBarLabelStyle: {
+          fontSize: 10,
+          textTransform: 'none'
+        },
+
+        tabBarItemStyle: {
+        },
+        tabBarIconStyle: {
+          width: '100%',
+        },
+        tabBarContentContainerStyle: {
+          width: '100%',
+        }
+
+
+      }}>
       <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         tabBarLabel: 'Home',
+        headerTitleStyle: {
+
+        },
         headerShown: false,
         tabBarIcon: ({ color }) => (
           <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
@@ -55,6 +79,9 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
+        headerTitleStyle: {
+
+        },
         tabBarLabel: 'Planner',
         headerShown: false,
         tabBarIcon: ({ color }) => (
@@ -63,6 +90,9 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
+        headerTitleStyle: {
+
+        },
         headerShown: false,
         tabBarLabel: 'Dashboard',
         tabBarIcon: ({ color }) => (
@@ -71,6 +101,9 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
+        headerTitleStyle: {
+
+        },
         headerShown: false,
         tabBarLabel: 'Restaurante',
         tabBarIcon: ({ color }) => (
@@ -94,10 +127,9 @@ function TabBarIcon(props) {
 
   return (
     <View style={styles.iconContainer}>
-      <View style={styles.absoluteContainer}>
-        <View style={selectedStyle} />
+      <View style={selectedStyle}>
+        <MaterialIcons name={props.name} size={24} color={props.active ? colors.onSecondaryContainer : colors.onSurface} />
       </View>
-      <MaterialIcons name={props.name} size={24} color={props.active ? colors.onSecondaryContainer : colors.onSurface} />
     </View>
   );
 }
@@ -116,8 +148,6 @@ const styles = StyleSheet.create({
   },
 
   inactive: {
-    width: 10,
-    height: 10,
     backgroundColor: 'transparent',
   },
 
@@ -125,11 +155,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 15,
+    paddingHorizontal: 10
   },
 
   iconContainer: {
-    width: '50%',
-    height: '80%',
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',

@@ -68,6 +68,10 @@ const Menu = (props) => {
     ghostBox: {
       flex: 1
     },
+    fixBox: {
+      height: 1,
+      width: 1,
+    },
     header: {
       flexDirection: "row",
       justifyContent: "space-between",
@@ -92,7 +96,6 @@ const Menu = (props) => {
 
     }
   });
-
 
   return (
     <View style={styles.item}>
@@ -131,19 +134,16 @@ const Menu = (props) => {
           <Text style={styles.subtitle}>Prato Principal - Intolerante/Vegano:</Text>
           <Text style={styles.itemMenuSubject}>{props.mainMealVegan}</Text>
         </View>
+
         {shouldShow ? (
-          <View>
+          <>
             <View>
               <Text style={styles.subtitle}>Guarnicão:</Text>
               <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
             </View>
             <View>
-              <Text style={styles.subtitle}>Arroz:</Text>
+              <Text style={styles.subtitle}>Acompanhamento:</Text>
               <Text style={styles.itemMenuSubject}>{props.rice}</Text>
-            </View>
-            <View>
-              <Text style={styles.subtitle}>Feijão:</Text>
-              <Text style={styles.itemMenuSubject}>{props.bean}</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Saladas:</Text>
@@ -157,24 +157,21 @@ const Menu = (props) => {
               <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />
               <Text style={styles.itemMenuSubjectPrice}>{props.studentPrice} (estudante) ou {props.price} (visitante).</Text>
             </View>
-          </View>
-        ) : null}
+            <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
 
-        <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
-          <View style={styles.ghostBox} />
-          {shouldShow ? (
-            <>
-              <Text style={styles.verText}> Ver menos</Text>
+              <Text style={styles.verText}>Ver menos</Text>
               <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
-            </>
-          ) : (
-            <>
-              <Text style={styles.verText}> Ver mais</Text>
-              <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} /></>
-          )}
-          <View style={styles.ghostBox} />
-        </TouchableOpacity>
 
+            </TouchableOpacity>
+          </>
+        ) : null}
+        {!shouldShow && <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
+
+          <Text style={styles.verText}> Ver mais</Text>
+          <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} />
+
+        </TouchableOpacity>}
+        <View style={styles.fixBox} />
 
       </View>
     </View>

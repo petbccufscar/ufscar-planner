@@ -154,7 +154,7 @@ export const calendarReducer = (state = initialState, action) => {
         }
     }
 
-    const removePayload = (st,event,redefine = true) => {
+    const removePayload = (st, event, redefine = true) => {
         let newItems = { ...st.items }
 
         // buscar os dados antigos de event
@@ -319,7 +319,7 @@ export const calendarReducer = (state = initialState, action) => {
                     visit.push(items[i].id)
                 }
             }
-            
+
 
             return aux
 

@@ -33,7 +33,7 @@ async function loadNotifications(task) {
                     repeats: true
                 }
                 let auxT = getTime(task.notification[j])
-                if (auxT.length != 0){
+                if (auxT.length != 0) {
                     auxT = " em " + auxT
                 } else {
                     auxT = " agora"

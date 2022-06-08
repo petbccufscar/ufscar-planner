@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { IconButton, useTheme, Portal, Button, Dialog, TextInput } from "react-native-paper";
+import {
+  IconButton,
+  useTheme,
+  Portal,
+  Button,
+  Dialog,
+  TextInput,
+} from "react-native-paper";
 import KeyboardButton from "./KeyboardButton";
 import ScrollView from "./ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -175,7 +182,7 @@ export default function NewSubject({ route, navigation }) {
           { borderColor: colors.outline, backgroundColor: colors.surface },
         ]}
       >
-        <Text style={{...styles.subtitle, color:colors.onSurface}}>{`${type == "editMean" ? "Média" : "Frequência"
+        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>{`${type == "editMean" ? "Média" : "Frequência"
           } atual`}</Text>
         {meanExpressionArray.join("") &&
           validExpression(meanExpressionArray.join("")) ? (
@@ -190,7 +197,10 @@ export default function NewSubject({ route, navigation }) {
                   : styles.meanValidValueText
             }
           >
-            {magic(meanDict, meanExpressionArray.join("")).result* (type == "editMean"?1:100).toFixed(2) + ((type == "editMean")?"" : "%")}
+            {(
+              magic(meanDict, meanExpressionArray.join("")).result *
+              (type == "editMean" ? 1 : 100)
+            ).toFixed(2) + (type == "editMean" ? "" : "%")}
           </Text>
         ) : (
           <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
@@ -198,7 +208,7 @@ export default function NewSubject({ route, navigation }) {
       </View>
 
       <View style={styles.section}>
-        <Text style={{...styles.subtitle, color:colors.onSurface}}>
+        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>
           Fórmula da {type == "editMean" ? "média" : "frequência"}
         </Text>
         <View style={styles.sectionContent}>
@@ -221,7 +231,14 @@ export default function NewSubject({ route, navigation }) {
                   </KeyboardButton>
                 );
               } else {
-                return <Text key={index} style={{...styles.operator, color:colors.onSurface}}>{character}</Text>;
+                return (
+                  <Text
+                    key={index}
+                    style={{ ...styles.operator, color: colors.onSurface }}
+                  >
+                    {character}
+                  </Text>
+                );
               }
             })}
           </View>
@@ -229,7 +246,9 @@ export default function NewSubject({ route, navigation }) {
       </View>
 
       <View style={styles.section}>
-        <Text style={{...styles.subtitle,color:colors.onSurface}}>Operadores</Text>
+        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>
+          Operadores
+        </Text>
         <View style={[styles.sectionContent, styles.row, { marginLeft: -8 }]}>
           {operators.map((operator, index) => (
             <View style={styles.buttonContainer} key={index}>
@@ -265,7 +284,7 @@ export default function NewSubject({ route, navigation }) {
 
       <View style={styles.section}>
         <View style={styles.row}>
-          <Text style={{...styles.subtitle, color:colors.onSurface}}>
+          <Text style={{ ...styles.subtitle, color: colors.onSurface }}>
             Variáveis da {type == "editMean" ? "média" : "frequência"}
           </Text>
           <TouchableOpacity
@@ -301,7 +320,11 @@ export default function NewSubject({ route, navigation }) {
                 }}
               />
               <TouchableOpacity
-                style={{ marginLeft: "auto",marginLeft:2, alignItems: "center" }}
+                style={{
+                  marginLeft: "auto",
+                  marginLeft: 2,
+                  alignItems: "center",
+                }}
                 onPress={() => handleVariableDelete(key)}
               >
                 <MaterialIcons
@@ -315,8 +338,14 @@ export default function NewSubject({ route, navigation }) {
         </View>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogVariableOpen} onDismiss={() => setIsDialogVariableOpen(false)}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Nova variável</Dialog.Title>
+        <Dialog
+          style={{ backgroundColor: colors.dialog }}
+          visible={isDialogVariableOpen}
+          onDismiss={() => setIsDialogVariableOpen(false)}
+        >
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+            Nova variável
+          </Dialog.Title>
           <Dialog.Content>
             <TextInput
               style={{ ...styles.input, backgroundColor: colors.surface }}
@@ -336,48 +365,41 @@ export default function NewSubject({ route, navigation }) {
             )}
           </Dialog.Content>
           <Dialog.Actions>
-
-            <Button
-              onPress={() => setIsDialogVariableOpen(false)}
-            >Cancelar</Button>
+            <Button onPress={() => setIsDialogVariableOpen(false)}>
+              Cancelar
+            </Button>
             <Button
               onPress={() => handleVariableCreation()}
               disabled={
-                newVariableName.length == 0 || operators.includes(newVariableName)
+                newVariableName.length == 0 ||
+                !isNaN(newVariableName) ||
+                operators.includes(newVariableName)
               }
-            >Ok</Button>
+            >
+              Ok
+            </Button>
           </Dialog.Actions>
-
         </Dialog>
       </Portal>
       <Portal>
-        <Dialog style={{ backgroundColor: colors.dialog }} visible={isDialogValueOpen}>
-          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Adicionar valor</Dialog.Title>
+        <Dialog
+          style={{ backgroundColor: colors.dialog }}
+          visible={isDialogValueOpen}
+        >
+          <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+            Adicionar valor
+          </Dialog.Title>
           <Dialog.Content>
             <TextInput
               style={{ ...styles.input, backgroundColor: colors.surface }}
               onChangeText={(text) => setNewValue(text.replace(",", "."))}
               keyboardType="numeric"
             ></TextInput>
-            {newValue.length > 0 &&
-              newValue.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) <
-              0 && (
-                <Text
-                  style={{
-                    fontSize: 10,
-                    color: "red",
-                    marginHorizontal: 10,
-                    marginTop: -16,
-                  }}
-                >
-                  Valor inválido. Apenas números são permitidos.
-                </Text>
-              )}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button
-              onPress={() => setIsDialogValueOpen(false)}
-            >Cancelar</Button>
+            <Button onPress={() => setIsDialogValueOpen(false)}>
+              Cancelar
+            </Button>
             <Button
               disabled={
                 newValue.search(
@@ -385,7 +407,9 @@ export default function NewSubject({ route, navigation }) {
                 ) < 0
               }
               onPress={() => handleValueAddition()}
-            >Ok</Button>
+            >
+              Ok
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -413,7 +437,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderRadius: 5,
-    marginBottom: 8
+    marginBottom: 8,
   },
 
   subtitle: {
@@ -451,7 +475,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginTop: 10,
   },
-
 
   buttonContainer: {
     marginLeft: 8,

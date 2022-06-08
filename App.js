@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef } from "react";
-import { AppRegistry, Platform, StyleSheet, UIManager } from "react-native";
+import { AppRegistry, Platform, StyleSheet, UIManager, View } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
@@ -25,7 +25,16 @@ import EditScreen from "./screens/EditScreen";
 import Restaurant from "./screens/Restaurant";
 import Welcome from "./screens/Welcome";
 import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
-
+import {
+  useFonts,
+  RobotoCondensed_300Light,
+  RobotoCondensed_300Light_Italic,
+  RobotoCondensed_400Regular,
+  RobotoCondensed_400Regular_Italic,
+  RobotoCondensed_700Bold,
+  RobotoCondensed_700Bold_Italic,
+} from '@expo-google-fonts/roboto-condensed';
+import Links from "./screens/dashboardScreens/Links";
 
 
 
@@ -92,7 +101,16 @@ function Loader() {
   const themeConfig = useSelector((state) => state.theme);
 
   let theme = themeConfig.isDark ? CombinedDarkThemes[themeConfig.themeIdx] : CombinedDefaultThemes[themeConfig.themeIdx];
-  
+  let [fontsLoaded] = useFonts({
+    RobotoCondensed_300Light,
+    RobotoCondensed_300Light_Italic,
+    RobotoCondensed_400Regular,
+    RobotoCondensed_400Regular_Italic,
+    RobotoCondensed_700Bold,
+    RobotoCondensed_700Bold_Italic,
+  });
+  if (!fontsLoaded)
+    return <View style={{flex:1, backgroundColor: '#E8243C'}} />;
   return (
     <>
       <StatusBar style={themeConfig.isDark?"light":"dark"}/>
@@ -150,7 +168,16 @@ function Loader() {
                 component={Config} />
               <HomeStackRoutes.Screen
                 name="AboutUs"
+                options={() => ({
+                  title: "Sobre nós",
+                })}
                 component={AboutUs} />
+              <HomeStackRoutes.Screen
+                name="Links"
+                options={() => ({
+                  title: "Links Úteis",
+                })}
+                component={Links} />
               <HomeStackRoutes.Screen
                 name="Contato"
                 component={Contact} />
