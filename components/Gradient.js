@@ -15,7 +15,7 @@ import {
 export function Gradient(props) {
     let color = []
     const gradients = [['#42EBB9'], ['#42EBE1'], ['#4272EB'], ["#AB42EB"],
-    ["#EB42A8"], ["#EB4257"], ["#EBA842"], ["#DBDBDB"], ["#7277F1", "#42EBAF"],
+    ["#EB42A8"], ["#EB4257"], ["#FB9337"], ["#DBDBDB"], ["#7277F1", "#42EBAF"],
     ["#EB429E", "#EB9E42"], ["#46EB42", "#42B9EB"], ["#B4B2B5", "#1F1F1F"], ["#EBDB42", "#1AEB55"],
     ["#C574F7", "#ED3F88"], ["#e40303", "#FF8C00", "#FFED00", "#008026", "#004DFF", "#750787"]]
     const start = { x: 0, y: 0 }
