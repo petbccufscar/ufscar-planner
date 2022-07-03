@@ -69,19 +69,12 @@ export default function MyTabs() {
       <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
         tabBarLabel: 'Home',
-        headerTitleStyle: {
-
-        },
         headerShown: false,
         tabBarIcon: ({ color }) => (
           <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
         ),
       })} />
       <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
-        title: 'UFSCar Planner',
-        headerTitleStyle: {
-
-        },
         tabBarLabel: 'Planner',
         headerShown: false,
         tabBarIcon: ({ color }) => (
@@ -90,9 +83,6 @@ export default function MyTabs() {
       })} />
       <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
         title: 'UFSCar Planner',
-        headerTitleStyle: {
-
-        },
         headerShown: false,
         tabBarLabel: 'Dashboard',
         tabBarIcon: ({ color }) => (

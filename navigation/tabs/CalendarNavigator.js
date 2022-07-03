@@ -22,12 +22,6 @@ export default function CalendarNavigator({ navigation }) {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        navigation.setOptions({
-            title: `${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`,
-        })
-    }, [])
-
     return (
         <calendarStack.Navigator screenOptions={{
             presentation: 'containedTransparentModal', animation: "fade"
