@@ -131,14 +131,14 @@ const Menu = (props) => {
           <Text style={styles.itemMenuSubject}>{props.mainMealVegetarian}</Text>
         </View>
         <View>
-          <Text style={styles.subtitle}>Prato Principal - Intolerante/Vegano:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMealVegan}</Text>
+          <Text style={styles.subtitle}>Prato Principal - Extra:</Text>
+          <Text style={styles.itemMenuSubject}>{props.mainMealExtra}</Text>
         </View>
 
         {shouldShow ? (
           <>
             <View>
-              <Text style={styles.subtitle}>Guarnicão:</Text>
+              <Text style={styles.subtitle}>Guarnição:</Text>
               <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
             </View>
             <View>
@@ -152,6 +152,10 @@ const Menu = (props) => {
             <View>
               <Text style={styles.subtitle}>Sobremesa:</Text>
               <Text style={styles.itemMenuSubject}>{props.desert}</Text>
+            </View>
+            <View>
+              <Text style={styles.subtitle}>Suco:</Text>
+              <Text style={styles.itemMenuSubject}>{props.juice}</Text>
             </View>
             <View style={styles.money}>
               <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />
