@@ -33,9 +33,10 @@ export default function Wallet() {
   const days = { begin: first, end: last, today: today };
   const [selectedDay, setSelectedDay] = useState(today);
   const [refreshing, setRefreshing] = useState(true);
+  const [stPrices, setStPrices] = useState(null);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
-
+  
   const user = useSelector((state) => state.user).user;
 
   const dispatch = useDispatch();
@@ -61,9 +62,10 @@ export default function Wallet() {
   }
 
   useEffect(() => {
-    if(refreshing){
-      getWeekMenu().then(() => 
-      setRefreshing(false))
+    if(refreshing || tried == null){
+      getWeekMenu().then(() => {
+        if (refreshing)
+          setRefreshing(false)})
     }
   }, [user, netInfo.isConnected, refreshing]);
 
@@ -123,17 +125,21 @@ export default function Wallet() {
   let tried = null
 
   async function apiDoRU(date, isLunch){
-    if ((tried == null  || (new Date()).getTime() - tried.getTime() > 1800000 ) && refreshing){
-      tried = new Date()
-      const url = `https://petbcc.ufscar.br/ru_api/`
 
+    if (tried == null  ||  (new Date()).getTime() - tried.getTime() > 50000  
+    && refreshing ||
+      ( (new Date()).getTime() - tried.getTime() > 1800000 )
+    ){
+      const url = `https://petbcc.ufscar.br/ru_api/`
+      
       const response = await fetch(url)
       const data = await response.json()
-
+      
       respostaAPI = data
+      tried = new Date()
     }
-
-    const searchDate = date.toISOString().split('T')[0] 
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    const searchDate = new Date(date - tzoffset).toISOString().split('T')[0] 
     const mealType = isLunch? "Almoço" : "Jantar"
     for(let i = 0; i < respostaAPI.length; i++){
       const r = respostaAPI[i]
@@ -154,8 +160,7 @@ export default function Wallet() {
 
   }
 
-  async function menuScrapping(date) {
-    const searchUrl = campus[local]["urlCard"];
+  async function priceScrapping(date){
     const priceUrl = campus[local]["urlPrice"];
     let dayMenu = {
       mainMeal: "Não Definido",
@@ -171,70 +176,81 @@ export default function Wallet() {
       priceDefault: "R$ ???",
       priceVisit: "R$ ???",
     };
-    
-    const response = await fetch(searchUrl);
-    const priceResponse = await fetch(priceUrl);
 
-    const htmlString = await response.text();
-    const priceHtmlString = await priceResponse.text();
+    try {
+      let prices = [];
+      if (stPrices == null){
+        const priceResponse = await fetch(priceUrl);
+        const priceHtmlString = await priceResponse.text();
 
-    let $ = cheerio.load(htmlString);
-    const weekMenu = $(".col-lg-7.metade.periodo");
+        $ = cheerio.load(priceHtmlString);
+        const priceMenu = $(".col-sm-12");
 
-    $ = cheerio.load(priceHtmlString);
-    const priceMenu = $(".col-sm-12");
+        prices = priceMenu.eq(0).text();
 
-    let prices = priceMenu.eq(0).text();
-
-    prices = prices.split("\n").filter((x) => x !== "");
-
-    if (prices.indexOf("Estudante (UFSCar)") != -1)
-      dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
-    else
-      dayMenu.priceDefault =
-        prices[
-        prices.findIndex((x) => 0 < (x.match(/Aluno/g) || []).length) + 1
-        ];
-    dayMenu.priceVisit = getPrice(prices, "Visitante");
-
-    let timeStart;
-    let timeEnd;
-
-    if (date.getDay() == 6) {
-      try {
-        timeStart = campus[local]["satStart"];
-        timeEnd = campus[local]["satEnd"];
-      } catch (e) {
-        timeStart = "Não Definido";
-        timeEnd = "Não Definido";
+        prices = prices.split("\n").filter((x) => x !== "");
+        setStPrices(prices);
+      } else {
+        prices = stPrices
       }
-    } else {
-      timeStart = campus[local]["lunchStart"];
-      timeEnd = campus[local]["lunchEnd"];
-    }
-    dayMenu.lunchStartTime = timeStart;
-    dayMenu.lunchEndTime = timeEnd;
 
-    if (date.getDay() == 6) {
-      try {
-        timeStart = campus[local]["satStart"];
-        timeEnd = campus[local]["satEnd"];
-      } catch (e) {
-        timeStart = "Não Definido";
-        timeEnd = "Não Definido";
+
+      if (prices.indexOf("Estudante (UFSCar)") != -1)
+        dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
+      else
+        dayMenu.priceDefault =
+          prices[
+          prices.findIndex((x) => 0 < (x.match(/Aluno/g) || []).length) + 1
+          ];
+      dayMenu.priceVisit = getPrice(prices, "Visitante");
+
+      let timeStart;
+      let timeEnd;
+      
+      if (date.getDay() == 6) {
+        try {
+          timeStart = campus[local]["satStart"];
+          timeEnd = campus[local]["satEnd"];
+        } catch (e) {
+          timeStart = "Não Definido";
+          timeEnd = "Não Definido";
+        }
+      } else {
+        timeStart = campus[local]["lunchStart"];
+        timeEnd = campus[local]["lunchEnd"];
       }
-    } else {
-      timeStart = campus[local]["dinnerStart"];
-      timeEnd = campus[local]["dinnerEnd"];
-    }
-    (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
+      dayMenu.lunchStartTime = timeStart;
+      dayMenu.lunchEndTime = timeEnd;
 
-    let foundLunch = false;
-    let foundDinner = false;
+      if (date.getDay() == 6) {
+        try {
+          timeStart = campus[local]["satStart"];
+          timeEnd = campus[local]["satEnd"];
+        } catch (e) {
+          timeStart = "Não Definido";
+          timeEnd = "Não Definido";
+        }
+      } else {
+        timeStart = campus[local]["dinnerStart"];
+        timeEnd = campus[local]["dinnerEnd"];
+      }
+      (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
+    } catch (e){
+      console.log(e)
+    }
+    return dayMenu;
+  }
+
+
+
+  async function menuScrapping(date) {
+
+    let dayMenu = await priceScrapping(date);
     let auxDayMenu = {};
 
 
       try {
+
         const r = await apiDoRU(date, true);
         auxDayMenu.lunch = {...dayMenu, ...r};
       }
@@ -289,8 +305,8 @@ export default function Wallet() {
       fontSize: 11,
     },
   });
-
-
+  
+  
   return (
     <View style={{ ...styles.backgroundColor, flex: 1 }}>
       <ScrollView
