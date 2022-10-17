@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
 import { Appbar } from "react-native-paper";
 import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
@@ -21,6 +21,7 @@ import { Foundation } from "@expo/vector-icons";
 import RestaurantTickets from "../components/RestaurantTickt";
 import { updateCardapio } from "../redux/actions/restaurantActions";
 import { useNetInfo } from "@react-native-community/netinfo";
+
 
 export default function Wallet() {
   const navigation = useNavigation();
@@ -135,7 +136,7 @@ export default function Wallet() {
   async function apiDoRU(date, isLunch){
     if (tried == null  || (new Date()).getTime() - tried.getTime() > 3600000 ){
       tried = new Date()
-      const url = `https://ru-api.herokuapp.com/`
+      const url = `https://petbcc.ufscar.br/ru_api/`
 
       const response = await fetch(url)
       const data = await response.json()
@@ -345,7 +346,7 @@ export default function Wallet() {
         </View>
         {(
           <>
-            <View style={styles.cardapioView}>
+            <TouchableOpacity onPress={()=>Linking.openURL('https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario')} style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
               <Text style={styles.cardapioSubText}>
                 {restaurant.updatedAt
@@ -353,13 +354,11 @@ export default function Wallet() {
                     new Date(restaurant.updatedAt)
                   )}.
 fontes: 
-  ${campus[local]["urlCard"]},
-  ${campus[local]["urlPrice"]} e 
-  https://www.facebook.com/RU.UFSCar/
+  https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario
                     `
                   : "Não foi possível obter as informações. Dispositivo offline."}
               </Text>
-            </View>
+            </TouchableOpacity>
 
             <Days
               days={days}
