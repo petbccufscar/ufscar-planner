@@ -129,6 +129,7 @@ export default function Wallet() {
     if (tried == null  || (new Date()).getTime() - tried.getTime() > 3600000 ){
       tried = new Date()
       const url = `https://petbcc.ufscar.br/ru_api/`
+    }
 
     if (tried == null  ||  (new Date()).getTime() - tried.getTime() > 50000  
     && refreshing ||
