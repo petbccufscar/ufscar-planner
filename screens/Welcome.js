@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, LayoutAnimation, StyleSheet, Text, View } from "react-native";
+import { Image, LayoutAnimation, StyleSheet, Text, View, Linking } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TextInput, useTheme } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
@@ -26,7 +26,7 @@ import { useEffect } from "react";
 
 export default function Welcome() {
   const colors = useTheme().colors;
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const user = useSelector((state) => state.user).user;
   const navigation = useNavigation();
 
@@ -80,9 +80,82 @@ export default function Welcome() {
         />
       </View>
       <View style={styles.card}>
+        {page == 0 && <ScreenZero setPage={handlePageChange} />}
         {page == 1 && <ScreenOne setPage={handlePageChange} />}
         {page == 2 && <ScreenTwo setPage={handlePageChange} />}
         {page == 3 && <ScreenThree setPage={handlePageChange} />}
+      </View>
+    </View>
+  );
+}
+
+function ScreenZero({ navigation, setPage }) {
+  const colors = useTheme().colors;
+  const styles = StyleSheet.create({
+    container: {
+      paddingHorizontal: 40,
+      paddingVertical: 20,
+    },
+    h1: {
+      fontSize: 28,
+      color: colors.primary,
+    },
+    h2: {
+      fontSize: 22,
+      color: colors.primary,
+      marginVertical: 20,
+    },
+
+    h3: {
+      fontSize: 16,
+      lineHeight: 24,
+      color: colors.onSurface,
+      marginBottom: 15,
+    },
+
+    centerText: {
+      justifyContent: "center",
+      textAlign: "center",
+    },
+
+    btn: {
+      backgroundColor: colors.secondaryContainer,
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "flex-start",
+      borderRadius: 20,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+    btnText: {
+      color: colors.onSecondaryContainer,
+    },
+    secBtn: {
+      padding: 20,
+    },
+    secBtnText: {
+      color: colors.onSurfaceVariant,
+    },
+    btnPlace: {
+      alignSelf: "center",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.h1}>Olá, estudante</Text>
+      <Text style={[styles.h2, styles.centerText]}>Seja bem vindo(a)!</Text>
+      <Text style={styles.h3}>
+        Ao continuar você estará concordando com nossa Política de Privacidade / Termos de uso.</Text>
+        <TouchableOpacity onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}>
+      <Text style={{...styles.h3, color: colors.primary}}>Acesse a Política de Privacidade / Termos de uso clicando aqui.</Text>
+      </TouchableOpacity>
+      <View style={styles.btnPlace}>
+        <TouchableOpacity style={styles.btn} onPress={() => setPage(1)}>
+          <Text style={styles.btnText}>Continuar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -144,8 +217,6 @@ function ScreenOne({ navigation, setPage }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>Olá, estudante</Text>
-      <Text style={[styles.h2, styles.centerText]}>Seja bem vindo(a)!</Text>
       <Text style={styles.h3}>
         Com o UFSCar Planner você pode acompanhar suas obrigações acadêmicas,
         cardápio do Restaurante Universitário e outras atividades relacionadas à
@@ -206,6 +277,7 @@ function ScreenTwo({ setPage }) {
             text1:
               "Aparentemente você não possui nenhum deferimento no Periodo letivo atual, por acaso está de férias?",
           });
+          setPage(3);
         } else {
           const subjects = data.data;
           try {

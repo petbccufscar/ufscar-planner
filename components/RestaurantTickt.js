@@ -56,8 +56,8 @@ export default function RestaurantTickets() {
     saldo: {
       justifyContent: "space-between",
       alignItems: "center",
-      flexDirection: "row",
       marginBottom: 10,
+      width: '100%'
     },
     buttonRow: {
       flexDirection: "row",
@@ -95,7 +95,11 @@ export default function RestaurantTickets() {
       color: theme.colors.primary,
       fontSize: 30,
       textAlign: "center",
-      flex: 1,
+    },
+    saldoQtd: {
+      color: theme.colors.primary,
+      fontSize: 20,
+      textAlign: "center",
     },
     debitarBtnText: {
       color: theme.colors.onPrimary,
@@ -120,6 +124,10 @@ export default function RestaurantTickets() {
       backgroundColor: theme.colors.surface
     },
   });
+
+  const qtdRefeicoes = user.money / user.meal
+  const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições"
+
   return (
     <View style={styles.card}>
       <View style={styles.saldoTitleCard}>
@@ -135,8 +143,9 @@ export default function RestaurantTickets() {
       <View style={styles.saldoBodyCard}>
         <View style={styles.saldo}>
           <Text style={styles.saldoValue}>{formatReal(user.money)}</Text>
+          <Text style={styles.saldoQtd}>{qtdRefeicoes != (qtdRefeicoes|0) ? '∞' : qtdRefeicoes|0} {refeicao}</Text>
         </View>
-
+        
         <ScrollView horizontal={true}>
           <View style={styles.buttonRow}>
             <TouchableOpacity

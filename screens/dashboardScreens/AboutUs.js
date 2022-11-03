@@ -87,6 +87,7 @@ export default function AboutUs() {
     • Isabela Vieira Magalhães
     • João Victor Bueno de Caldas
     • Lucas Machado Cid
+    • Maria Luiza Edwards de M Cordeiro
     • Matheus Ramos de Carvalho
     • Miguel Antonio de Oliveira
     • Natália Bachiega Magalhães

@@ -152,5 +152,5 @@ export function parseTime(t) {
 
 export function SIGA(props) {
     const size = props.size || 20
-    return (<Text style={{ fontFamily: 'sans-serif-condensed', color: '#F89837', fontWeight: 'bold', fontSize: size, ...(props.style || {}) }}>SIGA</Text>)
+    return (<Text style={{ color: '#F89837', fontWeight: 'bold', fontSize: size, ...(props.style || {}) }}>SIGA</Text>)
 }
