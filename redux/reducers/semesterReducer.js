@@ -2,8 +2,8 @@ import { ActionsTypes } from "../constants/actionsTypes";
 
 const initialState = {
     semester: {
-        init: "2022-05-30T03:02:00",
-        end: "2022-10-01T03:04:00"
+        init: "2022-11-07T03:02:00",
+        end: "2023-04-08T03:04:00"
     }
 }
 
