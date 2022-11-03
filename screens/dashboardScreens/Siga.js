@@ -63,7 +63,7 @@ export const addSigaSubject = (subject, dispatch) => {
     siga: true,
     details: [...auxdetails],
     name: subject.atividade,
-    color: 4,
+    color: 6,
     turma: "turma " + subject.turma,
   };
 

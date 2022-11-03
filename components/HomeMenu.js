@@ -8,7 +8,7 @@ import { Feather } from '@expo/vector-icons';
 const Menu = (props) => {
   const [shouldShow, setShouldShow] = useState(props.shouldShow);
   const theme = useTheme();
-
+  const defaultStr = "Carregando..."
 
   const styles = StyleSheet.create({
     item: {
@@ -124,34 +124,38 @@ const Menu = (props) => {
 
         <View>
           <Text style={styles.subtitle}>Prato Principal:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMeal}</Text>
+          <Text style={styles.itemMenuSubject}>{props.mainMeal || defaultStr}</Text>
         </View>
         <View>
           <Text style={styles.subtitle}>Prato Principal - Vegetariano:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMealVegetarian}</Text>
+          <Text style={styles.itemMenuSubject}>{props.mainMealVegetarian || defaultStr}</Text>
         </View>
         <View>
-          <Text style={styles.subtitle}>Prato Principal - Intolerante/Vegano:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMealVegan}</Text>
+          <Text style={styles.subtitle}>Prato Principal - Extra:</Text>
+          <Text style={styles.itemMenuSubject}>{props.mainMealExtra || defaultStr}</Text>
         </View>
 
         {shouldShow ? (
           <>
             <View>
-              <Text style={styles.subtitle}>Guarnicão:</Text>
-              <Text style={styles.itemMenuSubject}>{props.garrison}</Text>
+              <Text style={styles.subtitle}>Guarnição:</Text>
+              <Text style={styles.itemMenuSubject}>{props.garrison || defaultStr}</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Acompanhamento:</Text>
-              <Text style={styles.itemMenuSubject}>{props.rice}</Text>
+              <Text style={styles.itemMenuSubject}>{props.rice || defaultStr}</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Saladas:</Text>
-              <Text style={styles.itemMenuSubject}>{props.salad}</Text>
+              <Text style={styles.itemMenuSubject}>{props.salad || defaultStr}</Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Sobremesa:</Text>
-              <Text style={styles.itemMenuSubject}>{props.desert}</Text>
+              <Text style={styles.itemMenuSubject}>{props.desert || defaultStr}</Text>
+            </View>
+            <View>
+              <Text style={styles.subtitle}>Suco:</Text>
+              <Text style={styles.itemMenuSubject}>{props.juice || defaultStr}</Text>
             </View>
             <View style={styles.money}>
               <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />

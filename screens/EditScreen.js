@@ -906,7 +906,7 @@ export default function EditScreen({ route, navigation }) {
           }}
         >
           <TextInput
-            value={teacher}
+            defaultValue={teacher}
             onEndEditing={(e) => {
               if (e.nativeEvent.text != "") {
                 let newTeachers = [...teachers];
