@@ -21,7 +21,6 @@
     "@react-navigation/native-stack": "^6.x",
     "@react-navigation/stack": "^6.x",
     "@stream-io/flat-list-mvcp": "^0.10.1",
-    "eslint": "^8.28.0",
     "expo": "^45.0.0",
     "expo-app-loading": "~2.0.0",
     "expo-font": "~10.1.0",
@@ -61,6 +60,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "eslint": "^8.28.0",
     "eslint-plugin-react": "^7.31.11",
     "react-native-svg-transformer": "^0.14.3"
   },
