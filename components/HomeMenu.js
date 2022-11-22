@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
+
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 
 const Menu = (props) => {
   const [shouldShow, setShouldShow] = useState(props.shouldShow);
   const theme = useTheme();
-  const defaultStr = "Carregando..."
+  const defaultStr = "Carregando...";
 
   const styles = StyleSheet.create({
     item: {
@@ -35,7 +37,7 @@ const Menu = (props) => {
       color: theme.colors.onSurface,
       flexDirection: "row",
       fontSize: 14,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       paddingHorizontal: 10,
       paddingTop: 10
     },
@@ -63,7 +65,7 @@ const Menu = (props) => {
       flexDirection: "row",
       paddingHorizontal: 10,
       marginBottom: 10,
-      width: '100%',
+      width: "100%",
     },
     ghostBox: {
       flex: 1
@@ -76,13 +78,13 @@ const Menu = (props) => {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      width: '100%',
+      width: "100%",
       borderBottomWidth: 1,
       borderColor: theme.colors.outline,
     },
 
     verText: {
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.colors.primary,
     },
     hour: {

@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
   TouchableOpacity,
-  Alert,
   StyleSheet,
-  LayoutAnimation,
-  Linking,
   TextInput,
 } from "react-native";
 import {
-  Ionicons,
-  Entypo,
   MaterialIcons,
-  MaterialCommunityIcons,
-  Feather,
-  FontAwesome,
 } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   Button,
-  IconButton,
   useTheme,
-  FAB,
-  Menu,
-  Divider,
-  Surface,
   Portal,
   Dialog,
 } from "react-native-paper";
-import { FreqRender } from "../../components/EventCards";
 import {
   defaultSubject,
   parseTime,
@@ -37,10 +23,8 @@ import {
   weekDaysSIGA,
 } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
-import ScrollView from "../../components/ScrollView";
 import {
   addEvent,
-  removeEvent,
   removeSIGA,
 } from "../../redux/actions/eventActions";
 import Toast from "react-native-toast-message";
@@ -190,10 +174,6 @@ export default function SigaScreen() {
       alignItems: "center",
       justifyContent: "center",
       marginTop: 10,
-    },
-    message: {
-      padding: 10,
-      color: colors.error,
     },
     message: {
       padding: 10,

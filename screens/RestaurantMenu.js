@@ -58,8 +58,8 @@ export default function Wallet() {
     if (refreshing) {
       getWeekMenu().then(() => {
         if (refreshing)
-          setRefreshing(false)
-      })
+          setRefreshing(false);
+      });
     }
   }, [user, netInfo.isConnected, refreshing]);
 
@@ -74,8 +74,8 @@ export default function Wallet() {
 
   const campus = {
     sorocaba: {
-      urlCard: `https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio`,
-      urlPrice: `https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+      urlCard: "https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio",
+      urlPrice: "https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes",
       lunchStart: "11h00",
       lunchEnd: "13h30",
       dinnerStart: "17h30",
@@ -84,16 +84,16 @@ export default function Wallet() {
       satEnd: "13h00",
     },
     araras: {
-      urlCard: `https://www.araras.ufscar.br/restaurante-universitario/cardapio`,
-      urlPrice: `https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes`,
+      urlCard: "https://www.araras.ufscar.br/restaurante-universitario/cardapio",
+      urlPrice: "https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes",
       lunchStart: "11h00",
       lunchEnd: "13h30",
       dinnerStart: "18h00",
       dinnerEnd: "19h30",
     },
     "são carlos": {
-      urlCard: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
-      urlPrice: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
+      urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
+      urlPrice: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos",
       lunchStart: "11h15",
       lunchEnd: "13h30",
       dinnerStart: "17h15",
@@ -102,8 +102,8 @@ export default function Wallet() {
       satEnd: "13h00",
     },
     "lagoa do sino": {
-      urlCard: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio`,
-      urlPrice: `https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos`,
+      urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
+      urlPrice: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos",
       lunchStart: "11h15",
       lunchEnd: "13h30",
       dinnerStart: "17h15",
@@ -115,16 +115,16 @@ export default function Wallet() {
 
   const local = user.campus.toLocaleLowerCase();
 
-  let respostaAPI = []
+  let respostaAPI = [];
 
   async function apiDoRU(date, isLunch) {
-    const response = await fetch(`https://petbcc.ufscar.br/ru_api/`)
-    respostaAPI = await response.json()
+    const response = await fetch("https://petbcc.ufscar.br/ru_api/");
+    respostaAPI = await response.json();
     var tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    const searchDate = new Date(date - tzoffset).toISOString().split('T')[0]
-    const mealType = isLunch ? "Almoço" : "Jantar"
+    const searchDate = new Date(date - tzoffset).toISOString().split("T")[0];
+    const mealType = isLunch ? "Almoço" : "Jantar";
     for (let i = 0; i < respostaAPI.length; i++) {
-      const r = respostaAPI[i]
+      const r = respostaAPI[i];
       if (respostaAPI[i].meal_type == mealType && respostaAPI[i].date == searchDate && r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()) {
         return {
           mainMeal: r.main_dish_unrestricted,
@@ -136,7 +136,7 @@ export default function Wallet() {
           salad: r.salads,
           desert: r.dessert,
           juice: r.juice
-        }
+        };
       }
     }
   }
@@ -164,7 +164,7 @@ export default function Wallet() {
         const priceResponse = await fetch(priceUrl);
         const priceHtmlString = await priceResponse.text();
 
-        $ = cheerio.load(priceHtmlString);
+        const $ = cheerio.load(priceHtmlString);
         const priceMenu = $(".col-sm-12");
 
         prices = priceMenu.eq(0).text();
@@ -172,16 +172,16 @@ export default function Wallet() {
         prices = prices.split("\n").filter((x) => x !== "");
         setStPrices(prices);
       } else {
-        prices = stPrices
+        prices = stPrices;
       }
 
       if (prices.indexOf("Estudante (UFSCar)") != -1)
         dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
       else
         dayMenu.priceDefault =
-          prices[
-          prices.findIndex((x) => 0 < (x.match(/Aluno/g) || []).length) + 1
-          ];
+          prices[1 + prices.findIndex(
+            (x) => 0 < (x.match(/Aluno/g) || []).length
+          )];
       dayMenu.priceVisit = getPrice(prices, "Visitante");
 
       let timeStart;
@@ -216,7 +216,7 @@ export default function Wallet() {
       }
       (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     return dayMenu;
   }
@@ -233,7 +233,7 @@ export default function Wallet() {
     }
 
     try {
-      const r = await apiDoRU(date, false)
+      const r = await apiDoRU(date, false);
       auxDayMenu.dinner = { ...dayMenu, ...r };
     } catch (e) {
       auxDayMenu.dinner = dayMenu;
@@ -296,7 +296,7 @@ export default function Wallet() {
         </View>
         {(
           <>
-            <TouchableOpacity onPress={() => Linking.openURL('https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario')} style={styles.cardapioView}>
+            <TouchableOpacity onPress={() => Linking.openURL("https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario")} style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
               <Text style={styles.cardapioSubText}>
                 {restaurant.updatedAt

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import debounce from 'lodash.debounce'; // 4.0.8
-export const withPreventDoubleClick = (WrappedComponent) => {
+/* eslint-disable react/prop-types */
 
+import React from "react";
+import debounce from "lodash.debounce"; // 4.0.8
+
+export const withPreventDoubleClick = (WrappedComponent) => {
   class PreventDoubleClick extends React.PureComponent {
 
     debouncedOnPress = () => {
       this.props.onPress && this.props.onPress();
-    }
+    };
 
     onPress = debounce(this.debouncedOnPress, 500, { leading: true, trailing: false });
 
@@ -15,6 +17,6 @@ export const withPreventDoubleClick = (WrappedComponent) => {
     }
   }
 
-  PreventDoubleClick.displayName = `withPreventDoubleClick(${WrappedComponent.displayName ||WrappedComponent.name})`
+  PreventDoubleClick.displayName = `withPreventDoubleClick(${WrappedComponent.displayName || WrappedComponent.name})`;
   return PreventDoubleClick;
-}
+};

@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { TouchableRipple, useTheme } from "react-native-paper";

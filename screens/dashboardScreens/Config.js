@@ -8,7 +8,6 @@ import { formatDate } from "../../helpers/helper";
 import { updateSemester } from "../../redux/actions/semesterActions";
 import { updateUser } from "../../redux/actions/userActions";
 import { setTheme, toggleTheme as tg } from "../../redux/actions/themeActions";
-import { useNavigation } from "@react-navigation/native";
 import { SelGradSquare } from "../../components/Gradient";
 import ScrollView from "./../../components/ScrollView";
 
@@ -65,7 +64,7 @@ export default function Config() {
   const [money, setMoney] = useState(user?.meal?.toString() || "0");
   const handleMoneyChange = (value) => {
     try {
-      const valor = parseFloat(value.substring(3).replace(/,/, '.'));
+      const valor = parseFloat(value.substring(3).replace(/,/, "."));
       if (!isNaN(valor)) {
         setMoney(value.substring(3));
         dispatch(updateUser({ ...user, meal: valor }));
@@ -73,7 +72,7 @@ export default function Config() {
         setMoney("0");
         dispatch(updateUser({ ...user, meal: 0 }));
       }
-    } catch (e) {}
+    } catch (e) { /* empty */ }
   };
 
   const handleNameChange = (value) => {
@@ -82,7 +81,6 @@ export default function Config() {
   const [showMenu, setShowMenu] = useState(false);
   const openMenu = () => setShowMenu(true);
   const closeMenu = () => setShowMenu(false);
-  const navigation = useNavigation();
   const setCampus = (name) => {
     dispatch(updateUser({ ...user, campus: name }));
   };

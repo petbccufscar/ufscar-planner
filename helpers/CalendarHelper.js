@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
+
 import React from "react";
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Pressable,
 } from "react-native";
@@ -11,7 +12,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { BWFont } from './ExpressionHelper';
 
 export const hourHeight = hp("8%");
 export const weekHeight = hp("9%");
@@ -64,28 +64,23 @@ export function Days(props) {
     dias: {
       width: hourWidth,
       height: hourHeight,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
       alignItems: "center",
       justifyContent: "center",
       alignSelf: "center",
     },
   });
 
-
-
-
-
-
   return (
     <View style={styles.weekDays}>
-      {days.map((day, i) => {
+      {days.map((day) => {
         return (
           <Pressable
             onPress={() => props.setSelectedDay(day.date)}
             style={styles.dias}
             key={day.day}
           >
-            <Text style={{ color: theme.colors.onSurface, fontWeight: 'bold', fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
+            <Text style={{ color: theme.colors.onSurface, fontWeight: "bold", fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
             <View
               style={{
                 alignItems: "center",
@@ -108,5 +103,4 @@ export function Days(props) {
       })}
     </View>
   );
-
 }

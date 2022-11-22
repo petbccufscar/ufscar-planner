@@ -1,30 +1,31 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useSelector } from 'react-redux';
-import { ConfigSemester } from '../screens/dashboardScreens/Config';
-import { Portal, Dialog, Button, TextInput } from 'react-native-paper';
+/* eslint-disable react/prop-types */
+
+import { MaterialIcons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "react-native-paper";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { useSelector } from "react-redux";
+import { ConfigSemester } from "../screens/dashboardScreens/Config";
+import { Portal, Dialog, Button } from "react-native-paper";
 
 function Bar(props) {
   const text = props.text || "";
   const progress = props.progress || 0;
-  const colors = useTheme().colors
   const colorOutside = props.colorOutside || "#fdfdfd";
   const colorInside = props.colorInside || "#73FCB2";
   const style = props.style || {};
   return (
-    <View style={{ flexDirection: 'row', borderRadius: 30, overflow: 'hidden', ...style }}>
+    <View style={{ flexDirection: "row", borderRadius: 30, overflow: "hidden", ...style }}>
       <View style={{ width: `${progress}%`, backgroundColor: colorInside }}></View>
       <View style={{ width: `${100 - progress}%`, backgroundColor: colorOutside }}></View>
-      <View style={{ left: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ left: 10, position: "absolute", top: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
         <Text style={{}}>{text}</Text>
       </View>
-      <View style={{ right: 10, position: 'absolute', top: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ right: 10, position: "absolute", top: 0, bottom: 0, justifyContent: "center", alignItems: "center" }}>
         <Text style={{}}>{`${progress.toFixed(2)}%`}</Text>
       </View>
-    </View>)
+    </View>);
 
 }
 
@@ -32,10 +33,10 @@ function Bar(props) {
 export default function Progress() {
   const semester = useSelector((state) => state.semester).semester;
   const currentDate = new Date();
-  let message = '';
+  let message = "";
   let progress = 0;
   calculateProgress();
-  const colors = useTheme().colors
+  const colors = useTheme().colors;
   const [showDialog, setShowDialog] = useState(false);
 
 
@@ -59,7 +60,7 @@ export default function Progress() {
       }
       else {
         if (auxDaysLeft <= 0) {
-          message = `As férias chegaram!`;
+          message = "As férias chegaram!";
         }
         else {
           message = `Férias em ${auxDaysLeft} dia${auxDaysLeft != 1 ? "s" : ""}!`;
@@ -75,14 +76,14 @@ export default function Progress() {
   return (<>
     <View style={styles.content}>
       <View style={styles.container}>
-        <Bar style={styles.progress} progress={progress * 100} text={'Progresso do Semestre'} >
+        <Bar style={styles.progress} progress={progress * 100} text={"Progresso do Semestre"} >
         </Bar>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ alignItems: 'flex-start', flex: 1, }}>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ alignItems: "flex-start", flex: 1, }}>
             <Text style={{ color: colors.onSurfaceVariant, ...styles.message }}>{message}</Text>
           </View>
-          <View style={{ alignItems: 'flex-end', flex: 1, }}>
-            <TouchableOpacity onPress={() => setShowDialog(true)} style={{ borderWidth: 1, borderColor: colors.outline, borderRadius: 8, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5 }}>
+          <View style={{ alignItems: "flex-end", flex: 1, }}>
+            <TouchableOpacity onPress={() => setShowDialog(true)} style={{ borderWidth: 1, borderColor: colors.outline, borderRadius: 8, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", flexDirection: "row", paddingHorizontal: 10, paddingVertical: 5 }}>
               <MaterialIcons name="settings" size={18} color={colors.primary} style={{ paddingRight: 5 }} />
               <Text style={{ color: colors.onSurface }}>Ajustar</Text>
 
@@ -112,7 +113,7 @@ export default function Progress() {
 
 const styles = StyleSheet.create({
   content: {
-    width: wp('85%'),
+    width: wp("85%"),
     alignSelf: "center",
     paddingTop: hp("5%"),
   },

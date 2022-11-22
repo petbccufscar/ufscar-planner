@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Image } from "react-native";
+/* eslint-disable react/prop-types */
+
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Image } from "react-native";
 import { useNavigation } from "@react-navigation/core";
-import { useSelector, useDispatch } from 'react-redux';
-import { formatHour, formatDateWithHour, weekDaysNames, weekDaysFullNames, SIGA } from '../helpers/helper';
-import { useTheme, Checkbox, Paragraph, Dialog, Portal, Button, TextInput } from "react-native-paper";
-import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { useSelector, useDispatch } from "react-redux";
+import { formatHour, formatDateWithHour, weekDaysFullNames, SIGA } from "../helpers/helper";
+import { useTheme, Checkbox, Dialog, Portal, Button, TextInput } from "react-native-paper";
+import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
 import DropDown from "react-native-paper-dropdown";
-const mapsSrc = require('../assets/icons/maps.png')
+const mapsSrc = require("../assets/icons/maps.png");
 
 export function Task(props) {
-  const mostrarData = props.show || false
+  const mostrarData = props.show || false;
   let task = props.task;
   const navigation = useNavigation();
-  const user = useSelector(state => state.user).user
-  const subjectScreen = props.subjectScreen || false
+  const user = useSelector(state => state.user).user;
+  const subjectScreen = props.subjectScreen || false;
   // TODO verificar se está acontecendo agora
   const acontecendoAgora = props.acontecendo || false;
 
@@ -32,7 +34,7 @@ export function Task(props) {
       flexDirection: "row",
       backgroundColor: theme.colors.surface,
       borderRadius: 10,
-      overflow: 'hidden',
+      overflow: "hidden",
       alignItems: "flex-start",
       marginVertical: 10
       // width: '100%',
@@ -41,7 +43,7 @@ export function Task(props) {
       // height: "100%",
       // flex: 1,
       width: 10,
-      height: '100%',
+      height: "100%",
       // backgroundColor: "#55BCF6", // Definir como passar a cor da tarefa
       //marginRight: 10,
     },
@@ -53,12 +55,12 @@ export function Task(props) {
       fontSize: 14,
       color: theme.colors.onSurfaceVariant,
       flexShrink: 1,
-      flexWrap: 'wrap',
+      flexWrap: "wrap",
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row',
-      alignItems: 'center'
+      flexDirection: "row",
+      alignItems: "center"
     },
     atumalaca: {
       padding: 10,
@@ -68,7 +70,7 @@ export function Task(props) {
     },
     iconView: {
       width: 30,
-      alignItems: 'center'
+      alignItems: "center"
 
     },
     acontecendoAgoraMapsIcon: {
@@ -85,24 +87,24 @@ export function Task(props) {
       borderColor: theme.colors.outline,
       borderRadius: 8,
       backgroundColor: theme.colors.surface,
-      flexDirection: 'row',
+      flexDirection: "row",
       padding: 5,
       paddingRight: 10,
       marginTop: 5
     },
     linhaAcontecendoTitulo: {
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "flex-start",
       paddingHorizontal: 5,
     },
     AcontecendoView: {
-      alignItems: 'flex-end',
+      alignItems: "flex-end",
       right: 0,
     },
     AcontecendoIcon: {
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       backgroundColor: colors.primary,
       width: 30,
       height: 30,
@@ -117,8 +119,8 @@ export function Task(props) {
 
       <View style={styles.atumalaca}>
         <View style={styles.linhaAcontecendoTitulo}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-            <Text style={{ ...styles.itemTaskSubject, alignSelf: 'flex-start', flex: 1 }}>{task.name}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+            <Text style={{ ...styles.itemTaskSubject, alignSelf: "flex-start", flex: 1 }}>{task.name}</Text>
             {subjectScreen && task.siga && <SIGA />}
           </View>
           <View style={styles.AcontecendoView}>
@@ -140,7 +142,7 @@ export function Task(props) {
           </View>
         </>)}
         {task.is_subject && task.teachers && task.teachers.length > 0 && (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <FontAwesome name="user" size={24} style={{ margin: 5 }} color={theme.colors.onSurfaceVariant} />
             <Text style={{ color: theme.colors.onSurfaceVariant }}>{task.teachers[0]}{task.teachers.length > 1 ? " +" : ""}</Text>
           </View>
@@ -168,7 +170,7 @@ export function Task(props) {
                 try {
                   await Linking.openURL(url);
                 } catch (e) {
-                  console.log(e)
+                  console.log(e);
                 }
               }}
 
@@ -188,14 +190,14 @@ export function Task(props) {
 }
 
 export function EventCards(props) {
-  const mostrarData = props.show || false
+  const mostrarData = props.show || false;
   let task = props.task;
   const navigation = useNavigation();
 
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-  const user = useSelector(state => state.user).user
+  const user = useSelector(state => state.user).user;
 
 
   const theme = useTheme();
@@ -205,14 +207,14 @@ export function EventCards(props) {
       flexDirection: "row",
       backgroundColor: theme.colors.surface,
       borderRadius: 10,
-      overflow: 'hidden',
+      overflow: "hidden",
       alignItems: "flex-start",
       margin: 10,
 
     },
     square: {
       width: 10,
-      height: '100%',
+      height: "100%",
     },
     itemTaskSubject: {
       fontSize: 22,
@@ -224,12 +226,12 @@ export function EventCards(props) {
       fontSize: 14,
       color: theme.colors.onSurfaceVariant,
       flexShrink: 1,
-      flexWrap: 'wrap',
+      flexWrap: "wrap",
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row',
-      alignItems: 'center'
+      flexDirection: "row",
+      alignItems: "center"
     },
     atumalaca: {
       padding: 10,
@@ -238,7 +240,7 @@ export function EventCards(props) {
     },
     iconView: {
       width: 30,
-      alignItems: 'center'
+      alignItems: "center"
 
     },
     acontecendoAgoraMapsIcon: {
@@ -255,7 +257,7 @@ export function EventCards(props) {
       borderColor: theme.colors.outline,
       borderRadius: 8,
       backgroundColor: theme.colors.surface,
-      flexDirection: 'row',
+      flexDirection: "row",
       marginTop: 5,
       padding: 5,
       paddingRight: 10,
@@ -291,7 +293,7 @@ export function EventCards(props) {
               try {
                 await Linking.openURL(url);
               } catch (e) {
-                console.log(e)
+                console.log(e);
               }
 
             }}
@@ -313,12 +315,12 @@ export function EventCards(props) {
 
 export function EventRender(props) {
   let task = props.task;
-  const mostrarData = task.weekly
+  const mostrarData = task.weekly;
   const navigation = useNavigation();
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-  const hasCheck = task.when_submit != null
+  const hasCheck = task.when_submit != null;
   const dispatch = useDispatch();
 
 
@@ -329,14 +331,14 @@ export function EventRender(props) {
       flexDirection: "row",
       backgroundColor: theme.colors.surface,
       borderRadius: 10,
-      overflow: 'hidden',
+      overflow: "hidden",
       alignItems: "flex-start",
       margin: 10,
-      width: '100%'
+      width: "100%"
     },
     square: {
       width: 10,
-      height: '100%',
+      height: "100%",
     },
     itemTaskSubject: {
       fontSize: 22,
@@ -346,11 +348,11 @@ export function EventRender(props) {
       fontSize: 14,
       color: theme.colors.onSurfaceVariant,
       flexShrink: 1,
-      flexWrap: 'wrap',
+      flexWrap: "wrap",
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: 'row'
+      flexDirection: "row"
 
     },
     atumalaca: {
@@ -360,13 +362,13 @@ export function EventRender(props) {
     },
     iconView: {
       width: 30,
-      alignItems: 'center',
+      alignItems: "center",
       paddingLeft: hasCheck ? 5 : 0,
     },
     linhaTitulo: {
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "flex-start",
       paddingLeft: hasCheck ? 0 : 5,
       width: "100%",
     },
@@ -385,7 +387,7 @@ export function EventRender(props) {
         <View style={styles.linhaTitulo}>
           {hasCheck && <Checkbox
             style={styles.check}
-            status={task.is_submited ? 'checked' : 'unchecked'}
+            status={task.is_submited ? "checked" : "unchecked"}
             onPress={() => {
               dispatch(updateEvent({ ...task, is_submited: !task.is_submited }));
             }}
@@ -422,20 +424,20 @@ export function NotaRender(props) {
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-  const colors = theme.colors
+  const colors = theme.colors;
   const styles = StyleSheet.create({
     itemLeft: {
       flexDirection: "row",
       backgroundColor: theme.colors.surface,
       borderRadius: 10,
-      overflow: 'hidden',
+      overflow: "hidden",
       alignItems: "flex-start",
       margin: 10,
-      width: '100%'
+      width: "100%"
     },
     square: {
       width: 10,
-      height: '100%',
+      height: "100%",
     },
     atumalaca: {
       padding: 10,
@@ -449,37 +451,37 @@ export function NotaRender(props) {
       fontSize: 22,
     },
     header: {
-      flexDirection: 'row',
+      flexDirection: "row",
       borderBottomColor: colors.outline,
       borderBottomWidth: 1,
     },
     campo: {
       paddingRight: 5,
-      flexDirection: 'row',
+      flexDirection: "row",
       marginRight: 10,
-      alignItems: 'center',
+      alignItems: "center",
       paddingVertical: 10
     },
     campotxt: {
       fontSize: 16,
       color: colors.onSurfaceVariant,
-      maxWidth: '90%',
-      overflow: 'scroll'
+      maxWidth: "90%",
+      overflow: "scroll"
     },
     campoicon: {
       marginRight: 5
     },
     nota: {
-      flexDirection: 'row',
+      flexDirection: "row",
       paddingVertical: 5,
-      alignItems: 'center'
+      alignItems: "center"
     },
     notas: {
       paddingVertical: 5,
     },
     notaleft: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       flex: 1,
     },
     notaright: {
@@ -509,46 +511,45 @@ export function NotaRender(props) {
       fontSize: 16,
     },
     editarrow: {
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       flex: 1,
       margin: 10
     },
     inputText: { backgroundColor: colors.surface1, marginVertical: 10 }
 
   });
-  const [dict, setDict] = useState(task?.grade?.mean || {})
+  const [dict, setDict] = useState(task?.grade?.mean || {});
 
   let resultMean = "";
 
   try {
     const meanRes = magic(dict || {}, task.mean || "");
     resultMean = "" + (meanRes.result || 0);
-  } catch (e) {
-  }
+  } catch (e) { /* empty */ }
 
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
-  const [dropOrd, setDropOrd] = useState(false)
-  const [selected, setSelected] = useState(null)
-  let listItems = []
-  let keys = Object.keys(dict)
+  const [dropOrd, setDropOrd] = useState(false);
+  const [selected, setSelected] = useState(null);
+  let listItems = [];
+  let keys = Object.keys(dict);
   for (let i = 0; i < keys.length; i++) {
-    listItems.push({ label: keys[i], value: keys[i] })
+    listItems.push({ label: keys[i], value: keys[i] });
   }
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const hideDialog = () => setVisible(false);
   const submit = () => {
-    let auxdict = {}
+    let auxdict = {};
     for (let i = 0; i < keys.length; i++) {
-      auxdict[keys[i]] = parseFloat(dict[keys[i]])
+      auxdict[keys[i]] = parseFloat(dict[keys[i]]);
     }
-    setDict(auxdict)
+    setDict(auxdict);
     dispatch(updateEvent({ ...task, grade: { ...task.grade, mean: auxdict } }));
     hideDialog();
-  }
+  };
   return (
     <TouchableOpacity style={{ ...styles.itemLeft }} onPress={edit}>
       <Gradient style={{ ...styles.square }} color={task.color} />
@@ -558,7 +559,7 @@ export function NotaRender(props) {
           {task.teachers.length > 0 &&
             <View style={styles.campo}>
               <MaterialIcons style={styles.campoicon} name="person" size={24} color={colors.onSurfaceVariant} />
-              <Text style={styles.campotxt}>{task.teachers[0]} {task.teachers.length > 1 ? '+' : ''}</Text>
+              <Text style={styles.campotxt}>{task.teachers[0]} {task.teachers.length > 1 ? "+" : ""}</Text>
             </View>}
 
           <View style={styles.campo}>
@@ -604,19 +605,17 @@ export function NotaRender(props) {
                 theme={{ colors: { primary: colors.primary } }}
               />
               <TextInput label="Valor" placeholder="0.0" placeholderTextColor={colors.outline} style={styles.inputText} keyboardType="number-pad"
-                value={selected != undefined && selected != null ? dict[selected].toString() : ''}
+                value={selected != undefined && selected != null ? dict[selected].toString() : ""}
                 onChangeText={(text) => {
                   if (selected != null && selected != undefined) {
-                    let auxdict = { ...dict }
+                    let auxdict = { ...dict };
                     try {
 
-                      const aux = parseFloat(text)
+                      const aux = parseFloat(text);
 
-                      auxdict[selected] = isNaN(aux) ? '0' : text
-                      setDict(auxdict)
-                    } catch (e) {
-
-                    }
+                      auxdict[selected] = isNaN(aux) ? "0" : text;
+                      setDict(auxdict);
+                    } catch (e) { /* empty */ }
                   }
                 }}
               />
@@ -640,27 +639,27 @@ export function NotaRender(props) {
 
 
 export function FreqRender(props) {
-  const theme = useTheme()
-  const colors = theme.colors
+  const theme = useTheme();
+  const colors = theme.colors;
 
   let resultFreq = "";
   let task = props.task;
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
   try {
     const freqRes = magic(task?.grade?.frequency || {}, task.frequency || "");
     resultFreq = "" + (freqRes.result * 100 || 0);
-  } catch (e) { }
+  } catch (e) { /* empty */ }
 
   resultFreq += "%";
 
   const styles = StyleSheet.create({
     headerline: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
       paddingBottom: 10,
     },
     name: {
@@ -681,11 +680,11 @@ export function FreqRender(props) {
       flex: 1,
     },
     body: {
-      flexDirection: 'row',
+      flexDirection: "row",
     },
     percentcontainer: {
-      alignItems: 'flex-end',
-      justifyContent: 'flex-end'
+      alignItems: "flex-end",
+      justifyContent: "flex-end"
     },
     percentText: {
       color: colors.onSurface,
@@ -694,13 +693,13 @@ export function FreqRender(props) {
     },
     bar: {
       height: 25,
-      width: '100%',
-      backgroundColor: '#c4c4c4',
+      width: "100%",
+      backgroundColor: "#c4c4c4",
       borderRadius: 20,
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
+      alignItems: "flex-start",
+      justifyContent: "flex-start",
       marginTop: 10,
-      overflow: 'hidden'
+      overflow: "hidden"
     },
     barprogress: {
       height: 25,
@@ -713,20 +712,20 @@ export function FreqRender(props) {
       margin: 20,
       padding: 20,
       borderRadius: 10,
-      width: '100%'
+      width: "100%"
     },
     table: {
       flex: 1,
       marginBottom: 5,
     },
     tableline: {
-      flexDirection: 'row',
+      flexDirection: "row",
       padding: 5,
       borderRadius: 5
 
     },
     tablelineA: {
-      flexDirection: 'row',
+      flexDirection: "row",
       padding: 5,
       backgroundColor: colors.surfaceVariant,
       borderRadius: 5
@@ -742,15 +741,15 @@ export function FreqRender(props) {
     },
     input: {
       minHeight: 40,
-      minWidth: '30%',
+      minWidth: "30%",
       borderRadius: 5,
       backgroundColor: colors.surface
     },
-  })
-  const removeSpaces = (str) => str.replace(/\s/g, '');
+  });
+  const removeSpaces = (str) => str.replace(/\s/g, "");
   const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
-  const aulasDadas = task?.grade?.frequency?.aulasDadas || 0
-  const faltas = task?.grade?.frequency?.faltas || 0
+  const aulasDadas = task?.grade?.frequency?.aulasDadas || 0;
+  const faltas = task?.grade?.frequency?.faltas || 0;
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
@@ -758,24 +757,23 @@ export function FreqRender(props) {
   const hideDialog = () => setVisible(false);
   const [open, setOpen] = useState(false);
   const freqkeys = Object.keys(task?.grade?.frequency || {});
-  const aux = []
+  const items = [];
   for (let i = 0; i < freqkeys.length; i++) {
-    aux.push({ label: freqkeys[i], value: freqkeys[i] })
+    items.push({ label: freqkeys[i], value: freqkeys[i] });
   }
   const [dropvalue, setDropalue] = useState(freqkeys[0]);
-  const [items, setItems] = useState(aux);
   const [dict, setDict] = useState(task?.grade?.frequency || {});
   const dispatch = useDispatch();
 
   const submit = () => {
-    let auxdict = {}
+    let auxdict = {};
     for (let i = 0; i < freqkeys.length; i++) {
-      auxdict[freqkeys[i]] = parseFloat(dict[freqkeys[i]])
+      auxdict[freqkeys[i]] = parseFloat(dict[freqkeys[i]]);
     }
 
     dispatch(updateEvent({ ...task, grade: { ...task.grade, frequency: auxdict } }));
     hideDialog();
-  }
+  };
 
   return (<TouchableOpacity style={styles.card} onPress={edit}>
     <View style={styles.headerline}>
@@ -785,11 +783,12 @@ export function FreqRender(props) {
       </TouchableOpacity>
     </View>
     {!isDefault && <View style={styles.table}>
-      {Object.keys(task?.grade?.frequency || {}).map((item, index) =>
-      (<View style={index % 2 == 0 ? styles.tablelineA : styles.tableline} key={index}>
-        <Text style={styles.tablel}>{item}</Text>
-        <Text style={styles.tabler}>{task.grade.frequency[item]}</Text>
-      </View>))}
+      {Object.keys(task?.grade?.frequency || {}).map((item, index) => (
+        <View style={index % 2 == 0 ? styles.tablelineA : styles.tableline} key={index}>
+          <Text style={styles.tablel}>{item}</Text>
+          <Text style={styles.tabler}>{task.grade.frequency[item]}</Text>
+        </View>
+      ))}
     </View>}
     <View style={styles.body}>
       <View style={styles.textocontainer}>
@@ -824,44 +823,38 @@ export function FreqRender(props) {
 
           />
           <Text style={{ color: colors.onSurface }}>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={() => {
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: "center", justifyContent: "center", borderRadius: 10 }} onPress={() => {
                 if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict }
+                  let auxdict = { ...dict };
                   try {
-                    const aux = parseFloat(dict[dropvalue])
-                    auxdict[dropvalue] = isNaN(aux) ? '0' : (aux - 1).toString()
-                    setDict(auxdict)
-                  } catch (e) {
-
-                  }
+                    const aux = parseFloat(dict[dropvalue]);
+                    auxdict[dropvalue] = isNaN(aux) ? "0" : (aux - 1).toString();
+                    setDict(auxdict);
+                  } catch (e) { /* empty */ }
                 }
               }}>
                 <Text style={{ fontSize: 20, color: colors.onPrimary }}>-</Text>
               </TouchableOpacity>
-              <TextInput style={{ ...styles.input, textAlign: 'center' }} placeholderTextColor={colors.outline} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString() : ''} onChangeText={(text) => {
+              <TextInput style={{ ...styles.input, textAlign: "center" }} placeholderTextColor={colors.outline} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString() : ""} onChangeText={(text) => {
                 if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict }
+                  let auxdict = { ...dict };
                   try {
-                    const aux = parseFloat(text)
-                    auxdict[dropvalue] = isNaN(aux) ? '0' : text
-                    setDict(auxdict)
-                  } catch (e) {
-
-                  }
+                    const aux = parseFloat(text);
+                    auxdict[dropvalue] = isNaN(aux) ? "0" : text;
+                    setDict(auxdict);
+                  } catch (e) { /* empty */ }
                 }
               }}></TextInput>
-              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 10 }} onPress={() => {
+              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: "center", justifyContent: "center", borderRadius: 10 }} onPress={() => {
                 if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict }
+                  let auxdict = { ...dict };
                   try {
-                    const aux = parseFloat(dict[dropvalue])
-                    auxdict[dropvalue] = isNaN(aux) ? '0' : (aux + 1).toString()
-                    setDict(auxdict)
-                  } catch (e) {
-
-                  }
+                    const aux = parseFloat(dict[dropvalue]);
+                    auxdict[dropvalue] = isNaN(aux) ? "0" : (aux + 1).toString();
+                    setDict(auxdict);
+                  } catch (e) { /* empty */ }
                 }
               }}>
                 <Text style={{ fontSize: 20, color: colors.onPrimary }}>+</Text>
@@ -881,5 +874,5 @@ export function FreqRender(props) {
     </Portal>
 
 
-  </TouchableOpacity>)
+  </TouchableOpacity>);
 }

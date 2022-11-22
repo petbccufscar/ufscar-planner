@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RestaurantMenu from "../../screens/RestaurantMenu";
-import { useTheme } from 'react-native-paper';
+import { useTheme } from "react-native-paper";
 
 const restaurantsStack = createNativeStackNavigator();
 
@@ -10,7 +10,7 @@ export default function RestaurantsNavigator() {
   return (
     <restaurantsStack.Navigator
       screenOptions={{
-        title: 'UFSCar Planner',
+        title: "UFSCar Planner",
         headerStyle: {
           backgroundColor: colors.headerInactive,
         },
@@ -19,7 +19,7 @@ export default function RestaurantsNavigator() {
         },
         headerShadowVisible: false,
         headerTintColor: colors.onHeaderInactive,
-        headerTitleAlign: 'center'
+        headerTitleAlign: "center"
       }}
     >
       <restaurantsStack.Screen

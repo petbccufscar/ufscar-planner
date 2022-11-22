@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import {
@@ -160,7 +162,7 @@ export default function NewSubject({ route, navigation }) {
 
   const validExpression = (text) => {
     try {
-      const r = magic(meanDict, text);
+      magic(meanDict, text);
       return true;
     } catch (e) {
       return false;
@@ -182,29 +184,34 @@ export default function NewSubject({ route, navigation }) {
           { borderColor: colors.outline, backgroundColor: colors.surface },
         ]}
       >
-        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>{`${type == "editMean" ? "Média" : "Frequência"
-          } atual`}</Text>
+        <Text style={{ ...styles.subtitle, color: colors.onSurface }}>
+          {
+            `${type == "editMean" ? "Média" : "Frequência"
+            } atual`
+          }</Text>
         {meanExpressionArray.join("") &&
-          validExpression(meanExpressionArray.join("")) ? (
-          <Text
-            style={
-              type == "editMean"
-                ? magic(meanDict, meanExpressionArray.join("")).result < 6
-                  ? styles.meanInvalidValueText
-                  : styles.meanValidValueText
-                : magic(meanDict, meanExpressionArray.join("")).result < 0.75
-                  ? styles.meanInvalidValueText
-                  : styles.meanValidValueText
-            }
-          >
-            {(
-              magic(meanDict, meanExpressionArray.join("")).result *
-              (type == "editMean" ? 1 : 100)
-            ).toFixed(2) + (type == "editMean" ? "" : "%")}
-          </Text>
-        ) : (
-          <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
-        )}
+          validExpression(meanExpressionArray.join(""))
+          ? (
+            <Text
+              style={
+                type == "editMean"
+                  ? magic(meanDict, meanExpressionArray.join("")).result < 6
+                    ? styles.meanInvalidValueText
+                    : styles.meanValidValueText
+                  : magic(meanDict, meanExpressionArray.join("")).result < 0.75
+                    ? styles.meanInvalidValueText
+                    : styles.meanValidValueText
+              }
+            >
+              {(
+                magic(meanDict, meanExpressionArray.join("")).result *
+                (type == "editMean" ? 1 : 100)
+              ).toFixed(2) + (type == "editMean" ? "" : "%")}
+            </Text>
+          ) : (
+            <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
+          )
+        }
       </View>
 
       <View style={styles.section}>
@@ -321,7 +328,6 @@ export default function NewSubject({ route, navigation }) {
               />
               <TouchableOpacity
                 style={{
-                  marginLeft: "auto",
                   marginLeft: 2,
                   alignItems: "center",
                 }}
@@ -403,7 +409,7 @@ export default function NewSubject({ route, navigation }) {
             <Button
               disabled={
                 newValue.search(
-                  /^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/
+                  /^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/
                 ) < 0
               }
               onPress={() => handleValueAddition()}
