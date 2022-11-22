@@ -22,7 +22,6 @@ import NotasScreen from "./screens/dashboardScreens/Notas";
 import SigaScreen from "./screens/dashboardScreens/Siga";
 import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
-import Restaurant from "./screens/Restaurant";
 import Welcome from "./screens/Welcome";
 import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
 import {
@@ -110,115 +109,107 @@ function Loader() {
     RobotoCondensed_700Bold_Italic,
   });
   if (!fontsLoaded)
-    return <View style={{flex:1, backgroundColor: '#E8243C'}} />;
+    return <View style={{ flex: 1, backgroundColor: '#E8243C' }} />;
   return (
     <>
-      <StatusBar style={themeConfig.isDark?"light":"dark"}/>
-        <PaperProvider theme={theme}>
-          <NavigationContainer theme={theme}>
-            <HomeStackRoutes.Navigator initialRouteName={user.welcome? "Welcome": "BottomNav"} screenOptions={() => ({
-              headerStyle: {
-                backgroundColor: theme.colors.headerInactive,
-              },
-              headerTintColor: theme.colors.onHeaderInactive,
-            })}>
-              <HomeStackRoutes.Screen
-                name="Welcome"
-                component={Welcome}
-                options={() => ({
-                  headerTitleAlign: "center",
-                  headerShown:false
-                })}
-              />
-              <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
-                <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
-              </HomeStackRoutes.Group>
-              <HomeStackRoutes.Screen
-                name="Event"
-                component={Details}
-                options={() => ({
-                  headerTitleAlign: "center",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="EditScreen"
-                component={EditScreen}
-                options={() => ({
-                  headerTitleAlign: "center",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Restaurant"
-                component={Restaurant}
-                options={() => ({
-                  title: "Carteirinha",
-                  headerTitleAlign: "center",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Subject"
-                component={Subject}
-                options={() => ({
-                  title: "Média",
-                  headerTitleAlign: "center",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Configurações"
-                component={Config} />
-              <HomeStackRoutes.Screen
-                name="AboutUs"
-                options={() => ({
-                  title: "Sobre nós",
-                })}
-                component={AboutUs} />
-              <HomeStackRoutes.Screen
-                name="Links"
-                options={() => ({
-                  title: "Links Úteis",
-                })}
-                component={Links} />
-              <HomeStackRoutes.Screen
-                name="Contato"
-                component={Contact} />
-              <HomeStackRoutes.Screen
-                name="Eventos"
-                component={EventScreen}
-                options={() => ({
-                  title: "Eventos",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Materias"
-                component={SubjectScreen}
-                options={() => ({
-                  title: "Matérias",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Notas"
-                component={NotasScreen}
-                options={() => ({
-                  title: "Notas",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Frequencia"
-                component={FreqScreen}
-                options={() => ({
-                  title: "Frequência",
-                })}
-              />
-              <HomeStackRoutes.Screen
-                name="Siga"
-                component={SigaScreen}
-                options={() => ({
-                  title: "Siga",
-                })}
-              />
-            </HomeStackRoutes.Navigator>
-          </NavigationContainer>
-        </PaperProvider>
+      <StatusBar style={themeConfig.isDark ? "light" : "dark"} />
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme}>
+          <HomeStackRoutes.Navigator initialRouteName={user.welcome ? "Welcome" : "BottomNav"} screenOptions={() => ({
+            headerStyle: {
+              backgroundColor: theme.colors.headerInactive,
+            },
+            headerTintColor: theme.colors.onHeaderInactive,
+          })}>
+            <HomeStackRoutes.Screen
+              name="Welcome"
+              component={Welcome}
+              options={() => ({
+                headerTitleAlign: "center",
+                headerShown: false
+              })}
+            />
+            <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
+              <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
+            </HomeStackRoutes.Group>
+            <HomeStackRoutes.Screen
+              name="Event"
+              component={Details}
+              options={() => ({
+                headerTitleAlign: "center",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="EditScreen"
+              component={EditScreen}
+              options={() => ({
+                headerTitleAlign: "center",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Subject"
+              component={Subject}
+              options={() => ({
+                title: "Média",
+                headerTitleAlign: "center",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Configurações"
+              component={Config} />
+            <HomeStackRoutes.Screen
+              name="AboutUs"
+              options={() => ({
+                title: "Sobre nós",
+              })}
+              component={AboutUs} />
+            <HomeStackRoutes.Screen
+              name="Links"
+              options={() => ({
+                title: "Links Úteis",
+              })}
+              component={Links} />
+            <HomeStackRoutes.Screen
+              name="Contato"
+              component={Contact} />
+            <HomeStackRoutes.Screen
+              name="Eventos"
+              component={EventScreen}
+              options={() => ({
+                title: "Eventos",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Materias"
+              component={SubjectScreen}
+              options={() => ({
+                title: "Matérias",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Notas"
+              component={NotasScreen}
+              options={() => ({
+                title: "Notas",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Frequencia"
+              component={FreqScreen}
+              options={() => ({
+                title: "Frequência",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="Siga"
+              component={SigaScreen}
+              options={() => ({
+                title: "Siga",
+              })}
+            />
+          </HomeStackRoutes.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
       <Toast bottomOffset={20} text1NumberOfLines={2} />
     </>
   );
