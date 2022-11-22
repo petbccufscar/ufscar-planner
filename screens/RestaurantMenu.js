@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { RefreshControl, StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
-import { Appbar } from "react-native-paper";
-import Constants from "expo-constants";
 import Menu from "../components/HomeMenu";
-import { Days, hourWidth } from "../helpers/CalendarHelper";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { useNavigation } from "@react-navigation/core";
+import { Days } from "../helpers/CalendarHelper";
 import cheerio from "react-native-cheerio";
 import ScrollView from "./../components/ScrollView";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  formatReal,
   offsetDate,
   formatDateWithHour,
   floorDate,
 } from "../helpers/helper";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
 import RestaurantTickets from "../components/RestaurantTickt";
@@ -24,20 +18,17 @@ import { useNetInfo } from "@react-native-community/netinfo";
 
 
 export default function Wallet() {
-  const navigation = useNavigation();
   const netInfo = useNetInfo();
-  const timeWidth = wp("100%") - 7.5 * hourWidth;
-  // const today = new Date(2020, 2, 18);
   const today = new Date();
   const first = offsetDate(today, -today.getDay());
-  const last =  offsetDate(today, 7-today.getDay());
+  const last = offsetDate(today, 7 - today.getDay());
   const days = { begin: first, end: last, today: today };
   const [selectedDay, setSelectedDay] = useState(today);
   const [refreshing, setRefreshing] = useState(true);
   const [stPrices, setStPrices] = useState(null);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
-  
+
   const user = useSelector((state) => state.user).user;
 
   const dispatch = useDispatch();
@@ -59,14 +50,16 @@ export default function Wallet() {
       const dayMenu = await menuScrapping(newDate);
       auxWeekMenu[floorDate(newDate)] = dayMenu;
     }
+
     setWeekMenu(auxWeekMenu);
   }
 
   useEffect(() => {
-    if(refreshing || tried == null){
+    if (refreshing) {
       getWeekMenu().then(() => {
         if (refreshing)
-          setRefreshing(false)})
+          setRefreshing(false)
+      })
     }
   }, [user, netInfo.isConnected, refreshing]);
 
@@ -121,34 +114,18 @@ export default function Wallet() {
   };
 
   const local = user.campus.toLocaleLowerCase();
-  
+
   let respostaAPI = []
-  let tried = null
 
-  async function apiDoRU(date, isLunch){
-    if (tried == null  || (new Date()).getTime() - tried.getTime() > 3600000 ){
-      tried = new Date()
-      const url = `https://petbcc.ufscar.br/ru_api/`
-    }
-
-    if (tried == null  ||  (new Date()).getTime() - tried.getTime() > 50000  
-    && refreshing ||
-      ( (new Date()).getTime() - tried.getTime() > 1800000 )
-    ){
-      const url = `https://petbcc.ufscar.br/ru_api/`
-      
-      const response = await fetch(url)
-      const data = await response.json()
-      
-      respostaAPI = data
-      tried = new Date()
-    }
+  async function apiDoRU(date, isLunch) {
+    const response = await fetch(`https://petbcc.ufscar.br/ru_api/`)
+    respostaAPI = await response.json()
     var tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    const searchDate = new Date(date - tzoffset).toISOString().split('T')[0] 
-    const mealType = isLunch? "Almoço" : "Jantar"
-    for(let i = 0; i < respostaAPI.length; i++){
+    const searchDate = new Date(date - tzoffset).toISOString().split('T')[0]
+    const mealType = isLunch ? "Almoço" : "Jantar"
+    for (let i = 0; i < respostaAPI.length; i++) {
       const r = respostaAPI[i]
-      if (respostaAPI[i].meal_type == mealType && respostaAPI[i].date == searchDate && r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()){
+      if (respostaAPI[i].meal_type == mealType && respostaAPI[i].date == searchDate && r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()) {
         return {
           mainMeal: r.main_dish_unrestricted,
           mainMealExtra: r.main_dish_extra,
@@ -159,13 +136,12 @@ export default function Wallet() {
           salad: r.salads,
           desert: r.dessert,
           juice: r.juice
-        } 
+        }
       }
     }
-
   }
 
-  async function priceScrapping(date){
+  async function priceScrapping(date) {
     const priceUrl = campus[local]["urlPrice"];
     let dayMenu = {
       mainMeal: "Não Definido",
@@ -184,7 +160,7 @@ export default function Wallet() {
 
     try {
       let prices = [];
-      if (stPrices == null){
+      if (stPrices == null) {
         const priceResponse = await fetch(priceUrl);
         const priceHtmlString = await priceResponse.text();
 
@@ -199,7 +175,6 @@ export default function Wallet() {
         prices = stPrices
       }
 
-
       if (prices.indexOf("Estudante (UFSCar)") != -1)
         dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
       else
@@ -211,7 +186,7 @@ export default function Wallet() {
 
       let timeStart;
       let timeEnd;
-      
+
       if (date.getDay() == 6) {
         try {
           timeStart = campus[local]["satStart"];
@@ -240,38 +215,29 @@ export default function Wallet() {
         timeEnd = campus[local]["dinnerEnd"];
       }
       (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
-    } catch (e){
+    } catch (e) {
       console.log(e)
     }
     return dayMenu;
   }
 
-
-
   async function menuScrapping(date) {
-
     let dayMenu = await priceScrapping(date);
     let auxDayMenu = {};
 
+    try {
+      const r = await apiDoRU(date, true);
+      auxDayMenu.lunch = { ...dayMenu, ...r };
+    } catch (e) {
+      auxDayMenu.lunch = dayMenu;
+    }
 
-      try {
-
-        const r = await apiDoRU(date, true);
-        auxDayMenu.lunch = {...dayMenu, ...r};
-      }
-      catch (e)
-      {
-        auxDayMenu.lunch = dayMenu;
-      }
-
-      try {
-        const r = await apiDoRU(date, false)
-        auxDayMenu.dinner = {...dayMenu, ...r};
-      } 
-      catch (e)
-      {
-        auxDayMenu.dinner = dayMenu;
-      }
+    try {
+      const r = await apiDoRU(date, false)
+      auxDayMenu.dinner = { ...dayMenu, ...r };
+    } catch (e) {
+      auxDayMenu.dinner = dayMenu;
+    }
 
     return auxDayMenu;
   }
@@ -310,17 +276,16 @@ export default function Wallet() {
       fontSize: 11,
     },
   });
-  
-  
+
   return (
     <View style={{ ...styles.backgroundColor, flex: 1 }}>
       <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => setRefreshing(true)}
-        />
-      }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => setRefreshing(true)}
+          />
+        }
       >
         <RestaurantTickets />
         <View style={styles.infoView}>
@@ -331,7 +296,7 @@ export default function Wallet() {
         </View>
         {(
           <>
-            <TouchableOpacity onPress={()=>Linking.openURL('https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario')} style={styles.cardapioView}>
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario')} style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
               <Text style={styles.cardapioSubText}>
                 {restaurant.updatedAt
