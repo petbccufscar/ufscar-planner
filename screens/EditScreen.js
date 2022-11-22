@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import {
   Entypo,
   Feather,
@@ -8,8 +10,6 @@ import {
 } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
-  LayoutAnimation,
   Linking,
   StyleSheet,
   Text,
@@ -30,7 +30,7 @@ import {
 import ScrollPicker from "react-native-picker-scrollview";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
-import { getTime, magic } from "../helpers/ExpressionHelper";
+import { getTime } from "../helpers/ExpressionHelper";
 import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 import { addEvent, updateEvent } from "../redux/actions/eventActions";
 import { PickerGradSquare, SelGradSquare } from "../components/Gradient";
@@ -39,7 +39,7 @@ import ScrollView from "../components/ScrollView";
 export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
   //boleano
-  const [isSubject, setIsSubject] = useState(task.is_subject || false);
+  const [isSubject] = useState(task.is_subject || false);
   const [weekly, setWeekly] = useState(task.weekly || false);
   const [isSubmited, setIsSubmited] = useState(task.is_submited || false);
 
@@ -51,11 +51,11 @@ export default function EditScreen({ route, navigation }) {
   const [whenSubmit, setWhenSubmit] = useState(task.when_submit || null);
 
   // tela separada
-  const [grade, setGrade] = useState(task.grade || {});
-  const [frequency, setFrequency] = useState(
+  const [grade] = useState(task.grade || {});
+  const [frequency] = useState(
     task.frequency || "(aulasDadas - faltas)/aulasDadas"
   );
-  const [mean, setMean] = useState(task.mean || "(p1+p2+p3)/3");
+  const [mean] = useState(task.mean || "(p1+p2+p3)/3");
 
   const [name, setName] = useState(task.name || "");
   const [details, setDetails] = useState(task.details);
@@ -63,10 +63,7 @@ export default function EditScreen({ route, navigation }) {
   const [description, setDescription] = useState(task.description);
 
   //dialog
-  const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
   const [openTeacherDialog, setOpenTeacherDialog] = useState(false);
-  const [openNameDialog, setOpenNameDialog] = useState(false);
-  const [openSubjectDialog, setOpenSubjectDialog] = useState(false);
   const [openNotificationDialog, setOpenNotificationDialog] = useState(false);
   const [openHorarioDialog, setOpenHorarioDialog] = useState(false);
   const [openWhenDialog, setOpenWhenDialog] = useState(false);
@@ -79,7 +76,6 @@ export default function EditScreen({ route, navigation }) {
     horarioLocal: "",
     id: 0,
   });
-  const [currentTeacherIndex, setCurrentTeacherIndex] = useState(null);
 
   useEffect(() => {
     if (sendingData) {
@@ -216,7 +212,6 @@ export default function EditScreen({ route, navigation }) {
     const setOpen = props.setOpen;
     const open = props.open;
     const [texto, setTexto] = useState(old);
-    let novo = "";
 
     return (
       <Portal>
@@ -349,7 +344,6 @@ export default function EditScreen({ route, navigation }) {
       );
     }
     const isEditing = openHorarioDialog == 2;
-    const indice = props.indice;
     const headerTitle = isSubject
       ? "Quando e onde será a aula?"
       : "Quando e onde será o evento?";
@@ -435,9 +429,9 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(date) => {
                     setShowPicker(false);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setDetail({...detail, horarioDate: date, horarioEndTime: date});
+                      setDetail({ ...detail, horarioDate: date, horarioEndTime: date });
                     } else {
-                      setHorarioDate(date)
+                      setHorarioDate(date);
                     }
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -460,7 +454,7 @@ export default function EditScreen({ route, navigation }) {
                     setHorarioEndTime(
                       ndate.getTime() < minimum(horarioDate)
                         ? minimum(horarioDate)
-                        : 
+                        :
                         ndate
                     );
                   }}
@@ -516,7 +510,7 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(date) => {
                     setShowPicker(false);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setDetail({...detail, horarioEndTime: date, horarioDate: date});
+                      setDetail({ ...detail, horarioEndTime: date, horarioDate: date });
                     } else {
                       setHorarioDate(date);
                     }
@@ -647,8 +641,10 @@ export default function EditScreen({ route, navigation }) {
     const list = props.list || range(props.n || 60);
     const width = props.width || props.size || 60;
     const height = props.height || props.size || 60;
-    const defun = () => {};
+    const defun = () => { };
     const fun = props.fun || defun;
+    // Se vc tirar ele não funciona. O Ramos não explicou o porquê.
+    // eslint-disable-next-line no-unused-vars
     let p;
     return (
       <View style={{ height: height * 3, width: width }}>
@@ -672,19 +668,6 @@ export default function EditScreen({ route, navigation }) {
       </View>
     );
   }
-
-  let resultMean = "";
-  let resultFreq = "";
-
-  try {
-    const meanRes = magic(grade.mean || {}, mean || "");
-    resultMean = "" + (meanRes.result || 0);
-  } catch (e) {}
-
-  try {
-    const freqRes = magic(grade.frequency || {}, frequency || "");
-    resultFreq = "" + (freqRes.result || 0);
-  } catch (e) {}
 
   const user = useSelector((state) => state.user).user;
 
@@ -729,9 +712,8 @@ export default function EditScreen({ route, navigation }) {
               style={{ paddingRight: 8 }}
             />
             <Text style={{ color: colors.onSurface }}>
-              {`${
-                weekly ? week[detail.day] : formatDate(detail.datetime_init)
-              } `}{" "}
+              {(weekly ? week[detail.day] : formatDate(detail.datetime_init))
+                + " "}{" "}
               {`${formatHour(detail.datetime_init)} - ${formatHour(
                 detail.datetime_end
               )}`}
@@ -746,11 +728,10 @@ export default function EditScreen({ route, navigation }) {
                   "https://www.google.com/maps/search/?api=1&query=" +
                   encodeURI(place);
 
-
                 try {
                   await Linking.openURL(url);
-                } catch (e){
-                  console.log(e)
+                } catch (e) {
+                  console.log(e);
                 }
               }}
               style={{
@@ -1061,7 +1042,7 @@ export default function EditScreen({ route, navigation }) {
                         : colors.onSecondaryContainer,
                   }}
                 >
-                  { `${isSubmited != false?'Concluído' : 'Marcar como Concluído'}`}
+                  {`${isSubmited != false ? "Concluído" : "Marcar como Concluído"}`}
                 </Text>
               </TouchableOpacity>
             </View>

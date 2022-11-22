@@ -1,11 +1,11 @@
-import {useNavigation} from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import {StyleSheet, View} from "react-native";
-import {LocaleConfig} from "react-native-calendars";
-import {FAB, useTheme} from "react-native-paper";
-import {useSelector} from "react-redux";
+import { StyleSheet, View } from "react-native";
+import { LocaleConfig } from "react-native-calendars";
+import { FAB, useTheme } from "react-native-paper";
+import { useSelector } from "react-redux";
 import Agenda from "../components/Agenda";
-import {defaultSubject, defaultTask} from "../helpers/helper";
+import { defaultSubject, defaultTask } from "../helpers/helper";
 
 export function Calendar() {
   LocaleConfig.locales["br"] = {
@@ -61,15 +61,7 @@ function EventsScreen() {
   let stMarked = useSelector((state) => state.cards).marked;
   let stItems = useSelector((state) => state.cards).items;
 
-  const renderEmptyDate = () => {
-    return (
-      <View
-        style={{ backgroundColor: "transparent", width: 100, height: 0 }}
-      ></View>
-    );
-  };
   const navigation = useNavigation();
-  const rowHasChanged = (r1, r2) => r1 !== r2;
   const th = useTheme();
   const colors = th.colors;
   const [state, setState] = React.useState({ open: false });

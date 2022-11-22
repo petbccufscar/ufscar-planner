@@ -1,24 +1,19 @@
+/* eslint-disable react/prop-types */
+
 import React, { useState, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  Keyboard,
   Image,
   Linking
-
-} from 'react-native'
-import ScrollView from '../components/ScrollView'
-import { MaterialIcons } from '@expo/vector-icons';
-import Constants from 'expo-constants'
-import { Task } from '../components/EventCards'
-import Menu from '../components/HomeMenu'
-import { useNavigation } from '@react-navigation/core'
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { ThemeProvider } from "react-native-paper";
+} from "react-native";
+import ScrollView from "../components/ScrollView";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Task } from "../components/EventCards";
+import { useNavigation } from "@react-navigation/core";
+import { useSelector } from "react-redux";
 import { useTheme, FAB } from "react-native-paper";
 import { defaultSubject, defaultTask } from "../helpers/helper";
 
@@ -49,22 +44,22 @@ export default function App() {
 
   function calculateAcontecendoAgora() {
     const aux1 = classes.filter((e) => {
-      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()
-    })
+      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date();
+    });
     const aux2 = tasks.filter((e) => {
 
-      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date()
+      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date();
 
-    })
-    const aux3 = [...aux1, ...aux2]
+    });
+    const aux3 = [...aux1, ...aux2];
     if (JSON.stringify(acontecendoAgora) != JSON.stringify(aux3)) {
-      setAcontecendoAgora(aux3)
+      setAcontecendoAgora(aux3);
     }
   }
   setInterval(calculateAcontecendoAgora, 60 * 1000);
   useEffect(() => {
-    calculateAcontecendoAgora()
-  }, [items])
+    calculateAcontecendoAgora();
+  }, [items]);
 
   const styles = StyleSheet.create({
     container: {
@@ -121,16 +116,17 @@ export default function App() {
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
             <AcontecendoAgora list={acontecendoAgora} />
             {classes.length + tasks.length == 0 && (
-              <View style={{ ...styles.infoRow, paddingVertical: 30, paddingHorizontal: 30, borderRadius: 10, backgroundColor: theme.colors.surface, justifyContent: 'center', marginVertical: 20 }}>
+              <View style={{ ...styles.infoRow, paddingVertical: 30, paddingHorizontal: 30, borderRadius: 10, backgroundColor: theme.colors.surface, justifyContent: "center", marginVertical: 20 }}>
                 <MaterialIcons name="info" size={24} color={theme.colors.primary} />
                 <Text style={{ ...styles.infoText }}>Não há nenhuma atividade agendada para hoje.</Text>
               </View>
 
             )}
-            {classes.length + tasks.length > 0 && (<><View style={styles.infoRow}>
-              <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-              <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
-            </View>
+            {classes.length + tasks.length > 0 && (<>
+              <View style={styles.infoRow}>
+                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+                <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
+              </View>
               <Text style={styles.sectionTitle}>Aulas de hoje</Text>
               {classes.length == 0 && (<View style={styles.infoRow}>
                 <MaterialIcons name="info" size={24} color={theme.colors.primary} />
@@ -151,7 +147,8 @@ export default function App() {
                 {tasks.map((item, idx) => {
                   return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
                 })}
-              </View></>)}
+              </View>
+            </>)}
           </View>
         </ScrollView>
       </View>
@@ -186,13 +183,11 @@ export default function App() {
   );
 }
 
-
 function AcontecendoAgora(props) {
-
   const colors = useTheme().colors;
-  const mapsSrc = require('../assets/icons/maps.png')
-  const list = props.list
-  const user = useSelector((state) => state.user).user
+  const mapsSrc = require("../assets/icons/maps.png");
+  const list = props.list;
+  const user = useSelector((state) => state.user).user;
 
   const styles = StyleSheet.create({
     hourglassContainer: {
@@ -213,14 +208,14 @@ function AcontecendoAgora(props) {
       borderColor: colors.outline,
       borderRadius: 8,
       backgroundColor: colors.surface,
-      flexDirection: 'row',
+      flexDirection: "row",
       padding: 5,
       paddingRight: 10,
     },
     emptyflex: {
     },
     localView: {
-      flexDirection: 'row'
+      flexDirection: "row"
     },
     acontecendoAgoraContainer: {
       borderRadius: 12,
@@ -243,9 +238,9 @@ function AcontecendoAgora(props) {
       paddingLeft: 10,
       color: colors.primary,
     }
-  })
+  });
   if (list.length == 0)
-    return null
+    return null;
   return (<View style={styles.acontecendoAgoraContainer}>
     <View style={styles.acontecendoAgoraRow}>
       <View style={styles.hourglassContainer}>
@@ -257,30 +252,30 @@ function AcontecendoAgora(props) {
       return (<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
         <View style={styles.localView}>
 
-          {item.detail.local.length > 0 && (<><TouchableOpacity style={styles.localContainer}
-            onPress={async () => {
-              let place = user.campus + ", UFSCAR, " + item.detail.local;
+          {item.detail.local.length > 0 && (<>
+            <TouchableOpacity style={styles.localContainer}
+              onPress={async () => {
+                let place = user.campus + ", UFSCAR, " + item.detail.local;
 
-              const url =
-                "https://www.google.com/maps/search/?api=1&query=" +
-                encodeURI(place);
+                const url =
+                  "https://www.google.com/maps/search/?api=1&query=" +
+                  encodeURI(place);
 
+                try {
+                  await Linking.openURL(url);
+                } catch (e) {
+                  console.log(e);
+                }
 
-              try {
-                await Linking.openURL(url);
-              } catch (e) {
-                console.log(e)
-              }
-
-            }}>
-            <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
-            <Text style={{ color: colors.onSurface }}>
-              {item.detail.local}
-            </Text>
-          </TouchableOpacity>
-            <View style={styles.emptyflex} /></>)}
-
-        </View></View>)
+              }}>
+              <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
+              <Text style={{ color: colors.onSurface }}>
+                {item.detail.local}
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.emptyflex} />
+          </>)}
+        </View></View>);
     })}
-  </View>)
+  </View>);
 }

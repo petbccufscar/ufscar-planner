@@ -57,7 +57,7 @@ export default function RestaurantTickets() {
       justifyContent: "space-between",
       alignItems: "center",
       marginBottom: 10,
-      width: '100%'
+      width: "100%"
     },
     buttonRow: {
       flexDirection: "row",
@@ -125,8 +125,8 @@ export default function RestaurantTickets() {
     },
   });
 
-  const qtdRefeicoes = user.money / user.meal
-  const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições"
+  const qtdRefeicoes = user.money / user.meal;
+  const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições";
 
   return (
     <View style={styles.card}>
@@ -143,9 +143,9 @@ export default function RestaurantTickets() {
       <View style={styles.saldoBodyCard}>
         <View style={styles.saldo}>
           <Text style={styles.saldoValue}>{formatReal(user.money)}</Text>
-          <Text style={styles.saldoQtd}>{qtdRefeicoes != (qtdRefeicoes|0) ? '∞' : qtdRefeicoes|0} {refeicao}</Text>
+          <Text style={styles.saldoQtd}>{qtdRefeicoes != (qtdRefeicoes | 0) ? "∞" : qtdRefeicoes | 0} {refeicao}</Text>
         </View>
-        
+
         <ScrollView horizontal={true}>
           <View style={styles.buttonRow}>
             <TouchableOpacity
@@ -184,7 +184,7 @@ export default function RestaurantTickets() {
             >Cancelar</Button>
             <Button
               disabled={
-                value.search(/^\$?\d+(((.\d{3})*(\,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
+                value.search(/^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
               }
               onPress={() => {
                 handleCashChange();

@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, LayoutAnimation, StyleSheet, Text, View, Linking } from "react-native";
@@ -9,26 +11,17 @@ import { SIGA } from "../helpers/helper";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import {
-  addEvent,
-  removeEvent,
   removeSIGA,
 } from "../redux/actions/eventActions";
 import { addSigaSubject } from "./dashboardScreens/Siga";
 import {
-  Ionicons,
-  Entypo,
   MaterialIcons,
-  MaterialCommunityIcons,
-  Feather,
-  FontAwesome,
 } from "@expo/vector-icons";
 import { useEffect } from "react";
 
 export default function Welcome() {
   const colors = useTheme().colors;
   const [page, setPage] = useState(0);
-  const user = useSelector((state) => state.user).user;
-  const navigation = useNavigation();
 
   const styles = StyleSheet.create({
     image: {
@@ -89,7 +82,7 @@ export default function Welcome() {
   );
 }
 
-function ScreenZero({ navigation, setPage }) {
+function ScreenZero({ setPage }) {
   const colors = useTheme().colors;
   const styles = StyleSheet.create({
     container: {
@@ -149,8 +142,8 @@ function ScreenZero({ navigation, setPage }) {
       <Text style={[styles.h2, styles.centerText]}>Seja bem vindo(a)!</Text>
       <Text style={styles.h3}>
         Ao continuar você estará concordando com nossa Política de Privacidade / Termos de uso.</Text>
-        <TouchableOpacity onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}>
-      <Text style={{...styles.h3, color: colors.primary}}>Acesse a Política de Privacidade / Termos de uso clicando aqui.</Text>
+      <TouchableOpacity onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}>
+        <Text style={{ ...styles.h3, color: colors.primary }}>Acesse a Política de Privacidade / Termos de uso clicando aqui.</Text>
       </TouchableOpacity>
       <View style={styles.btnPlace}>
         <TouchableOpacity style={styles.btn} onPress={() => setPage(1)}>
@@ -161,7 +154,7 @@ function ScreenZero({ navigation, setPage }) {
   );
 }
 
-function ScreenOne({ navigation, setPage }) {
+function ScreenOne({ setPage }) {
   const colors = useTheme().colors;
   const styles = StyleSheet.create({
     container: {
@@ -363,7 +356,6 @@ function ScreenTwo({ setPage }) {
       alignSelf: "center",
     },
     textInput: {
-      flex: 1,
       marginVertical: 8,
       borderRadius: 12,
       borderTopRightRadius: 0,

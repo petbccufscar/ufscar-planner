@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
   FAB,
   useTheme,
-  Checkbox,
   Portal,
   Dialog,
   Button,
@@ -34,7 +35,6 @@ export default function Details({ route, navigation }) {
   const grade = task.grade || {};
   const frequency = task.frequency || "(aulasDadas - faltas)/aulasDadas";
   const mean = task.mean || "(p1+p2+p3)/3";
-  const whenSubmit = task.when_submit || null;
 
   const name = task.name || "";
   const details = task.details || [];
@@ -91,12 +91,12 @@ export default function Details({ route, navigation }) {
   try {
     const meanRes = magic(grade.mean || {}, mean || "");
     resultMean = "" + (meanRes.result || 0);
-  } catch (e) { }
+  } catch (e) { /* empty */ }
 
   try {
     const freqRes = magic(grade.frequency || {}, frequency || "");
     resultFreq = "" + (freqRes.result || 0);
-  } catch (e) { }
+  } catch (e) { /* empty */ }
 
   function notificationText(notification) {
     if (notification != 0) return getTime(notification) + " antes";
@@ -327,12 +327,14 @@ export default function Details({ route, navigation }) {
             </View>
             {details.map((detail, index) => (
               <Text style={styles.corpoDetail} key={index}>
-                {`${weekly
+                {
+                  // TODO Ver se isso não deu erro.
+                  weekly
                     ? week[detail.day] +
                     " " +
                     `${formatHour(detail.datetime_init)}`
                     : formatDateWithHour(detail.datetime_init)
-                  }`}{" "}
+                }{" "}
                 {` - ${formatHour(detail.datetime_end)}`}
               </Text>
             ))}
@@ -411,3 +413,17 @@ export default function Details({ route, navigation }) {
     </View>
   );
 }
+
+// Aqui está a besta:
+/*
+Details.propTypes = {
+   route: PropTypes.shape({
+     params: PropTypes.shape({
+       task: PropTypes.object.isRequired,
+       grade: ???,
+       frequency: ?????,
+       mean: ???????,
+     }).isRequired,
+   }).isRequired,
+   navigation: NavigationProp.isRequired,
+}; */

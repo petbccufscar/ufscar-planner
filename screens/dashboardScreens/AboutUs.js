@@ -3,25 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableOpacity,
   Linking,
 } from "react-native";
-import { useNavigation } from "@react-navigation/core";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-// import { ScrollView } from 'react-native-gesture-handler'
-import { FontAwesome } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import ScrollView from "./../../components/ScrollView";
 
 export default function AboutUs() {
-  const navigation = useNavigation();
   const theme = useTheme();
 
   const styles = StyleSheet.create({
@@ -70,7 +59,7 @@ export default function AboutUs() {
             <Text style={styles.text}>
               O aplicativo UFSCar Planner foi desenvolvido pelo grupo PET do
               curso de Ciência da Computação da UFSCar, campus de São Carlos, com o
-              objetivo de ajudar os alunos a organizarem seus estudos e 
+              objetivo de ajudar os alunos a organizarem seus estudos e
               integrarem-se às atvididades oferecidas pela universidade.
             </Text>
           </View>
@@ -127,7 +116,7 @@ Colaboradores do aplicativo UFSCar Planner 2017:
             >
               <Text
                 style={[styles.text, styles.contentText, styles.link]}
-              >{`      https://petbcc.ufscar.br/`}</Text>
+              >{"      https://petbcc.ufscar.br/"}</Text>
             </TouchableOpacity>
           </View>
         </View>
