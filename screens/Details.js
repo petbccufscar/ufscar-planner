@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -17,6 +15,7 @@ import { removeEvent, updateEvent } from "../redux/actions/eventActions";
 import { Gradient } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
 import { withPreventDoubleClick } from "../helpers/withPreventDoubleClick";
+import { PropTypes } from "prop-types";
 
 export default function Details({ route, navigation }) {
   let task = { ...route.params.task };
@@ -414,16 +413,4 @@ export default function Details({ route, navigation }) {
   );
 }
 
-// Aqui está a besta:
-/*
-Details.propTypes = {
-   route: PropTypes.shape({
-     params: PropTypes.shape({
-       task: PropTypes.object.isRequired,
-       grade: ???,
-       frequency: ?????,
-       mean: ???????,
-     }).isRequired,
-   }).isRequired,
-   navigation: NavigationProp.isRequired,
-}; */
+Details.propTypes = PropTypes.any;

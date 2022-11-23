@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -16,6 +14,7 @@ import { useNavigation } from "@react-navigation/core";
 import { useSelector } from "react-redux";
 import { useTheme, FAB } from "react-native-paper";
 import { defaultSubject, defaultTask } from "../helpers/helper";
+import { PropTypes } from "prop-types";
 
 const floorDate = (data) => {
   return (
@@ -279,3 +278,5 @@ function AcontecendoAgora(props) {
     })}
   </View>);
 }
+
+AcontecendoAgora.propTypes = PropTypes.any;

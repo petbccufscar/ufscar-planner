@@ -3,54 +3,28 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useTheme,
 } from "react-native-paper";
 import GenericLogin from "../../components/GenericLogin";
-import {
-  defaultSubject,
-  parseTime,
-  SIGA,
-  weekDaysSIGA,
-} from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
-import {
-  addEvent,
-  removeSIGA,
-} from "../../redux/actions/eventActions";
+import { updateUser } from "../../redux/actions/userActions";
 import Toast from "react-native-toast-message";
 
-export const addSigaSubject = (subject, dispatch) => {
-  let auxdetails = [];
-  for (let i = 0; i < subject.horarios.length; i++) {
-    const aux = {
-      datetime_init: parseTime(subject.horarios[i].inicio).toString(),
-      datetime_end: parseTime(subject.horarios[i].fim).toString(),
-      local: subject.horarios[i].sala,
-      day: weekDaysSIGA.indexOf(subject.horarios[i].dia),
-    };
 
-    auxdetails.push(aux);
-  }
-
-  const task = {
-    ...defaultSubject,
-    siga: true,
-    details: [...auxdetails],
-    name: subject.atividade,
-    color: 6,
-    turma: "turma " + subject.turma,
-  };
-
-  dispatch(addEvent(task));
-};
-
-export default function SigaScreen() {
+export default function UpdateSaldoScreen() {
   const navigation = useNavigation();
   const theme = useTheme();
   const colors = theme.colors;
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user).user;
+  function updateWallet(money, dispatch) {
+    user.money = money;
+    dispatch(updateUser(user));
+
+  }
 
   async function Login(user, pssw, handleError, setMessageE, setMessageS) {
     setMessageS("");
@@ -60,7 +34,7 @@ export default function SigaScreen() {
     console.log(encodedAuth);
     try {
       const response = await fetch(
-        "https://sistemas.ufscar.br/sagui-api/siga/deferimento",
+        "https://sistemas.ufscar.br/sagui-api/integracoes/pwacesso/consultar-saldo",
         {
           headers: {
             Authorization: "Basic " + encodedAuth,
@@ -71,23 +45,20 @@ export default function SigaScreen() {
       if (data.status == undefined) {
         if (data.length == 0) {
           setMessageE(
-            "Aparentemente você não possui nenhum deferimento no Periodo letivo atual, por acaso está de férias?"
+            "Aparentemente ocorreu um erro ao consultar o saldo"
           );
           setMessageS("");
         } else {
-          const subjects = data.data;
+          const saldo = data.saldo;
           try {
-            dispatch(removeSIGA());
-            for (let i = 0; i < subjects.length; i++) {
-              addSigaSubject(subjects[i], dispatch);
-            }
+            updateWallet(saldo, dispatch);
             Toast.show({
               type: "success",
-              text1: "Suas matérias foram importadas!",
+              text1: "Seu saldo foi atualizado!",
             });
             navigation.goBack();
           } catch (e) {
-            setMessageE("Aconteceu um problema na comunicação com o SIGA");
+            setMessageE("Aconteceu um erro ao consultar o saldo");
             setMessageS("");
             console.log(e);
           }
@@ -111,15 +82,14 @@ export default function SigaScreen() {
 
   return (
     <GenericLogin Authenticate={Login}
-      WarningText="Isso deletará as matérias importadas anteriormente!">
-      <SIGA size={30} style={{ marginTop: 20 }} />
+      WarningText="Isso alterará seu saldo!">
+      <Text style={{ color: colors.onSurfaceVariant, fontWeight: "bold", fontSize: 30, marginTop: 20 }}>Carteirinha do RU</Text>
       <Text style={{ ...styles.description, paddingBottom: 0 }}>
         Sincronize usando as mesmas credenciais que você utiliza ao entrar no
         SIGA.
       </Text>
       <Text style={{ ...styles.description, paddingTop: 0 }}>
-        Ao conectar, suas matérias anteriores registradas pelo siga serão
-        substituidas pelas atuais
+        Ao conectar, seu saldo será atualizado.
       </Text>
     </GenericLogin>
   );

@@ -125,7 +125,7 @@ export default function RestaurantTickets() {
     },
   });
 
-  const qtdRefeicoes = user.money / user.meal;
+  const qtdRefeicoes = Math.floor(user.money / user.meal);
   const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições";
 
   return (

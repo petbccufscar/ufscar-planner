@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Linking, Image } from "react-native";
 import { useNavigation } from "@react-navigation/core";
@@ -11,6 +9,7 @@ import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
 import DropDown from "react-native-paper-dropdown";
+import { PropTypes } from "prop-types";
 const mapsSrc = require("../assets/icons/maps.png");
 
 export function Task(props) {
@@ -189,6 +188,8 @@ export function Task(props) {
 
 }
 
+Task.propTypes = PropTypes.any;
+
 export function EventCards(props) {
   const mostrarData = props.show || false;
   let task = props.task;
@@ -313,6 +314,8 @@ export function EventCards(props) {
 
 }
 
+EventCards.propTypes = PropTypes.any;
+
 export function EventRender(props) {
   let task = props.task;
   const mostrarData = task.weekly;
@@ -415,6 +418,7 @@ export function EventRender(props) {
 
 }
 
+EventRender.propTypes = PropTypes.any;
 
 export function NotaRender(props) {
   let task = props.task;
@@ -637,6 +641,7 @@ export function NotaRender(props) {
   );
 }
 
+NotaRender.propTypes = PropTypes.any;
 
 export function FreqRender(props) {
   const theme = useTheme();
@@ -876,3 +881,5 @@ export function FreqRender(props) {
 
   </TouchableOpacity>);
 }
+
+FreqRender.propTypes = PropTypes.any;

@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, LayoutAnimation, StyleSheet, Text, View, Linking } from "react-native";
@@ -18,6 +16,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { useEffect } from "react";
+import { PropTypes } from "prop-types";
 
 export default function Welcome() {
   const colors = useTheme().colors;
@@ -154,6 +153,8 @@ function ScreenZero({ setPage }) {
   );
 }
 
+ScreenZero.propTypes = PropTypes.any;
+
 function ScreenOne({ setPage }) {
   const colors = useTheme().colors;
   const styles = StyleSheet.create({
@@ -229,6 +230,8 @@ function ScreenOne({ setPage }) {
     </View>
   );
 }
+
+ScreenOne.propTypes = PropTypes.any;
 
 function ScreenTwo({ setPage }) {
   const colors = useTheme().colors;
@@ -446,6 +449,8 @@ function ScreenTwo({ setPage }) {
   );
 }
 
+ScreenTwo.propTypes = PropTypes.any;
+
 function ScreenThree({ setPage }) {
   const theme = useTheme();
   const colors = theme.colors;
@@ -589,3 +594,5 @@ function ScreenThree({ setPage }) {
     </View>
   );
 }
+
+ScreenThree.propTypes = PropTypes.any;

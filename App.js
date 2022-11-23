@@ -20,6 +20,7 @@ import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SubjectScreen from "./screens/dashboardScreens/Materias";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import SigaScreen from "./screens/dashboardScreens/Siga";
+import UpdateSaldoScreen from "./screens/dashboardScreens/UpdateSaldoScreen";
 import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
 import Welcome from "./screens/Welcome";
@@ -201,6 +202,13 @@ function Loader() {
               component={SigaScreen}
               options={() => ({
                 title: "Siga",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="UpdateSaldo"
+              component={UpdateSaldoScreen}
+              options={() => ({
+                title: "Atualização da Carteirinha",
               })}
             />
           </HomeStackRoutes.Navigator>

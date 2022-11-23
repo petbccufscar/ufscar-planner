@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { TouchableRipple, useTheme } from "react-native-paper";
+import { PropTypes } from "prop-types";
 
 export default function KeyboardButton({
   style,
@@ -31,6 +30,8 @@ export default function KeyboardButton({
     </TouchableRipple>
   );
 }
+
+KeyboardButton.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   container: {

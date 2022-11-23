@@ -9,6 +9,7 @@ import {
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import ScrollView from "./../../components/ScrollView";
+import Constants from "expo-constants";
 
 export default function AboutUs() {
   const theme = useTheme();
@@ -44,6 +45,7 @@ export default function AboutUs() {
       marginVertical: 5,
     },
   });
+  const version = Constants.manifest.version;
 
   return (
     <>
@@ -51,8 +53,8 @@ export default function AboutUs() {
         <View style={styles.background}>
           <View style={{ alignItems: "center", marginBottom: 5 }}>
             <MaterialIcons name="info" size={54} color={theme.colors.primary} />
+            <Text style={{ color: theme.colors.primary, fontSize: 18 }}>Versão {version}</Text>
           </View>
-
           <View style={styles.textWall}>
             <Text style={styles.title}>O UFSCar Planner</Text>
 

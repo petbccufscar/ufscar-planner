@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-
 import React from "react";
 import { Text } from "react-native";
+import { PropTypes } from "prop-types";
 
 export const formatDate = (dataFormatar) => {
   const data = new Date(dataFormatar);
@@ -146,3 +145,5 @@ export function SIGA(props) {
   const size = props.size || 20;
   return (<Text style={{ color: "#F89837", fontWeight: "bold", fontSize: size, ...(props.style || {}) }}>SIGA</Text>);
 }
+
+SIGA.propTypes = PropTypes.any;
