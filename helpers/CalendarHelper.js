@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React from "react";
 import {
   StyleSheet,
@@ -12,6 +10,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { PropTypes } from "prop-types";
 
 export const hourHeight = hp("8%");
 export const weekHeight = hp("9%");
@@ -34,8 +33,6 @@ export const dayComponentHeight = wp("100%") / 7;
 // É a barra da semana
 export function Days(props) {
   const theme = useTheme();
-
-
   const width = props.width ?? weekBall;
   const height = props.height ?? weekBall;
   let days = [];
@@ -104,3 +101,5 @@ export function Days(props) {
     </View>
   );
 }
+
+Days.propTypes = PropTypes.any;

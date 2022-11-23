@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
@@ -10,6 +8,7 @@ import DashboardNavigator from "./tabs/DashboardNavigator";
 import HomeNavigator from "./tabs/HomeNavigator";
 import RestaurantNavigator from "./tabs/RestaurantNavigator";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { PropTypes } from "prop-types";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -112,6 +111,8 @@ function TabBarIcon(props) {
     </View>
   );
 }
+
+TabBarIcon.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   absoluteContainer: {

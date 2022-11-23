@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -8,6 +6,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { useSelector } from "react-redux";
 import { ConfigSemester } from "../screens/dashboardScreens/Config";
 import { Portal, Dialog, Button } from "react-native-paper";
+import { PropTypes } from "prop-types";
 
 function Bar(props) {
   const text = props.text || "";
@@ -29,6 +28,7 @@ function Bar(props) {
 
 }
 
+Bar.propTypes = PropTypes.any;
 
 export default function Progress() {
   const semester = useSelector((state) => state.semester).semester;

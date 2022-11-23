@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
@@ -12,6 +10,7 @@ import { floorDate, monthNames, offsetDate, weekDaysNames } from "../helpers/hel
 import { EventCards } from "./EventCards";
 import { FlatList } from "react-native-bidirectional-infinite-scroll";
 import { MaterialIcons } from "@expo/vector-icons";
+import { PropTypes } from "prop-types";
 
 function floorDate2Date(date) {
   const data = new Date(date);
@@ -38,8 +37,9 @@ function RenderCalendarRow(props) {
   return (<View style={{ flexDirection: "row" }}>
     {weekDays.map((day, index) => (<RenderCalendarCell marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month} />))}</View>
   );
-
 }
+
+RenderCalendarRow.propTypes = PropTypes.any;
 
 function RenderCalendarCell(props) {
   const date = props.day;
@@ -68,7 +68,7 @@ function RenderCalendarCell(props) {
   </TouchableOpacity>);
 }
 
-
+RenderCalendarCell.propTypes = PropTypes.any;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -130,6 +130,8 @@ function RenderDay(props) {
   </>
   );
 }
+
+RenderDay.propTypes = PropTypes.any;
 
 function nextMonth(month) {
   const obj = {};
@@ -227,6 +229,8 @@ export default function Agenda(props) {
   </View>);
 }
 
+Agenda.propTypes = PropTypes.any;
+
 function RenderMonthCalendar(props) {
   const colors = props.colors;
   const open = props.open;
@@ -267,6 +271,8 @@ function RenderMonthCalendar(props) {
     }
   </View>);
 }
+
+RenderMonthCalendar.propTypes = PropTypes.any;
 
 export function AgendaList(props) {
   const items = props.items;
@@ -334,3 +340,5 @@ export function AgendaList(props) {
     </FlatList>
   );
 }
+
+AgendaList.propTypes = PropTypes.any;

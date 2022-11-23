@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import {
   Text,
@@ -16,6 +15,7 @@ import {
   Portal,
   Dialog,
 } from "react-native-paper";
+import { PropTypes } from "prop-types";
 
 export default function GenericLogin({ Authenticate, WarningText, children }) {
   const [messageE, setMessageE] = useState("");
@@ -223,3 +223,5 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
     </View>
   );
 }
+
+GenericLogin.propTypes = PropTypes.any;

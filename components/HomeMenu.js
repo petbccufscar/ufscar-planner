@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
-
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import { PropTypes } from "prop-types";
 
 const Menu = (props) => {
   const [shouldShow, setShouldShow] = useState(props.shouldShow);
@@ -184,5 +183,6 @@ const Menu = (props) => {
   );
 };
 
+Menu.propTypes = PropTypes.any;
 
 export default Menu;

@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import {
@@ -15,6 +13,7 @@ import ScrollView from "./ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { magic } from "../helpers/ExpressionHelper";
+import { PropTypes } from "prop-types";
 
 export default function NewSubject({ route, navigation }) {
   const type = route.params.type;
@@ -422,6 +421,8 @@ export default function NewSubject({ route, navigation }) {
     </ScrollView>
   );
 }
+
+NewSubject.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   container: {

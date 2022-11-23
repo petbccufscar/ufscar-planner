@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-
 import React from "react";
 import debounce from "lodash.debounce"; // 4.0.8
+import { PropTypes } from "prop-types";
 
 export const withPreventDoubleClick = (WrappedComponent) => {
   class PreventDoubleClick extends React.PureComponent {
@@ -16,6 +15,8 @@ export const withPreventDoubleClick = (WrappedComponent) => {
       return <WrappedComponent {...this.props} onPress={this.onPress} />;
     }
   }
+
+  PreventDoubleClick.propTypes = PropTypes.any;
 
   PreventDoubleClick.displayName = `withPreventDoubleClick(${WrappedComponent.displayName || WrappedComponent.name})`;
   return PreventDoubleClick;
