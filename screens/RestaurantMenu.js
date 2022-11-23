@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { RefreshControl, StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
 import Menu from "../components/HomeMenu";
 import { Days } from "../helpers/CalendarHelper";
-import cheerio from "react-native-cheerio";
 import ScrollView from "./../components/ScrollView";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,7 +24,6 @@ export default function Wallet() {
   const days = { begin: first, end: last, today: today };
   const [selectedDay, setSelectedDay] = useState(today);
   const [refreshing, setRefreshing] = useState(true);
-  const [stPrices, setStPrices] = useState(null);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
 
@@ -63,53 +61,40 @@ export default function Wallet() {
     }
   }, [user, netInfo.isConnected, refreshing]);
 
-
-  function getPrice(prices, typeName) {
-    try {
-      return prices[prices.indexOf(typeName) + 1].trim();
-    } catch (e) {
-      return "Não Definido";
-    }
-  }
-
   const campus = {
     sorocaba: {
       urlCard: "https://www.sorocaba.ufscar.br/restaurante-universitario/cardapio",
-      urlPrice: "https://www.sorocaba.ufscar.br/restaurante-universitario/preco-das-refeicoes",
       lunchStart: "11h00",
       lunchEnd: "13h30",
-      dinnerStart: "17h30",
+      dinnerStart: "17h00",
       dinnerEnd: "19h00",
-      satStart: "11h00",
-      satEnd: "13h00",
+      satLunchStart: "11h00",
+      satLunchEnd: "13h00",
     },
     araras: {
       urlCard: "https://www.araras.ufscar.br/restaurante-universitario/cardapio",
-      urlPrice: "https://www.araras.ufscar.br/restaurante-universitario/preco-das-refeicoes",
       lunchStart: "11h00",
       lunchEnd: "13h30",
       dinnerStart: "18h00",
       dinnerEnd: "19h30",
+      satLunchStart: "11h00",
+      satLunchEnd: "12h30"
     },
     "são carlos": {
       urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
-      urlPrice: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos",
-      lunchStart: "11h15",
-      lunchEnd: "13h30",
-      dinnerStart: "17h15",
-      dinnerEnd: "19h30",
-      satStart: "11h30",
-      satEnd: "13h00",
+      lunchStart: "10h30",
+      lunchEnd: "14h00",
+      dinnerStart: "16h45",
+      dinnerEnd: "19h00",
+      satLunchStart: "11h30",
+      satLunchEnd: "13h00",
+      satDinnerStart: "17h30",
+      satDinnerEnd: "18h30",
     },
     "lagoa do sino": {
       urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
-      urlPrice: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario/restaurantes-universitario-precos",
-      lunchStart: "11h15",
-      lunchEnd: "13h30",
-      dinnerStart: "17h15",
-      dinnerEnd: "19h30",
-      satStart: "11h30",
-      satEnd: "13h00",
+      lunchStart: "10h30",
+      lunchEnd: "13h30"
     },
   };
 
@@ -142,7 +127,6 @@ export default function Wallet() {
   }
 
   async function priceScrapping(date) {
-    const priceUrl = campus[local]["urlPrice"];
     let dayMenu = {
       mainMeal: "Não Definido",
       mainMealVegan: "Não Definido",
@@ -154,65 +138,36 @@ export default function Wallet() {
       salad: "Não Definido",
       desert: "Não Definido",
       juice: "Não Definido",
-      priceDefault: "R$ ???",
-      priceVisit: "R$ ???",
+      priceDefault: "R$ 4,20",
+      priceVisit: "R$ 13,50",
     };
 
     try {
-      let prices = [];
-      if (stPrices == null) {
-        const priceResponse = await fetch(priceUrl);
-        const priceHtmlString = await priceResponse.text();
 
-        const $ = cheerio.load(priceHtmlString);
-        const priceMenu = $(".col-sm-12");
-
-        prices = priceMenu.eq(0).text();
-
-        prices = prices.split("\n").filter((x) => x !== "");
-        setStPrices(prices);
-      } else {
-        prices = stPrices;
-      }
-
-      if (prices.indexOf("Estudante (UFSCar)") != -1)
-        dayMenu.priceDefault = getPrice(prices, "Estudante (UFSCar)");
-      else
-        dayMenu.priceDefault =
-          prices[1 + prices.findIndex(
-            (x) => 0 < (x.match(/Aluno/g) || []).length
-          )];
-      dayMenu.priceVisit = getPrice(prices, "Visitante");
-
-      let timeStart;
-      let timeEnd;
-
+      let timeStart = campus[local]["lunchStart"];
+      let timeEnd = campus[local]["lunchEnd"];
       if (date.getDay() == 6) {
         try {
-          timeStart = campus[local]["satStart"];
-          timeEnd = campus[local]["satEnd"];
+          timeStart = campus[local]["satLunchStart"];
+          timeEnd = campus[local]["satLunchEnd"];
         } catch (e) {
           timeStart = "Não Definido";
           timeEnd = "Não Definido";
         }
-      } else {
-        timeStart = campus[local]["lunchStart"];
-        timeEnd = campus[local]["lunchEnd"];
       }
       dayMenu.lunchStartTime = timeStart;
       dayMenu.lunchEndTime = timeEnd;
 
+      timeStart = campus[local]["dinnerStart"];
+      timeEnd = campus[local]["dinnerEnd"];
       if (date.getDay() == 6) {
         try {
-          timeStart = campus[local]["satStart"];
-          timeEnd = campus[local]["satEnd"];
+          timeStart = campus[local]["satDinnerStart"];
+          timeEnd = campus[local]["satDinnerEnd"];
         } catch (e) {
           timeStart = "Não Definido";
           timeEnd = "Não Definido";
         }
-      } else {
-        timeStart = campus[local]["dinnerStart"];
-        timeEnd = campus[local]["dinnerEnd"];
       }
       (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
     } catch (e) {
@@ -348,7 +303,7 @@ fontes:
               }
               price={weekMenu[floorDate(selectedDay)]?.lunch.priceVisit}
             ></Menu>
-            {weekMenu[floorDate(selectedDay)]?.lunch.day != "6" ? (
+            {weekMenu[floorDate(selectedDay)]?.lunch.day != "6" && local != "lagoa do sino" ? (
               <Menu
                 shouldShow={false}
                 mealTime={"Jantar"}

@@ -100,7 +100,7 @@ const Menu = (props) => {
   });
 
   return (
-    <View style={styles.item}>
+    <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => setShouldShow(!shouldShow)}>
       <View style={styles.itemLeft}>
         <View style={styles.header}>
           <Text style={styles.title}>{props.mealTime}</Text>
@@ -163,24 +163,24 @@ const Menu = (props) => {
               <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />
               <Text style={styles.itemMenuSubjectPrice}>{props.studentPrice} (estudante) ou {props.price} (visitante).</Text>
             </View>
-            <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
+            <View style={styles.details}>
 
               <Text style={styles.verText}>Ver menos</Text>
               <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
 
-            </TouchableOpacity>
+            </View>
           </>
         ) : null}
-        {!shouldShow && <TouchableOpacity style={styles.details} onPress={() => setShouldShow(!shouldShow)}>
+        {!shouldShow && <View style={styles.details}>
 
           <Text style={styles.verText}> Ver mais</Text>
           <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} />
 
-        </TouchableOpacity>}
+        </View>}
         <View style={styles.fixBox} />
 
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

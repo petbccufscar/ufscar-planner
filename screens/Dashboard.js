@@ -189,6 +189,17 @@ export default function Dashboard() {
         <View style={styles.buttonCont}>
           <TouchableOpacity
             style={styles.button}
+            onPress={() => navigation.navigate("UpdateSaldo")}
+          >
+            <MaterialIcons
+              name="account-balance-wallet"
+              size={24}
+              color={theme.colors.onSurfaceVariant}
+            />
+            <Text style={styles.buttonText}>Sincronizar saldo do RU</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => navigation.navigate("Configurações")}
           >
             <Feather
