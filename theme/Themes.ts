@@ -5,6 +5,7 @@ import {
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
+  useTheme,
 } from "react-native-paper";
 
 const baseTheme = {
@@ -50,6 +51,11 @@ const baseTheme = {
 };
 
 export type AppTheme = typeof baseTheme;
+
+// HACK Não faço ideia de como arrumar. Recomendado: Atualuzar o paper para 5.0.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const useAppTheme: () => AppTheme = useTheme;
 
 export const CombinedDefaultThemes: AppTheme[] = [
   baseTheme,

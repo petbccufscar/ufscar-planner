@@ -27,6 +27,7 @@ import SigaScreen from "./screens/dashboardScreens/Siga";
 import UpdateSaldoScreen from "./screens/dashboardScreens/UpdateSaldoScreen";
 import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
+import RestaurantNotice from "./screens/RestaurantNotice";
 import Welcome from "./screens/Welcome";
 import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
 import {
@@ -154,6 +155,13 @@ function Loader() {
               component={EditScreen}
               options={() => ({
                 headerTitleAlign: "center",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="RestaurantNotice"
+              component={RestaurantNotice}
+              options={({ route }) => ({
+                title: route.params.title,
               })}
             />
             <HomeStackRoutes.Screen

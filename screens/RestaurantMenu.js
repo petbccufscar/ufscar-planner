@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Menu from "../components/HomeMenu";
 import { Days } from "../helpers/CalendarHelper";
+import { useNavigation } from "@react-navigation/core";
 import ScrollView from "./../components/ScrollView";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,6 +17,7 @@ import {
   formatDateWithHour,
   floorDate,
 } from "../helpers/helper";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
 import RestaurantTickets from "../components/RestaurantTickt";
@@ -24,6 +26,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 
 
 export default function Wallet() {
+  const navigation = useNavigation();
   const netInfo = useNetInfo();
   const today = new Date();
   const first = offsetDate(today, -today.getDay());
@@ -55,6 +58,8 @@ export default function Wallet() {
       const dayMenu = await menuScrapping(newDate);
       auxWeekMenu[floorDate(newDate)] = dayMenu;
     }
+
+    auxWeekMenu.notice = await noticeDoRU();
 
     setWeekMenu(auxWeekMenu);
   }
@@ -107,6 +112,11 @@ export default function Wallet() {
   const local = user.campus.toLocaleLowerCase();
 
   let respostaAPI = [];
+
+  async function noticeDoRU() {
+    const response = await fetch("https://petbcc.ufscar.br/ru_api/notice");
+    return await response.json();
+  }
 
   async function apiDoRU(date, isLunch) {
     const response = await fetch("https://petbcc.ufscar.br/ru_api/");
@@ -228,6 +238,34 @@ export default function Wallet() {
       textAlign: "center",
       padding: 10,
     },
+    alertView: {
+      borderBottomWidth: 1,
+      borderColor: theme.colors.outline,
+      marginHorizontal: 20,
+      padding: 10,
+    },
+    alertCard: {
+      flexDirection: "row",
+      backgroundColor: theme.colors.surface,
+      borderRadius: 12,
+      marginTop: 20,
+      padding: 10,
+      alignItems: "center",
+      marginHorizontal: 20,
+      borderColor: theme.colors.outline,
+      borderWidth: 1,
+    },
+    alertIcon: {
+      marginRight: 10,
+    },
+    alertTitle: {
+      color: theme.colors.onSurface,
+      fontSize: 20,
+    },
+    alertSubtitle: {
+      color: theme.colors.onSurfaceVariant,
+      fontSize: 14,
+    },
     cardapioView: {
       padding: 20,
     },
@@ -252,6 +290,36 @@ export default function Wallet() {
           />
         }
       >
+        {
+          weekMenu.notice &&
+          <TouchableOpacity
+            onPress={
+              () => navigation.navigate("RestaurantNotice", weekMenu.notice)
+            }
+          >
+            <View style={styles.alertCard}>
+              <MaterialIcons
+                name="info"
+                size={24}
+                color={theme.colors.onSurfaceVariant}
+                style={styles.alertIcon}
+              />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.alertTitle}>
+                  {weekMenu.notice.title}
+                </Text>
+                <Text style={styles.alertSubtitle}>
+                  {weekMenu.notice.description}
+                </Text>
+              </View>
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color={theme.colors.onSurfaceVariant}
+              />
+            </View>
+          </TouchableOpacity>
+        }
         <RestaurantTickets />
         <View style={styles.infoView}>
           <Foundation name="info" size={24} color={theme.colors.outline} />
