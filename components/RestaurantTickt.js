@@ -148,8 +148,7 @@ export default function RestaurantTickets() {
               qtdRefeicoes != (qtdRefeicoes | 0) ?
                 "∞" :
                 qtdRefeicoes | 0
-            }
-            {refeicao}
+            } {refeicao}
           </Text>
         </View>
 

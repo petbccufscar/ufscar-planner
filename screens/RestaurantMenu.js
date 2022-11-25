@@ -115,7 +115,9 @@ export default function Wallet() {
 
   async function noticeDoRU() {
     const response = await fetch("https://petbcc.ufscar.br/ru_api/notice");
-    return await response.json();
+    if (!response.ok) { return null; }
+    const data = await response.json();
+    return data;
   }
 
   async function apiDoRU(date, isLunch) {
