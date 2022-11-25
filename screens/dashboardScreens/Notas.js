@@ -20,7 +20,7 @@ export default function NotasScreen() {
       alignItems: "center",
       backgroundColor: colors.surface1,
       paddingHorizontal: 20,
-      paddingBottom: 60
+      paddingBottom: 60,
     },
     scroll: {
       flex: 1,
@@ -33,9 +33,19 @@ export default function NotasScreen() {
       <ScrollView>
         <View style={styles.container}>
           {classes.map((item, idx) => {
-            return <NotaRender subjectScreen={true} acontecendo={false} key={idx} task={item} />;
+            return <NotaRender
+              subjectScreen={true}
+              acontecendo={false}
+              key={idx}
+              task={item}
+            />;
           })}
-          {classes.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhuma aula registrada</Text>}
+          {
+            classes.length == 0 &&
+            <Text style={{ fontSize: 20, color: colors.onSurface }}>
+              Nenhuma aula registrada
+            </Text>
+          }
         </View>
       </ScrollView>
     </View>

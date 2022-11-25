@@ -11,7 +11,7 @@ import GenericLogin from "../../components/GenericLogin";
 import { useNavigation } from "@react-navigation/native";
 import { updateUser } from "../../redux/actions/userActions";
 import Toast from "react-native-toast-message";
-
+import { Buffer } from "buffer";
 
 export default function UpdateSaldoScreen() {
   const navigation = useNavigation();
@@ -23,15 +23,12 @@ export default function UpdateSaldoScreen() {
   function updateWallet(money, dispatch) {
     user.money = money;
     dispatch(updateUser(user));
-
   }
 
   async function Login(user, pssw, handleError, setMessageE, setMessageS) {
     setMessageS("");
     setMessageE("");
-    const Buffer = require("buffer").Buffer;
     let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
-    console.log(encodedAuth);
     try {
       const response = await fetch(
         "https://sistemas.ufscar.br/sagui-api/integracoes/pwacesso/consultar-saldo",
@@ -39,13 +36,13 @@ export default function UpdateSaldoScreen() {
           headers: {
             Authorization: "Basic " + encodedAuth,
           },
-        }
+        },
       );
       let data = await response.json();
       if (data.status == undefined) {
         if (data.length == 0) {
           setMessageE(
-            "Aparentemente ocorreu um erro ao consultar o saldo"
+            "Aparentemente ocorreu um erro ao consultar o saldo",
           );
           setMessageS("");
         } else {
@@ -83,7 +80,16 @@ export default function UpdateSaldoScreen() {
   return (
     <GenericLogin Authenticate={Login}
       WarningText="Isso alterará seu saldo!">
-      <Text style={{ color: colors.onSurfaceVariant, fontWeight: "bold", fontSize: 30, marginTop: 20 }}>Carteirinha do RU</Text>
+      <Text
+        style={{
+          color: colors.onSurfaceVariant,
+          fontWeight: "bold",
+          fontSize: 30,
+          marginTop: 20,
+        }}
+      >
+        Carteirinha do RU
+      </Text>
       <Text style={{ ...styles.description, paddingBottom: 0 }}>
         Sincronize usando as mesmas credenciais que você utiliza ao entrar no
         SIGA.

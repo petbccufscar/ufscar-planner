@@ -53,15 +53,17 @@ export default function AboutUs() {
         <View style={styles.background}>
           <View style={{ alignItems: "center", marginBottom: 5 }}>
             <MaterialIcons name="info" size={54} color={theme.colors.primary} />
-            <Text style={{ color: theme.colors.primary, fontSize: 18 }}>Versão {version}</Text>
+            <Text style={{ color: theme.colors.primary, fontSize: 18 }}>
+              Versão {version}
+            </Text>
           </View>
           <View style={styles.textWall}>
             <Text style={styles.title}>O UFSCar Planner</Text>
 
             <Text style={styles.text}>
               O aplicativo UFSCar Planner foi desenvolvido pelo grupo PET do
-              curso de Ciência da Computação da UFSCar, campus de São Carlos, com o
-              objetivo de ajudar os alunos a organizarem seus estudos e
+              curso de Ciência da Computação da UFSCar, campus de São Carlos,
+              com o objetivo de ajudar os alunos a organizarem seus estudos e
               integrarem-se às atvididades oferecidas pela universidade.
             </Text>
           </View>
@@ -73,30 +75,35 @@ export default function AboutUs() {
               Esse projeto contou com a colaboração de:
             </Text>
 
-            <Text style={[styles.contentText]}>{`    • Carlos Eduardo Fontaneli
-    • Igor Lúcio Manta Guedes
-    • Isabela Vieira Magalhães
-    • João Victor Bueno de Caldas
-    • Lucas Machado Cid
-    • Maria Luiza Edwards de M Cordeiro
-    • Matheus Ramos de Carvalho
-    • Miguel Antonio de Oliveira
-    • Natália Bachiega Magalhães
-    • Renato Bueno (tutor)
-    • Vanderlei de Brito Junior
-    • Vinicius Quaresma da Luz`}</Text>
+            <Text style={[styles.contentText]}>{
+              "    • Carlos Eduardo Fontaneli\n" +
+              "    • Igor Lúcio Manta Guedes\n" +
+              "    • Isabela Vieira Magalhães\n" +
+              "    • João Victor Bueno de Caldas\n" +
+              "    • Lucas Machado Cid\n" +
+              "    • Maria Luiza Edwards de M Cordeiro\n" +
+              "    • Matheus Ramos de Carvalho\n" +
+              "    • Miguel Antonio de Oliveira\n" +
+              "    • Natália Bachiega Magalhães\n" +
+              "    • Renato Bueno (tutor)\n" +
+              "    • Vanderlei de Brito Junior\n" +
+              "    • Vinicius Quaresma da Luz"}
+            </Text>
 
-
-            <Text style={[styles.contentText]}>{`Este aplicativo foi baseado no aplicativo UFSCar Planner lançado em 2017, desenvolvido no LINCE - Departamento de Computação - UFSCar, sob supervisão do Prof. Dr. Cesar Augusto Camillo Teixeira, com apoio e participação da empresa TokenLab.
-
-Colaboradores do aplicativo UFSCar Planner 2017:
-
-    • Ana Lucia Cardoso
-    • Carlos Augusto Santo Andréa Junior
-    • Daniel Willian de Souza Cunha
-    • Felipe José Bento
-    • Mateus Barros
-    • Ruan Willer`}</Text>
+            <Text style={[styles.contentText]}>{
+              "Este aplicativo foi baseado no aplicativo UFSCar Planner " +
+              "lançado em 2017, desenvolvido no LINCE - Departamento de " +
+              "Computação - UFSCar, sob supervisão do Prof. Dr. Cesar " +
+              "Augusto Camillo Teixeira, com apoio e participação da empresa " +
+              "TokenLab.\n\nColaboradores do aplicativo UFSCar Planner 2017:" +
+              "\n\n" +
+              "    • Ana Lucia Cardoso\n" +
+              "    • Carlos Augusto Santo Andréa Junior\n" +
+              "    • Daniel Willian de Souza Cunha\n" +
+              "    • Felipe José Bento\n" +
+              "    • Mateus Barros\n" +
+              "    • Ruan Willer"}
+            </Text>
 
           </View>
 

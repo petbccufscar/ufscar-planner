@@ -62,15 +62,19 @@ export default function Details({ route, navigation }) {
   }, []);
 
   useEffect(() => {
-    if (route?.params?.grade || route?.params?.frequency || route?.params?.mean)
+    const grade = route?.params?.grade;
+    const frequency = route?.params?.frequency;
+    const mean = route?.params?.mean;
+    if (grade || frequency || mean) {
       dispatch(
         updateEvent({
           ...task,
           grade: route?.params?.grade ?? task.grade,
           frequency: route?.params?.frequency ?? task.frequency,
           mean: route?.params?.mean ?? task.mean,
-        })
+        }),
       );
+    }
   }, [route?.params?.grade, route?.params?.frequency, route?.params?.mean]);
 
   function formatHour(date) {
@@ -204,7 +208,7 @@ export default function Details({ route, navigation }) {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.trueContainer}>
-          {task.siga && (
+          {task.siga &&
             <View style={styles.cortainer}>
               <View style={styles.linhaEsquerdaDetail}>
                 <SIGA style={{ marginRight: 5 }} />
@@ -213,31 +217,31 @@ export default function Details({ route, navigation }) {
                 </Text>
               </View>
             </View>
-          )}
+          }
           <View style={styles.cortainer}>
             <View style={styles.linhaEsquerdaDetail}>
               <Gradient style={styles.corDetail} color={color} />
 
-              {turma.length > 0 && (
+              {turma.length > 0 &&
                 <Text style={styles.turmaDetail}>{`${turma}`}</Text>
-              )}
-              {turma.length === 0 && (
+              }
+              {turma.length === 0 &&
                 <Text style={styles.nomeEventoDetail}>{`${name}`}</Text>
-              )}
+              }
             </View>
           </View>
-          {turma.length > 0 && (
+          {turma.length > 0 &&
             <Text
               style={{ ...styles.nomeEventoDetail, ...styles.containername }}
             >{`${name}`}</Text>
-          )}
-          {description.length > 0 && (
+          }
+          {description.length > 0 &&
             <View style={styles.containerSectionDetail}>
               <Text style={styles.tituloDetail}>Descrição</Text>
               <Text style={styles.corpoDetail}>{description}</Text>
             </View>
-          )}
-          {isSubject && (
+          }
+          {isSubject &&
             <>
               <View style={styles.containerSectionDetail}>
                 <View style={styles.linhaEsquerdaDetail}>
@@ -292,8 +296,8 @@ export default function Details({ route, navigation }) {
                 </ScrollView>
               </View>
             </>
-          )}
-          {isSubject && teachers.length > 0 && (
+          }
+          {isSubject && teachers.length > 0 &&
             <View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
                 <View style={styles.iconDetail}>
@@ -305,13 +309,12 @@ export default function Details({ route, navigation }) {
                 </View>
                 <Text style={styles.tituloDetail}>Professores</Text>
               </View>
-              {teachers.map((teacher, index) => (
+              {teachers.map((teacher, index) =>
                 <Text style={styles.corpoDetail} key={index}>
                   {teacher}
-                </Text>
-              ))}
+                </Text>)}
             </View>
-          )}
+          }
           <View style={styles.containerSectionDetail}>
             <View style={styles.linhaEsquerdaDetail}>
               <View style={styles.iconDetail}>
@@ -324,21 +327,20 @@ export default function Details({ route, navigation }) {
               </View>
               <Text style={styles.tituloDetail}>Horários</Text>
             </View>
-            {details.map((detail, index) => (
+            {details.map((detail, index) =>
               <Text style={styles.corpoDetail} key={index}>
                 {
                   // TODO Ver se isso não deu erro.
-                  weekly
-                    ? week[detail.day] +
+                  weekly ?
+                    week[detail.day] +
                     " " +
-                    `${formatHour(detail.datetime_init)}`
-                    : formatDateWithHour(detail.datetime_init)
+                    `${formatHour(detail.datetime_init)}` :
+                    formatDateWithHour(detail.datetime_init)
                 }{" "}
                 {` - ${formatHour(detail.datetime_end)}`}
-              </Text>
-            ))}
+              </Text>)}
           </View>
-          {notifications.length > 0 && (
+          {notifications.length > 0 &&
             <View style={styles.containerSectionDetail}>
               <View style={styles.linhaEsquerdaDetail}>
                 <View style={styles.iconDetail}>
@@ -351,13 +353,12 @@ export default function Details({ route, navigation }) {
                 </View>
                 <Text style={styles.tituloDetail}>Notificações</Text>
               </View>
-              {notifications.map((notification, index) => (
+              {notifications.map((notification, index) =>
                 <Text style={styles.corpoDetail} key={index}>
                   {notificationText(notification)}
-                </Text>
-              ))}
+                </Text>)}
             </View>
-          )}
+          }
           <View style={styles.linecenter}>
             <TouchableOpacityD
               style={styles.deleteButton}

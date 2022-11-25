@@ -7,28 +7,28 @@ export function graphSearch(node) {
     result[node.name] = 0;
   } else if (node.args) {
     const keys = Object.keys(node.args);
-    for (let i = 0; i < keys.length; i++)
+    for (let i = 0; i < keys.length; i++) {
       result = { ...result, ...graphSearch(node.args[keys[i]]) };
+    }
   } else if (node.content) {
     result = { ...result, ...graphSearch(node.content) };
   }
   return result;
-
 }
 
 export function getTime(totalMinutes) {
   const days = parseInt(totalMinutes / 60 / 24);
-  const hours = parseInt((totalMinutes / 60) % 24);
+  const hours = parseInt(totalMinutes / 60 % 24);
   const minutes = parseInt(totalMinutes % 60);
 
   const daysLabel =
-    days > 0
-      ? days + " dia" + (days > 1 ? "s" : "") + (hours || minutes ? ", " : "")
-      : "";
+    days > 0 ?
+      days + " dia" + (days > 1 ? "s" : "") + (hours || minutes ? ", " : "") :
+      "";
   const hoursLabel =
-    hours > 0
-      ? hours + " hora" + (hours > 1 ? "s" : "") + (minutes ? " e " : "")
-      : "";
+    hours > 0 ?
+      hours + " hora" + (hours > 1 ? "s" : "") + (minutes ? " e " : "") :
+      "";
   const minutesLabel =
     minutes > 0 ? minutes + " minuto" + (minutes > 1 ? "s" : "") : "";
 
@@ -56,7 +56,7 @@ export function getMean(task) {
   if (mean.length == 0) {
     return "-";
   }
-  return ("" + magic(task.grades.mean, task.mean).result);
+  return "" + magic(task.grades.mean, task.mean).result;
 }
 
 export function getFrequency(task) {
@@ -65,7 +65,7 @@ export function getFrequency(task) {
   if (frequency.length == 0) {
     return "-";
   }
-  return ("" + magic(task.grades.frequency, task.frequency).result);
+  return "" + magic(task.grades.frequency, task.frequency).result;
 }
 
 
@@ -85,13 +85,13 @@ export function BWFont(backgroundColor) {
   // Converte cor em hex para decimal
   if (backgroundColor.length == 4) {
     r = parseInt(
-      "0x" + backgroundColor.substring(1, 2) + backgroundColor.substring(1, 2)
+      "0x" + backgroundColor.substring(1, 2) + backgroundColor.substring(1, 2),
     );
     g = parseInt(
-      "0x" + backgroundColor.substring(2, 3) + backgroundColor.substring(2, 3)
+      "0x" + backgroundColor.substring(2, 3) + backgroundColor.substring(2, 3),
     );
     b = parseInt(
-      "0x" + backgroundColor.substring(3, 4) + backgroundColor.substring(3, 4)
+      "0x" + backgroundColor.substring(3, 4) + backgroundColor.substring(3, 4),
     );
   }
   if (backgroundColor.length == 7) {

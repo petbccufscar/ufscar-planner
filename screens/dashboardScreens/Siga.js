@@ -20,6 +20,7 @@ import {
   removeSIGA,
 } from "../../redux/actions/eventActions";
 import Toast from "react-native-toast-message";
+import { Buffer } from "buffer";
 
 export const addSigaSubject = (subject, dispatch) => {
   let auxdetails = [];
@@ -55,9 +56,7 @@ export default function SigaScreen() {
   async function Login(user, pssw, handleError, setMessageE, setMessageS) {
     setMessageS("");
     setMessageE("");
-    const Buffer = require("buffer").Buffer;
     let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
-    console.log(encodedAuth);
     try {
       const response = await fetch(
         "https://sistemas.ufscar.br/sagui-api/siga/deferimento",
@@ -65,13 +64,14 @@ export default function SigaScreen() {
           headers: {
             Authorization: "Basic " + encodedAuth,
           },
-        }
+        },
       );
       let data = await response.json();
       if (data.status == undefined) {
         if (data.length == 0) {
           setMessageE(
-            "Aparentemente você não possui nenhum deferimento no Periodo letivo atual, por acaso está de férias?"
+            "Aparentemente você não possui nenhum deferimento no Periodo " +
+            "letivo atual, por acaso está de férias?",
           );
           setMessageS("");
         } else {

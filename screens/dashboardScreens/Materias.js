@@ -32,7 +32,7 @@ export default function SubjectScreen() {
       alignItems: "center",
       backgroundColor: colors.surface1,
       paddingHorizontal: 20,
-      paddingBottom: 60
+      paddingBottom: 60,
     },
     scroll: {
       flex: 1,
@@ -45,9 +45,19 @@ export default function SubjectScreen() {
       <ScrollView>
         <View style={styles.container}>
           {classes.map((item, idx) => {
-            return <Task subjectScreen={true} acontecendo={false} key={idx} task={item} />;
+            return <Task
+              subjectScreen={true}
+              acontecendo={false}
+              key={idx}
+              task={item}
+            />;
           })}
-          {classes.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhuma aula registrada</Text>}
+          {
+            classes.length == 0 &&
+            <Text style={{ fontSize: 20, color: colors.onSurface }}>
+              Nenhuma aula registrada
+            </Text>
+          }
         </View>
 
       </ScrollView>
@@ -55,7 +65,9 @@ export default function SubjectScreen() {
         style={styles.fab}
         color={colors.primary}
         icon="plus"
-        onPress={() => navigation.navigate("EditScreen", { task: defaultSubject })}
+        onPress={
+          () => navigation.navigate("EditScreen", { task: defaultSubject })
+        }
       />
     </View>
   );

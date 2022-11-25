@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import {
-  ScrollView as DefaultScrollView
+  ScrollView as DefaultScrollView,
 } from "react-native";
 import { useTheme } from "react-native-paper";
 import { PropTypes } from "prop-types";
@@ -16,10 +16,14 @@ export default function ScrollView(props) {
   function changeHeaderColor(position) {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: position == 0 ? colors.headerInactive : colors.headerActive,
+        backgroundColor: position == 0 ?
+          colors.headerInactive :
+          colors.headerActive,
       },
       headerShadowVisible: false,
-      headerTintColor: position == 0 ? colors.onHeaderInactive : colors.onHeader,
+      headerTintColor: position == 0 ?
+        colors.onHeaderInactive :
+        colors.onHeader,
     });
     if (position > 0 && onTop) {
       setOnTop(false);

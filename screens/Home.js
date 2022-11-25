@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Linking
+  Linking,
 } from "react-native";
 import ScrollView from "../components/ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -22,7 +22,8 @@ const floorDate = (data) => {
     "-" +
     (data.getMonth() + 1).toString().padStart(2, "0") +
     "-" +
-    data.getDate().toString().padStart(2, "0")
+    data.getDate().toString()
+      .padStart(2, "0")
   );
 };
 
@@ -36,20 +37,27 @@ export default function App() {
   const keys = Object.keys(items).sort();
   const initial = keys.findIndex((e) => e == today);
   for (let j = initial; j < keys.length && j >= 0; j++) {
-    tasks = [...tasks, ...items[keys[j]].filter((e) => !e.is_subject && floorDate(new Date(e.detail.datetime_init)) == today)];
+    tasks = [
+      ...tasks,
+      ...items[keys[j]].filter(
+        (e) =>
+          !e.is_subject && floorDate(new Date(e.detail.datetime_init)) == today,
+      ),
+    ];
   }
   const nome = useSelector((state) => state.user).user.name;
   const theme = useTheme();
 
+  function isHappeningNow(event) {
+    const initDate = new Date(event.detail.datetime_init);
+    const endDate = new Date(event.detail.datetime_end);
+    const now = new Date();
+    return initDate <= now && endDate >= now;
+  }
+
   function calculateAcontecendoAgora() {
-    const aux1 = classes.filter((e) => {
-      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date();
-    });
-    const aux2 = tasks.filter((e) => {
-
-      return new Date(e.detail.datetime_init) <= new Date() && new Date(e.detail.datetime_end) >= new Date();
-
-    });
+    const aux1 = classes.filter(isHappeningNow);
+    const aux2 = tasks.filter(isHappeningNow);
     const aux3 = [...aux1, ...aux2];
     if (JSON.stringify(acontecendoAgora) != JSON.stringify(aux3)) {
       setAcontecendoAgora(aux3);
@@ -103,7 +111,6 @@ export default function App() {
   return (
     <>
       <View style={styles.container}>
-        {/* Added this scroll view to enable scrolling when list gets longer than the page */}
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -114,40 +121,81 @@ export default function App() {
           <View style={styles.tasksWrapper}>
             <Text style={styles.sectionTitle}>Olá, {nome}</Text>
             <AcontecendoAgora list={acontecendoAgora} />
-            {classes.length + tasks.length == 0 && (
-              <View style={{ ...styles.infoRow, paddingVertical: 30, paddingHorizontal: 30, borderRadius: 10, backgroundColor: theme.colors.surface, justifyContent: "center", marginVertical: 20 }}>
-                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-                <Text style={{ ...styles.infoText }}>Não há nenhuma atividade agendada para hoje.</Text>
+            {classes.length + tasks.length == 0 &&
+              <View
+                style={{ ...styles.infoRow,
+                  paddingVertical: 30,
+                  paddingHorizontal: 30,
+                  borderRadius: 10,
+                  backgroundColor: theme.colors.surface,
+                  justifyContent: "center",
+                  marginVertical: 20 }}
+              >
+                <MaterialIcons
+                  name="info"
+                  size={24}
+                  color={theme.colors.primary}
+                />
+                <Text
+                  style={{ ...styles.infoText }}
+                >
+                  Não há nenhuma atividade agendada para hoje.
+                </Text>
               </View>
 
-            )}
-            {classes.length + tasks.length > 0 && (<>
+            }
+            {classes.length + tasks.length > 0 && <>
               <View style={styles.infoRow}>
-                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
-                <Text style={styles.infoText}>Estas são as suas atividades para hoje.</Text>
+                <MaterialIcons
+                  name="info"
+                  size={24}
+                  color={theme.colors.primary}
+                />
+                <Text
+                  style={styles.infoText}
+                >
+                  Estas são as suas atividades para hoje.
+                </Text>
               </View>
               <Text style={styles.sectionTitle}>Aulas de hoje</Text>
-              {classes.length == 0 && (<View style={styles.infoRow}>
-                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+              {classes.length == 0 && <View style={styles.infoRow}>
+                <MaterialIcons
+                  name="info"
+                  size={24}
+                  color={theme.colors.primary}
+                />
                 <Text style={styles.infoText}>Não há aulas para hoje.</Text>
-              </View>)
+              </View>
               }
               {classes.map((item, idx) => {
-                return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} />;
+                return <Task
+                  acontecendo={acontecendoAgora.includes(item)}
+                  key={idx}
+                  task={item}
+                />;
               })}
 
               <Text style={styles.sectionTitle}>Eventos de hoje</Text>
-              {tasks.length == 0 && (<View style={styles.infoRow}>
-                <MaterialIcons name="info" size={24} color={theme.colors.primary} />
+              {tasks.length == 0 && <View style={styles.infoRow}>
+                <MaterialIcons
+                  name="info"
+                  size={24}
+                  color={theme.colors.primary}
+                />
                 <Text style={styles.infoText}>Não há eventos para hoje.</Text>
-              </View>)
+              </View>
               }
               <View style={styles.items}>
                 {tasks.map((item, idx) => {
-                  return <Task acontecendo={acontecendoAgora.includes(item)} key={idx} task={item} show={false} />;
+                  return <Task
+                    acontecendo={acontecendoAgora.includes(item)}
+                    key={idx}
+                    task={item}
+                    show={false}
+                  />;
                 })}
               </View>
-            </>)}
+            </>}
           </View>
         </ScrollView>
       </View>
@@ -184,7 +232,7 @@ export default function App() {
 
 function AcontecendoAgora(props) {
   const colors = useTheme().colors;
-  const mapsSrc = require("../assets/icons/maps.png");
+  const mapsSrc = import("../assets/icons/maps.png");
   const list = props.list;
   const user = useSelector((state) => state.user).user;
 
@@ -214,13 +262,13 @@ function AcontecendoAgora(props) {
     emptyflex: {
     },
     localView: {
-      flexDirection: "row"
+      flexDirection: "row",
     },
     acontecendoAgoraContainer: {
       borderRadius: 12,
       backgroundColor: colors.primaryContainer,
       padding: 10,
-      marginVertical: 10
+      marginVertical: 10,
     },
     acontecendoAgoraText: {
       color: colors.onPrimaryContainer,
@@ -236,24 +284,28 @@ function AcontecendoAgora(props) {
       fontSize: 24,
       paddingLeft: 10,
       color: colors.primary,
-    }
+    },
   });
-  if (list.length == 0)
-    return null;
-  return (<View style={styles.acontecendoAgoraContainer}>
+  if (list.length == 0) { return null; }
+  return <View style={styles.acontecendoAgoraContainer}>
     <View style={styles.acontecendoAgoraRow}>
       <View style={styles.hourglassContainer}>
-        <MaterialIcons name="hourglass-bottom" size={24} color={colors.onPrimary} />
+        <MaterialIcons
+          name="hourglass-bottom"
+          size={24}
+          color={colors.onPrimary}
+        />
       </View>
       <Text style={styles.acontecendoAgoraTitle}>Acontecendo agora</Text>
     </View>
     {list.map((item, idx) => {
-      return (<View key={idx}><Text style={styles.acontecendoAgoraText}>{item.name}</Text>
+      return <View key={idx}>
+        <Text style={styles.acontecendoAgoraText}>{item.name}</Text>
         <View style={styles.localView}>
 
-          {item.detail.local.length > 0 && (<>
+          {item.detail.local.length > 0 && <>
             <TouchableOpacity style={styles.localContainer}
-              onPress={async () => {
+              onPress={async() => {
                 let place = user.campus + ", UFSCAR, " + item.detail.local;
 
                 const url =
@@ -265,7 +317,6 @@ function AcontecendoAgora(props) {
                 } catch (e) {
                   console.log(e);
                 }
-
               }}>
               <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
               <Text style={{ color: colors.onSurface }}>
@@ -273,10 +324,10 @@ function AcontecendoAgora(props) {
               </Text>
             </TouchableOpacity>
             <View style={styles.emptyflex} />
-          </>)}
-        </View></View>);
+          </>}
+        </View></View>;
     })}
-  </View>);
+  </View>;
 }
 
 AcontecendoAgora.propTypes = PropTypes.any;

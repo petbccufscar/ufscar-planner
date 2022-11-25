@@ -4,12 +4,15 @@ import { PropTypes } from "prop-types";
 
 export const withPreventDoubleClick = (WrappedComponent) => {
   class PreventDoubleClick extends React.PureComponent {
-
     debouncedOnPress = () => {
       this.props.onPress && this.props.onPress();
     };
 
-    onPress = debounce(this.debouncedOnPress, 500, { leading: true, trailing: false });
+    onPress = debounce(
+      this.debouncedOnPress,
+      500,
+      { leading: true, trailing: false },
+    );
 
     render() {
       return <WrappedComponent {...this.props} onPress={this.onPress} />;
@@ -17,7 +20,8 @@ export const withPreventDoubleClick = (WrappedComponent) => {
   }
 
   PreventDoubleClick.propTypes = PropTypes.any;
+  const displayName = WrappedComponent.displayName || WrappedComponent.name;
+  PreventDoubleClick.displayName = `withPreventDoubleClick(${displayName})`;
 
-  PreventDoubleClick.displayName = `withPreventDoubleClick(${WrappedComponent.displayName || WrappedComponent.name})`;
   return PreventDoubleClick;
 };

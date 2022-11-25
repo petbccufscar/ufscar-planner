@@ -6,7 +6,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { useTheme, ActivityIndicator } from "react-native-paper";
-import { floorDate, monthNames, offsetDate, weekDaysNames } from "../helpers/helper";
+import {
+  floorDate,
+  monthNames,
+  offsetDate,
+  weekDaysNames,
+} from "../helpers/helper";
 import { EventCards } from "./EventCards";
 import { FlatList } from "react-native-bidirectional-infinite-scroll";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,7 +19,7 @@ import { PropTypes } from "prop-types";
 
 function floorDate2Date(date) {
   const data = new Date(date);
-  return (new Date(data.getTime() + new Date().getTimezoneOffset() * 60000));
+  return new Date(data.getTime() + new Date().getTimezoneOffset() * 60000);
 }
 
 function RenderCalendarRow(props) {
@@ -34,9 +39,21 @@ function RenderCalendarRow(props) {
     aux = offsetDate(aux, 1);
   }
 
-  return (<View style={{ flexDirection: "row" }}>
-    {weekDays.map((day, index) => (<RenderCalendarCell marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} day={day} month={month} />))}</View>
-  );
+  return <View style={{ flexDirection: "row" }}>
+    {
+      weekDays.map((day, index) => <RenderCalendarCell
+        marked={marked}
+        open={open}
+        setOpen={setOpen}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        colors={colors}
+        key={index}
+        day={day}
+        month={month}
+      />)
+    }
+  </View>;
 }
 
 RenderCalendarRow.propTypes = PropTypes.any;
@@ -53,24 +70,58 @@ function RenderCalendarCell(props) {
   const hasEvent = Object.keys(props.marked).includes(floorDate(date));
 
   if (open && date.getMonth() != month) {
-    return (<View style={{ flex: 1 }}></View>);
+    return <View style={{ flex: 1 }}></View>;
   }
 
-  return (<TouchableOpacity style={{ width: "14.28%", aspectRatio: 1, alignItems: "center", justifyContent: "center" }} onPress={() => { setSelectedDate(date); setOpen(false); }}>
+  return <TouchableOpacity
+    style={{
+      width: "14.28%",
+      aspectRatio: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+    onPress={() => { setSelectedDate(date); setOpen(false); }}
+  >
     <View style={{
       borderRadius: 30,
-      aspectRatio: 1, backgroundColor: selected ? colors.primary : "transparent", width: "80%", alignContent: "center", justifyContent: "center"
+      aspectRatio: 1,
+      backgroundColor: selected ? colors.primary : "transparent",
+      width: "80%",
+      alignContent: "center",
+      justifyContent: "center",
     }}>
-
-      <Text style={{ textAlign: "center", color: selected ? colors.onPrimary : isToday ? colors.primary : date.getMonth() == month ? colors.onSurface : colors.outline }}>{date.getDate()}</Text>
-      <View style={{ borderRadius: 30, aspectRatio: 1, backgroundColor: hasEvent ? selected ? colors.onPrimary : colors.primary : "transparent", width: 10, position: "absolute", bottom: 0, alignSelf: "center" }} />
+      <Text
+        style={{
+          textAlign: "center",
+          color: selected ?
+            colors.onPrimary :
+            isToday ?
+              colors.primary :
+              date.getMonth() == month ?
+                colors.onSurface :
+                colors.outline,
+        }}>{date.getDate()}</Text>
+      <View
+        style={{
+          borderRadius: 30,
+          aspectRatio: 1,
+          backgroundColor: hasEvent ?
+            selected ?
+              colors.onPrimary :
+              colors.primary :
+            "transparent",
+          width: 10,
+          position: "absolute",
+          bottom: 0,
+          alignSelf: "center",
+        }} />
     </View>
-  </TouchableOpacity>);
+  </TouchableOpacity>;
 }
 
 RenderCalendarCell.propTypes = PropTypes.any;
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function RenderDay(props) {
   const day = props.day || new Date();
@@ -82,39 +133,46 @@ function RenderDay(props) {
 
   const Divisor = () => {
     const yesterday = offsetDate(day, -1);
-    return (<View style={{ alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ fontSize: 20, color: colors.onSurface }}>{`Fim de ${monthNames[yesterday.getMonth()]} ${yesterday.getFullYear()}`}</Text>
-      <Text style={{ fontSize: 20, color: colors.onSurface }}>{`Inicio de ${monthNames[day.getMonth()]} ${day.getFullYear()}`}</Text>
-    </View>);
+    return <View style={{ alignItems: "center", justifyContent: "center" }}>
+      <Text style={{ fontSize: 20, color: colors.onSurface }}>
+        {
+          `Fim de ${monthNames[yesterday.getMonth()]}` +
+            `${yesterday.getFullYear()}`
+        }
+      </Text>
+      <Text style={{ fontSize: 20, color: colors.onSurface }}>
+        {`Inicio de ${monthNames[day.getMonth()]} ${day.getFullYear()}`}
+      </Text>
+    </View>;
   };
 
   const styles = StyleSheet.create({
     linha: {
       flexDirection: "row",
       flex: 1,
-      margin: 10
+      margin: 10,
     },
     diaNum: {
       fontSize: 30,
-      color: isToday ? colors.primary : colors.onSurface
+      color: isToday ? colors.primary : colors.onSurface,
     },
     dia: {
       alignItems: "center",
       width: 40,
-      paddingTop: 2
+      paddingTop: 2,
     },
     diaText: {
-      color: isToday ? colors.primary : colors.onSurface
+      color: isToday ? colors.primary : colors.onSurface,
     },
     taskContainer: {
-      flex: 1
-    }
+      flex: 1,
+    },
 
   });
-  return (<>
-    {1 == day.getDate() && (
+  return <>
+    {1 == day.getDate() &&
       <Divisor />
-    )}
+    }
     <View style={styles.linha}>
       <View style={styles.dia}>
         <Text style={styles.diaNum}>{`${day.getUTCDate()}`}</Text>
@@ -122,13 +180,18 @@ function RenderDay(props) {
       </View>
       <View style={styles.taskContainer}>
         {
-          items.map((item, index) => (<EventCards style={{ marginTop: 0 }} key={index} task={item}></EventCards>))
+          items.map(
+            (item, index) => <EventCards
+              style={{ marginTop: 0 }}
+              key={index}
+              task={item}
+            ></EventCards>,
+          )
         }
       </View>
 
     </View>
-  </>
-  );
+  </>;
 }
 
 RenderDay.propTypes = PropTypes.any;
@@ -165,9 +228,15 @@ export default function Agenda(props) {
   const [open, setOpen] = useState(false);
 
   const [changedByController, setChangedByController] = useState(false);
-  const [loadedMonth, setLoadedMonth] = useState([{ month: selectedDate.getMonth(), year: selectedDate.getFullYear() }]);
-  const [lastMonth, setLastMonth] = useState({ month: selectedDate.getMonth(), year: selectedDate.getFullYear() });
-  const [firstMonth, setFirstMonth] = useState({ month: selectedDate.getMonth(), year: selectedDate.getFullYear() });
+  const [loadedMonth, setLoadedMonth] = useState(
+    [{ month: selectedDate.getMonth(), year: selectedDate.getFullYear() }],
+  );
+  const [lastMonth, setLastMonth] = useState(
+    { month: selectedDate.getMonth(), year: selectedDate.getFullYear() },
+  );
+  const [firstMonth, setFirstMonth] = useState(
+    { month: selectedDate.getMonth(), year: selectedDate.getFullYear() },
+  );
 
   const msetOpen = (value) => {
     setOpen(value);
@@ -175,7 +244,7 @@ export default function Agenda(props) {
   };
 
 
-  const loadAtEnd = async () => {
+  const loadAtEnd = async() => {
     let aux = [];
     let auxMonth = lastMonth;
     for (let i = 0; i < 3; i++) {
@@ -188,7 +257,7 @@ export default function Agenda(props) {
     return [];
   };
 
-  const loadAtStart = async () => {
+  const loadAtStart = async() => {
     let aux = [];
     let auxMonth = firstMonth;
     for (let i = 0; i < 1; i++) {
@@ -200,33 +269,65 @@ export default function Agenda(props) {
     setLoadedMonth([...aux, ...loadedMonth]);
     return [];
   };
-  if (loadedMonth.length < 2)
-    loadAtEnd();
+  if (loadedMonth.length < 2) { loadAtEnd(); }
 
   if (open) {
-    return (<View style={{ flex: 1, backgroundColor: colors.primaryContainer }}>
+    return <View style={{ flex: 1, backgroundColor: colors.primaryContainer }}>
       <FlatList
         onStartReached={loadAtStart}
         data={loadedMonth}
         marked={marked}
-        HeaderLoadingIndicator={() => (<ActivityIndicator style={{ padding: 10 }} animating={true} color={colors.primary} />)}
+        HeaderLoadingIndicator={
+          () => <ActivityIndicator
+            style={{ padding: 10 }}
+            animating={true}
+            color={colors.primary}
+          />
+        }
         onEndReached={loadAtEnd}
-        renderItem={({ item }) => <RenderMonthCalendar marked={marked} open={open} setOpen={msetOpen} colors={colors} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={item.year} month={item.month} />}
+        renderItem={
+          ({ item }) => <RenderMonthCalendar
+            marked={marked}
+            open={open}
+            setOpen={msetOpen}
+            colors={colors}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            year={item.year} month={item.month}
+          />
+        }
         showDefaultLoadingIndicators={true}
       />
-      <TouchableOpacity onPress={() => setOpen(false)} style={{ alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <TouchableOpacity
+        onPress={() => setOpen(false)}
+        style={{ alignItems: "center", justifyContent: "center", padding: 20 }}
+      >
         <MaterialIcons name="expand-less" size={24} color={colors.primary} />
       </TouchableOpacity>
-    </View>);
+    </View>;
   }
-  return (<View style={{ flex: 1 }}>
+  return <View style={{ flex: 1 }}>
 
-    <RenderMonthCalendar marked={marked} colors={colors} open={open} setOpen={msetOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} year={selectedDate.getFullYear()} month={selectedDate.getMonth()} />
+    <RenderMonthCalendar
+      marked={marked}
+      colors={colors}
+      open={open}
+      setOpen={msetOpen}
+      selectedDate={selectedDate}
+      setSelectedDate={setSelectedDate}
+      year={selectedDate.getFullYear()}
+      month={selectedDate.getMonth()}
+    />
     <View style={{ flex: 1 }}>
-
-      <AgendaList setSelectedDate={setSelectedDate} changedByController={changedByController} setChangedByController={setChangedByController} selectedDate={selectedDate} items={items}></AgendaList>
+      <AgendaList
+        setSelectedDate={setSelectedDate}
+        changedByController={changedByController}
+        setChangedByController={setChangedByController}
+        selectedDate={selectedDate}
+        items={items}
+      ></AgendaList>
     </View>
-  </View>);
+  </View>;
 }
 
 Agenda.propTypes = PropTypes.any;
@@ -248,28 +349,103 @@ function RenderMonthCalendar(props) {
     }
   }
   if (!open) {
-    return (<View style={{ backgroundColor: colors.primaryContainer, padding: 20, maargin: 20 }}>
+    return <View
+      style={{
+        backgroundColor: colors.primaryContainer,
+        padding: 20,
+        maargin: 20,
+      }}
+    >
       <View style={{ flexDirection: "row" }}>
-        {weekDaysNames.map((day, index) => (<Text style={{ flex: 1, color: colors.onSurface, textAlign: "center", fontWeight: "bold" }} key={index}>{day}</Text>))}
+        {weekDaysNames.map(
+          (day, index) => <Text
+            style={{
+              flex: 1,
+              color: colors.onSurface,
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+            key={index}
+          >
+            {day}
+          </Text>,
+        )}
       </View>
-      <RenderCalendarRow marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} date={selectedDate} month={props.month} />
+      <RenderCalendarRow
+        marked={marked}
+        open={open}
+        setOpen={setOpen}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        colors={colors} date={selectedDate}
+        month={props.month}
+      />
 
-      <TouchableOpacity onPress={() => setOpen(true)} style={{ alignItems: "center", justifyContent: "center" }}>
+      <TouchableOpacity
+        onPress={() => setOpen(true)}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
         <MaterialIcons name="expand-more" size={24} color={colors.primary} />
       </TouchableOpacity>
-    </View>);
+    </View>;
   }
-  return (<View style={{ backgroundColor: colors.primaryContainer, padding: 20, maargin: 20 }}>
-    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 10 }}>
-      <Text style={{ fontSize: 20, color: colors.onPrimaryContainer }}>{`${monthNames[props.month]} ${props.year}`}</Text>
+  return <View
+    style={{
+      backgroundColor: colors.primaryContainer,
+      padding: 20,
+      maargin: 20,
+    }}
+  >
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 20,
+          color: colors.onPrimaryContainer,
+        }}
+      >
+        {`${monthNames[props.month]} ${props.year}`}
+      </Text>
     </View>
     <View style={{ flexDirection: "row" }}>
-      {weekDaysNames.map((day, index) => (<Text style={{ flex: 1, color: colors.onPrimaryContainer, textAlign: "center", fontWeight: "bold" }} key={index}>{day}</Text>))}
+      {
+        weekDaysNames.map(
+          (day, index) => <Text
+            style={{
+              flex: 1,
+              color: colors.onPrimaryContainer,
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+            key={index}
+          >
+            {day}
+          </Text>,
+        )
+      }
     </View>
     {
-      weeksRep.map((week, index) => (<RenderCalendarRow marked={marked} open={open} setOpen={setOpen} selectedDate={selectedDate} setSelectedDate={setSelectedDate} colors={colors} key={index} date={week} month={props.month} />))
+      weeksRep.map(
+        (week, index) => <RenderCalendarRow
+          marked={marked}
+          open={open}
+          setOpen={setOpen}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          colors={colors}
+          key={index}
+          date={week}
+          month={props.month}
+        />,
+      )
     }
-  </View>);
+  </View>;
 }
 
 RenderMonthCalendar.propTypes = PropTypes.any;
@@ -287,7 +463,7 @@ export function AgendaList(props) {
   let [daysToRender, setDaysToRender] = useState({});
 
 
-  const loadAtEnd = async () => {
+  const loadAtEnd = async() => {
     let daysAux = { ...daysToRender };
     for (let i = 0; i <= offsetDown; i++) {
       const aux = offsetDate(lastDate, i);
@@ -325,7 +501,7 @@ export function AgendaList(props) {
   }
 
   const _viewabilityConfig = {
-    itemVisiblePercentThreshold: 0
+    itemVisiblePercentThreshold: 0,
   };
   return (
     <FlatList
@@ -336,8 +512,17 @@ export function AgendaList(props) {
       showDefaultLoadingIndicators={true}
       contentContainerStyle={{ flexGrow: 1 }}
       style={{ backgroundColor: colors.surface1 }}
-      viewabilityConfig={_viewabilityConfig} data={Object.keys(daysToRender).sort()} renderItem={({ item, index }) => (<RenderDay key={index} day={floorDate2Date(item)} index={index} items={daysToRender} />)}>
-    </FlatList>
+      viewabilityConfig={_viewabilityConfig}
+      data={Object.keys(daysToRender).sort()}
+      renderItem={
+        ({ item, index }) => <RenderDay
+          key={index}
+          day={floorDate2Date(item)}
+          index={index}
+          items={daysToRender}
+        />
+      }
+    ></FlatList>
   );
 }
 

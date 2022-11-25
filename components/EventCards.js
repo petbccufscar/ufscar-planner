@@ -1,22 +1,46 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
-import { formatHour, formatDateWithHour, weekDaysFullNames, SIGA } from "../helpers/helper";
-import { useTheme, Checkbox, Dialog, Portal, Button, TextInput } from "react-native-paper";
-import { Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
+import {
+  formatHour,
+  formatDateWithHour,
+  weekDaysFullNames,
+  SIGA,
+} from "../helpers/helper";
+import {
+  useTheme,
+  Checkbox,
+  Dialog,
+  Portal,
+  Button,
+  TextInput,
+} from "react-native-paper";
+import {
+  Entypo,
+  MaterialIcons,
+  MaterialCommunityIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
 import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
 import DropDown from "react-native-paper-dropdown";
 import { PropTypes } from "prop-types";
-const mapsSrc = require("../assets/icons/maps.png");
+const mapsSrc = import("../assets/icons/maps.png");
 
 export function Task(props) {
   const mostrarData = props.show || false;
   let task = props.task;
   const navigation = useNavigation();
-  const user = useSelector(state => state.user).user;
+  const user = useSelector((state) => state.user).user;
   const subjectScreen = props.subjectScreen || false;
   // TODO verificar se está acontecendo agora
   const acontecendoAgora = props.acontecendo || false;
@@ -35,7 +59,7 @@ export function Task(props) {
       borderRadius: 10,
       overflow: "hidden",
       alignItems: "flex-start",
-      marginVertical: 10
+      marginVertical: 10,
       // width: '100%',
     },
     square: {
@@ -59,17 +83,17 @@ export function Task(props) {
     superItem: {
       paddingTop: 5,
       flexDirection: "row",
-      alignItems: "center"
+      alignItems: "center",
     },
     atumalaca: {
       padding: 10,
       flex: 1,
-      flexShrink: 1
+      flexShrink: 1,
       // backgroundColor: ,
     },
     iconView: {
       width: 30,
-      alignItems: "center"
+      alignItems: "center",
 
     },
     acontecendoAgoraMapsIcon: {
@@ -89,7 +113,7 @@ export function Task(props) {
       flexDirection: "row",
       padding: 5,
       paddingRight: 10,
-      marginTop: 5
+      marginTop: 5,
     },
     linhaAcontecendoTitulo: {
       flexDirection: "row",
@@ -108,8 +132,8 @@ export function Task(props) {
       width: 30,
       height: 30,
       borderRadius: 8,
-      marginLeft: 5
-    }
+      marginLeft: 5,
+    },
   });
 
   return (
@@ -119,73 +143,109 @@ export function Task(props) {
       <View style={styles.atumalaca}>
         <View style={styles.linhaAcontecendoTitulo}>
           <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
-            <Text style={{ ...styles.itemTaskSubject, alignSelf: "flex-start", flex: 1 }}>{task.name}</Text>
+            <Text
+              style={{
+                ...styles.itemTaskSubject,
+                alignSelf: "flex-start",
+                flex: 1,
+              }}
+            >
+              {task.name}
+            </Text>
             {subjectScreen && task.siga && <SIGA />}
           </View>
           <View style={styles.AcontecendoView}>
-            {acontecendoAgora && (<View style={styles.AcontecendoIcon}>
-              <MaterialIcons name="hourglass-bottom" size={20} color={colors.onPrimary} />
-            </View>)}
+            {acontecendoAgora && <View style={styles.AcontecendoIcon}>
+              <MaterialIcons
+                name="hourglass-bottom"
+                size={20}
+                color={colors.onPrimary}
+              />
+            </View>}
           </View>
         </View>
-        {!subjectScreen && (<>
+        {!subjectScreen && <>
           <View style={styles.superItem}>
             <View style={styles.iconView}>
-              <MaterialCommunityIcons name="clock" size={24} color={theme.colors.onSurfaceVariant} />
+              <MaterialCommunityIcons
+                name="clock"
+                size={24}
+                color={theme.colors.onSurfaceVariant}
+              />
             </View>
             <Text style={styles.itemDate}>
               {""}
-              {mostrarData ? formatDateWithHour(task.detail.datetime_init) : formatHour(task.detail.datetime_init)} -{" "}
+              {
+                mostrarData ?
+                  formatDateWithHour(task.detail.datetime_init) :
+                  formatHour(task.detail.datetime_init)
+              } -{" "}
               {formatHour(task.detail.datetime_end)}
             </Text>
           </View>
-        </>)}
-        {task.is_subject && task.teachers && task.teachers.length > 0 && (
+        </>}
+        {task.is_subject && task.teachers && task.teachers.length > 0 &&
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <FontAwesome name="user" size={24} style={{ margin: 5 }} color={theme.colors.onSurfaceVariant} />
-            <Text style={{ color: theme.colors.onSurfaceVariant }}>{task.teachers[0]}{task.teachers.length > 1 ? " +" : ""}</Text>
+            <FontAwesome
+              name="user"
+              size={24}
+              style={{ margin: 5 }}
+              color={theme.colors.onSurfaceVariant}
+            />
+            <Text
+              style={{ color: theme.colors.onSurfaceVariant }}
+            >
+              {task.teachers[0]}{task.teachers.length > 1 ? " +" : ""}
+            </Text>
           </View>
-        )}
-        {!subjectScreen && (<>
-          {task.description.length > 0 && (
+        }
+        {!subjectScreen && <>
+          {task.description.length > 0 &&
             <View style={styles.superItem}>
               <View style={styles.iconView}>
-                <Entypo name="text" size={24} color={theme.colors.onSurfaceVariant} />
-
+                <Entypo
+                  name="text"
+                  size={24}
+                  color={theme.colors.onSurfaceVariant}
+                />
               </View>
               <Text style={styles.itemDate}>{`${task.description}`}
               </Text>
-            </View>)}
-          {task.detail.local.length > 0 && (<View style={styles.acontecendoAgoraRow}>
-            <TouchableOpacity style={styles.localContainer}
-              onPress={async () => {
-                let place = user.campus + ", UFSCAR, " + task.detail.local;
+            </View>}
+          {
+            task.detail.local.length > 0 &&
+            <View style={styles.acontecendoAgoraRow}>
+              <TouchableOpacity style={styles.localContainer}
+                onPress={async() => {
+                  let place = user.campus + ", UFSCAR, " + task.detail.local;
 
-                const url =
+                  const url =
                   "https://www.google.com/maps/search/?api=1&query=" +
                   encodeURI(place);
 
 
-                try {
-                  await Linking.openURL(url);
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
+                  try {
+                    await Linking.openURL(url);
+                  } catch (e) {
+                    console.log(e);
+                  }
+                }}
 
-            >
-              <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
-              <Text style={{ color: theme.colors.onSurfaceVariant }}>
-                {task.detail.local}
-              </Text>
-            </TouchableOpacity>
-            <View style={styles.emptyflex} />
-          </View>)}
-        </>)}
+              >
+                <Image
+                  style={styles.acontecendoAgoraMapsIcon}
+                  source={mapsSrc}
+                />
+                <Text style={{ color: theme.colors.onSurfaceVariant }}>
+                  {task.detail.local}
+                </Text>
+              </TouchableOpacity>
+              <View style={styles.emptyflex} />
+            </View>}
+        </>}
       </View>
     </TouchableOpacity>
   );
-
 }
 
 Task.propTypes = PropTypes.any;
@@ -198,7 +258,7 @@ export function EventCards(props) {
   const edit = () => {
     navigation.navigate("Event", { task: task });
   };
-  const user = useSelector(state => state.user).user;
+  const user = useSelector((state) => state.user).user;
 
 
   const theme = useTheme();
@@ -232,16 +292,16 @@ export function EventCards(props) {
     superItem: {
       paddingTop: 5,
       flexDirection: "row",
-      alignItems: "center"
+      alignItems: "center",
     },
     atumalaca: {
       padding: 10,
 
-      flexShrink: 1
+      flexShrink: 1,
     },
     iconView: {
       width: 30,
-      alignItems: "center"
+      alignItems: "center",
 
     },
     acontecendoAgoraMapsIcon: {
@@ -273,45 +333,56 @@ export function EventCards(props) {
         <Text style={styles.itemTaskSubject}>{task.name}</Text>
         <View style={styles.superItem}>
           <View style={styles.iconView}>
-            <MaterialCommunityIcons name="clock" size={24} color={theme.colors.onSurfaceVariant} />
+            <MaterialCommunityIcons
+              name="clock"
+              size={24}
+              color={theme.colors.onSurfaceVariant}
+            />
           </View>
           <Text style={styles.itemDate}>
             {""}
-            {mostrarData ? formatDateWithHour(task.detail.datetime_init) : formatHour(task.detail.datetime_init)} -{" "}
+            {
+              mostrarData ?
+                formatDateWithHour(task.detail.datetime_init) :
+                formatHour(task.detail.datetime_init)
+            } -{" "}
             {formatHour(task.detail.datetime_end)}
 
           </Text>
         </View>
-        {task.detail.local.length > 0 && (<View style={styles.acontecendoAgoraRow}>
-          <TouchableOpacity style={styles.localContainer}
-            onPress={async () => {
-              let place = user.campus + ", UFSCAR, " + task.detail.local;
+        {
+          task.detail.local.length > 0 &&
+           <View style={styles.acontecendoAgoraRow}>
+             <TouchableOpacity style={styles.localContainer}
+               onPress={async() => {
+                 let place = user.campus + ", UFSCAR, " + task.detail.local;
 
-              const url =
+                 const url =
                 "https://www.google.com/maps/search/?api=1&query=" +
                 encodeURI(place);
 
-              try {
-                await Linking.openURL(url);
-              } catch (e) {
-                console.log(e);
-              }
+                 try {
+                   await Linking.openURL(url);
+                 } catch (e) {
+                   console.log(e);
+                 }
+               }}
 
-            }}
-
-          >
-            <Image style={styles.acontecendoAgoraMapsIcon} source={mapsSrc} />
-            <Text style={{ color: theme.colors.onSurface }}>
-              {task.detail.local}
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.emptyflex} />
-        </View>)}
+             >
+               <Image
+                 style={styles.acontecendoAgoraMapsIcon}
+                 source={mapsSrc}
+               />
+               <Text style={{ color: theme.colors.onSurface }}>
+                 {task.detail.local}
+               </Text>
+             </TouchableOpacity>
+             <View style={styles.emptyflex} />
+           </View>}
       </View>
 
     </TouchableOpacity>
   );
-
 }
 
 EventCards.propTypes = PropTypes.any;
@@ -337,7 +408,7 @@ export function EventRender(props) {
       overflow: "hidden",
       alignItems: "flex-start",
       margin: 10,
-      width: "100%"
+      width: "100%",
     },
     square: {
       width: 10,
@@ -355,13 +426,13 @@ export function EventRender(props) {
     },
     superItem: {
       paddingTop: 5,
-      flexDirection: "row"
+      flexDirection: "row",
 
     },
     atumalaca: {
       padding: 10,
       paddingLeft: hasCheck ? 5 : 10,
-      flexShrink: 1
+      flexShrink: 1,
     },
     iconView: {
       width: 30,
@@ -380,7 +451,7 @@ export function EventRender(props) {
       padding: 0,
       marginRight: 5,
 
-    }
+    },
 
   });
   return (
@@ -392,30 +463,45 @@ export function EventRender(props) {
             style={styles.check}
             status={task.is_submited ? "checked" : "unchecked"}
             onPress={() => {
-              dispatch(updateEvent({ ...task, is_submited: !task.is_submited }));
+              dispatch(updateEvent({
+                ...task,
+                is_submited: !task.is_submited,
+              }));
             }}
           />}
           <Text style={styles.itemTaskSubject}>{task.name}</Text>
 
         </View>
 
-        {task.details.map((detail, index) => <View key={index} style={styles.superItem}>
-          <View style={styles.iconView}>
-            <MaterialCommunityIcons name="clock" size={24} color={theme.colors.onSurfaceVariant} />
-          </View>
-          <Text style={styles.itemDate}>
-            {""}
-            {mostrarData ? formatDateWithHour(detail.datetime_init) : weekDaysFullNames[detail.day] + ", " + formatHour(detail.datetime_init)} -{" "}
-            {formatHour(detail.datetime_end)}
+        {
+          task.details.map(
+            (detail, index) => <View key={index} style={styles.superItem}>
+              <View style={styles.iconView}>
+                <MaterialCommunityIcons
+                  name="clock"
+                  size={24}
+                  color={theme.colors.onSurfaceVariant}
+                />
+              </View>
+              <Text style={styles.itemDate}>
+                {""}
+                {
+                  mostrarData ?
+                    formatDateWithHour(detail.datetime_init) :
+                    weekDaysFullNames[detail.day] +
+                 ", " +
+                 formatHour(detail.datetime_init)
+                } -{" "}
+                {formatHour(detail.datetime_end)}
 
-          </Text>
-        </View>)}
+              </Text>
+            </View>,
+          )}
 
       </View>
 
     </TouchableOpacity>
   );
-
 }
 
 EventRender.propTypes = PropTypes.any;
@@ -437,7 +523,7 @@ export function NotaRender(props) {
       overflow: "hidden",
       alignItems: "flex-start",
       margin: 10,
-      width: "100%"
+      width: "100%",
     },
     square: {
       width: 10,
@@ -464,21 +550,21 @@ export function NotaRender(props) {
       flexDirection: "row",
       marginRight: 10,
       alignItems: "center",
-      paddingVertical: 10
+      paddingVertical: 10,
     },
     campotxt: {
       fontSize: 16,
       color: colors.onSurfaceVariant,
       maxWidth: "90%",
-      overflow: "scroll"
+      overflow: "scroll",
     },
     campoicon: {
-      marginRight: 5
+      marginRight: 5,
     },
     nota: {
       flexDirection: "row",
       paddingVertical: 5,
-      alignItems: "center"
+      alignItems: "center",
     },
     notas: {
       paddingVertical: 5,
@@ -500,7 +586,7 @@ export function NotaRender(props) {
       color: colors.onSurfaceVariant,
       padding: 5,
       backgroundColor: colors.surfaceVariant,
-      borderRadius: 10
+      borderRadius: 10,
 
     },
     editarbtn: {
@@ -518,9 +604,9 @@ export function NotaRender(props) {
       justifyContent: "center",
       alignItems: "center",
       flex: 1,
-      margin: 10
+      margin: 10,
     },
-    inputText: { backgroundColor: colors.surface1, marginVertical: 10 }
+    inputText: { backgroundColor: colors.surface1, marginVertical: 10 },
 
   });
   const [dict, setDict] = useState(task?.grade?.mean || {});
@@ -562,12 +648,24 @@ export function NotaRender(props) {
         <View style={styles.header}>
           {task.teachers.length > 0 &&
             <View style={styles.campo}>
-              <MaterialIcons style={styles.campoicon} name="person" size={24} color={colors.onSurfaceVariant} />
-              <Text style={styles.campotxt}>{task.teachers[0]} {task.teachers.length > 1 ? "+" : ""}</Text>
+              <MaterialIcons
+                style={styles.campoicon}
+                name="person"
+                size={24}
+                color={colors.onSurfaceVariant}
+              />
+              <Text style={styles.campotxt}>
+                {task.teachers[0]} {task.teachers.length > 1 ? "+" : ""}
+              </Text>
             </View>}
 
           <View style={styles.campo}>
-            <MaterialIcons style={styles.campoicon} name="stars" size={24} color={colors.onSurfaceVariant} />
+            <MaterialIcons
+              style={styles.campoicon}
+              name="stars"
+              size={24}
+              color={colors.onSurfaceVariant}
+            />
             <Text style={styles.campotxt}>{resultMean}</Text>
           </View>
         </View>
@@ -575,7 +673,12 @@ export function NotaRender(props) {
           {Object.keys(dict).map((item, index) =>
             <View style={styles.nota} key={index}>
               <View style={styles.notaleft}>
-                <MaterialIcons style={styles.campoicon} name="event" size={24} color={colors.onSurface} />
+                <MaterialIcons
+                  style={styles.campoicon}
+                  name="event"
+                  size={24}
+                  color={colors.onSurface}
+                />
                 <Text style={styles.notatxt}>{item}</Text>
               </View>
               <View style={styles.notaright}>
@@ -593,8 +696,14 @@ export function NotaRender(props) {
           </TouchableOpacity>
         </View>
         <Portal>
-          <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha qual nota você deseja editar, e informe o valor.</Dialog.Title>
+          <Dialog
+            style={{ backgroundColor: colors.dialog }}
+            visible={visible}
+            onDismiss={hideDialog}
+          >
+            <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+              Escolha qual nota você deseja editar, e informe o valor.
+            </Dialog.Title>
             <Dialog.Content>
               <DropDown
                 mode={"flat"}
@@ -608,13 +717,22 @@ export function NotaRender(props) {
                 inputProps={{ style: styles.inputText }}
                 theme={{ colors: { primary: colors.primary } }}
               />
-              <TextInput label="Valor" placeholder="0.0" placeholderTextColor={colors.outline} style={styles.inputText} keyboardType="number-pad"
-                value={selected != undefined && selected != null ? dict[selected].toString() : ""}
+              <TextInput
+                label="Valor"
+                placeholder="0.0"
+                placeholderTextColor={colors.outline}
+                style={styles.inputText}
+                keyboardType="number-pad"
+                value={
+                  selected != undefined &&
+                  selected != null ?
+                    dict[selected].toString() :
+                    ""
+                }
                 onChangeText={(text) => {
                   if (selected != null && selected != undefined) {
                     let auxdict = { ...dict };
                     try {
-
                       const aux = parseFloat(text);
 
                       auxdict[selected] = isNaN(aux) ? "0" : text;
@@ -670,10 +788,10 @@ export function FreqRender(props) {
     name: {
       flex: 1,
       color: colors.onSurfaceVariant,
-      fontSize: 20
+      fontSize: 20,
     },
     editar: {
-      color: colors.primary
+      color: colors.primary,
     },
     editarbtn: {
       padding: 10,
@@ -689,7 +807,7 @@ export function FreqRender(props) {
     },
     percentcontainer: {
       alignItems: "flex-end",
-      justifyContent: "flex-end"
+      justifyContent: "flex-end",
     },
     percentText: {
       color: colors.onSurface,
@@ -704,12 +822,12 @@ export function FreqRender(props) {
       alignItems: "flex-start",
       justifyContent: "flex-start",
       marginTop: 10,
-      overflow: "hidden"
+      overflow: "hidden",
     },
     barprogress: {
       height: 25,
       borderRadius: 20,
-      width: resultFreq
+      width: resultFreq,
     },
     card: {
       flex: 1,
@@ -717,7 +835,7 @@ export function FreqRender(props) {
       margin: 20,
       padding: 20,
       borderRadius: 10,
-      width: "100%"
+      width: "100%",
     },
     table: {
       flex: 1,
@@ -726,33 +844,34 @@ export function FreqRender(props) {
     tableline: {
       flexDirection: "row",
       padding: 5,
-      borderRadius: 5
+      borderRadius: 5,
 
     },
     tablelineA: {
       flexDirection: "row",
       padding: 5,
       backgroundColor: colors.surfaceVariant,
-      borderRadius: 5
+      borderRadius: 5,
 
     },
     tablel: {
       flex: 1,
-      color: colors.onSurfaceVariant
+      color: colors.onSurfaceVariant,
     },
     tabler: {
       marginRight: 5,
-      color: colors.onSurfaceVariant
+      color: colors.onSurfaceVariant,
     },
     input: {
       minHeight: 40,
       minWidth: "30%",
       borderRadius: 5,
-      backgroundColor: colors.surface
+      backgroundColor: colors.surface,
     },
   });
   const removeSpaces = (str) => str.replace(/\s/g, "");
-  const isDefault = removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
+  const isDefault =
+    removeSpaces(task.frequency || "") == "(aulasDadas-faltas)/aulasDadas";
   const aulasDadas = task?.grade?.frequency?.aulasDadas || 0;
   const faltas = task?.grade?.frequency?.faltas || 0;
   const [visible, setVisible] = React.useState(false);
@@ -776,11 +895,14 @@ export function FreqRender(props) {
       auxdict[freqkeys[i]] = parseFloat(dict[freqkeys[i]]);
     }
 
-    dispatch(updateEvent({ ...task, grade: { ...task.grade, frequency: auxdict } }));
+    dispatch(updateEvent({
+      ...task,
+      grade: { ...task.grade, frequency: auxdict },
+    }));
     hideDialog();
   };
 
-  return (<TouchableOpacity style={styles.card} onPress={edit}>
+  return <TouchableOpacity style={styles.card} onPress={edit}>
     <View style={styles.headerline}>
       <Text style={styles.name}>{task.name}</Text>
       <TouchableOpacity style={styles.editarbtn} onPress={showDialog}>
@@ -788,19 +910,26 @@ export function FreqRender(props) {
       </TouchableOpacity>
     </View>
     {!isDefault && <View style={styles.table}>
-      {Object.keys(task?.grade?.frequency || {}).map((item, index) => (
-        <View style={index % 2 == 0 ? styles.tablelineA : styles.tableline} key={index}>
+      {Object.keys(task?.grade?.frequency || {}).map((item, index) =>
+        <View
+          style={index % 2 == 0 ? styles.tablelineA : styles.tableline}
+          key={index}
+        >
           <Text style={styles.tablel}>{item}</Text>
           <Text style={styles.tabler}>{task.grade.frequency[item]}</Text>
-        </View>
-      ))}
+        </View>)}
     </View>}
     <View style={styles.body}>
       <View style={styles.textocontainer}>
         {isDefault && <>
-          <Text style={styles.texto}>Quantidade de presenças: {aulasDadas - faltas}</Text>
+          <Text style={styles.texto}>
+            Quantidade de presenças: {aulasDadas - faltas}
+          </Text>
           <Text style={styles.texto}>Quantidade de faltas: {faltas}</Text>
-          <Text style={styles.texto}>Faltas disponiveis: {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}</Text>
+          <Text style={styles.texto}>
+            Faltas disponiveis:
+            {Math.max(0, Math.floor(0.25 * aulasDadas - faltas))}
+          </Text>
         </>}
       </View>
       <View style={styles.percentcontainer}>
@@ -812,8 +941,14 @@ export function FreqRender(props) {
       <Gradient style={styles.barprogress} color={task.color}></Gradient>
     </View>
     <Portal>
-      <Dialog style={{ backgroundColor: colors.dialog }} visible={visible} onDismiss={hideDialog}>
-        <Dialog.Title style={{ color: colors.onSurfaceVariant }}>Escolha os meios de presença dessa matéria:</Dialog.Title>
+      <Dialog
+        style={{ backgroundColor: colors.dialog }}
+        visible={visible}
+        onDismiss={hideDialog}
+      >
+        <Dialog.Title style={{ color: colors.onSurfaceVariant }}>
+          Escolha os meios de presença dessa matéria:
+        </Dialog.Title>
         <Dialog.Content>
           <DropDown
             label={"Variável"}
@@ -827,41 +962,87 @@ export function FreqRender(props) {
             theme={theme}
 
           />
-          <Text style={{ color: colors.onSurface }}>{dropvalue != null && dropvalue != undefined ? dropvalue : ""}</Text>
+          <Text style={{ color: colors.onSurface }}>
+            {dropvalue != null && dropvalue != undefined ? dropvalue : ""}
+          </Text>
           <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: "center", justifyContent: "center", borderRadius: 10 }} onPress={() => {
-                if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict };
-                  try {
-                    const aux = parseFloat(dict[dropvalue]);
-                    auxdict[dropvalue] = isNaN(aux) ? "0" : (aux - 1).toString();
-                    setDict(auxdict);
-                  } catch (e) { /* empty */ }
-                }
-              }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.primary,
+                  minHeight: 30,
+                  minWidth: 30,
+                  margin: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                }}
+                onPress={() => {
+                  if (dropvalue != null && dropvalue != undefined) {
+                    let auxdict = { ...dict };
+                    try {
+                      const aux = parseFloat(dict[dropvalue]);
+                      auxdict[dropvalue] = isNaN(aux) ?
+                        "0" :
+                        (aux - 1).toString();
+                      setDict(auxdict);
+                    } catch (e) { /* empty */ }
+                  }
+                }}
+              >
                 <Text style={{ fontSize: 20, color: colors.onPrimary }}>-</Text>
               </TouchableOpacity>
-              <TextInput style={{ ...styles.input, textAlign: "center" }} placeholderTextColor={colors.outline} keyboardType="number-pad" placeholder="0.0" value={dropvalue != undefined && dropvalue != null ? dict[dropvalue].toString() : ""} onChangeText={(text) => {
-                if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict };
-                  try {
-                    const aux = parseFloat(text);
-                    auxdict[dropvalue] = isNaN(aux) ? "0" : text;
-                    setDict(auxdict);
-                  } catch (e) { /* empty */ }
+              <TextInput
+                style={{ ...styles.input, textAlign: "center" }}
+                placeholderTextColor={colors.outline}
+                keyboardType="number-pad"
+                placeholder="0.0"
+                value={
+                  dropvalue != undefined &&
+                  dropvalue != null ?
+                    dict[dropvalue].toString() :
+                    ""
                 }
-              }}></TextInput>
-              <TouchableOpacity style={{ backgroundColor: colors.primary, minHeight: 30, minWidth: 30, margin: 10, alignItems: "center", justifyContent: "center", borderRadius: 10 }} onPress={() => {
-                if (dropvalue != null && dropvalue != undefined) {
-                  let auxdict = { ...dict };
-                  try {
-                    const aux = parseFloat(dict[dropvalue]);
-                    auxdict[dropvalue] = isNaN(aux) ? "0" : (aux + 1).toString();
-                    setDict(auxdict);
-                  } catch (e) { /* empty */ }
-                }
-              }}>
+                onChangeText={(text) => {
+                  if (dropvalue != null && dropvalue != undefined) {
+                    let auxdict = { ...dict };
+                    try {
+                      const aux = parseFloat(text);
+                      auxdict[dropvalue] = isNaN(aux) ? "0" : text;
+                      setDict(auxdict);
+                    } catch (e) { /* empty */ }
+                  }
+                }}
+              ></TextInput>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.primary,
+                  minHeight: 30,
+                  minWidth: 30,
+                  margin: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                }}
+                onPress={() => {
+                  if (dropvalue != null && dropvalue != undefined) {
+                    let auxdict = { ...dict };
+                    try {
+                      const aux = parseFloat(dict[dropvalue]);
+                      auxdict[dropvalue] = isNaN(aux) ?
+                        "0" :
+                        (aux + 1).toString();
+                      setDict(auxdict);
+                    } catch (e) { /* empty */ }
+                  }
+                }}
+              >
                 <Text style={{ fontSize: 20, color: colors.onPrimary }}>+</Text>
               </TouchableOpacity>
             </View>
@@ -879,7 +1060,7 @@ export function FreqRender(props) {
     </Portal>
 
 
-  </TouchableOpacity>);
+  </TouchableOpacity>;
 }
 
 FreqRender.propTypes = PropTypes.any;

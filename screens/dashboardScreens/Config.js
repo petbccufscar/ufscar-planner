@@ -197,15 +197,6 @@ export default function Config() {
             onChangeText={handleNameChange}
           ></TextInput>
 
-          {/* Botão de debug */}
-          {/* <TouchableOpacity style={styles.opcao} onPress={() => {
-            navigation.navigate('Welcome')}}>
-            <View style={styles.linha}>
-              <MaterialIcons style={styles.icon} name="follow-the-signs" size={24} color={colors.onSurfaceVariant} />
-              <Text style={styles.text}>Ir para as Boas Vindas</Text>
-            </View>
-          </TouchableOpacity> */}
-
           <View style={styles.opcao}>
             <View style={styles.linha}>
               <MaterialIcons

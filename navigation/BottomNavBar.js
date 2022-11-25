@@ -7,7 +7,9 @@ import CalendarNavigator from "./tabs/CalendarNavigator";
 import DashboardNavigator from "./tabs/DashboardNavigator";
 import HomeNavigator from "./tabs/HomeNavigator";
 import RestaurantNavigator from "./tabs/RestaurantNavigator";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import {
+  createMaterialTopTabNavigator,
+} from "@react-navigation/material-top-tabs";
 import { PropTypes } from "prop-types";
 
 const Tab = createMaterialTopTabNavigator();
@@ -21,7 +23,7 @@ export default function MyTabs() {
       tabBarPosition='bottom'
       screenOptions={{
         keyboardHidesTabBar: true,
-        headerLeft: () => (
+        headerLeft: () =>
           <IconButton
             icon={"menu"}
             size={24}
@@ -29,7 +31,7 @@ export default function MyTabs() {
               navigation.openDrawer();
             }}
           />
-        ),
+        ,
 
         tabBarActiveTintColor: theme.colors.onSecundaryContainer,
         tabBarInactiveTintColor: theme.colors.onSurface,
@@ -45,7 +47,7 @@ export default function MyTabs() {
 
         tabBarLabelStyle: {
           fontSize: 10,
-          textTransform: "none"
+          textTransform: "none",
         },
 
         tabBarItemStyle: {
@@ -55,44 +57,71 @@ export default function MyTabs() {
         },
         tabBarContentContainerStyle: {
           width: "100%",
-        }
+        },
 
 
       }}>
-      <Tab.Screen name="HomeTab" component={HomeNavigator} options={({ navigation }) => ({
-        title: "UFSCar Planner",
-        tabBarLabel: "Home",
-        headerShown: false,
-        tabBarIcon: ({ color }) => (
-          <TabBarIcon name="home" color={color} active={navigation.getState().index == 0} />
-        ),
-      })} />
-      <Tab.Screen name="CalendarTab" component={CalendarNavigator} options={({ navigation }) => ({
-        tabBarLabel: "Planner",
-        headerShown: false,
-        tabBarIcon: ({ color }) => (
-          <TabBarIcon name="menu-book" color={color} active={navigation.getState().index == 1} />
-        ),
-      })} />
-      <Tab.Screen name="Dashboard" component={DashboardNavigator} options={({ navigation }) => ({
-        title: "UFSCar Planner",
-        headerShown: false,
-        tabBarLabel: "Dashboard",
-        tabBarIcon: ({ color }) => (
-          <TabBarIcon name="menu" color={color} active={navigation.getState().index == 2} />
-        ),
-      })} />
-      <Tab.Screen name="RestaurantTab" component={RestaurantNavigator} options={({ navigation }) => ({
-        title: "UFSCar Planner",
-        headerTitleStyle: {
-
-        },
-        headerShown: false,
-        tabBarLabel: "Restaurante",
-        tabBarIcon: ({ color }) => (
-          <TabBarIcon name="restaurant" color={color} active={navigation.getState().index == 3} />
-        ),
-      })} />
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeNavigator}
+        options={({ navigation }) => ({
+          title: "UFSCar Planner",
+          tabBarLabel: "Home",
+          headerShown: false,
+          tabBarIcon: ({ color }) =>
+            <TabBarIcon
+              name="home"
+              color={color}
+              active={navigation.getState().index == 0}
+            />,
+        })}
+      />
+      <Tab.Screen
+        name="CalendarTab"
+        component={CalendarNavigator}
+        options={({ navigation }) => ({
+          tabBarLabel: "Planner",
+          headerShown: false,
+          tabBarIcon: ({ color }) =>
+            <TabBarIcon
+              name="menu-book"
+              color={color}
+              active={navigation.getState().index == 1}
+            />,
+        })}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardNavigator}
+        options={({ navigation }) => ({
+          title: "UFSCar Planner",
+          headerShown: false,
+          tabBarLabel: "Dashboard",
+          tabBarIcon: ({ color }) =>
+            <TabBarIcon
+              name="menu"
+              color={color}
+              active={navigation.getState().index == 2}
+            />,
+        })}
+      />
+      <Tab.Screen
+        name="RestaurantTab"
+        component={RestaurantNavigator}
+        options={({ navigation }) => ({
+          title: "UFSCar Planner",
+          headerTitleStyle: {},
+          headerShown: false,
+          tabBarLabel: "Restaurante",
+          tabBarIcon: ({ color }) =>
+            <TabBarIcon
+              name="restaurant"
+              color={color}
+              active={navigation.getState().index == 3}
+            />
+          ,
+        })}
+      />
     </Tab.Navigator>
   );
 }
@@ -100,13 +129,18 @@ export default function MyTabs() {
 function TabBarIcon(props) {
   const colors = useTheme().colors;
 
-  const selectedStyle =
-    props.active ? { ...styles.active, ...{ backgroundColor: colors.secondaryContainer } } : styles.inactive;
+  const selectedStyle = props.active ?
+    { ...styles.active, ...{ backgroundColor: colors.secondaryContainer } } :
+    styles.inactive;
 
   return (
     <View style={styles.iconContainer}>
       <View style={selectedStyle}>
-        <MaterialIcons name={props.name} size={24} color={props.active ? colors.onSecondaryContainer : colors.onSurface} />
+        <MaterialIcons
+          name={props.name}
+          size={24}
+          color={props.active ? colors.onSecondaryContainer : colors.onSurface}
+        />
       </View>
     </View>
   );
@@ -135,7 +169,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 15,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   iconContainer: {

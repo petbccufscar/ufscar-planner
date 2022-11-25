@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { RefreshControl, StyleSheet, Text, TouchableOpacity, View, Linking } from "react-native";
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Linking,
+} from "react-native";
 import Menu from "../components/HomeMenu";
 import { Days } from "../helpers/CalendarHelper";
 import ScrollView from "./../components/ScrollView";
@@ -33,7 +40,7 @@ export default function Wallet() {
 
   function setWeekMenu(data) {
     dispatch(
-      updateCardapio({ updatedAt: new Date().toISOString(), weekMenu: data })
+      updateCardapio({ updatedAt: new Date().toISOString(), weekMenu: data }),
     );
   }
 
@@ -55,8 +62,7 @@ export default function Wallet() {
   useEffect(() => {
     if (refreshing) {
       getWeekMenu().then(() => {
-        if (refreshing)
-          setRefreshing(false);
+        if (refreshing) { setRefreshing(false); }
       });
     }
   }, [user, netInfo.isConnected, refreshing]);
@@ -78,7 +84,7 @@ export default function Wallet() {
       dinnerStart: "18h00",
       dinnerEnd: "19h30",
       satLunchStart: "11h00",
-      satLunchEnd: "12h30"
+      satLunchEnd: "12h30",
     },
     "são carlos": {
       urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
@@ -94,7 +100,7 @@ export default function Wallet() {
     "lagoa do sino": {
       urlCard: "https://www.ufscar.br/restaurantes-universitario/restaurantes-universitario/cardapio",
       lunchStart: "10h30",
-      lunchEnd: "13h30"
+      lunchEnd: "13h30",
     },
   };
 
@@ -105,12 +111,17 @@ export default function Wallet() {
   async function apiDoRU(date, isLunch) {
     const response = await fetch("https://petbcc.ufscar.br/ru_api/");
     respostaAPI = await response.json();
-    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    const searchDate = new Date(date - tzoffset).toISOString().split("T")[0];
+    var tzoffset = new Date().getTimezoneOffset() * 60000;
+    const searchDate = new Date(date - tzoffset).toISOString()
+      .split("T")[0];
     const mealType = isLunch ? "Almoço" : "Jantar";
     for (let i = 0; i < respostaAPI.length; i++) {
       const r = respostaAPI[i];
-      if (respostaAPI[i].meal_type == mealType && respostaAPI[i].date == searchDate && r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()) {
+      if (
+        respostaAPI[i].meal_type == mealType &&
+        respostaAPI[i].date == searchDate &&
+        r.campus.toLocaleLowerCase() == user.campus.toLocaleLowerCase()
+      ) {
         return {
           mainMeal: r.main_dish_unrestricted,
           mainMealExtra: r.main_dish_extra,
@@ -120,7 +131,7 @@ export default function Wallet() {
           bean: "Não Definido",
           salad: r.salads,
           desert: r.dessert,
-          juice: r.juice
+          juice: r.juice,
         };
       }
     }
@@ -143,7 +154,6 @@ export default function Wallet() {
     };
 
     try {
-
       let timeStart = campus[local]["lunchStart"];
       let timeEnd = campus[local]["lunchEnd"];
       if (date.getDay() == 6) {
@@ -169,7 +179,7 @@ export default function Wallet() {
           timeEnd = "Não Definido";
         }
       }
-      (dayMenu.dinnerStartTime = timeStart), (dayMenu.dinnerEndTime = timeEnd);
+      dayMenu.dinnerStartTime = timeStart, dayMenu.dinnerEndTime = timeEnd;
     } catch (e) {
       console.log(e);
     }
@@ -254,14 +264,14 @@ export default function Wallet() {
             <TouchableOpacity onPress={() => Linking.openURL("https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario")} style={styles.cardapioView}>
               <Text style={styles.cardapioText}>Cardápio</Text>
               <Text style={styles.cardapioSubText}>
-                {restaurant.updatedAt
-                  ? `Informações obtidas pela última em ${formatDateWithHour(
-                    new Date(restaurant.updatedAt)
+                {restaurant.updatedAt ?
+                  `Informações obtidas pela última em ${formatDateWithHour(
+                    new Date(restaurant.updatedAt),
                   )}.
 fontes: 
   https://www.proad.ufscar.br/pt-br/servicos/restaurante-universitario
-                    `
-                  : "Não foi possível obter as informações. Dispositivo offline."}
+                    ` :
+                  "Não foi possível obter as informações. Dispositivo offline."}
               </Text>
             </TouchableOpacity>
 
@@ -303,35 +313,37 @@ fontes:
               }
               price={weekMenu[floorDate(selectedDay)]?.lunch.priceVisit}
             ></Menu>
-            {weekMenu[floorDate(selectedDay)]?.lunch.day != "6" && local != "lagoa do sino" ? (
-              <Menu
-                shouldShow={false}
-                mealTime={"Jantar"}
-                dinnerStartTime={
-                  weekMenu[floorDate(selectedDay)]?.dinner.dinnerStartTime
-                }
-                dinnerEndTime={
-                  weekMenu[floorDate(selectedDay)]?.dinner.dinnerEndTime
-                }
-                mainMeal={weekMenu[floorDate(selectedDay)]?.dinner.mainMeal}
-                mainMealExtra={
-                  weekMenu[floorDate(selectedDay)]?.dinner.mainMealExtra
-                }
-                mainMealVegetarian={
-                  weekMenu[floorDate(selectedDay)]?.dinner.mainMealVegetarian
-                }
-                garrison={weekMenu[floorDate(selectedDay)]?.dinner.garrison}
-                rice={weekMenu[floorDate(selectedDay)]?.dinner.rice}
-                juice={weekMenu[floorDate(selectedDay)]?.dinner.juice}
-                bean={weekMenu[floorDate(selectedDay)]?.dinner.bean}
-                salad={weekMenu[floorDate(selectedDay)]?.dinner.salad}
-                desert={weekMenu[floorDate(selectedDay)]?.dinner.desert}
-                studentPrice={
-                  weekMenu[floorDate(selectedDay)]?.dinner.priceDefault
-                }
-                price={weekMenu[floorDate(selectedDay)]?.dinner.priceVisit}
-              ></Menu>
-            ) : null}
+            {
+              weekMenu[floorDate(selectedDay)]?.lunch.day != "6" &&
+              local != "lagoa do sino" ?
+                <Menu
+                  shouldShow={false}
+                  mealTime={"Jantar"}
+                  dinnerStartTime={
+                    weekMenu[floorDate(selectedDay)]?.dinner.dinnerStartTime
+                  }
+                  dinnerEndTime={
+                    weekMenu[floorDate(selectedDay)]?.dinner.dinnerEndTime
+                  }
+                  mainMeal={weekMenu[floorDate(selectedDay)]?.dinner.mainMeal}
+                  mainMealExtra={
+                    weekMenu[floorDate(selectedDay)]?.dinner.mainMealExtra
+                  }
+                  mainMealVegetarian={
+                    weekMenu[floorDate(selectedDay)]?.dinner.mainMealVegetarian
+                  }
+                  garrison={weekMenu[floorDate(selectedDay)]?.dinner.garrison}
+                  rice={weekMenu[floorDate(selectedDay)]?.dinner.rice}
+                  juice={weekMenu[floorDate(selectedDay)]?.dinner.juice}
+                  bean={weekMenu[floorDate(selectedDay)]?.dinner.bean}
+                  salad={weekMenu[floorDate(selectedDay)]?.dinner.salad}
+                  desert={weekMenu[floorDate(selectedDay)]?.dinner.desert}
+                  studentPrice={
+                    weekMenu[floorDate(selectedDay)]?.dinner.priceDefault
+                  }
+                  price={weekMenu[floorDate(selectedDay)]?.dinner.priceVisit}
+                ></Menu> :
+                null}
           </>
         )}
         <View style={{ height: 30 }}></View>

@@ -10,7 +10,7 @@ export default function CalendarNavigator() {
 
   return (
     <calendarStack.Navigator screenOptions={{
-      presentation: "containedTransparentModal", animation: "fade"
+      presentation: "containedTransparentModal", animation: "fade",
     }}>
       <calendarStack.Screen name="Calendar" options={() => ({
         title: "UFSCar Planner",

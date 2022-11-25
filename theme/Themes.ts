@@ -46,7 +46,7 @@ const baseTheme = {
     headerInactive: "#F8F2F2",
     onHeaderInactive: "#191C1D",
     onHeader: "#191C1D",
-  }
+  },
 };
 
 export type AppTheme = typeof baseTheme;
@@ -92,8 +92,9 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#DBE4E6",
       "tertiary": "#715B2E",
       "tertiaryContainer": "#FEDFA6",
-    }
-  }, {
+    },
+  },
+  {
     ...PaperDefaultTheme,
     ...NavigationDefaultTheme,
     "colors": {
@@ -132,7 +133,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#EADFEA",
       "tertiary": "#815155",
       "tertiaryContainer": "#FFD9DC",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -173,7 +174,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#F3DDE1",
       "tertiary": "#7C5734",
       "tertiaryContainer": "#FFDCBD",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -214,7 +215,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#E4E1EC",
       "tertiary": "#78536A",
       "tertiaryContainer": "#FFD8EF",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -255,7 +256,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#EEDEE8",
       "tertiary": "#815245",
       "tertiaryContainer": "#FFDACF",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -296,7 +297,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#DEE4D7",
       "tertiary": "#386568",
       "tertiaryContainer": "#BCEBEF",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -337,7 +338,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#EDE1CF",
       "tertiary": "#496547",
       "tertiaryContainer": "#CBEBC5",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -378,7 +379,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#DBE4E6",
       "tertiary": "#BF0016",
       "tertiaryContainer": "#FFDAD5",
-    }
+    },
   },
   {
     ...PaperDefaultTheme,
@@ -419,8 +420,8 @@ export const CombinedDefaultThemes: AppTheme[] = [
       "surfaceVariant": "#E1E4D5",
       "tertiary": "#396663",
       "tertiaryContainer": "#BBECE7",
-    }
-  }
+    },
+  },
 ];
 
 export const CombinedDarkThemes: AppTheme[] = [
@@ -504,9 +505,9 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#534341",
       "tertiary": "#E1C38C",
       "tertiaryContainer": "#584419",
-    }
-  }, {
-
+    },
+  },
+  {
     ...PaperDarkTheme,
     ...NavigationDarkTheme,
     colors: {
@@ -545,7 +546,7 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#4B454D",
       "tertiary": "#F4B7BB",
       "tertiaryContainer": "#663A3E",
-    }
+    },
   },
   {
     ...PaperDarkTheme,
@@ -586,8 +587,9 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#514346",
       "tertiary": "#EEBD93",
       "tertiaryContainer": "#61401F",
-    }
-  }, {
+    },
+  },
+  {
     ...PaperDarkTheme,
     ...NavigationDarkTheme,
     colors: {
@@ -626,7 +628,7 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#46464F",
       "tertiary": "#E8B9D4",
       "tertiaryContainer": "#5E3C52",
-    }
+    },
   },
   {
     ...PaperDarkTheme,
@@ -667,8 +669,9 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#4E444B",
       "tertiary": "#F5B8A8",
       "tertiaryContainer": "#663B2F",
-    }
-  }, {
+    },
+  },
+  {
     ...PaperDarkTheme,
     ...NavigationDarkTheme,
     colors: {
@@ -707,7 +710,7 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#43493F",
       "tertiary": "#A0CFD2",
       "tertiaryContainer": "#1E4D51",
-    }
+    },
   },
   {
     ...PaperDarkTheme,
@@ -748,7 +751,7 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#4D4639",
       "tertiary": "#AFCFAA",
       "tertiaryContainer": "#324D31",
-    }
+    },
   },
   {
     ...PaperDarkTheme,
@@ -789,7 +792,7 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#3F484A",
       "tertiary": "#FFB3AA",
       "tertiaryContainer": "#93000E",
-    }
+    },
   },
   {
     ...PaperDarkTheme,
@@ -830,6 +833,6 @@ export const CombinedDarkThemes: AppTheme[] = [
       "surfaceVariant": "#44483D",
       "tertiary": "#A0CFCB",
       "tertiaryContainer": "#1E4E4B",
-    }
-  }
+    },
+  },
 ];
