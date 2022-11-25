@@ -13,11 +13,14 @@ export const formatDate = (dataFormatar) => {
   );
 };
 
-export const formatDateWithHour = dataFormatar => {
+export const formatDateWithHour = (dataFormatar) => {
   const data = new Date(dataFormatar);
-  return ("0" + data.getUTCDate()).slice(-2) + "/" + ("0" + (data.getUTCMonth() + 1)).slice(-2) + "/" + data.getFullYear() + " " + ("0" + data.getHours()).slice(-2) +
-    "h" +
-    ("0" + data.getMinutes()).slice(-2);
+  const day = ("0" + data.getUTCDate()).slice(-2);
+  const month = ("0" + (data.getUTCMonth() + 1)).slice(-2);
+  const year = data.getFullYear();
+  const hours = ("0" + data.getHours()).slice(-2);
+  const minutes = ("0" + data.getMinutes()).slice(-2);
+  return `${day}/${month}/${year} ${hours}h${minutes}`;
 };
 
 export function formatHour(date) {
@@ -79,22 +82,25 @@ export const defaultSubject = {
   "grade": {
     "frequency": {
       "aulasDadas": 1,
-      "faltas": 0
+      "faltas": 0,
     },
     "mean": {
       "p1": 0,
       "p2": 0,
       "p3": 0,
-    }
+    },
   },
   "turma": "",
   "teachers": [],
 };
 
 export const floorDate = (data) => {
-  return (data.getFullYear() + "-" + ((data.getMonth() + 1).toString().padStart(2, "0")) + "-" + (data.getDate().toString().padStart(2, "0")));
+  let year = data.getFullYear();
+  let month = (data.getMonth() + 1).toString().padStart(2, "0");
+  let w = data.getDate().toString()
+    .padStart(2, "0");
+  return `${year}-${month}-${w}`;
 };
-
 
 export const offsetDate = (date, days) => {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -102,8 +108,24 @@ export const offsetDate = (date, days) => {
 
 
 export const weekDaysNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-export const weekDaysFullNames = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
-export const weekDaysSIGA = ["DOMINGO", "SEGUNDA", "TERCA", "QUARTA", "QUINTA", "SEXTA", "SABADO"];
+export const weekDaysFullNames = [
+  "Domingo",
+  "Segunda-Feira",
+  "Terça-Feira",
+  "Quarta-Feira",
+  "Quinta-Feira",
+  "Sexta-Feira",
+  "Sábado",
+];
+export const weekDaysSIGA = [
+  "DOMINGO",
+  "SEGUNDA",
+  "TERCA",
+  "QUARTA",
+  "QUINTA",
+  "SEXTA",
+  "SABADO",
+];
 
 export const monthNames = [
   "Janeiro",
@@ -117,7 +139,7 @@ export const monthNames = [
   "Setembro",
   "Outubro",
   "Novembro",
-  "Dezembro"
+  "Dezembro",
 ];
 
 export const minimum = (date) => {
@@ -127,11 +149,24 @@ export const minimum = (date) => {
     td.getMonth(),
     td.getDate(),
     date.getHours(),
-    date.getMinutes()
+    date.getMinutes(),
   );
 };
 
-export const monthNamesShort = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+export const monthNamesShort = [
+  "Jan",
+  "Fev",
+  "Mar",
+  "Abr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Set",
+  "Out",
+  "Nov",
+  "Dez",
+];
 
 export function parseTime(t) {
   var d = new Date();
@@ -143,7 +178,15 @@ export function parseTime(t) {
 
 export function SIGA(props) {
   const size = props.size || 20;
-  return (<Text style={{ color: "#F89837", fontWeight: "bold", fontSize: size, ...(props.style || {}) }}>SIGA</Text>);
+  return <Text
+    style={{
+      color: "#F89837",
+      fontWeight: "bold",
+      fontSize: size,
+      ...props.style || {},
+    }}>
+      SIGA
+  </Text>;
 }
 
 SIGA.propTypes = PropTypes.any;

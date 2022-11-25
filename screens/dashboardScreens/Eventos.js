@@ -7,7 +7,15 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { useTheme, FAB, Searchbar, Portal, Dialog, Button, Checkbox } from "react-native-paper";
+import {
+  useTheme,
+  FAB,
+  Searchbar,
+  Portal,
+  Dialog,
+  Button,
+  Checkbox,
+} from "react-native-paper";
 import { EventRender } from "../../components/EventCards";
 import { defaultTask } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
@@ -56,7 +64,7 @@ export default function SubjectScreen() {
   const [crescent, setCrescent] = useState(false);
   const crescentList = [
     { value: false, label: "Mais recente primeiro" },
-    { value: true, label: "Mais antigo primeiro" }
+    { value: true, label: "Mais antigo primeiro" },
   ];
   if (crescent) {
     events = events.sort((a, b) => {
@@ -91,14 +99,21 @@ export default function SubjectScreen() {
   }
 
   const [showFilter, setShowFilter] = useState(false);
-  const onChangeSearch = query => setSearchQuery(query);
+  const onChangeSearch = (query) => setSearchQuery(query);
 
 
   const [dropOrd, setDropOrd] = useState(false);
   const [dropSub, setDropSub] = useState(false);
 
-  return (<View style={styles.scroll}>
-    <View style={{ margin: 10, marginHorizontal: 20, alignItems: "center", flexDirection: "row" }}>
+  return <View style={styles.scroll}>
+    <View
+      style={{
+        margin: 10,
+        marginHorizontal: 20,
+        alignItems: "center",
+        flexDirection: "row",
+      }}
+    >
       <View style={{ flexDirection: "row" }}>
         <Searchbar
           placeholder="Buscar"
@@ -112,14 +127,24 @@ export default function SubjectScreen() {
           inputStyle={{ color: colors.onSurface }}
         /></View>
       <TouchableOpacity onPress={() => setShowFilter(true)} style={{
-        backgroundColor: colors.surface, alignItems: "center", width: 30,
-        top: 0, bottom: 0, right: 10, position: "absolute", justifyContent: "center",
+        backgroundColor: colors.surface,
+        alignItems: "center",
+        width: 30,
+        top: 0,
+        bottom: 0,
+        right: 10,
+        position: "absolute",
+        justifyContent: "center",
       }}>
         <MaterialIcons name="filter-alt" size={24} color={colors.outline} />
       </TouchableOpacity>
     </View>
     <Portal>
-      <Dialog style={{ backgroundColor: colors.dialog }} visible={showFilter} onDismiss={() => setShowFilter(false)}>
+      <Dialog
+        style={{ backgroundColor: colors.dialog }}
+        visible={showFilter}
+        onDismiss={() => setShowFilter(false)}
+      >
         <Dialog.Title>Aplique os filtros abaixo</Dialog.Title>
         <Dialog.Content>
           <DropDown
@@ -154,7 +179,9 @@ export default function SubjectScreen() {
                 setShowFisinshed(!showFisinshed);
               }}
             />
-            <Text style={{ color: colors.onSurface }}>Mostrar eventos concluídos</Text>
+            <Text style={{ color: colors.onSurface }}>
+              Mostrar eventos concluídos
+            </Text>
           </View>
 
 
@@ -172,7 +199,12 @@ export default function SubjectScreen() {
         {events.map((item, idx) => {
           return <EventRender acontecendo={false} key={idx} task={item} />;
         })}
-        {events.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhum evento registrado</Text>}
+        {
+          events.length == 0 &&
+          <Text style={{ fontSize: 20, color: colors.onSurface }}>
+            Nenhum evento registrado
+          </Text>
+        }
       </View>
 
     </ScrollView>
@@ -182,6 +214,5 @@ export default function SubjectScreen() {
       icon="plus"
       onPress={() => navigation.navigate("EditScreen", { task: defaultTask })}
     />
-  </View>
-  );
+  </View>;
 }

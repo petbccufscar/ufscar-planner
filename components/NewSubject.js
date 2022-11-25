@@ -18,14 +18,14 @@ import { PropTypes } from "prop-types";
 export default function NewSubject({ route, navigation }) {
   const type = route.params.type;
   const meanExpression =
-    type == "editMean"
-      ? route.params.task.mean || ""
-      : route.params.task.frequency || "";
+    type == "editMean" ?
+      route.params.task.mean || "" :
+      route.params.task.frequency || "";
 
   const [meanDict, setMeanDict] = useState(
-    type == "editMean"
-      ? route.params.task.grade.mean || magic({}, meanExpression).dict
-      : route.params.task.grade.frequency || magic({}, meanExpression).dict
+    type == "editMean" ?
+      route.params.task.grade.mean || magic({}, meanExpression).dict :
+      route.params.task.grade.frequency || magic({}, meanExpression).dict,
   );
 
   const [meanExpressionArray, setMeanExpressionArray] = useState([]);
@@ -57,7 +57,7 @@ export default function NewSubject({ route, navigation }) {
     delete auxMeanDict[variable];
 
     const auxMeanExpressionArray = meanExpressionArray.filter(
-      (item) => item !== variable
+      (item) => item !== variable,
     );
 
     setMeanExpressionArray(auxMeanExpressionArray);
@@ -123,7 +123,7 @@ export default function NewSubject({ route, navigation }) {
     }
     navigation.setOptions({
       headerTitle: type == "editMean" ? "Média" : "Frequência",
-      headerRight: () => (
+      headerRight: () =>
         <IconButton
           icon={"check"}
           disabled={!validExpression(meanExpressionArray.join(""))}
@@ -137,7 +137,7 @@ export default function NewSubject({ route, navigation }) {
             });
           }}
         />
-      ),
+      ,
     });
   }, [meanExpressionArray, meanDict]);
 
@@ -189,27 +189,26 @@ export default function NewSubject({ route, navigation }) {
             } atual`
           }</Text>
         {meanExpressionArray.join("") &&
-          validExpression(meanExpressionArray.join(""))
-          ? (
-            <Text
-              style={
-                type == "editMean"
-                  ? magic(meanDict, meanExpressionArray.join("")).result < 6
-                    ? styles.meanInvalidValueText
-                    : styles.meanValidValueText
-                  : magic(meanDict, meanExpressionArray.join("")).result < 0.75
-                    ? styles.meanInvalidValueText
-                    : styles.meanValidValueText
-              }
-            >
-              {(
-                magic(meanDict, meanExpressionArray.join("")).result *
+          validExpression(meanExpressionArray.join("")) ?
+
+          <Text
+            style={
+              type == "editMean" ?
+                magic(meanDict, meanExpressionArray.join("")).result < 6 ?
+                  styles.meanInvalidValueText :
+                  styles.meanValidValueText :
+                magic(meanDict, meanExpressionArray.join("")).result < 0.75 ?
+                  styles.meanInvalidValueText :
+                  styles.meanValidValueText
+            }
+          >
+            {(
+              magic(meanDict, meanExpressionArray.join("")).result *
                 (type == "editMean" ? 1 : 100)
-              ).toFixed(2) + (type == "editMean" ? "" : "%")}
-            </Text>
-          ) : (
-            <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
-          )
+            ).toFixed(2) + (type == "editMean" ? "" : "%")}
+          </Text>           :
+          <Text style={styles.meanInvalidValueText}> Expressão Inválida</Text>
+
         }
       </View>
 
@@ -256,13 +255,12 @@ export default function NewSubject({ route, navigation }) {
           Operadores
         </Text>
         <View style={[styles.sectionContent, styles.row, { marginLeft: -8 }]}>
-          {operators.map((operator, index) => (
+          {operators.map((operator, index) =>
             <View style={styles.buttonContainer} key={index}>
               <KeyboardButton onPress={() => handleFormulaAddition(operator)}>
                 {operator}
               </KeyboardButton>
-            </View>
-          ))}
+            </View>)}
         </View>
         <View style={[styles.sectionContent, styles.row]}>
           <TouchableOpacity
@@ -307,7 +305,7 @@ export default function NewSubject({ route, navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.sectionContent}>
-          {Object.keys(meanDict).map((key, index) => (
+          {Object.keys(meanDict).map((key, index) =>
             <View style={[styles.row, { marginBottom: 20 }]} key={index}>
               <KeyboardButton
                 style={styles.variableButton}
@@ -338,8 +336,7 @@ export default function NewSubject({ route, navigation }) {
                   color={colors.outline}
                 />
               </TouchableOpacity>
-            </View>
-          ))}
+            </View>)}
         </View>
       </View>
       <Portal>
@@ -356,8 +353,9 @@ export default function NewSubject({ route, navigation }) {
               style={{ ...styles.input, backgroundColor: colors.surface }}
               onChangeText={(text) => setNewVariableName(text)}
             ></TextInput>
-            {newVariableName.length > 0 && operators.includes(newVariableName) && (
-              <Text
+            {
+              newVariableName.length > 0 &&
+              operators.includes(newVariableName) && <Text
                 style={{
                   fontSize: 10,
                   color: "red",
@@ -367,7 +365,7 @@ export default function NewSubject({ route, navigation }) {
               >
                 Nome de variável inválido. Operadores não são permitidos.
               </Text>
-            )}
+            }
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setIsDialogVariableOpen(false)}>
@@ -408,7 +406,7 @@ export default function NewSubject({ route, navigation }) {
             <Button
               disabled={
                 newValue.search(
-                  /^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/
+                  /^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/,
                 ) < 0
               }
               onPress={() => handleValueAddition()}

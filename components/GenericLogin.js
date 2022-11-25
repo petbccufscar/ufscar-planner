@@ -39,7 +39,13 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
   };
 
   async function Login(username, password) {
-    await Authenticate(username, password, handleError, setMessageE, setMessageS);
+    await Authenticate(
+      username,
+      password,
+      handleError,
+      setMessageE,
+      setMessageS,
+    );
   }
 
   const styles = StyleSheet.create({
@@ -170,20 +176,20 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
           style={styles.pssdBtn}
           onPress={() => setVisible(!visible)}
         >
-          {!visible && (
+          {!visible &&
             <MaterialIcons
               name="visibility"
               size={24}
               color={colors.onSurface}
             />
-          )}
-          {visible && (
+          }
+          {visible &&
             <MaterialIcons
               name="visibility-off"
               size={24}
               color={colors.onSurface}
             />
-          )}
+          }
         </TouchableOpacity>
       </View>
       <TouchableOpacity

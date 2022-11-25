@@ -77,7 +77,16 @@ export function Days(props) {
             style={styles.dias}
             key={day.day}
           >
-            <Text style={{ color: theme.colors.onSurface, fontWeight: "bold", fontSize: 14, paddingBottom: 5 }}>{day.title}</Text>
+            <Text
+              style={{
+                color: theme.colors.onSurface,
+                fontWeight: "bold",
+                fontSize: 14,
+                paddingBottom: 5,
+              }}
+            >
+              {day.title}
+            </Text>
             <View
               style={{
                 alignItems: "center",
@@ -86,11 +95,16 @@ export function Days(props) {
                 width: width,
                 height: height,
                 borderRadius: 100,
-                backgroundColor: day.today ? theme.colors.primary : "transparent",
+                backgroundColor: day.today ?
+                  theme.colors.primary :
+                  "transparent",
               }}
             >
               <Text
-                style={{ color: day.today ? theme.colors.onPrimary : theme.colors.onSurface }}
+                style={{
+                  color: day.today ?
+                    theme.colors.onPrimary :
+                    theme.colors.onSurface }}
               >
                 {day.day}
               </Text>

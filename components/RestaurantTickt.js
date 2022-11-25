@@ -57,7 +57,7 @@ export default function RestaurantTickets() {
       justifyContent: "space-between",
       alignItems: "center",
       marginBottom: 10,
-      width: "100%"
+      width: "100%",
     },
     buttonRow: {
       flexDirection: "row",
@@ -121,7 +121,7 @@ export default function RestaurantTickets() {
       height: 40,
       borderRadius: 5,
       marginBottom: 8,
-      backgroundColor: theme.colors.surface
+      backgroundColor: theme.colors.surface,
     },
   });
 
@@ -143,7 +143,13 @@ export default function RestaurantTickets() {
       <View style={styles.saldoBodyCard}>
         <View style={styles.saldo}>
           <Text style={styles.saldoValue}>{formatReal(user.money)}</Text>
-          <Text style={styles.saldoQtd}>{qtdRefeicoes != (qtdRefeicoes | 0) ? "∞" : qtdRefeicoes | 0} {refeicao}</Text>
+          <Text style={styles.saldoQtd}>
+            {
+              qtdRefeicoes != (qtdRefeicoes | 0) ?
+                "∞" :
+                qtdRefeicoes | 0
+            } {refeicao}
+          </Text>
         </View>
 
         <ScrollView horizontal={true}>
@@ -164,8 +170,11 @@ export default function RestaurantTickets() {
         </ScrollView>
       </View>
       <Portal>
-        <Dialog style={{ backgroundColor: theme.colors.dialog }} visible={open} nDismiss={() => setOpen(false)}>
-
+        <Dialog
+          style={{ backgroundColor: theme.colors.dialog }}
+          visible={open}
+          nDismiss={() => setOpen(false)}
+        >
           <Dialog.Title>Alterar</Dialog.Title>
           <Dialog.Content>
             <TextInput
@@ -192,7 +201,6 @@ export default function RestaurantTickets() {
               }}
             >Ok</Button>
           </Dialog.Actions>
-
         </Dialog>
       </Portal>
     </View>

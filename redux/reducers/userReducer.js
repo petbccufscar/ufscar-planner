@@ -11,7 +11,7 @@ const initialState = {
       font_size: 14,
     },
     money: 0,
-    meal: 4.20
+    meal: 4.20,
   },
 };
 
@@ -20,7 +20,7 @@ export const userReducer = (state = initialState, action) => {
   case ActionsTypes.UPDATE_USER:
     return {
       ...state,
-      user: action.payload
+      user: action.payload,
     };
   default:
     return state;

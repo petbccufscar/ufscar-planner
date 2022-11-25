@@ -6,7 +6,11 @@ import React, { useEffect, useRef } from "react";
 import { AppRegistry, Platform, UIManager, View } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import Toast from "react-native-toast-message";
-import { Provider as ReduxProvider, useDispatch, useSelector } from "react-redux";
+import {
+  Provider as ReduxProvider,
+  useDispatch,
+  useSelector,
+} from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Subject from "./components/NewSubject";
 import BottomNavBar from "./navigation/BottomNavBar";
@@ -23,6 +27,7 @@ import SigaScreen from "./screens/dashboardScreens/Siga";
 import UpdateSaldoScreen from "./screens/dashboardScreens/UpdateSaldoScreen";
 import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
+import RestaurantNotice from "./screens/RestaurantNotice";
 import Welcome from "./screens/Welcome";
 import { CombinedDarkThemes, CombinedDefaultThemes } from "./theme/Themes";
 import {
@@ -46,7 +51,7 @@ if (
 const HomeStackRoutes = createStackNavigator();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
+  handleNotification: async() => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
@@ -74,7 +79,7 @@ export default function App() {
 
     return () => {
       Notifications.removeNotificationSubscription(
-        notificationListener.current
+        notificationListener.current,
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
@@ -96,7 +101,9 @@ function Loader() {
   const user = useSelector((state) => state.user).user;
   const themeConfig = useSelector((state) => state.theme);
 
-  let theme = themeConfig.isDark ? CombinedDarkThemes[themeConfig.themeIdx] : CombinedDefaultThemes[themeConfig.themeIdx];
+  let theme = themeConfig.isDark ?
+    CombinedDarkThemes[themeConfig.themeIdx] :
+    CombinedDefaultThemes[themeConfig.themeIdx];
   let [fontsLoaded] = useFonts({
     RobotoCondensed_300Light,
     RobotoCondensed_300Light_Italic,
@@ -105,29 +112,36 @@ function Loader() {
     RobotoCondensed_700Bold,
     RobotoCondensed_700Bold_Italic,
   });
-  if (!fontsLoaded)
+  if (!fontsLoaded) {
     return <View style={{ flex: 1, backgroundColor: "#E8243C" }} />;
+  }
   return (
     <>
       <StatusBar style={themeConfig.isDark ? "light" : "dark"} />
       <PaperProvider theme={theme}>
         <NavigationContainer theme={theme}>
-          <HomeStackRoutes.Navigator initialRouteName={user.welcome ? "Welcome" : "BottomNav"} screenOptions={() => ({
-            headerStyle: {
-              backgroundColor: theme.colors.headerInactive,
-            },
-            headerTintColor: theme.colors.onHeaderInactive,
-          })}>
+          <HomeStackRoutes.Navigator
+            initialRouteName={user.welcome ? "Welcome" : "BottomNav"}
+            screenOptions={() => ({
+              headerStyle: {
+                backgroundColor: theme.colors.headerInactive,
+              },
+              headerTintColor: theme.colors.onHeaderInactive,
+            })}
+          >
             <HomeStackRoutes.Screen
               name="Welcome"
               component={Welcome}
               options={() => ({
                 headerTitleAlign: "center",
-                headerShown: false
+                headerShown: false,
               })}
             />
             <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
-              <HomeStackRoutes.Screen name="BottomNav" component={BottomNavBar} />
+              <HomeStackRoutes.Screen
+                name="BottomNav"
+                component={BottomNavBar}
+              />
             </HomeStackRoutes.Group>
             <HomeStackRoutes.Screen
               name="Event"
@@ -141,6 +155,13 @@ function Loader() {
               component={EditScreen}
               options={() => ({
                 headerTitleAlign: "center",
+              })}
+            />
+            <HomeStackRoutes.Screen
+              name="RestaurantNotice"
+              component={RestaurantNotice}
+              options={({ route }) => ({
+                title: route.params.title,
               })}
             />
             <HomeStackRoutes.Screen

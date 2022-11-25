@@ -38,7 +38,7 @@ const Menu = (props) => {
       fontSize: 14,
       fontWeight: "bold",
       paddingHorizontal: 10,
-      paddingTop: 10
+      paddingTop: 10,
     },
 
     itemMenuSubject: {
@@ -47,7 +47,7 @@ const Menu = (props) => {
       color: theme.colors.onSurface,
       flexDirection: "row",
       fontSize: 14,
-      paddingHorizontal: 10
+      paddingHorizontal: 10,
     },
     itemMenuSubjectPrice: {
       /* TODO fontFamily: '', */
@@ -55,7 +55,7 @@ const Menu = (props) => {
       color: theme.colors.onSurfaceVariant,
       flexDirection: "row",
       fontSize: 14,
-      padding: 10
+      padding: 10,
     },
     details: {
       alignContent: "center",
@@ -67,7 +67,7 @@ const Menu = (props) => {
       width: "100%",
     },
     ghostBox: {
-      flex: 1
+      flex: 1,
     },
     fixBox: {
       height: 1,
@@ -95,85 +95,116 @@ const Menu = (props) => {
       justifyContent: "center",
       alignItems: "center",
 
-    }
+    },
   });
 
   return (
-    <TouchableOpacity activeOpacity={1} style={styles.item} onPress={() => setShouldShow(!shouldShow)}>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.item}
+      onPress={() => setShouldShow(!shouldShow)}
+    >
       <View style={styles.itemLeft}>
         <View style={styles.header}>
           <Text style={styles.title}>{props.mealTime}</Text>
           <View style={styles.hour}>
             <Feather name="clock" size={18} color={theme.colors.primary} />
-            {props.day != "6" ? (
-              props.mealTime == "Almoço" ? (
+            {props.day != "6" ?
+              props.mealTime == "Almoço" ?
                 <Text style={styles.itemMenuSubject}>
                   {props.lunchStartTime} - {props.lunchEndTime}
-                </Text>
-              ) : (
+                </Text>               :
                 <Text style={styles.itemMenuSubject}>
                   {props.dinnerStartTime} - {props.dinnerEndTime}
-                </Text>
-              )
-            ) : (
+                </Text>                            :
               <Text style={styles.itemMenuSubject}>
                 {props.saturdayLunchStartTime} - {props.saturdayLunchEndTime}
               </Text>
-            )}
+            }
           </View>
         </View>
 
         <View>
           <Text style={styles.subtitle}>Prato Principal:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMeal || defaultStr}</Text>
+          <Text style={styles.itemMenuSubject}>
+            {props.mainMeal || defaultStr}
+          </Text>
         </View>
         <View>
           <Text style={styles.subtitle}>Prato Principal - Vegetariano:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMealVegetarian || defaultStr}</Text>
+          <Text style={styles.itemMenuSubject}>
+            {props.mainMealVegetarian || defaultStr}
+          </Text>
         </View>
         <View>
           <Text style={styles.subtitle}>Prato Principal - Extra:</Text>
-          <Text style={styles.itemMenuSubject}>{props.mainMealExtra || defaultStr}</Text>
+          <Text style={styles.itemMenuSubject}>
+            {props.mainMealExtra || defaultStr}
+          </Text>
         </View>
 
-        {shouldShow ? (
+        {shouldShow ?
           <>
             <View>
               <Text style={styles.subtitle}>Guarnição:</Text>
-              <Text style={styles.itemMenuSubject}>{props.garrison || defaultStr}</Text>
+              <Text style={styles.itemMenuSubject}>
+                {props.garrison || defaultStr}
+              </Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Acompanhamento:</Text>
-              <Text style={styles.itemMenuSubject}>{props.rice || defaultStr}</Text>
+              <Text style={styles.itemMenuSubject}>
+                {props.rice || defaultStr}
+              </Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Saladas:</Text>
-              <Text style={styles.itemMenuSubject}>{props.salad || defaultStr}</Text>
+              <Text style={styles.itemMenuSubject}>
+                {props.salad || defaultStr}
+              </Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Sobremesa:</Text>
-              <Text style={styles.itemMenuSubject}>{props.desert || defaultStr}</Text>
+              <Text style={styles.itemMenuSubject}>
+                {props.desert || defaultStr}
+              </Text>
             </View>
             <View>
               <Text style={styles.subtitle}>Suco:</Text>
-              <Text style={styles.itemMenuSubject}>{props.juice || defaultStr}</Text>
+              <Text style={styles.itemMenuSubject}>
+                {props.juice || defaultStr}
+              </Text>
             </View>
             <View style={styles.money}>
-              <MaterialIcons name="payments" size={20} color={theme.colors.onSurfaceVariant} />
-              <Text style={styles.itemMenuSubjectPrice}>{props.studentPrice} (estudante) ou {props.price} (visitante).</Text>
+              <MaterialIcons
+                name="payments"
+                size={20}
+                color={theme.colors.onSurfaceVariant}
+              />
+              <Text style={styles.itemMenuSubjectPrice}>
+                {props.studentPrice} (estudante) ou {props.price} (visitante).
+              </Text>
             </View>
             <View style={styles.details}>
 
               <Text style={styles.verText}>Ver menos</Text>
-              <MaterialIcons name="expand-less" size={24} color={theme.colors.primary} />
+              <MaterialIcons
+                name="expand-less"
+                size={24}
+                color={theme.colors.primary}
+              />
 
             </View>
-          </>
-        ) : null}
+          </> :
+          null}
         {!shouldShow && <View style={styles.details}>
 
           <Text style={styles.verText}> Ver mais</Text>
-          <MaterialIcons name="expand-more" size={24} color={theme.colors.primary} />
+          <MaterialIcons
+            name="expand-more"
+            size={24}
+            color={theme.colors.primary}
+          />
 
         </View>}
         <View style={styles.fixBox} />

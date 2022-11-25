@@ -1,6 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, LayoutAnimation, StyleSheet, Text, View, Linking } from "react-native";
+import { Image,
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  View,
+  Linking } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TextInput, useTheme } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
@@ -17,6 +22,7 @@ import {
 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { PropTypes } from "prop-types";
+import { Buffer } from "buffer";
 
 export default function Welcome() {
   const colors = useTheme().colors;
@@ -140,9 +146,17 @@ function ScreenZero({ setPage }) {
       <Text style={styles.h1}>Olá, estudante</Text>
       <Text style={[styles.h2, styles.centerText]}>Seja bem vindo(a)!</Text>
       <Text style={styles.h3}>
-        Ao continuar você estará concordando com nossa Política de Privacidade / Termos de uso.</Text>
-      <TouchableOpacity onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}>
-        <Text style={{ ...styles.h3, color: colors.primary }}>Acesse a Política de Privacidade / Termos de uso clicando aqui.</Text>
+        Ao continuar você estará concordando com nossa Política de Privacidade
+        / Termos de uso.
+      </Text>
+      <TouchableOpacity
+        onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}
+      >
+        <Text
+          style={{ ...styles.h3, color: colors.primary }}
+        >
+          Acesse a Política de Privacidade / Termos de uso clicando aqui.
+        </Text>
       </TouchableOpacity>
       <View style={styles.btnPlace}>
         <TouchableOpacity style={styles.btn} onPress={() => setPage(1)}>
@@ -254,7 +268,6 @@ function ScreenTwo({ setPage }) {
   };
 
   async function Login(user, pssw) {
-    const Buffer = require("buffer").Buffer;
     let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
     try {
       const response = await fetch(
@@ -263,7 +276,7 @@ function ScreenTwo({ setPage }) {
           headers: {
             Authorization: "Basic " + encodedAuth,
           },
-        }
+        },
       );
       let data = await response.json();
       if (data.status == undefined) {
@@ -271,7 +284,8 @@ function ScreenTwo({ setPage }) {
           Toast.show({
             type: "error",
             text1:
-              "Aparentemente você não possui nenhum deferimento no Periodo letivo atual, por acaso está de férias?",
+              "Aparentemente você não possui nenhum deferimento no Periodo " +
+              "letivo atual, por acaso está de férias?",
           });
           setPage(3);
         } else {
@@ -415,20 +429,20 @@ function ScreenTwo({ setPage }) {
           style={styles.pssdBtn}
           onPress={() => setVisible(!visible)}
         >
-          {!visible && (
+          {!visible &&
             <MaterialIcons
               name="visibility"
               size={24}
               color={colors.onSurface}
             />
-          )}
-          {visible && (
+          }
+          {visible &&
             <MaterialIcons
               name="visibility-off"
               size={24}
               color={colors.onSurface}
             />
-          )}
+          }
         </TouchableOpacity>
       </View>
 

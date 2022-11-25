@@ -20,13 +20,8 @@ const initialState = {
   marked: {},
   cid: 0,
   nextId: 42,
-  load: false
+  load: false,
 };
-
-
-
-
-
 
 const compare = (e, f) => {
   const a = new Date(e.detail.datetime_init);
@@ -38,11 +33,17 @@ const compare = (e, f) => {
 
 const copyTimeStrToDate = (date, str) => {
   const time = new Date(str);
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds());
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    time.getHours(),
+    time.getMinutes(),
+    time.getSeconds(),
+  );
 };
 
 export const calendarReducer = (state = initialState, action) => {
-
   const repeatPayload = (event, myItems, myCid, mykeys) => {
     let items = { ...myItems };
     let cid = myCid;
@@ -60,11 +61,18 @@ export const calendarReducer = (state = initialState, action) => {
     while (datei.getTime() <= datef.getTime()) {
       const date = floorDate(datei);
       const nevent = {
-        ...event, detail: {
+        ...event,
+        detail: {
           ...event.detail,
-          datetime_init: copyTimeStrToDate(datei, event.detail.datetime_init).toISOString(),
-          datetime_end: copyTimeStrToDate(datei, event.detail.datetime_end).toISOString(),
-        }
+          datetime_init: copyTimeStrToDate(
+            datei,
+            event.detail.datetime_init,
+          ).toISOString(),
+          datetime_end: copyTimeStrToDate(
+            datei,
+            event.detail.datetime_end,
+          ).toISOString(),
+        },
       };
       if (items[date] == null) {
         items[date] = [nevent];
@@ -79,7 +87,7 @@ export const calendarReducer = (state = initialState, action) => {
     return {
       items: items,
       cid: myCid,
-      keys: keys
+      keys: keys,
     };
   };
 
@@ -93,7 +101,7 @@ export const calendarReducer = (state = initialState, action) => {
       return {
         items: items,
         cid: cid,
-        marked: marked
+        marked: marked,
       };
     }
 
@@ -101,7 +109,7 @@ export const calendarReducer = (state = initialState, action) => {
       const obj = {
         ...action.payload,
         detail: action.payload.details[j],
-        id: action.payload.id || st.nextId
+        id: action.payload.id || st.nextId,
       };
       const aux = new Date(obj.detail.datetime_init);
       const date = floorDate(aux);
@@ -110,7 +118,6 @@ export const calendarReducer = (state = initialState, action) => {
         items = { ...aux4.items };
         cid = aux4.cid;
         keysMap = { ...aux4.keys };
-
       } else {
         if (items[date] == null) {
           items[date] = [obj];
@@ -143,7 +150,7 @@ export const calendarReducer = (state = initialState, action) => {
     return {
       items: items,
       cid: cid,
-      marked: marked
+      marked: marked,
     };
   };
 
@@ -163,7 +170,10 @@ export const calendarReducer = (state = initialState, action) => {
 
     while (iterador <= datef) {
       d = floorDate(iterador);
-      aux[d] = (newItems[d] || []).filter((e) => e.id == event.id).map(evt => evt.subject === event.id ? { ...evt, subject: null } : evt);
+      aux[d] = (newItems[d] || []).filter((e) => e.id == event.id)
+        .map(
+          (evt) => evt.subject === event.id ? { ...evt, subject: null } : evt,
+        );
       if (aux[d].length > 0) {
         event = aux[d][0];
         break;
@@ -188,7 +198,6 @@ export const calendarReducer = (state = initialState, action) => {
         if (newItems[d].filter((e) => !e.weekly).length == 0) {
           newMarked[d] = { marked: false };
         }
-
       }
     } else {
       for (let i = 0; i < event.details.length; i++) {
@@ -203,7 +212,12 @@ export const calendarReducer = (state = initialState, action) => {
           while (datei.getTime() <= datef.getTime()) {
             const d = floorDate(datei);
             // Filtra os itens
-            newItems[d] = newItems[d].filter((e) => e.id != event.id).map(evt => evt.subject === event.id ? { ...evt, subject: null } : evt);
+            newItems[d] = newItems[d].filter((e) => e.id != event.id)
+              .map(
+                (evt) => evt.subject === event.id ?
+                  { ...evt, subject: null } :
+                  evt,
+              );
             datei = offsetDate(datei, 7);
           }
           weekVisit[event.details[i].day] = 1;
@@ -213,7 +227,7 @@ export const calendarReducer = (state = initialState, action) => {
     return {
       ...st,
       items: newItems,
-      marked: newMarked
+      marked: newMarked,
     };
   };
 
@@ -225,11 +239,11 @@ export const calendarReducer = (state = initialState, action) => {
     const nextId = action.payload.nextId;
 
     for (let i = 0; i < events.length; i++) {
-      if (events[i].is_submited != true)
+      if (events[i].is_submited != true) {
         for (let j = 0; j < events[i].details.length; j++) {
           const obj = {
             ...events[i],
-            detail: events[i].details[j]
+            detail: events[i].details[j],
           };
           const aux = new Date(obj.detail.datetime_init);
           const date = floorDate(aux);
@@ -247,6 +261,7 @@ export const calendarReducer = (state = initialState, action) => {
             marked[date] = { marked: true };
           }
         }
+      }
     }
     const keys = Object.keys(items);
     for (let i = 0; i < keys.length; i++) {
@@ -266,7 +281,7 @@ export const calendarReducer = (state = initialState, action) => {
       marked: marked,
       nextId: nextId,
       cid: cid,
-      load: true
+      load: true,
     };
   };
 
@@ -285,8 +300,7 @@ export const calendarReducer = (state = initialState, action) => {
     return { ...state, ...insertPayload(aux) };
 
   case ActionsTypes.LOAD_EVENTS:
-    if (state.load)
-      return state;
+    if (state.load) { return state; }
     aux = setup(state);
     return aux;
 
@@ -295,7 +309,7 @@ export const calendarReducer = (state = initialState, action) => {
     const items = [];
     const keys = Object.keys(state.items);
     for (let i = 0; i < keys.length; i++) {
-      items.push(...state.items[keys[i]].filter(e => e.siga == true));
+      items.push(...state.items[keys[i]].filter((e) => e.siga == true));
     }
 
     aux = state;

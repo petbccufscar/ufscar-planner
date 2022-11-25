@@ -15,23 +15,43 @@ import { PropTypes } from "prop-types";
 export function Gradient(props) {
   let color = [];
   const gradients = [
-    ["#42EBB9"], ["#42EBE1"], ["#4272EB"], ["#AB42EB"],
-    ["#EB42A8"], ["#EB4257"], ["#FB9337"], ["#DBDBDB"], ["#7277F1", "#42EBAF"],
-    ["#EB429E", "#EB9E42"], ["#46EB42", "#42B9EB"], ["#B4B2B5", "#1F1F1F"], ["#EBDB42", "#1AEB55"],
-    ["#C574F7", "#ED3F88"], ["#e40303", "#FF8C00", "#FFED00", "#008026", "#004DFF", "#750787"]
+    ["#42EBB9"],
+    ["#42EBE1"],
+    ["#4272EB"],
+    ["#AB42EB"],
+    ["#EB42A8"],
+    ["#EB4257"],
+    ["#FB9337"],
+    ["#DBDBDB"],
+    ["#7277F1", "#42EBAF"],
+    ["#EB429E", "#EB9E42"],
+    ["#46EB42", "#42B9EB"],
+    ["#B4B2B5", "#1F1F1F"],
+    ["#EBDB42", "#1AEB55"],
+    ["#C574F7", "#ED3F88"],
+    ["#e40303", "#FF8C00", "#FFED00", "#008026", "#004DFF", "#750787"],
   ];
   const start = { x: 0, y: 0 };
   const end = props.color == 14 ? { x: 0, y: 1 } : { x: 1, y: 1 };
-  if (isNaN(props.color) || props.color < 0 || props.color > 15)
+  if (
+    isNaN(props.color) ||
+    props.color < 0 ||
+    props.color > 15
+  ) {
     color = [props.color];
-  else {
+  } else {
     color = gradients[props.color];
   }
   if (color.length == 1 || props.theme != undefined) {
     return (
       <View
         colors={color}
-        style={props.theme != undefined ? { backgroundColor: props.theme, ...(props.style || {}) } : { backgroundColor: color[0], ...(props.style || {}) }}
+        style={
+          props.theme != undefined ? {
+            backgroundColor: props.theme, ...props.style || {},
+          } : {
+            backgroundColor: color[0], ...props.style || {},
+          }}
       >
         {props.children}
       </View>
@@ -57,11 +77,11 @@ export function SelGradSquare(props) {
     square: {
       alignItems: "center",
       justifyContent: "center",
-      width: wp("8.5%"), height: wp("8.5%"),
+      width: wp("8.5%"),
+      height: wp("8.5%"),
       borderRadius: 8,
-      ...(props.style || {})
-
-    }
+      ...props.style || {},
+    },
   });
   return (
     <TouchableOpacity onPress={() => setState(props.color)} style={{
@@ -69,7 +89,13 @@ export function SelGradSquare(props) {
       borderWidth: state == props.color ? 1 : 0,
     }}>
       <Gradient color={props.color} theme={props.theme} style={styles.square}>
-        {state == props.color && (<Feather name="check" size={24} color="white" />)}
+        {
+          state == props.color && <Feather
+            name="check"
+            size={24}
+            color="white"
+          />
+        }
       </Gradient>
     </TouchableOpacity>
   );
@@ -85,27 +111,35 @@ export function PickerGradSquare(props) {
     square: {
       alignItems: "center",
       justifyContent: "center",
-      width: wp("8.5%"), height: wp("8.5%"),
+      width: wp("8.5%"),
+      height: wp("8.5%"),
       borderRadius: 8,
       borderWidth: isNaN(state) ? 1 : 0,
-      ...(props.style || {})
-    }
+      ...props.style || {},
+    },
   });
   return (
     <>
       <TouchableOpacity onPress={() => setOpenColorDialog(true)}>
         <Gradient color={props.color} style={styles.square}>
-          <FontAwesome name="eyedropper" size={18} color={BWFont(props.color)} />
+          <FontAwesome
+            name="eyedropper"
+            size={18}
+            color={BWFont(props.color)}
+          />
         </Gradient>
       </TouchableOpacity>
 
 
 
       <Portal>
-        <Dialog visible={openColorDialog} onDismiss={() => setOpenColorDialog(false)}>
+        <Dialog
+          visible={openColorDialog}
+          onDismiss={() => setOpenColorDialog(false)}
+        >
           <Dialog.Title>Alterar</Dialog.Title>
           <ColorPicker
-            onColorChange={(color) => (aux = color)}
+            onColorChange={(color) => aux = color}
             defaultColor={props.color}
             style={{ width: 300, height: 300 }}
           />

@@ -52,7 +52,7 @@ export default function EditScreen({ route, navigation }) {
   // tela separada
   const [grade] = useState(task.grade || {});
   const [frequency] = useState(
-    task.frequency || "(aulasDadas - faltas)/aulasDadas"
+    task.frequency || "(aulasDadas - faltas)/aulasDadas",
   );
   const [mean] = useState(task.mean || "(p1+p2+p3)/3");
 
@@ -130,7 +130,7 @@ export default function EditScreen({ route, navigation }) {
       headerTintColor: colors.onHeaderInactive,
       headerTitle: isSubject ? "Editar Matéria" : "Editar Evento",
 
-      headerRight: () => (
+      headerRight: () =>
         <TouchableOpacity
           style={{
             backgroundColor: colors.primaryContainer,
@@ -165,7 +165,7 @@ export default function EditScreen({ route, navigation }) {
         >
           <Text style={{ color: colors.onPrimaryContainer }}>Salvar</Text>
         </TouchableOpacity>
-      ),
+      ,
     });
   }, [
     route.params,
@@ -308,17 +308,18 @@ export default function EditScreen({ route, navigation }) {
 
     const handleTouchDay = (aux) => {
       if (horarioDay.includes(aux)) {
-        if (horarioDay.length > 1)
+        if (horarioDay.length > 1) {
           setHorarioDay(horarioDay.filter((d) => d !== aux));
+        }
       } else {
         setHorarioDay([...horarioDay, aux]);
       }
     };
 
     function Bolinha(props) {
-      const cor = horarioDay.includes(props.index)
-        ? colors.primary
-        : colors.secondaryContainer;
+      const cor = horarioDay.includes(props.index) ?
+        colors.primary :
+        colors.secondaryContainer;
       return (
         <TouchableOpacity
           style={{
@@ -334,9 +335,9 @@ export default function EditScreen({ route, navigation }) {
         >
           <Text
             style={{
-              color: horarioDay.includes(props.index)
-                ? colors.onPrimary
-                : colors.onSurface,
+              color: horarioDay.includes(props.index) ?
+                colors.onPrimary :
+                colors.onSurface,
             }}
           >
             {props.text}
@@ -348,9 +349,9 @@ export default function EditScreen({ route, navigation }) {
     Bolinha.propTypes = PropTypes.any;
 
     const isEditing = openHorarioDialog == 2;
-    const headerTitle = isSubject
-      ? "Quando e onde será a aula?"
-      : "Quando e onde será o evento?";
+    const headerTitle = isSubject ?
+      "Quando e onde será a aula?" :
+      "Quando e onde será o evento?";
     return (
       <Portal>
         <Dialog
@@ -363,7 +364,7 @@ export default function EditScreen({ route, navigation }) {
             {headerTitle}
           </Dialog.Title>
           <Dialog.Content>
-            {props.weekly && (
+            {props.weekly &&
               <>
                 <DefaultScrollView
                   contentContainerStyle={{
@@ -433,7 +434,11 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(date) => {
                     setShowPicker(false);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setDetail({ ...detail, horarioDate: date, horarioEndTime: date });
+                      setDetail({
+                        ...detail,
+                        horarioDate: date,
+                        horarioEndTime: date,
+                      });
                     } else {
                       setHorarioDate(date);
                     }
@@ -456,10 +461,9 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
                     setHorarioEndTime(
-                      ndate.getTime() < minimum(horarioDate)
-                        ? minimum(horarioDate)
-                        :
-                        ndate
+                      ndate.getTime() < minimum(horarioDate) ?
+                        minimum(horarioDate)                        :
+                        ndate,
                     );
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -467,8 +471,8 @@ export default function EditScreen({ route, navigation }) {
                   headerTextIOS={"Escolha uma hora"}
                 />
               </>
-            )}
-            {!props.weekly && (
+            }
+            {!props.weekly &&
               <>
                 <TouchableOpacity
                   style={{ ...styles.dateAndDatepicker, margin: 10 }}
@@ -514,7 +518,11 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(date) => {
                     setShowPicker(false);
                     if (minimum(date) > horarioEndTime.getTime()) {
-                      setDetail({ ...detail, horarioEndTime: date, horarioDate: date });
+                      setDetail({
+                        ...detail,
+                        horarioEndTime: date,
+                        horarioDate: date,
+                      });
                     } else {
                       setHorarioDate(date);
                     }
@@ -537,9 +545,9 @@ export default function EditScreen({ route, navigation }) {
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
                     setHorarioEndTime(
-                      ndate.getTime() < minimum(horarioDate)
-                        ? minimum(horarioDate)
-                        : ndate
+                      ndate.getTime() < minimum(horarioDate) ?
+                        minimum(horarioDate) :
+                        ndate,
                     );
                   }}
                   cancelTextIOS={"Cancelar"}
@@ -547,7 +555,7 @@ export default function EditScreen({ route, navigation }) {
                   headerTextIOS={"Escolha uma hora"}
                 />
               </>
-            )}
+            }
             <Text style={{ color: colors.onSurface, marginLeft: 10 }}>
               Local
             </Text>
@@ -570,7 +578,7 @@ export default function EditScreen({ route, navigation }) {
             >
               Cancelar
             </Button>
-            {!isEditing && (
+            {!isEditing &&
               <Button
                 color={colors.primary}
                 onPress={() => {
@@ -600,8 +608,8 @@ export default function EditScreen({ route, navigation }) {
               >
                 OK
               </Button>
-            )}
-            {isEditing && (
+            }
+            {isEditing &&
               <Button
                 color={colors.primary}
                 onPress={() => {
@@ -632,7 +640,7 @@ export default function EditScreen({ route, navigation }) {
               >
                 Editar
               </Button>
-            )}
+            }
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -647,17 +655,10 @@ export default function EditScreen({ route, navigation }) {
     const list = props.list || range(props.n || 60);
     const width = props.width || props.size || 60;
     const height = props.height || props.size || 60;
-    const defun = () => { };
-    const fun = props.fun || defun;
-    // Se vc tirar ele não funciona. O Ramos não explicou o porquê.
-    // eslint-disable-next-line no-unused-vars
-    let p;
+    const fun = props.fun || (() => null);
     return (
       <View style={{ height: height * 3, width: width }}>
         <ScrollPicker
-          ref={(sp) => {
-            p = sp;
-          }}
           dataSource={list}
           selectedIndex={1}
           onValueChange={(data, selectedIndex) => {
@@ -720,16 +721,16 @@ export default function EditScreen({ route, navigation }) {
               style={{ paddingRight: 8 }}
             />
             <Text style={{ color: colors.onSurface }}>
-              {(weekly ? week[detail.day] : formatDate(detail.datetime_init))
-                + " "}{" "}
+              {(weekly ? week[detail.day] : formatDate(detail.datetime_init)) +
+                " "}{" "}
               {`${formatHour(detail.datetime_init)} - ${formatHour(
-                detail.datetime_end
+                detail.datetime_end,
               )}`}
             </Text>
           </View>
-          {detail.local.length > 0 && (
+          {detail.local.length > 0 &&
             <TouchableOpacity
-              onPress={async () => {
+              onPress={async() => {
                 let place = user.campus + ", UFSCAR, " + detail.local;
 
                 const url =
@@ -758,7 +759,7 @@ export default function EditScreen({ route, navigation }) {
               />
               <Text style={{ color: colors.primary }}>{`${detail.local}`}</Text>
             </TouchableOpacity>
-          )}
+          }
         </View>
         <View
           style={{ alignItems: "flex-end", justifyContent: "center", flex: 1 }}
@@ -852,7 +853,7 @@ export default function EditScreen({ route, navigation }) {
               style={{ paddingRight: 8 }}
             />
             <Text style={{ color: colors.onSurface }}>{`${notificationText(
-              notification
+              notification,
             )}`}</Text>
           </View>
         </View>
@@ -864,7 +865,7 @@ export default function EditScreen({ route, navigation }) {
             color={colors.onSurface}
             onPress={() => {
               let newNotifications = notifications.filter(
-                (e) => e != notification
+                (e) => e != notification,
               );
               setNotifications([...newNotifications]);
             }}
@@ -1034,14 +1035,14 @@ export default function EditScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.trueContainer}>
-        {(whenSubmit != null || isSubject) && (
+        {(whenSubmit != null || isSubject) &&
           <>
             <View style={styles.colorContainer}>
               <TouchableOpacity
                 style={!isSubmited ? styles.rbutton : styles.rbuttonAct}
                 onPress={() => setIsSubmited(!isSubmited)}
               >
-                {isSubmited && (
+                {isSubmited &&
                   <Feather
                     name="check"
                     size={16}
@@ -1049,21 +1050,25 @@ export default function EditScreen({ route, navigation }) {
                       !weekly ? colors.onSecondaryContainer : colors.onSurface
                     }
                   />
-                )}
+                }
                 <Text
                   style={{
                     color:
-                      isSubmited != null
-                        ? colors.onSurface
-                        : colors.onSecondaryContainer,
+                      isSubmited != null ?
+                        colors.onSurface :
+                        colors.onSecondaryContainer,
                   }}
                 >
-                  {`${isSubmited != false ? "Concluído" : "Marcar como Concluído"}`}
+                  {
+                    `${isSubmited != false ?
+                      "Concluído" :
+                      "Marcar como Concluído"}`
+                  }
                 </Text>
               </TouchableOpacity>
             </View>
           </>
-        )}
+        }
         {
           <>
             <View style={styles.colorContainer}>
@@ -1136,7 +1141,7 @@ export default function EditScreen({ route, navigation }) {
             onChangeText={(text) => setName(text)}
           />
 
-          {isSubject && (
+          {isSubject &&
             <>
               <View style={styles.colorContainer}>
                 <View style={styles.sectionIcon}>
@@ -1158,7 +1163,7 @@ export default function EditScreen({ route, navigation }) {
                 onChangeText={(text) => setTurma(text)}
               />
             </>
-          )}
+          }
         </View>
 
         <View style={styles.choice}>
@@ -1183,7 +1188,7 @@ export default function EditScreen({ route, navigation }) {
           />
         </View>
 
-        {isSubject && (
+        {isSubject &&
           <View style={styles.choice}>
             <View style={styles.colorContainer}>
               <View style={styles.sectionIcon}>
@@ -1194,17 +1199,16 @@ export default function EditScreen({ route, navigation }) {
               </View>
             </View>
           </View>
-        )}
+        }
 
         {isSubject &&
-          teachers.map((teacher, index) => (
-            <TeacherRender key={index} index={index} teacher={teacher} />
-          ))}
-        {isSubject && (
+          teachers.map((teacher, index) =>
+            <TeacherRender key={index} index={index} teacher={teacher} />)}
+        {isSubject &&
           <BotaoAdicionarQueAbreUmDialogo setState={setOpenTeacherDialog} />
-        )}
+        }
 
-        {!isSubject && (
+        {!isSubject &&
           <>
             <View style={styles.choice}>
               <View style={styles.colorContainer}>
@@ -1224,7 +1228,7 @@ export default function EditScreen({ route, navigation }) {
                   style={weekly ? styles.rbutton : styles.rbuttonAct}
                   onPress={() => setWeekly(false)}
                 >
-                  {!weekly && (
+                  {!weekly &&
                     <Feather
                       name="check"
                       size={16}
@@ -1232,12 +1236,12 @@ export default function EditScreen({ route, navigation }) {
                         !weekly ? colors.onSecondaryContainer : colors.onSurface
                       }
                     />
-                  )}
+                  }
                   <Text
                     style={{
-                      color: !weekly
-                        ? colors.onSecondaryContainer
-                        : colors.onSurface,
+                      color: !weekly ?
+                        colors.onSecondaryContainer :
+                        colors.onSurface,
                     }}
                   >
                     Evento único
@@ -1247,7 +1251,7 @@ export default function EditScreen({ route, navigation }) {
                   style={!weekly ? styles.rbutton : styles.rbuttonAct}
                   onPress={() => setWeekly(true)}
                 >
-                  {weekly && (
+                  {weekly &&
                     <Feather
                       name="check"
                       size={16}
@@ -1255,12 +1259,12 @@ export default function EditScreen({ route, navigation }) {
                         weekly ? colors.onSecondaryContainer : colors.onSurface
                       }
                     />
-                  )}
+                  }
                   <Text
                     style={{
-                      color: weekly
-                        ? colors.onSecondaryContainer
-                        : colors.onSurface,
+                      color: weekly ?
+                        colors.onSecondaryContainer :
+                        colors.onSurface,
                     }}
                   >
                     Evento recorrente
@@ -1269,7 +1273,7 @@ export default function EditScreen({ route, navigation }) {
               </View>
             </View>
           </>
-        )}
+        }
 
         <View style={styles.choice}>
           <View style={styles.colorContainer}>
@@ -1287,9 +1291,8 @@ export default function EditScreen({ route, navigation }) {
 
           <View style={{ height: 10 }}></View>
 
-          {details.sort(sortDetails).map((detail, index) => (
-            <DetailRender key={index} index={index} detail={detail} />
-          ))}
+          {details.sort(sortDetails).map((detail, index) =>
+            <DetailRender key={index} index={index} detail={detail} />)}
 
           <BotaoAdicionarQueAbreUmDialogo
             setState={(e) => {
@@ -1305,7 +1308,7 @@ export default function EditScreen({ route, navigation }) {
           />
         </View>
 
-        {!isSubject && (
+        {!isSubject &&
           <>
             <View style={styles.choice}>
               <View style={styles.colorContainer}>
@@ -1340,7 +1343,7 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   title="Nenhuma matéria"
                 />
-                {materias.map((materia, index) => (
+                {materias.map((materia, index) =>
                   <Menu.Item
                     key={index}
                     onPress={() => {
@@ -1348,14 +1351,13 @@ export default function EditScreen({ route, navigation }) {
                       setShowMenu(false);
                     }}
                     title={materia.name}
-                  />
-                ))}
+                  />)}
               </Menu>
             </View>
           </>
-        )}
+        }
 
-        {!isSubject && (
+        {!isSubject &&
           <>
             <View style={styles.choice}>
               <View style={styles.colorContainer}>
@@ -1377,7 +1379,7 @@ export default function EditScreen({ route, navigation }) {
                   }
                   onPress={() => setOpenWhenDialog(true)}
                 >
-                  {whenSubmit != null && (
+                  {whenSubmit != null &&
                     <Feather
                       name="check"
                       size={16}
@@ -1385,15 +1387,15 @@ export default function EditScreen({ route, navigation }) {
                         !weekly ? colors.onSecondaryContainer : colors.onSurface
                       }
                     />
-                  )}
-                  {whenSubmit == null && (
+                  }
+                  {whenSubmit == null &&
                     <Text style={{ color: colors.onSurface }}>Sim</Text>
-                  )}
-                  {whenSubmit != null && (
+                  }
+                  {whenSubmit != null &&
                     <Text style={{ color: colors.onSecondaryContainer }}>
                       {formatDateWithHour(new Date(whenSubmit))}
                     </Text>
-                  )}
+                  }
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={
@@ -1401,7 +1403,7 @@ export default function EditScreen({ route, navigation }) {
                   }
                   onPress={() => setWhenSubmit(null)}
                 >
-                  {whenSubmit == null && (
+                  {whenSubmit == null &&
                     <Feather
                       name="check"
                       size={16}
@@ -1409,13 +1411,13 @@ export default function EditScreen({ route, navigation }) {
                         !weekly ? colors.onSecondaryContainer : colors.onSurface
                       }
                     />
-                  )}
+                  }
                   <Text
                     style={{
                       color:
-                        whenSubmit != null
-                          ? colors.onSurface
-                          : colors.onSecondaryContainer,
+                        whenSubmit != null ?
+                          colors.onSurface :
+                          colors.onSecondaryContainer,
                     }}
                   >
                     Não
@@ -1424,7 +1426,7 @@ export default function EditScreen({ route, navigation }) {
               </View>
             </View>
           </>
-        )}
+        }
 
         <DateTimePickerModal
           style={{ width: "100%" }}
@@ -1462,13 +1464,12 @@ export default function EditScreen({ route, navigation }) {
 
           <View style={{ height: 10 }}></View>
 
-          {notifications.map((notification, index) => (
+          {notifications.map((notification, index) =>
             <NotificationRender
               key={index}
               index={index}
               notification={notification}
-            />
-          ))}
+            />)}
           <BotaoAdicionarQueAbreUmDialogo
             setState={setOpenNotificationDialog}
           />

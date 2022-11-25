@@ -19,7 +19,7 @@ export default function RestaurantsNavigator() {
         },
         headerShadowVisible: false,
         headerTintColor: colors.onHeaderInactive,
-        headerTitleAlign: "center"
+        headerTitleAlign: "center",
       }}
     >
       <restaurantsStack.Screen

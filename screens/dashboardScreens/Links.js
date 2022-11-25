@@ -90,10 +90,6 @@ export default function Links() {
             />
             <View>
               <Text style={styles.buttonText}>Meu Pergamum</Text>
-              {/* <Text style={styles.descText}>- verificar o material que está emprestado em seu nome e o prazo de devolução;</Text>
-              <Text style={styles.descText}>- renovar o material que está emprestado em seu nome;</Text>
-              <Text style={styles.descText}>- acompanhar sua reserva;</Text> */}
-
             </View>
 
           </TouchableOpacity>

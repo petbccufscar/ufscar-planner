@@ -20,7 +20,7 @@ export default function FreqScreen() {
       alignItems: "center",
       backgroundColor: colors.surface1,
       paddingHorizontal: 20,
-      paddingBottom: 60
+      paddingBottom: 60,
     },
     scroll: {
       flex: 1,
@@ -35,7 +35,12 @@ export default function FreqScreen() {
           {classes.map((item, idx) => {
             return <FreqRender key={idx} task={item} />;
           })}
-          {classes.length == 0 && <Text style={{ fontSize: 20, color: colors.onSurface }}>Nenhuma aula registrada</Text>}
+          {
+            classes.length == 0 &&
+            <Text style={{ fontSize: 20, color: colors.onSurface }}>
+              Nenhuma aula registrada
+            </Text>
+          }
         </View>
       </ScrollView>
     </View>

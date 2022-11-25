@@ -3,34 +3,34 @@ import { ActionsTypes } from "../constants/actionsTypes";
 export const addEvent = (event) => {
   return {
     type: ActionsTypes.ADD_EVENT,
-    payload: event
+    payload: event,
   };
 };
 
 export const removeEvent = (event) => {
   return {
     type: ActionsTypes.REMOVE_EVENT,
-    payload: event
+    payload: event,
   };
 };
 
 export const removeSIGA = (event) => {
   return {
     type: ActionsTypes.REMOVE_SIGA,
-    payload: event
+    payload: event,
   };
 };
 
 export const updateEvent = (event) => {
   return {
     type: ActionsTypes.UPDATE_EVENT,
-    payload: event
+    payload: event,
   };
 };
 
 export const incrementNextId = () => {
   return {
-    type: ActionsTypes.INCREMENT_NEXT_ID
+    type: ActionsTypes.INCREMENT_NEXT_ID,
   };
 };
 
