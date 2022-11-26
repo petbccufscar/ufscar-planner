@@ -23,7 +23,9 @@
         }
       ]
     ],
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pet.ufscarplanner",
@@ -37,7 +39,9 @@
       "package": "com.pet.ufscarplanner",
       "versionCode": 4,
       "useNextNotificationsApi": true,
-      "permissions": ["RECEIVE_BOOT_COMPLETED"]
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -57,6 +61,11 @@
         "svg"
       ]
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "5b6e4bb9-551f-46cc-9798-6b147956a461"
+      }
+    }
   }
 }

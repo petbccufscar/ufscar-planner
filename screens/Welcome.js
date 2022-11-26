@@ -23,6 +23,7 @@ import {
 import { useEffect } from "react";
 import { PropTypes } from "prop-types";
 import { Buffer } from "buffer";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Welcome() {
   const colors = useTheme().colors;
@@ -250,6 +251,7 @@ ScreenOne.propTypes = PropTypes.any;
 function ScreenTwo({ setPage }) {
   const colors = useTheme().colors;
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleError = (error) => {
     if (error.status != undefined) {
@@ -268,6 +270,7 @@ function ScreenTwo({ setPage }) {
   };
 
   async function Login(user, pssw) {
+    setLoading(true);
     let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
     try {
       const response = await fetch(
@@ -315,6 +318,7 @@ function ScreenTwo({ setPage }) {
     } catch (error) {
       handleError(error);
     }
+    setLoading(false);
   }
 
   const styles = StyleSheet.create({
@@ -452,11 +456,17 @@ function ScreenTwo({ setPage }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
+          disabled={loading}
           onPress={() => {
             Login(username, pssw);
           }}
         >
-          <Text style={styles.btnText}>Logar</Text>
+          {
+            loading && <ActivityIndicator color={colors.onSecondaryContainer} />
+          }
+          {
+            !loading && <Text style={styles.btnText}>Logar</Text>
+          }
         </TouchableOpacity>
       </View>
     </View>

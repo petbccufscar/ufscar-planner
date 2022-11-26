@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { formatReal } from "../helpers/helper";
 import { updateUser } from "../redux/actions/userActions";
 import ScrollView from "./ScrollView";
+import { useNavigation } from "@react-navigation/core";
 import { Portal, Button, Dialog, TextInput } from "react-native-paper";
 
 export default function RestaurantTickets() {
@@ -127,7 +128,7 @@ export default function RestaurantTickets() {
 
   const qtdRefeicoes = Math.floor(user.money / user.meal);
   const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições";
-
+  const navigation = useNavigation();
   return (
     <View style={styles.card}>
       <View style={styles.saldoTitleCard}>
@@ -138,7 +139,14 @@ export default function RestaurantTickets() {
           color={theme.colors.onSurfaceVariant}
         />
         <Text style={styles.titleCentered}>Saldo da Carteirinha</Text>
-        <View style={styles.iconPlaceholder}></View>
+        <TouchableOpacity onPress={() => navigation.navigate("UpdateSaldo")}>
+          <MaterialIcons
+            style={styles.leftIconButton}
+            name="update"
+            size={24}
+            color={theme.colors.primary}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.saldoBodyCard}>
         <View style={styles.saldo}>
