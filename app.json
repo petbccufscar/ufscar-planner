@@ -37,7 +37,7 @@
         "backgroundColor": "#E8243C"
       },
       "package": "com.pet.ufscarplanner",
-      "versionCode": 4,
+      "versionCode": 5,
       "useNextNotificationsApi": true,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
