@@ -36,10 +36,14 @@ export default function Wallet() {
   const [refreshing, setRefreshing] = useState(true);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
-
+  const [firstTime, setFirstTime] = useState(true);
   const user = useSelector((state) => state.user).user;
 
   const dispatch = useDispatch();
+
+  if (firstTime) {
+    setFirstTime(false);
+  }
 
   function setWeekMenu(data) {
     dispatch(
@@ -70,7 +74,7 @@ export default function Wallet() {
         if (refreshing) { setRefreshing(false); }
       });
     }
-  }, [user, netInfo.isConnected, refreshing]);
+  }, [user, netInfo.isConnected, refreshing, firstTime]);
 
   const campus = {
     sorocaba: {

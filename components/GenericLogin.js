@@ -16,6 +16,7 @@ import {
   Dialog,
 } from "react-native-paper";
 import { PropTypes } from "prop-types";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function GenericLogin({ Authenticate, WarningText, children }) {
   const [messageE, setMessageE] = useState("");
@@ -25,6 +26,7 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
   const [visible, setVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleError = (error) => {
     if (error.status != undefined) {
@@ -39,6 +41,7 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
   };
 
   async function Login(username, password) {
+    setLoading(true);
     await Authenticate(
       username,
       password,
@@ -46,6 +49,7 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
       setMessageE,
       setMessageS,
     );
+    setLoading(false);
   }
 
   const styles = StyleSheet.create({
@@ -196,7 +200,10 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
         style={styles.btn}
         onPress={() => setOpenSigaDialog(true)}
       >
-        <Text style={{ color: colors.onPrimary }}>Sincronizar</Text>
+        {loading && <ActivityIndicator color={colors.onPrimary} />}
+        {!loading && <Text style={{ color: colors.onPrimary }}>
+          Sincronizar
+        </Text>}
       </TouchableOpacity>
 
       <Portal>
