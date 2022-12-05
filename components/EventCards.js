@@ -14,6 +14,7 @@ import {
   formatDateWithHour,
   weekDaysFullNames,
   SIGA,
+  mapIconURI,
 } from "../helpers/helper";
 import {
   useTheme,
@@ -34,7 +35,7 @@ import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
 import DropDown from "react-native-paper-dropdown";
 import { PropTypes } from "prop-types";
-const mapsSrc = import("../assets/icons/maps.png");
+const mapsSrc = { uri: mapIconURI };
 
 export function Task(props) {
   const mostrarData = props.show || false;

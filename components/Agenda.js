@@ -136,7 +136,7 @@ function RenderDay(props) {
     return <View style={{ alignItems: "center", justifyContent: "center" }}>
       <Text style={{ fontSize: 20, color: colors.onSurface }}>
         {
-          `Fim de ${monthNames[yesterday.getMonth()]}` +
+          `Fim de ${monthNames[yesterday.getMonth()]} ` +
             `${yesterday.getFullYear()}`
         }
       </Text>

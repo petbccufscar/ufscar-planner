@@ -20,7 +20,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
-import RestaurantTickets from "../components/RestaurantTickt";
+import RestaurantTicket from "../components/RestaurantTicket";
 import { updateCardapio } from "../redux/actions/restaurantActions";
 import { useNetInfo } from "@react-native-community/netinfo";
 
@@ -36,14 +36,10 @@ export default function Wallet() {
   const [refreshing, setRefreshing] = useState(true);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
-  const [firstTime, setFirstTime] = useState(true);
   const user = useSelector((state) => state.user).user;
 
   const dispatch = useDispatch();
 
-  if (firstTime) {
-    setFirstTime(false);
-  }
 
   function setWeekMenu(data) {
     dispatch(
@@ -53,7 +49,7 @@ export default function Wallet() {
 
   async function getWeekMenu() {
     if (!netInfo.isConnected) {
-      return;
+      return false;
     }
 
     let auxWeekMenu = {};
@@ -66,15 +62,18 @@ export default function Wallet() {
     auxWeekMenu.notice = await noticeDoRU();
 
     setWeekMenu(auxWeekMenu);
+    return true;
   }
 
   useEffect(() => {
     if (refreshing) {
-      getWeekMenu().then(() => {
-        if (refreshing) { setRefreshing(false); }
+      getWeekMenu().then((result) => {
+        if (refreshing && result) {
+          setRefreshing(false);
+        }
       });
     }
-  }, [user, netInfo.isConnected, refreshing, firstTime]);
+  }, [user, netInfo.isConnected, refreshing]);
 
   const campus = {
     sorocaba: {
@@ -326,7 +325,7 @@ export default function Wallet() {
             </View>
           </TouchableOpacity>
         }
-        <RestaurantTickets />
+        <RestaurantTicket />
         <View style={styles.infoView}>
           <Foundation name="info" size={24} color={theme.colors.outline} />
           <Text style={styles.infoText}>

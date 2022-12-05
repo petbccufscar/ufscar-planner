@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { useTheme, FAB } from "react-native-paper";
 import { defaultSubject, defaultTask } from "../helpers/helper";
 import { PropTypes } from "prop-types";
+import { mapIconURI } from "../helpers/helper";
 
 const floorDate = (data) => {
   return (
@@ -232,7 +233,7 @@ export default function App() {
 
 function AcontecendoAgora(props) {
   const colors = useTheme().colors;
-  const mapsSrc = import("../assets/icons/maps.png");
+  const mapsSrc = { uri: mapIconURI };
   const list = props.list;
   const user = useSelector((state) => state.user).user;
 
