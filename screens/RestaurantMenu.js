@@ -20,7 +20,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
-import RestaurantTickets from "../components/RestaurantTickt";
+import RestaurantTicket from "../components/RestaurantTicket";
 import { updateCardapio } from "../redux/actions/restaurantActions";
 import { useNetInfo } from "@react-native-community/netinfo";
 
@@ -325,7 +325,7 @@ export default function Wallet() {
             </View>
           </TouchableOpacity>
         }
-        <RestaurantTickets />
+        <RestaurantTicket />
         <View style={styles.infoView}>
           <Foundation name="info" size={24} color={theme.colors.outline} />
           <Text style={styles.infoText}>

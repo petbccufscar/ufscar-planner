@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons  } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "react-native-paper";
@@ -9,7 +9,7 @@ import ScrollView from "./ScrollView";
 import { useNavigation } from "@react-navigation/core";
 import { Portal, Button, Dialog, TextInput } from "react-native-paper";
 
-export default function RestaurantTickets() {
+export default function RestaurantTicket() {
   const user = useSelector((state) => state.user).user;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -80,9 +80,6 @@ export default function RestaurantTickets() {
       padding: 10,
       marginVertical: 10,
     },
-    leftIconButton: {
-      marginRight: 10,
-    },
     titleCentered: {
       color: theme.colors.onSurface,
       textAlign: "center",
@@ -131,7 +128,8 @@ export default function RestaurantTickets() {
   const navigation = useNavigation();
   return (
     <View style={styles.card}>
-      <View style={styles.saldoTitleCard}>
+      <TouchableOpacity onPress={() => navigation.navigate("UpdateSaldo")}
+        style={styles.saldoTitleCard}>
         <MaterialIcons
           style={styles.leftIconButton}
           name="account-balance-wallet"
@@ -139,15 +137,14 @@ export default function RestaurantTickets() {
           color={theme.colors.onSurfaceVariant}
         />
         <Text style={styles.titleCentered}>Saldo da Carteirinha</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("UpdateSaldo")}>
-          <MaterialIcons
-            style={styles.leftIconButton}
-            name="update"
+        <View>
+          <MaterialCommunityIcons
+            name="web-sync"
             size={24}
             color={theme.colors.primary}
           />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <View style={styles.saldoBodyCard}>
         <View style={styles.saldo}>
           <Text style={styles.saldoValue}>{formatReal(user.money)}</Text>
