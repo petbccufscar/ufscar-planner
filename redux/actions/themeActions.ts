@@ -1,15 +1,15 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 
 export const setTheme = (theme) => {
   return {
-    type: ActionsTypes.SET_THEME,
+    type: ActionType.SET_THEME,
     payload: theme,
   };
 };
 
 export const toggleTheme = (theme) => {
   return {
-    type: ActionsTypes.TOGGLE_THEME,
+    type: ActionType.TOGGLE_THEME,
     payload: theme,
   };
 };

@@ -1,4 +1,4 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 
 const initialState = {
   semester: {
@@ -9,12 +9,12 @@ const initialState = {
 
 export const semesterReducer = (state = initialState, action) => {
   switch (action.type) {
-  case ActionsTypes.UPDATE_SEMESTER:
-    return {
-      ...state,
-      semester: action.payload,
-    };
-  default:
-    return state;
+    case ActionType.UPDATE_SEMESTER:
+      return {
+        ...state,
+        semester: action.payload,
+      };
+    default:
+      return state;
   }
 };

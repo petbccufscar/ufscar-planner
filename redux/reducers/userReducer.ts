@@ -1,4 +1,4 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 
 const initialState = {
   user: {
@@ -17,12 +17,12 @@ const initialState = {
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-  case ActionsTypes.UPDATE_USER:
-    return {
-      ...state,
-      user: action.payload,
-    };
-  default:
-    return state;
+    case ActionType.UPDATE_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    default:
+      return state;
   }
 };

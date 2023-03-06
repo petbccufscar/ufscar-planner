@@ -1,5 +1,4 @@
-import { ActionsTypes } from "../constants/actionsTypes";
-
+import { ActionType } from "../constants/actionType";
 
 const initialState = {
   themeIdx: 0,
@@ -8,17 +7,17 @@ const initialState = {
 
 export const themeReducer = (state = initialState, action) => {
   switch (action.type) {
-  case ActionsTypes.SET_THEME:
-    return {
-      ...state,
-      themeIdx: action.payload,
-    };
-  case ActionsTypes.TOGGLE_THEME:
-    return {
-      ...state,
-      isDark: !state.isDark,
-    };
-  default:
-    return state;
+    case ActionType.SET_THEME:
+      return {
+        ...state,
+        themeIdx: action.payload,
+      };
+    case ActionType.TOGGLE_THEME:
+      return {
+        ...state,
+        isDark: !state.isDark,
+      };
+    default:
+      return state;
   }
 };

@@ -1,8 +1,8 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 
 export const updateSemester = (semester) => {
   return {
-    type: ActionsTypes.UPDATE_SEMESTER,
+    type: ActionType.UPDATE_SEMESTER,
     payload: semester,
   };
 };

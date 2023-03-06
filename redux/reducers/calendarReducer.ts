@@ -1,4 +1,4 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 import { floorDate, offsetDate } from "../../helpers/helper";
 
 const offset = 180;
@@ -288,42 +288,42 @@ export const calendarReducer = (state = initialState, action) => {
 
   let aux;
   switch (action.type) {
-  case ActionsTypes.ADD_EVENT:
-    aux = { ...state, ...insertPayload(state), nextId: state.nextId + 1 };
-    return aux;
-  case ActionsTypes.REMOVE_EVENT:
-    aux = { ...removePayload(state, action.payload) };
-    return aux;
+    case ActionType.ADD_EVENT:
+      aux = { ...state, ...insertPayload(state), nextId: state.nextId + 1 };
+      return aux;
+    case ActionType.REMOVE_EVENT:
+      aux = { ...removePayload(state, action.payload) };
+      return aux;
 
-  case ActionsTypes.UPDATE_EVENT:
-    aux = removePayload(state, action.payload, false);
-    return { ...state, ...insertPayload(aux) };
+    case ActionType.UPDATE_EVENT:
+      aux = removePayload(state, action.payload, false);
+      return { ...state, ...insertPayload(aux) };
 
-  case ActionsTypes.LOAD_EVENTS:
-    if (state.load) { return state; }
-    aux = setup(state);
-    return aux;
+    case ActionType.LOAD_EVENTS:
+      if (state.load) { return state; }
+      aux = setup(state);
+      return aux;
 
-  case ActionsTypes.REMOVE_SIGA: {
-    let visit = [];
-    const items = [];
-    const keys = Object.keys(state.items);
-    for (let i = 0; i < keys.length; i++) {
-      items.push(...state.items[keys[i]].filter((e) => e.siga == true));
-    }
-
-    aux = state;
-    for (let i = 0; i < items.length; i++) {
-      if (visit.indexOf(items[i].id) == -1) {
-        aux = { ...removePayload(aux, items[i]) };
-        visit.push(items[i].id);
+    case ActionType.REMOVE_SIGA: {
+      let visit = [];
+      const items = [];
+      const keys = Object.keys(state.items);
+      for (let i = 0; i < keys.length; i++) {
+        items.push(...state.items[keys[i]].filter((e) => e.siga == true));
       }
+
+      aux = state;
+      for (let i = 0; i < items.length; i++) {
+        if (visit.indexOf(items[i].id) == -1) {
+          aux = { ...removePayload(aux, items[i]) };
+          visit.push(items[i].id);
+        }
+      }
+
+      return aux;
     }
 
-    return aux;
-  }
-
-  default:
-    return state;
+    default:
+      return state;
   }
 };

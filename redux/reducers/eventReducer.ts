@@ -1,4 +1,4 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 import * as Notifications from "expo-notifications";
 import { getTime } from "../../helpers/ExpressionHelper";
 
@@ -70,74 +70,74 @@ export const eventReducer = (state = initialState, action) => {
   }
   let aux;
   switch (action.type) {
-  case ActionsTypes.ADD_EVENT: {
-    const auxid = action.payload.id || state.nextId;
-    aux = {
-      ...state,
-      events: [...state.events, { ...action.payload, id: auxid }],
-      nextId: state.nextId + 1,
-    };
-    refazerNotificações(aux);
-    return aux;
-  }
-
-  case ActionsTypes.REMOVE_EVENT:
-    aux = {
-      ...state,
-      events: state.events
-        .filter((event) => event.id !== action.payload.id)
-        .map(
-          (event) => event.subject === action.payload.id ?
-            { ...event, subject: null } :
-            event,
-        ),
-    };
-    refazerNotificações(aux);
-    return aux;
-
-  case ActionsTypes.REMOVE_SIGA: {
-    const siga = state.events.filter((event) => event.siga == true);
-    let events = state.events;
-    for (let i = 0; i < siga.length; i++) {
-      events = events.filter((event) => event.id !== siga[i].id)
-        .map(
-          (event) => event.subject === siga[i].id ?
-            { ...event, subject: null } :
-            event,
-        );
+    case ActionType.ADD_EVENT: {
+      const auxid = action.payload.id || state.nextId;
+      aux = {
+        ...state,
+        events: [...state.events, { ...action.payload, id: auxid }],
+        nextId: state.nextId + 1,
+      };
+      refazerNotificações(aux);
+      return aux;
     }
 
-    aux = {
-      ...state,
-      events: events,
-    };
-    refazerNotificações(aux);
-    return aux;
-  }
+    case ActionType.REMOVE_EVENT:
+      aux = {
+        ...state,
+        events: state.events
+          .filter((event) => event.id !== action.payload.id)
+          .map(
+            (event) => event.subject === action.payload.id ?
+              { ...event, subject: null } :
+              event,
+          ),
+      };
+      refazerNotificações(aux);
+      return aux;
 
-  case ActionsTypes.UPDATE_EVENT:
-    aux = {
-      ...state,
-      events: state.events.map(
-        (event) => event.id === action.payload.id ?
-          action.payload :
-          event,
-      ),
-    };
-    refazerNotificações(aux);
-    return aux;
+    case ActionType.REMOVE_SIGA: {
+      const siga = state.events.filter((event) => event.siga == true);
+      let events = state.events;
+      for (let i = 0; i < siga.length; i++) {
+        events = events.filter((event) => event.id !== siga[i].id)
+          .map(
+            (event) => event.subject === siga[i].id ?
+              { ...event, subject: null } :
+              event,
+          );
+      }
 
-  case ActionsTypes.INCREMENT_NEXT_ID:
-    return {
-      ...state,
-      nextId: state.nextId + 1,
-    };
-  case ActionsTypes.SET_NEXT_ID:
-    return {
-      ...state,
-      nextId: action.payload,
-    };
-  default:
-    return state;
+      aux = {
+        ...state,
+        events: events,
+      };
+      refazerNotificações(aux);
+      return aux;
+    }
+
+    case ActionType.UPDATE_EVENT:
+      aux = {
+        ...state,
+        events: state.events.map(
+          (event) => event.id === action.payload.id ?
+            action.payload :
+            event,
+        ),
+      };
+      refazerNotificações(aux);
+      return aux;
+
+    case ActionType.INCREMENT_NEXT_ID:
+      return {
+        ...state,
+        nextId: state.nextId + 1,
+      };
+    case ActionType.SET_NEXT_ID:
+      return {
+        ...state,
+        nextId: action.payload,
+      };
+    default:
+      return state;
   }
 };

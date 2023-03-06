@@ -1,8 +1,8 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { ActionType } from "../constants/actionType";
 
 export const updateCardapio = (cardapio) => {
   return {
-    type: ActionsTypes.UPDATE_CARDAPIO,
+    type: ActionType.UPDATE_CARDAPIO,
     payload: cardapio,
   };
 };
