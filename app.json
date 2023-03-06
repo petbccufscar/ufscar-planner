@@ -38,7 +38,6 @@
       },
       "package": "com.pet.ufscarplanner",
       "versionCode": 6,
-      "useNextNotificationsApi": true,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
       ]
