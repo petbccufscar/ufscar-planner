@@ -1,7 +1,7 @@
 import React, { StyleSheet, View, Text } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import ScrollView from "../components/ScrollView";
-import { useAppTheme } from "../theme/Themes";
+import { useTheme } from "react-native-paper";
 
 type RootStackParamList = {
   RestaurantNotice: { content: string },
@@ -10,7 +10,7 @@ type RootStackParamList = {
 type Props = NativeStackScreenProps<RootStackParamList, "RestaurantNotice">;
 
 export default function RestaurantNotice({ route }: Props) {
-  const theme = useAppTheme();
+  const theme = useTheme();
   const { content } = route.params;
 
   const styles = StyleSheet.create({

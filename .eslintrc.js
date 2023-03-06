@@ -7,6 +7,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended",
   ],
   "overrides": [
   ],
@@ -18,8 +19,10 @@ module.exports = {
   "plugins": [
     "react",
     "@typescript-eslint",
+    "eslint-plugin-tsdoc",
   ],
   "rules": {
+    "tsdoc/syntax": "warn",
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double"],
@@ -57,7 +60,6 @@ module.exports = {
     "no-trailing-spaces": ["error"],
     "no-whitespace-before-property": ["error"],
     "nonblock-statement-body-position": ["error"],
-    // "object-curly-newline": ["error", { multiline: true }],
     "object-curly-spacing": ["error", "always"],
     "object-property-newline": [
       "error",
@@ -77,5 +79,6 @@ module.exports = {
     "template-curly-spacing": ["error"],
     "template-tag-spacing": ["error"],
     "wrap-iife": ["error", "inside"],
+    "no-namespace": "off",
   },
 };

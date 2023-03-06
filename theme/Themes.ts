@@ -5,60 +5,50 @@ import {
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
-  useTheme,
 } from "react-native-paper";
 
-const baseTheme = {
-  ...PaperDefaultTheme,
-  ...NavigationDefaultTheme,
-  colors: {
-    ...PaperDefaultTheme.colors,
-    ...NavigationDefaultTheme.colors,
-    primary: "#BB1822",
-    onPrimary: "#FFFFFF",
-    primaryContainer: "#FFDAD5",
-    onPrimaryContainer: "#410003",
-    secondary: "#C00103",
-    onSecondary: "#FFFFFF",
-    secondaryContainer: "#FFDAD3",
-    onSecondaryContainer: "#410000",
-    tertiary: "#725B2E",
-    onTertiary: "#FFFFFF",
-    tertiaryContainer: "#FFDEA6",
-    onTertiaryContainer: "#271900",
-    error: "#BA1B1B",
-    onError: "#FFFFFF",
-    errorContainer: "#FFDAD4",
-    onErrorContainer: "#410001",
-    background: "#FBFDFD",
-    onBackground: "#191C1D",
-    surface: "#FBFDFD",
-    onSurface: "#191C1D",
-    surfaceVariant: "#F4DDDB",
-    onSurfaceVariant: "#524342",
-    outline: "#857371",
-    surface1: "#F8F2F2",
-    surface2: "#F6EBEB",
-    "surface3": "#F4E4E5",
-    "dialog": "#F4E4E5",
-    surface4: "#F3E2E3",
-    surface5: "#F2DDDE",
-    headerActive: "#F2DDDE",
-    headerInactive: "#F8F2F2",
-    onHeaderInactive: "#191C1D",
-    onHeader: "#191C1D",
+export const CombinedDefaultThemes: ReactNativePaper.Theme[] = [
+  {
+    ...PaperDefaultTheme,
+    ...NavigationDefaultTheme,
+    colors: {
+      ...PaperDefaultTheme.colors,
+      ...NavigationDefaultTheme.colors,
+      primary: "#BB1822",
+      onPrimary: "#FFFFFF",
+      primaryContainer: "#FFDAD5",
+      onPrimaryContainer: "#410003",
+      secondary: "#C00103",
+      onSecondary: "#FFFFFF",
+      secondaryContainer: "#FFDAD3",
+      onSecondaryContainer: "#410000",
+      tertiary: "#725B2E",
+      onTertiary: "#FFFFFF",
+      tertiaryContainer: "#FFDEA6",
+      onTertiaryContainer: "#271900",
+      error: "#BA1B1B",
+      onError: "#FFFFFF",
+      errorContainer: "#FFDAD4",
+      onErrorContainer: "#410001",
+      background: "#FBFDFD",
+      onBackground: "#191C1D",
+      surface: "#FBFDFD",
+      onSurface: "#191C1D",
+      surfaceVariant: "#F4DDDB",
+      onSurfaceVariant: "#524342",
+      outline: "#857371",
+      surface1: "#F8F2F2",
+      surface2: "#F6EBEB",
+      surface3: "#F4E4E5",
+      dialog: "#F4E4E5",
+      surface4: "#F3E2E3",
+      surface5: "#F2DDDE",
+      headerActive: "#F2DDDE",
+      headerInactive: "#F8F2F2",
+      onHeaderInactive: "#191C1D",
+      onHeader: "#191C1D",
+    },
   },
-};
-
-export type AppTheme = typeof baseTheme;
-
-// HACK Não faço ideia de como arrumar. Recomendado: Atualuzar o paper para 5.0.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export const useAppTheme: () => AppTheme = useTheme;
-
-export const CombinedDefaultThemes: AppTheme[] = [
-  baseTheme,
   {
     ...PaperDefaultTheme,
     ...NavigationDefaultTheme,
@@ -430,7 +420,7 @@ export const CombinedDefaultThemes: AppTheme[] = [
   },
 ];
 
-export const CombinedDarkThemes: AppTheme[] = [
+export const CombinedDarkThemes: ReactNativePaper.Theme[] = [
   {
     ...PaperDarkTheme,
     ...NavigationDarkTheme,
