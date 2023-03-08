@@ -1,47 +1,83 @@
 import { ActionType } from "../constants/actionType";
+import { EventState } from "../types/event";
+import { Task, TaskDescription } from "../types/task";
 
-export const addEvent = (event) => {
+export type AddEventAction = {
+  type: ActionType.ADD_EVENT,
+  payload: TaskDescription,
+};
+
+/**
+ * Ação para criar um novo evento a partir de uma descrição.
+ * @param event - Uma descrição do evento a ser criado.
+ * @returns A ação para despachar.
+ */
+export const addEvent = (event: TaskDescription): AddEventAction => {
   return {
     type: ActionType.ADD_EVENT,
     payload: event,
   };
 };
 
-export const removeEvent = (event) => {
+export type RemoveEventAction = {
+  type: ActionType.REMOVE_EVENT,
+  payload: Task,
+}
+
+/**
+ * Ação para remover um evento.
+ * @param event - O evento a ser removido.
+ * @returns A ação para despachar.
+ */
+export const removeEvent = (event: Task): RemoveEventAction => {
   return {
     type: ActionType.REMOVE_EVENT,
     payload: event,
   };
 };
 
-export const removeSIGA = (event) => {
+export type RemoveSigaAction = {
+  type: ActionType.REMOVE_SIGA,
+};
+
+/**
+ * Ação para remover todos os eventos criados pelo siga.
+ * @returns A ação para despachar.
+ */
+export const removeSIGA = (): RemoveSigaAction => {
   return {
     type: ActionType.REMOVE_SIGA,
-    payload: event,
   };
 };
 
-export const updateEvent = (event) => {
+export type UpdateEventAction = {
+  type: ActionType.UPDATE_EVENT,
+  payload: Task,
+};
+
+/**
+ * Ação para atualizar um evento.
+ * @param event - O evento a ser atualizado.
+ * @returns A ação para despachar.
+ */
+export const updateEvent = (event: Task): UpdateEventAction => {
   return {
     type: ActionType.UPDATE_EVENT,
     payload: event,
   };
 };
 
-export const incrementNextId = () => {
-  return {
-    type: ActionType.INCREMENT_NEXT_ID,
-  };
-};
+export type LoadEventsAction = {
+  type: ActionType.LOAD_EVENTS,
+  payload: EventState,
+}
 
-export const setNextId = (nextId) => {
-  return {
-    type: ActionType.SET_NEXT_ID,
-    payload: nextId,
-  };
-};
-
-export const loadEvents = (events) => {
+/**
+ * Ação para carregar os eventos que acabaram de ser retornados.
+ * @param events - O eventos para carregar.
+ * @returns A ação para despachar.
+ */
+export const loadEvents = (events: EventState): LoadEventsAction => {
   return {
     type: ActionType.LOAD_EVENTS,
     payload: events,

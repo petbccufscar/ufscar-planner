@@ -7,6 +7,9 @@ import {
   DefaultTheme as PaperDefaultTheme,
 } from "react-native-paper";
 
+/**
+ * O conjunto de todos os temas claros disponíveis.
+ */
 export const CombinedDefaultThemes: ReactNativePaper.Theme[] = [
   {
     ...PaperDefaultTheme,
@@ -420,6 +423,9 @@ export const CombinedDefaultThemes: ReactNativePaper.Theme[] = [
   },
 ];
 
+/**
+ * O conjunto de todos os temas escuros disponíveis.
+ */
 export const CombinedDarkThemes: ReactNativePaper.Theme[] = [
   {
     ...PaperDarkTheme,

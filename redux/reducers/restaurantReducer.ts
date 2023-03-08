@@ -1,13 +1,14 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { Action, ActionType } from "../constants/actionType";
+import { RestaurantState } from "../types/restaurant";
 
-const initialState = {
+const initialState: RestaurantState = {
   updatedAt: "",
   weekMenu: {},
 };
 
-export const restaurantReducer = (state = initialState, action) => {
+export const restaurantReducer = (state = initialState, action: Action) => {
   switch (action.type) {
-  case ActionsTypes.UPDATE_CARDAPIO:
+  case ActionType.UPDATE_CARDAPIO:
     return {
       ...state,
       updatedAt: action.payload.updatedAt,

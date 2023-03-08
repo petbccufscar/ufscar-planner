@@ -1,3 +1,15 @@
+import {
+  AddEventAction,
+  LoadEventsAction,
+  RemoveEventAction,
+  RemoveSigaAction,
+  UpdateEventAction,
+} from "../actions/eventActions";
+import { UpdateCardapioAction } from "../actions/restaurantActions";
+import { UpdateSemesterAction } from "../actions/semesterActions";
+import { SetThemeAction, ToggleThemeAction } from "../actions/themeActions";
+import { UpdateUserAction } from "../actions/userActions";
+
 export enum ActionType {
   ADD_EVENT,
   REMOVE_EVENT,
@@ -12,3 +24,15 @@ export enum ActionType {
   REMOVE_SIGA,
   UPDATE_CARDAPIO,
 }
+
+export type Action =
+  | UpdateUserAction
+  | SetThemeAction
+  | ToggleThemeAction
+  | UpdateSemesterAction
+  | UpdateCardapioAction
+  | AddEventAction
+  | RemoveEventAction
+  | RemoveSigaAction
+  | UpdateEventAction
+  | LoadEventsAction

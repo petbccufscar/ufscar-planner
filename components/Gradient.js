@@ -21,7 +21,7 @@ export function Gradient(props) {
     ["#AB42EB"],
     ["#EB42A8"],
     ["#EB4257"],
-    ["#FB9337"],
+    ["#FB9337"], // Cor do siga
     ["#DBDBDB"],
     ["#7277F1", "#42EBAF"],
     ["#EB429E", "#EB9E42"],
