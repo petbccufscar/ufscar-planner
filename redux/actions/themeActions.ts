@@ -1,5 +1,4 @@
 import { ActionType } from "../constants/actionType";
-import { ThemeState } from "../types/theme";
 
 export type SetThemeAction = {
   type: ActionType.SET_THEME,

@@ -1,5 +1,3 @@
-import { CombinedDefaultThemes, CombinedDarkThemes } from "../../theme/Themes";
-
 /**
  * O estado do tema armazenado persistentemente.
  */

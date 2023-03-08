@@ -1,5 +1,3 @@
-import { Gradient } from "../../components/Gradient";
-
 /**
  * Descrição sobre um horário e localização de um evento.
  */
