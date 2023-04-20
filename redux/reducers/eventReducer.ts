@@ -1,20 +1,21 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { Action, ActionType } from "../constants/actionType";
 import * as Notifications from "expo-notifications";
 import { getTime } from "../../helpers/ExpressionHelper";
+import { Detail, Task } from "../types/task";
+import { EventState } from "../types/event";
 
-const initialState = {
-  events: [], // events: events,
+const initialState: EventState = {
+  events: [],
   nextId: 42,
 };
 
-
-function calculateDate(detail, minutes) {
+function calculateDate(detail: Detail, minutes: number): Date {
   const d = new Date(detail.datetime_init);
   d.setDate(d.getDate() + ((7 - d.getDay()) % 7 + detail.day) % 7);
   return new Date(d.getTime() - minutes * 60000);
 }
 
-async function loadNotifications(task) {
+async function loadNotifications(task: Task) {
   for (let i = 0; i < task.details.length; i++) {
     if (task.weekly) {
       for (let j = 0; j < task.notification.length; j++) {
@@ -59,35 +60,37 @@ async function loadNotifications(task) {
   }
 }
 
-
-export const eventReducer = (state = initialState, action) => {
-  async function refazerNotificações(st) {
+export const eventReducer = (
+  state = initialState,
+  action: Action,
+): EventState => {
+  async function refazerNotificações(st: EventState) {
     await Notifications.cancelAllScheduledNotificationsAsync();
     for (let i = 0; i < st.events.length; i++) {
       await loadNotifications(st.events[i]);
     }
     await Notifications.getAllScheduledNotificationsAsync();
   }
+
   let aux;
   switch (action.type) {
-  case ActionsTypes.ADD_EVENT: {
-    const auxid = action.payload.id || state.nextId;
+  case ActionType.ADD_EVENT: {
     aux = {
       ...state,
-      events: [...state.events, { ...action.payload, id: auxid }],
+      events: [...state.events, { ...action.payload, id: state.nextId }],
       nextId: state.nextId + 1,
     };
     refazerNotificações(aux);
     return aux;
   }
 
-  case ActionsTypes.REMOVE_EVENT:
+  case ActionType.REMOVE_EVENT:
     aux = {
       ...state,
       events: state.events
         .filter((event) => event.id !== action.payload.id)
         .map(
-          (event) => event.subject === action.payload.id ?
+          (event): Task => event.subject === action.payload.id ?
             { ...event, subject: null } :
             event,
         ),
@@ -95,8 +98,8 @@ export const eventReducer = (state = initialState, action) => {
     refazerNotificações(aux);
     return aux;
 
-  case ActionsTypes.REMOVE_SIGA: {
-    const siga = state.events.filter((event) => event.siga == true);
+  case ActionType.REMOVE_SIGA: {
+    const siga = state.events.filter((event) => event.siga);
     let events = state.events;
     for (let i = 0; i < siga.length; i++) {
       events = events.filter((event) => event.id !== siga[i].id)
@@ -115,7 +118,7 @@ export const eventReducer = (state = initialState, action) => {
     return aux;
   }
 
-  case ActionsTypes.UPDATE_EVENT:
+  case ActionType.UPDATE_EVENT:
     aux = {
       ...state,
       events: state.events.map(
@@ -127,16 +130,6 @@ export const eventReducer = (state = initialState, action) => {
     refazerNotificações(aux);
     return aux;
 
-  case ActionsTypes.INCREMENT_NEXT_ID:
-    return {
-      ...state,
-      nextId: state.nextId + 1,
-    };
-  case ActionsTypes.SET_NEXT_ID:
-    return {
-      ...state,
-      nextId: action.payload,
-    };
   default:
     return state;
   }

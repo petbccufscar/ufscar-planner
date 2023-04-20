@@ -1,12 +1,19 @@
-import { ActionsTypes } from "../constants/actionsTypes";
+import { Action, ActionType } from "../constants/actionType";
 import { floorDate, offsetDate } from "../../helpers/helper";
+import { Card, Task } from "../types/task";
+import { CalendarState } from "../types/calendar";
+import {
+  AddEventAction,
+  LoadEventsAction,
+  UpdateEventAction,
+} from "../actions/eventActions";
 
 const offset = 180;
 
 const initalSetup = () => {
   let datei = offsetDate(new Date(), -offset);
   const datef = offsetDate(new Date(), offset);
-  let items = {};
+  const items: { [date: string]: Card[] } = {};
   while (datei.getTime() <= datef.getTime()) {
     const date = floorDate(datei);
     items[date] = [];
@@ -15,7 +22,7 @@ const initalSetup = () => {
   return items;
 };
 
-const initialState = {
+const initialState: CalendarState = {
   items: initalSetup(),
   marked: {},
   cid: 0,
@@ -23,7 +30,7 @@ const initialState = {
   load: false,
 };
 
-const compare = (e, f) => {
+const compare = (e: Card, f: Card): number => {
   const a = new Date(e.detail.datetime_init);
   const b = new Date(f.detail.datetime_init);
   const av = 60 * a.getHours() + a.getMinutes();
@@ -31,7 +38,7 @@ const compare = (e, f) => {
   return av - bv;
 };
 
-const copyTimeStrToDate = (date, str) => {
+const copyTimeStrToDate = (date: Date, str: string): Date => {
   const time = new Date(str);
   return new Date(
     date.getFullYear(),
@@ -43,12 +50,19 @@ const copyTimeStrToDate = (date, str) => {
   );
 };
 
-export const calendarReducer = (state = initialState, action) => {
-  const repeatPayload = (event, myItems, myCid, mykeys) => {
-    let items = { ...myItems };
+export const calendarReducer = (
+  state = initialState,
+  action: Action,
+): CalendarState => {
+  const repeatPayload = (
+    event: Card,
+    myItems: { [date: string]: Card[] },
+    myCid: number,
+    mykeys: { [date: string]: boolean },
+  ) => {
+    const items = { ...myItems };
     let cid = myCid;
-    let keys = { ...mykeys };
-
+    const keys = { ...mykeys };
 
     let datei = offsetDate(new Date(), -offset);
     const datef = offsetDate(new Date(), offset);
@@ -91,11 +105,14 @@ export const calendarReducer = (state = initialState, action) => {
     };
   };
 
-  const insertPayload = (st) => {
+  const insertPayload = (
+    st: CalendarState,
+    action: AddEventAction | UpdateEventAction,
+  ) => {
     let items = { ...st.items };
     let cid = st.cid;
-    let marked = { ...st.marked };
-    let keysMap = {};
+    const marked = { ...st.marked };
+    let keysMap: { [date: string]: boolean } = {};
 
     if (action.payload.is_submited == true) {
       return {
@@ -106,10 +123,14 @@ export const calendarReducer = (state = initialState, action) => {
     }
 
     for (let j = 0; j < action.payload.details.length; j++) {
-      const obj = {
+      const id = action.type == ActionType.ADD_EVENT ?
+        st.nextId :
+        action.payload.id;
+      const obj: Card = {
         ...action.payload,
         detail: action.payload.details[j],
-        id: action.payload.id || st.nextId,
+        id: id || st.nextId,
+        cid: cid,
       };
       const aux = new Date(obj.detail.datetime_init);
       const date = floorDate(aux);
@@ -154,12 +175,12 @@ export const calendarReducer = (state = initialState, action) => {
     };
   };
 
-  const removePayload = (st, event) => {
-    let newItems = { ...st.items };
+  const removePayload = (st: CalendarState, event: Task) => {
+    const newItems = { ...st.items };
 
     // buscar os dados antigos de event
     let iterador = offsetDate(new Date(), -offset);
-    let aux = {};
+    const aux: { [date: string]: Card[] } = {};
     let d;
     const datef = offsetDate(new Date(), offset);
 
@@ -167,7 +188,7 @@ export const calendarReducer = (state = initialState, action) => {
     // Se for semanal, vai ser rápido (menos de 7 iterações),
     // Mas se for evento unico...
     // no pior caso, vai percorrer todos os 2*offset+1 dias
-
+    let achou = false;
     while (iterador <= datef) {
       d = floorDate(iterador);
       aux[d] = (newItems[d] || []).filter((e) => e.id == event.id)
@@ -176,17 +197,21 @@ export const calendarReducer = (state = initialState, action) => {
         );
       if (aux[d].length > 0) {
         event = aux[d][0];
+        achou = true;
         break;
       }
       iterador = offsetDate(iterador, 1);
     }
 
+    // Se o evento existe mas não tem nenhum card, nós desistimos aqui.
+    if (!achou) {
+      return st;
+    }
 
-
-    let newMarked = { ...st.marked };
+    const newMarked = { ...st.marked };
 
     // marca para não visitar o mesmo dia da semana
-    let weekVisit = [0, 0, 0, 0, 0, 0, 0];
+    const weekVisit = [0, 0, 0, 0, 0, 0, 0];
     // Percorre os detalhes caso o evento seja unico/ não semanal
     if (!event.weekly) {
       for (let i = 0; i < event.details.length; i++) {
@@ -231,11 +256,11 @@ export const calendarReducer = (state = initialState, action) => {
     };
   };
 
-  const setup = (st) => {
-    let marked = {};
-    let items = {};
+  const setup = (st: CalendarState, action: LoadEventsAction) => {
+    const marked: { [date: string]: { marked: boolean } } = {};
+    let items: { [date: string]: Card[] } = {};
     let cid = 0;
-    let events = action.payload.events;
+    const events = action.payload.events;
     const nextId = action.payload.nextId;
 
     for (let i = 0; i < events.length; i++) {
@@ -244,6 +269,7 @@ export const calendarReducer = (state = initialState, action) => {
           const obj = {
             ...events[i],
             detail: events[i].details[j],
+            cid: cid,
           };
           const aux = new Date(obj.detail.datetime_init);
           const date = floorDate(aux);
@@ -288,24 +314,28 @@ export const calendarReducer = (state = initialState, action) => {
 
   let aux;
   switch (action.type) {
-  case ActionsTypes.ADD_EVENT:
-    aux = { ...state, ...insertPayload(state), nextId: state.nextId + 1 };
+  case ActionType.ADD_EVENT:
+    aux = {
+      ...state,
+      ...insertPayload(state, action),
+      nextId: state.nextId + 1,
+    };
     return aux;
-  case ActionsTypes.REMOVE_EVENT:
+  case ActionType.REMOVE_EVENT:
     aux = { ...removePayload(state, action.payload) };
     return aux;
 
-  case ActionsTypes.UPDATE_EVENT:
-    aux = removePayload(state, action.payload, false);
-    return { ...state, ...insertPayload(aux) };
+  case ActionType.UPDATE_EVENT:
+    aux = removePayload(state, action.payload);
+    return { ...state, ...insertPayload(aux, action) };
 
-  case ActionsTypes.LOAD_EVENTS:
+  case ActionType.LOAD_EVENTS:
     if (state.load) { return state; }
-    aux = setup(state);
+    aux = setup(state, action);
     return aux;
 
-  case ActionsTypes.REMOVE_SIGA: {
-    let visit = [];
+  case ActionType.REMOVE_SIGA: {
+    const visit = [];
     const items = [];
     const keys = Object.keys(state.items);
     for (let i = 0; i < keys.length; i++) {
