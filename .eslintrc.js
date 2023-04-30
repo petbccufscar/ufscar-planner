@@ -81,4 +81,9 @@ module.exports = {
     "wrap-iife": ["error", "inside"],
     "no-namespace": "off",
   },
+  "globals": {
+    "__CLIENT__": true,
+    "__SERVER__": true,
+    "__DEV__": true,
+  },
 };
