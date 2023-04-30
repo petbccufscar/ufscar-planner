@@ -69,6 +69,7 @@ export default function SigaScreen() {
         },
       );
       let data = await response.json();
+      dispatch(updateSemester(latestDefaultSemester()));
       if (data.status == undefined) {
         if (data.length == 0) {
           setMessageE(
@@ -80,7 +81,6 @@ export default function SigaScreen() {
           const subjects = data.data;
           try {
             dispatch(removeSIGA());
-            dispatch(updateSemester(latestDefaultSemester()));
             for (let i = 0; i < subjects.length; i++) {
               addSigaSubject(subjects[i], dispatch);
             }
