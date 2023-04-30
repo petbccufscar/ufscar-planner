@@ -33,9 +33,13 @@ export default function MyTabs() {
           />
         ,
 
-        tabBarActiveTintColor: theme.colors.onSecundaryContainer,
+        tabBarActiveTintColor: theme.colors.onSecondaryContainer,
         tabBarInactiveTintColor: theme.colors.onSurface,
-        headerPressColor: theme.colors.secundaryContainer,
+        tabBarAndroidRipple: {
+          color: theme.colors.surfaceVariant,
+          borderless: true,
+        },
+
         tabBarStyle: {
           backgroundColor: theme.colors.surface2,
           paddingBottom: 8,
