@@ -68,15 +68,6 @@ export function getFrequency(task) {
   return "" + magic(task.grades.frequency, task.frequency).result;
 }
 
-
-
-// try {
-//     console.log(magic({c: 1, b: 2, j:1000 },"A + c + b + D*i"))
-// } catch(e){
-//     console.log("deu erro", e)
-// }
-
-
 export function BWFont(backgroundColor) {
   let r = 0,
     g = 0,
