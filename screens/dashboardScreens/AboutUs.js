@@ -108,8 +108,6 @@ export default function AboutUs() {
           </View>
 
           <View style={styles.textWall}>
-            <Text style={styles.title}>O PET</Text>
-
             <Text style={styles.text}>Conheça mais sobre o PET-BCC:</Text>
             <TouchableOpacity
               onPress={() => {
@@ -126,6 +124,23 @@ export default function AboutUs() {
               <Text
                 style={[styles.text, styles.contentText, styles.link]}
               >{"      https://petbcc.ufscar.br/"}</Text>
+            </TouchableOpacity>
+            <Text style={styles.text}>Acesse o repositório do aplicativo:</Text>
+            <TouchableOpacity
+              onPress={() => {
+                const url = "https://github.com/petbccufscar/ufscar-planner";
+                Linking.canOpenURL(url).then((supported) => {
+                  if (supported) {
+                    Linking.openURL(url);
+                  } else {
+                    console.log("Don't know how to open URI: " + url);
+                  }
+                });
+              }}
+            >
+              <Text
+                style={[styles.text, styles.contentText, styles.link]}
+              >{"      https://github.com/petbccufscar/ufscar-planner"}</Text>
             </TouchableOpacity>
           </View>
         </View>
