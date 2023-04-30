@@ -40,6 +40,13 @@ import {
   RobotoCondensed_700Bold_Italic,
 } from "@expo-google-fonts/roboto-condensed";
 import Links from "./screens/dashboardScreens/Links";
+import * as Sentry from "sentry-expo";
+
+Sentry.init({
+  dsn: "https://c1a9d3d02d424eaa91ee720bd5225f83@o4505104445079552.ingest.sentry.io/4505104464805888",
+  enableInExpoDevelopment: true,
+  debug: true,
+});
 
 if (
   Platform.OS === "android" &&
@@ -57,41 +64,47 @@ Notifications.setNotificationHandler({
     shouldSetBadge: false,
   }),
 });
+
 AppRegistry.registerComponent("X", () => App);
+
 export default function App() {
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  try {
+    const notificationListener = useRef();
+    const responseListener = useRef();
 
-  useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        Toast.show({
-          type: "success",
-          text1: notification.request.content.title,
-          text2: notification.request.content.body,
+    useEffect(() => {
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          Toast.show({
+            type: "success",
+            text1: notification.request.content.title,
+            text2: notification.request.content.body,
+          });
         });
-      });
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response);
+        });
 
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current,
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
+      return () => {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }, []);
 
-  return (
-    <ReduxProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Loader />
-      </PersistGate>
-    </ReduxProvider>
-  );
+    return (
+      <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Loader />
+        </PersistGate>
+      </ReduxProvider>
+    );
+  } catch (error) {
+    Sentry.Native.captureException(error);
+  }
 }
 
 function Loader() {
