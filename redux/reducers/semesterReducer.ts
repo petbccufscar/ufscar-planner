@@ -1,11 +1,9 @@
+import { latestDefaultSemester } from "../../helpers/defaultSemester";
 import { Action, ActionType } from "../constants/actionType";
 import { SemesterState } from "../types/semester";
 
 const initialState: SemesterState = {
-  semester: {
-    init: "2022-11-07T03:02:00",
-    end: "2023-04-08T03:04:00",
-  },
+  semester: latestDefaultSemester(),
 };
 
 export const semesterReducer = (

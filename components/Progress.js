@@ -6,10 +6,15 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ConfigSemester } from "../screens/dashboardScreens/Config";
 import { Portal, Dialog, Button } from "react-native-paper";
 import { PropTypes } from "prop-types";
+import {
+  isOldDefaultSemester,
+  latestDefaultSemester,
+} from "../helpers/defaultSemester";
+import { updateSemester } from "../redux/actions/semesterActions";
 
 function Bar(props) {
   const text = props.text || "";
@@ -67,7 +72,13 @@ function Bar(props) {
 Bar.propTypes = PropTypes.any;
 
 export default function Progress() {
+  const dispatch = useDispatch();
   const semester = useSelector((state) => state.semester).semester;
+
+  if (isOldDefaultSemester(semester)) {
+    dispatch(updateSemester(latestDefaultSemester()));
+  }
+
   const currentDate = new Date();
   let message = "";
   let progress = 0;

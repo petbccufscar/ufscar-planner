@@ -21,6 +21,8 @@ import {
 } from "../../redux/actions/eventActions";
 import Toast from "react-native-toast-message";
 import { Buffer } from "buffer";
+import { updateSemester } from "../../redux/actions/semesterActions";
+import { latestDefaultSemester } from "../../helpers/defaultSemester";
 
 export const addSigaSubject = (subject, dispatch) => {
   let auxdetails = [];
@@ -67,6 +69,7 @@ export default function SigaScreen() {
         },
       );
       let data = await response.json();
+      dispatch(updateSemester(latestDefaultSemester()));
       if (data.status == undefined) {
         if (data.length == 0) {
           setMessageE(
