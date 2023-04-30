@@ -21,6 +21,8 @@ import {
 } from "../../redux/actions/eventActions";
 import Toast from "react-native-toast-message";
 import { Buffer } from "buffer";
+import { updateSemester } from "../../redux/actions/semesterActions";
+import { latestDefaultSemester } from "../../helpers/defaultSemester";
 
 export const addSigaSubject = (subject, dispatch) => {
   let auxdetails = [];
@@ -78,6 +80,7 @@ export default function SigaScreen() {
           const subjects = data.data;
           try {
             dispatch(removeSIGA());
+            dispatch(updateSemester(latestDefaultSemester()));
             for (let i = 0; i < subjects.length; i++) {
               addSigaSubject(subjects[i], dispatch);
             }
