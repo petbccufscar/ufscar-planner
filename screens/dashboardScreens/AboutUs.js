@@ -45,7 +45,7 @@ export default function AboutUs() {
       marginVertical: 5,
     },
   });
-  const version = Constants.manifest.version;
+  const version = Constants.expoConfig.version;
 
   return (
     <>
