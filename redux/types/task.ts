@@ -8,12 +8,12 @@ export type Detail = {
   day: number,
 
   /**
-   * Uma string no formato ISO-8601 da data e hora de início do evento.
+   * Uma string no formato RFC 1123 da data e hora de início do evento.
    */
   datetime_init: string,
 
   /**
-   * Uma string no formato ISO-8601 da data e hora de do fim do evento.
+   * Uma string no formato RFC 1123 da data e hora de do fim do evento.
    */
   datetime_end: string,
 
@@ -136,7 +136,7 @@ export type EventDescription = BaseEventDescription & {
   siga: false,
 
   /**
-   * String no formato ISO-8601 com a data e hora de entrega do evento, se
+   * String no formato RFC 1123 com a data e hora de entrega do evento, se
    * existir.
    */
   when_submit?: string,

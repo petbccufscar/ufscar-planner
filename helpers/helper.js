@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, Image } from "react-native";
-import { PropTypes } from "prop-types";
 import mapIconPath from "../assets/icons/maps.png";
 
 export const formatDate = (dataFormatar) => {
@@ -189,8 +188,5 @@ export function SIGA(props) {
       SIGA
   </Text>;
 }
-
-SIGA.propTypes = PropTypes.any;
-
 
 export const mapIconURI = Image.resolveAssetSource(mapIconPath).uri;

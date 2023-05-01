@@ -10,7 +10,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { PropTypes } from "prop-types";
 
 export const hourHeight = hp("8%");
 export const weekHeight = hp("9%");
@@ -115,5 +114,3 @@ export function Days(props) {
     </View>
   );
 }
-
-Days.propTypes = PropTypes.any;

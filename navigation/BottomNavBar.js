@@ -10,7 +10,6 @@ import RestaurantNavigator from "./tabs/RestaurantNavigator";
 import {
   createMaterialTopTabNavigator,
 } from "@react-navigation/material-top-tabs";
-import { PropTypes } from "prop-types";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -149,8 +148,6 @@ function TabBarIcon(props) {
     </View>
   );
 }
-
-TabBarIcon.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   absoluteContainer: {

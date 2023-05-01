@@ -1,12 +1,12 @@
 export type Semester = {
   /**
-   * Uma string no formato ISO-8601 contendo a data e hora do início do
+   * Uma string no formato RFC 1123 contendo a data e hora do início do
    * semestre.
    */
   init: string,
 
   /**
-   * Uma string no formato ISO-8601 contendo a data e hora do fim do semestre.
+   * Uma string no formato RFC 1123 contendo a data e hora do fim do semestre.
    */
   end: string,
 };

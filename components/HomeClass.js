@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { PropTypes } from "prop-types";
 
 const Class = (props) => {
   return (
@@ -14,8 +13,6 @@ const Class = (props) => {
     </View>
   );
 };
-
-Class.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   item: {

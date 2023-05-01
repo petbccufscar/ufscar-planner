@@ -30,7 +30,7 @@ export const addSigaSubject = (subject, dispatch) => {
     const aux = {
       datetime_init: parseTime(subject.horarios[i].inicio).toString(),
       datetime_end: parseTime(subject.horarios[i].fim).toString(),
-      local: subject.horarios[i].sala,
+      local: subject.horarios[i].sala || "",
       day: weekDaysSIGA.indexOf(subject.horarios[i].dia),
     };
 

@@ -22,6 +22,7 @@ module.exports = {
     "eslint-plugin-tsdoc",
   ],
   "rules": {
+    "react/prop-types": "off",
     "tsdoc/syntax": "warn",
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],

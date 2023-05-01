@@ -33,7 +33,6 @@ import { formatDate, formatDateWithHour, minimum } from "../helpers/helper";
 import { addEvent, updateEvent } from "../redux/actions/eventActions";
 import { PickerGradSquare, SelGradSquare } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
-import { PropTypes } from "prop-types";
 
 export default function EditScreen({ route, navigation }) {
   let task = { ...route.params.task };
@@ -243,8 +242,6 @@ export default function EditScreen({ route, navigation }) {
     );
   }
 
-  TeacherDialog.propTypes = PropTypes.any;
-
   function NotificationDialog() {
     const [n, setN] = useState(1);
     const [mult, setMult] = useState(1);
@@ -345,8 +342,6 @@ export default function EditScreen({ route, navigation }) {
         </TouchableOpacity>
       );
     }
-
-    Bolinha.propTypes = PropTypes.any;
 
     const isEditing = openHorarioDialog == 2;
     const headerTitle = isSubject ?
@@ -647,8 +642,6 @@ export default function EditScreen({ route, navigation }) {
     );
   }
 
-  HorarioDialog.propTypes = PropTypes.any;
-
   const range = (n) => [...Array(n + 1).keys()];
 
   function Roleta(props) {
@@ -675,8 +668,6 @@ export default function EditScreen({ route, navigation }) {
       </View>
     );
   }
-
-  Roleta.propTypes = PropTypes.any;
 
   const user = useSelector((state) => state.user).user;
 
@@ -778,8 +769,6 @@ export default function EditScreen({ route, navigation }) {
     );
   }
 
-  DetailRender.propTypes = PropTypes.any;
-
   function BotaoAdicionarQueAbreUmDialogo(props) {
     const setState = props.setState;
     return (
@@ -813,8 +802,6 @@ export default function EditScreen({ route, navigation }) {
       </View>
     );
   }
-
-  BotaoAdicionarQueAbreUmDialogo.propTypes = PropTypes.any;
 
   function notificationText(notification) {
     if (notification != 0) return getTime(notification) + " antes";
@@ -876,8 +863,6 @@ export default function EditScreen({ route, navigation }) {
     );
   }
 
-  NotificationRender.propTypes = PropTypes.any;
-
   function TeacherRender(props) {
     const index = props.index;
     const teacher = props.teacher;
@@ -930,8 +915,6 @@ export default function EditScreen({ route, navigation }) {
       </View>
     );
   }
-
-  TeacherRender.propTypes = PropTypes.any;
 
   const styles = StyleSheet.create({
     container: {
@@ -1487,5 +1470,3 @@ export default function EditScreen({ route, navigation }) {
     </ScrollView>
   );
 }
-
-EditScreen.propTypes = PropTypes.any;

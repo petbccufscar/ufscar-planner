@@ -15,7 +15,6 @@ import {
   Portal,
   Dialog,
 } from "react-native-paper";
-import { PropTypes } from "prop-types";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function GenericLogin({ Authenticate, WarningText, children }) {
@@ -236,5 +235,3 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
     </View>
   );
 }
-
-GenericLogin.propTypes = PropTypes.any;
