@@ -43,10 +43,7 @@
       "versionCode": 9,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
-      ],
-      "runtimeVersion": {
-        "policy": "sdkVersion"
-      }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -82,6 +79,9 @@
           }
         }
       ]
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
