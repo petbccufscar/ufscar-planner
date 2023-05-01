@@ -1,8 +1,9 @@
 import { Action, ActionType } from "../constants/actionType";
 import * as Notifications from "expo-notifications";
 import { getTime } from "../../helpers/ExpressionHelper";
-import { Detail, Task } from "../types/task";
+import { BaseEventDescription, Detail, Task } from "../types/task";
 import { EventState } from "../types/event";
+import * as Sentry from "sentry-expo";
 
 const initialState: EventState = {
   events: [],
@@ -60,6 +61,29 @@ async function loadNotifications(task: Task) {
   }
 }
 
+function cleanLocal(l: string): string {
+  if (!l) {
+    Sentry.Native.captureException(
+      new Error("Tentou inserir nulo no local do evento >:("),
+    );
+    return "";
+  } else {
+    return l;
+  }
+}
+
+function cleanEvent<T extends BaseEventDescription>(e: T): T {
+  return {
+    ...e,
+    details: e.details.map((det) => {
+      return {
+        ...det,
+        local: cleanLocal(det.local),
+      };
+    }),
+  };
+}
+
 export const eventReducer = (
   state = initialState,
   action: Action,
@@ -77,7 +101,10 @@ export const eventReducer = (
   case ActionType.ADD_EVENT: {
     aux = {
       ...state,
-      events: [...state.events, { ...action.payload, id: state.nextId }],
+      events: [
+        ...state.events,
+        { ...cleanEvent(action.payload), id: state.nextId },
+      ],
       nextId: state.nextId + 1,
     };
     refazerNotificações(aux);
@@ -123,7 +150,7 @@ export const eventReducer = (
       ...state,
       events: state.events.map(
         (event) => event.id === action.payload.id ?
-          action.payload :
+          cleanEvent(action.payload) :
           event,
       ),
     };
