@@ -3,7 +3,7 @@
     "name": "UFSCar Planner",
     "owner": "petbccufscar",
     "slug": "ufscar-planner",
-    "version": "1.3.3",
+    "version": "1.3.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,18 +29,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.pet.ufscarplanner",
-      "buildNumber": "1.3.3"
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#E8243C"
       },
       "package": "com.pet.ufscarplanner",
-      "versionCode": 10,
+      "versionCode": 11,
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
       ]
