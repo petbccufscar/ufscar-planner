@@ -10,7 +10,6 @@ import { Dialog, Button, Portal } from "react-native-paper";
 import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { PropTypes } from "prop-types";
 
 export function Gradient(props) {
   let color = [];
@@ -69,8 +68,6 @@ export function Gradient(props) {
   );
 }
 
-Gradient.propTypes = PropTypes.any;
-
 export function SelGradSquare(props) {
   const [state, setState] = [props.state, props.setState];
   const styles = StyleSheet.create({
@@ -100,8 +97,6 @@ export function SelGradSquare(props) {
     </TouchableOpacity>
   );
 }
-
-SelGradSquare.propTypes = PropTypes.any;
 
 export function PickerGradSquare(props) {
   const [state, setState] = [props.state, props.setState];
@@ -159,5 +154,3 @@ export function PickerGradSquare(props) {
     </>
   );
 }
-
-PickerGradSquare.propTypes = PropTypes.any;

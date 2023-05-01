@@ -5,7 +5,6 @@ import {
   ScrollView as DefaultScrollView,
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import { PropTypes } from "prop-types";
 
 export default function ScrollView(props) {
   const { onScroll, ...otherProps } = props;
@@ -48,5 +47,3 @@ export default function ScrollView(props) {
     />
   );
 }
-
-ScrollView.propTypes = PropTypes.any;

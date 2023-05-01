@@ -9,7 +9,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ConfigSemester } from "../screens/dashboardScreens/Config";
 import { Portal, Dialog, Button } from "react-native-paper";
-import { PropTypes } from "prop-types";
 import {
   isOldDefaultSemester,
   latestDefaultSemester,
@@ -68,8 +67,6 @@ function Bar(props) {
       </View>
     </View>);
 }
-
-Bar.propTypes = PropTypes.any;
 
 export default function Progress() {
   const dispatch = useDispatch();

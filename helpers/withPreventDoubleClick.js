@@ -1,6 +1,5 @@
 import React from "react";
 import debounce from "lodash.debounce"; // 4.0.8
-import { PropTypes } from "prop-types";
 
 export const withPreventDoubleClick = (WrappedComponent) => {
   class PreventDoubleClick extends React.PureComponent {
@@ -19,7 +18,6 @@ export const withPreventDoubleClick = (WrappedComponent) => {
     }
   }
 
-  PreventDoubleClick.propTypes = PropTypes.any;
   const displayName = WrappedComponent.displayName || WrappedComponent.name;
   PreventDoubleClick.displayName = `withPreventDoubleClick(${displayName})`;
 

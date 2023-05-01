@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { PropTypes } from "prop-types";
 
 const Task = (props) => {
   return (
@@ -15,8 +14,6 @@ const Task = (props) => {
     </View>
   );
 };
-
-Task.propTypes = PropTypes.any;
 
 const styles = StyleSheet.create({
   item: {

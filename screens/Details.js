@@ -15,7 +15,6 @@ import { removeEvent, updateEvent } from "../redux/actions/eventActions";
 import { Gradient } from "../components/Gradient";
 import ScrollView from "../components/ScrollView";
 import { withPreventDoubleClick } from "../helpers/withPreventDoubleClick";
-import { PropTypes } from "prop-types";
 
 export default function Details({ route, navigation }) {
   let task = { ...route.params.task };
@@ -413,5 +412,3 @@ export default function Details({ route, navigation }) {
     </View>
   );
 }
-
-Details.propTypes = PropTypes.any;

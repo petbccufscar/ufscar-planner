@@ -21,7 +21,6 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { PropTypes } from "prop-types";
 import { Buffer } from "buffer";
 import { ActivityIndicator } from "react-native-paper";
 
@@ -168,8 +167,6 @@ function ScreenZero({ setPage }) {
   );
 }
 
-ScreenZero.propTypes = PropTypes.any;
-
 function ScreenOne({ setPage }) {
   const colors = useTheme().colors;
   const styles = StyleSheet.create({
@@ -245,8 +242,6 @@ function ScreenOne({ setPage }) {
     </View>
   );
 }
-
-ScreenOne.propTypes = PropTypes.any;
 
 function ScreenTwo({ setPage }) {
   const colors = useTheme().colors;
@@ -473,8 +468,6 @@ function ScreenTwo({ setPage }) {
   );
 }
 
-ScreenTwo.propTypes = PropTypes.any;
-
 function ScreenThree({ setPage }) {
   const theme = useTheme();
   const colors = theme.colors;
@@ -618,5 +611,3 @@ function ScreenThree({ setPage }) {
     </View>
   );
 }
-
-ScreenThree.propTypes = PropTypes.any;
