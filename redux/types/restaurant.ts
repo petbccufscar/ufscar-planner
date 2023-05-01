@@ -100,7 +100,7 @@ export type RestaurantWeekMenu = {
  */
 export type RestaurantState = {
   /**
-   * Uma string no formato ISO-8601 contendo a data e hora da última
+   * Uma string no formato RFC 1123 contendo a data e hora da última
    * atualização do estado, ou a string vazia.
    */
   updatedAt: string,
