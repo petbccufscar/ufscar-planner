@@ -61,8 +61,8 @@ async function loadNotifications(task: Task) {
   }
 }
 
-function cleanLocal(l: string): string {
-  if (!l) {
+function cleanLocal(l: string | null): string {
+  if (l == null) {
     Sentry.Native.captureException(
       new Error("Tentou inserir nulo no local do evento >:("),
     );

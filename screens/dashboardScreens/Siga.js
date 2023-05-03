@@ -23,8 +23,12 @@ import Toast from "react-native-toast-message";
 import { Buffer } from "buffer";
 import { updateSemester } from "../../redux/actions/semesterActions";
 import { latestDefaultSemester } from "../../helpers/defaultSemester";
+import { processSigaSubject } from "../../helpers/sigaHelper";
 
 export const addSigaSubject = (subject, dispatch) => {
+  subject = processSigaSubject(subject);
+  if (subject === null) { return; }
+
   let auxdetails = [];
   for (let i = 0; i < subject.horarios.length; i++) {
     const aux = {
