@@ -24,6 +24,7 @@ module.exports = {
     "eslint-plugin-tsdoc",
   ],
   "rules": {
+    "@typescript-eslint/no-var-requires": "off",
     "react/prop-types": "off",
     "tsdoc/syntax": "warn",
     "indent": ["error", 2],
