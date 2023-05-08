@@ -27,10 +27,14 @@ export async function tryGetBalance(user: User): Promise<number | null> {
   const headers = { Authorization: "Basic " + user.balanceSyncToken };
   const response = await fetch(URL, { headers });
   if (response.status == 200) {
-    const saldo = await response.json() as SaldoResponse;
-    if (saldo.servidorOnline && typeof saldo.saldo === "number") {
-      return saldo.saldo;
-    } else {
+    try {
+      const saldo = await response.json() as SaldoResponse;
+      if (saldo.servidorOnline && typeof saldo.saldo === "number") {
+        return saldo.saldo;
+      } else {
+        return null;
+      }
+    } catch (_) {
       return null;
     }
   } else {
