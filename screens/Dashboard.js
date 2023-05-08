@@ -1,19 +1,25 @@
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ScrollView from "./../components/ScrollView";
 import Progress from "../components/Progress";
 import TextTicker from "react-native-text-ticker";
 import { SIGA } from "../helpers/helper";
+import { isBalanceSyncEnabled } from "../helpers/balance";
+import { Button, Portal, Dialog } from "react-native-paper";
+import { updateUser } from "../redux/actions/userActions";
+import Toast from "react-native-toast-message";
 
 export default function Dashboard() {
   const navigation = useNavigation();
-  const nome = useSelector((state) => state.user).user.name;
+  const user = useSelector((state) => state.user).user;
+  const [openSyncDialog, setOpenSyncDialog] = useState(false);
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const styles = StyleSheet.create({
     container: {
@@ -82,10 +88,18 @@ export default function Dashboard() {
     },
   });
 
+  function onSyncButtonPress() {
+    if (isBalanceSyncEnabled(user)) {
+      setOpenSyncDialog(true);
+    } else {
+      navigation.navigate("RuSync");
+    }
+  }
+
   return (
     <>
       <ScrollView style={styles.container}>
-        <Text style={styles.sectionTitle}>Olá, {nome}</Text>
+        <Text style={styles.sectionTitle}>Olá, {user.name}</Text>
 
         <View style={styles.miscCont}>
           <View style={styles.line}>
@@ -189,7 +203,7 @@ export default function Dashboard() {
         <View style={styles.buttonCont}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("UpdateSaldo")}
+            onPress={onSyncButtonPress}
           >
             <MaterialIcons
               name="account-balance-wallet"
@@ -244,6 +258,40 @@ export default function Dashboard() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Portal>
+        <Dialog
+          style={{ backgroundColor: theme.colors.dialog }}
+          visible={openSyncDialog}
+          onDismiss={() => setOpenSyncDialog(false)}
+        >
+          <Dialog.Title style={{ color: theme.colors.onSurfaceVariant }}>
+            Desativar sincronização?
+          </Dialog.Title>
+          <Dialog.Content>
+            <Text style={{ color: theme.colors.onSurfaceVariant }}>
+              A sincronização automática será desativada.
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setOpenSyncDialog(false)}>
+              Cancelar
+            </Button>
+            <Button
+              onPress={() => {
+                setOpenSyncDialog(false);
+                const rest = { ...user };
+                delete rest.balanceSyncToken;
+                dispatch(updateUser(rest));
+                Toast.show({
+                  text1: "A sincronização de saldo foi desativada.",
+                });
+              }}
+            >
+              Desativar
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 }

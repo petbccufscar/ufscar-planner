@@ -17,7 +17,12 @@ import {
 } from "react-native-paper";
 import { ActivityIndicator } from "react-native-paper";
 
-export default function GenericLogin({ Authenticate, WarningText, children }) {
+export default function GenericLogin({
+  Authenticate,
+  WarningText,
+  SubmitText,
+  children,
+}) {
   const [messageE, setMessageE] = useState("");
   const [messageS, setMessageS] = useState("");
   const theme = useTheme();
@@ -101,9 +106,9 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
       justifyContent: "center",
       marginTop: 10,
     },
-    message: {
+    errorMsg: {
       padding: 10,
-      color: colors.tertiary,
+      color: colors.error,
     },
   });
 
@@ -118,7 +123,7 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
       }}
     >
       {children}
-      {messageE.length > 0 && <Text style={styles.message}>{messageE}</Text>}
+      {messageE.length > 0 && <Text style={styles.errorMsg}>{messageE}</Text>}
       {messageS.length > 0 && <Text style={styles.messageS}>{messageS}</Text>}
 
       <View
@@ -201,7 +206,7 @@ export default function GenericLogin({ Authenticate, WarningText, children }) {
       >
         {loading && <ActivityIndicator color={colors.onPrimary} />}
         {!loading && <Text style={{ color: colors.onPrimary }}>
-          Sincronizar
+          {SubmitText}
         </Text>}
       </TouchableOpacity>
 
