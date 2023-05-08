@@ -7,7 +7,7 @@ export enum Campus {
 
 export type User = {
   /**
-   * O nome do infeliz.
+   * O nome do aluno.
    */
   name: string,
 
