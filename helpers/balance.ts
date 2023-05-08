@@ -7,6 +7,12 @@ type SaldoResponse = {
   servidorOnline: boolean,
 };
 
+export enum BalanceErr {
+  DISABLED = "DISABLED",
+  AUTH_FAILED = "AUTH_FAILED",
+  UNKNOWN = "UNKNOWN",
+}
+
 /**
  * Verifica se a sincronização foi habilitada.
  * @param user - O usuário para autenticar a API.
@@ -19,11 +25,10 @@ export function isBalanceSyncEnabled(user: User): boolean {
 /**
  * Tenta obter o saldo pela API.
  * @param user - O usuário para autenticar a API.
- * @returns O saldo, ou nulo se a autorização foi desabilitada ou ocorreu algum
- * problema.
+ * @returns O saldo, ou uma string de erro em caso de erro.
  */
-export async function tryGetBalance(user: User): Promise<number | null> {
-  if (!isBalanceSyncEnabled(user)) { return null; }
+export async function tryGetBalance(user: User): Promise<number | BalanceErr> {
+  if (!isBalanceSyncEnabled(user)) { return BalanceErr.DISABLED; }
   const headers = { Authorization: "Basic " + user.balanceSyncToken };
   const response = await fetch(URL, { headers });
   if (response.status == 200) {
@@ -32,12 +37,14 @@ export async function tryGetBalance(user: User): Promise<number | null> {
       if (saldo.servidorOnline && typeof saldo.saldo === "number") {
         return saldo.saldo;
       } else {
-        return null;
+        return BalanceErr.UNKNOWN;
       }
     } catch (_) {
-      return null;
+      return BalanceErr.UNKNOWN;
     }
+  } else if (response.status == 401 || response.status == 403) {
+    return BalanceErr.AUTH_FAILED;
   } else {
-    return null;
+    return BalanceErr.UNKNOWN;
   }
 }

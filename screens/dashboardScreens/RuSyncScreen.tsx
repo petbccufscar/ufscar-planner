@@ -9,8 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { UserState } from "../../redux/types/user";
 import { updateUser } from "../../redux/actions/userActions";
-
-const URL = "https://sistemas.ufscar.br/sagui-api/integracoes/pwacesso/consultar-saldo";
+import { BalanceErr, tryGetBalance } from "../../helpers/balance";
 
 export default function RUSyncScreen() {
   const navigation = useNavigation();
@@ -26,15 +25,16 @@ export default function RUSyncScreen() {
     // setMessageS: (msg: string) => void, // TODO refatorar isso fora.
   ) {
     const encodedAuth = Buffer.from(uname + ":" + password).toString("base64");
-    const headers = { Authorization: "Basic " + encodedAuth };
-    const response = await fetch(URL, { headers });
+    const newUser = { ...user, balanceSyncToken: encodedAuth };
+    const balance = await tryGetBalance(newUser);
 
     // Só queremos saber se o usuário e a senha são válidos.
-    if (response.status == 200) {
-      dispatch(updateUser({ ...user, balanceSyncToken: encodedAuth }));
+    if (typeof balance === "number") {
+      newUser.money = balance;
+      dispatch(updateUser(newUser));
       Toast.show({ text1: "A sincronização de saldo foi ativada." });
       navigation.goBack();
-    } else if (response.status == 401 || response.status == 403) {
+    } else if (balance == BalanceErr.AUTH_FAILED) {
       setErrorMessage("Usuário ou senha inválidos");
     } else {
       setErrorMessage("Aconteceu um problema na comunicação com o Sagui");

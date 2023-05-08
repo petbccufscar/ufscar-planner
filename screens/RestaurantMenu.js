@@ -69,7 +69,7 @@ export default function Wallet() {
 
   async function getBalance() {
     const balance = await tryGetBalance(user);
-    if (balance !== null) {
+    if (typeof balance === "number") {
       dispatch(updateUser({ ...user, money: balance }));
       setBalanceOk(true);
     } else {
