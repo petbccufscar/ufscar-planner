@@ -46,6 +46,9 @@ export default function AboutUs() {
     },
   });
   const version = Constants.expoConfig.version;
+  const channel = Constants.expoConfig.updates.requestHeaders[
+    "ufscar-planner-channel"
+  ];
 
   return (
     <>
@@ -56,6 +59,13 @@ export default function AboutUs() {
             <Text style={{ color: theme.colors.primary, fontSize: 18 }}>
               Versão {version}
             </Text>
+            {
+              channel !== null && channel !== "production" && <Text
+                style={{ color: theme.colors.primary, fontSize: 13 }}
+              >
+                — {channel} —
+              </Text>
+            }
           </View>
           <View style={styles.textWall}>
             <Text style={styles.title}>O UFSCar Planner</Text>
