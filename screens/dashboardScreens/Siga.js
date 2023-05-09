@@ -117,8 +117,11 @@ export default function SigaScreen() {
   });
 
   return (
-    <GenericLogin Authenticate={Login}
-      WarningText="Isso deletará as matérias importadas anteriormente!">
+    <GenericLogin
+      Authenticate={Login}
+      SubmitText="Sincronizar"
+      WarningText="Isso deletará as matérias importadas anteriormente!"
+    >
       <SIGA size={30} style={{ marginTop: 20 }} />
       <Text style={{ ...styles.description, paddingBottom: 0 }}>
         Sincronize usando as mesmas credenciais que você utiliza ao entrar no

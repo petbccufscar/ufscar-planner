@@ -24,7 +24,6 @@ import FreqScreen from "./screens/dashboardScreens/Frequencia";
 import SubjectScreen from "./screens/dashboardScreens/Materias";
 import NotasScreen from "./screens/dashboardScreens/Notas";
 import SigaScreen from "./screens/dashboardScreens/Siga";
-import UpdateSaldoScreen from "./screens/dashboardScreens/UpdateSaldoScreen";
 import Details from "./screens/Details";
 import EditScreen from "./screens/EditScreen";
 import RestaurantNotice from "./screens/RestaurantNotice";
@@ -41,6 +40,7 @@ import {
 } from "@expo-google-fonts/roboto-condensed";
 import Links from "./screens/dashboardScreens/Links";
 import * as Sentry from "sentry-expo";
+import RuSyncScreen from "./screens/dashboardScreens/RuSyncScreen";
 
 Sentry.init({
   dsn: "https://c1a9d3d02d424eaa91ee720bd5225f83@o4505104445079552.ingest.sentry.io/4505104464805888",
@@ -239,10 +239,10 @@ function Loader() {
               })}
             />
             <HomeStackRoutes.Screen
-              name="UpdateSaldo"
-              component={UpdateSaldoScreen}
+              name="RuSync"
+              component={RuSyncScreen}
               options={() => ({
-                title: "Atualização da Carteirinha",
+                title: "Sincronização do Saldo",
               })}
             />
           </HomeStackRoutes.Navigator>

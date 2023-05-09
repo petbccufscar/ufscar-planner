@@ -23,6 +23,8 @@ import { Foundation } from "@expo/vector-icons";
 import RestaurantTicket from "../components/RestaurantTicket";
 import { updateCardapio } from "../redux/actions/restaurantActions";
 import { useNetInfo } from "@react-native-community/netinfo";
+import { isBalanceSyncEnabled, tryGetBalance } from "../helpers/balance";
+import { updateUser } from "../redux/actions/userActions";
 
 
 export default function Wallet() {
@@ -34,12 +36,12 @@ export default function Wallet() {
   const days = { begin: first, end: last, today: today };
   const [selectedDay, setSelectedDay] = useState(today);
   const [refreshing, setRefreshing] = useState(true);
+  const [balanceOk, setBalanceOk] = useState(true);
   const restaurant = useSelector((state) => state.restaurant);
   const weekMenu = restaurant.weekMenu;
   const user = useSelector((state) => state.user).user;
 
   const dispatch = useDispatch();
-
 
   function setWeekMenu(data) {
     dispatch(
@@ -64,6 +66,22 @@ export default function Wallet() {
     setWeekMenu(auxWeekMenu);
     return true;
   }
+
+  async function getBalance() {
+    const balance = await tryGetBalance(user);
+    if (typeof balance === "number") {
+      dispatch(updateUser({ ...user, money: balance }));
+      setBalanceOk(true);
+    } else {
+      setBalanceOk(false);
+    }
+  }
+
+  useEffect(() => {
+    if (refreshing && netInfo.isConnected && isBalanceSyncEnabled(user)) {
+      getBalance();
+    }
+  }, [refreshing, netInfo.isConnected, user.balanceSyncToken]);
 
   useEffect(() => {
     if (refreshing) {
@@ -325,7 +343,10 @@ export default function Wallet() {
             </View>
           </TouchableOpacity>
         }
-        <RestaurantTicket />
+        <RestaurantTicket
+          showControls={!isBalanceSyncEnabled(user)}
+          hasError={!balanceOk}
+        />
         <View style={styles.infoView}>
           <Foundation name="info" size={24} color={theme.colors.outline} />
           <Text style={styles.infoText}>

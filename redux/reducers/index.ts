@@ -16,7 +16,7 @@ import { ThemeState } from "../types/theme";
 import { RestaurantState } from "../types/restaurant";
 import createMigrate from "redux-persist/es/createMigrate";
 
-type RootState = {
+export type RootState = {
   events: EventState,
   user: UserState,
   semester: SemesterState,

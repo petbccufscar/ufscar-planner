@@ -9,13 +9,15 @@ import ScrollView from "./ScrollView";
 import { useNavigation } from "@react-navigation/core";
 import { Portal, Button, Dialog, TextInput } from "react-native-paper";
 
-export default function RestaurantTicket() {
+export default function RestaurantTicket(props) {
   const user = useSelector((state) => state.user).user;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(user.money.toString());
   const mealValue = user.meal;
 
+  const showControls = props.showControls;
+  const hasError = props.hasError;
   const dispatcher = useDispatch();
 
   const decrementValue = () => {
@@ -121,6 +123,15 @@ export default function RestaurantTicket() {
       marginBottom: 8,
       backgroundColor: theme.colors.surface,
     },
+    errorLine: {
+      flexDirection: "row",
+      justifyContent: "center",
+      paddingBottom: 14,
+    },
+    errorMessage: {
+      textAlign: "left",
+      color: theme.colors.error,
+    },
   });
 
   const qtdRefeicoes = Math.floor(user.money / user.meal);
@@ -128,8 +139,11 @@ export default function RestaurantTicket() {
   const navigation = useNavigation();
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={() => navigation.navigate("UpdateSaldo")}
-        style={styles.saldoTitleCard}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("RuSync")}
+        disabled={!showControls}
+        style={styles.saldoTitleCard}
+      >
         <MaterialIcons
           style={styles.leftIconButton}
           name="account-balance-wallet"
@@ -138,11 +152,13 @@ export default function RestaurantTicket() {
         />
         <Text style={styles.titleCentered}>Saldo da Carteirinha</Text>
         <View>
-          <MaterialCommunityIcons
-            name="web-sync"
-            size={24}
-            color={theme.colors.primary}
-          />
+          {
+            showControls && <MaterialCommunityIcons
+              name="web-sync"
+              size={24}
+              color={theme.colors.primary}
+            />
+          }
         </View>
       </TouchableOpacity>
       <View style={styles.saldoBodyCard}>
@@ -156,24 +172,40 @@ export default function RestaurantTicket() {
             } {refeicao}
           </Text>
         </View>
-
-        <ScrollView horizontal={true}>
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={styles.alterarSaldoButton}
-              onPress={() => setOpen(true)}
-            >
-              <Text style={styles.alterarBtnText}>Alterar saldo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => decrementValue()}
-              style={styles.debitarRefeicaoButton}
-            >
-              <Text style={styles.debitarBtnText}>Debitar refeição</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        {
+          showControls && <ScrollView horizontal={true}>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={styles.alterarSaldoButton}
+                onPress={() => setOpen(true)}
+              >
+                <Text style={styles.alterarBtnText}>Alterar saldo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => decrementValue()}
+                style={styles.debitarRefeicaoButton}
+              >
+                <Text style={styles.debitarBtnText}>Debitar refeição</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        }
       </View>
+      {
+        !showControls && hasError && <>
+          <View style={styles.errorLine}>
+            <MaterialIcons
+              style={styles.errorMessage}
+              name="warning"
+              size={19}
+            />
+            <Text> </Text>
+            <Text style={styles.errorMessage}>
+              Ocorreu um erro ao atualizar o saldo.
+            </Text>
+          </View>
+        </>
+      }
       <Portal>
         <Dialog
           style={{ backgroundColor: theme.colors.dialog }}
