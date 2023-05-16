@@ -9,9 +9,8 @@ import ScrollView from "./../components/ScrollView";
 import Progress from "../components/Progress";
 import TextTicker from "react-native-text-ticker";
 import { SIGA } from "../helpers/helper";
-import { isBalanceSyncEnabled } from "../helpers/balance";
+import { disableBalanceSync, isBalanceSyncEnabled } from "../helpers/balance";
 import { Button, Portal, Dialog } from "react-native-paper";
-import { updateUser } from "../redux/actions/userActions";
 import Toast from "react-native-toast-message";
 
 export default function Dashboard() {
@@ -277,11 +276,9 @@ export default function Dashboard() {
               Cancelar
             </Button>
             <Button
-              onPress={() => {
+              onPress={async() => {
                 setOpenSyncDialog(false);
-                const rest = { ...user };
-                delete rest.balanceSyncToken;
-                dispatch(updateUser(rest));
+                await disableBalanceSync(user, dispatch);
                 Toast.show({
                   text1: "A sincronização de saldo foi desativada.",
                 });

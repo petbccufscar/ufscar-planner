@@ -40,6 +40,9 @@ export type User = {
   /**
    * O token de autorização Basic do usuário para sincronização do RU. Não é
    * definido se a sincronização estiver desativada.
+   *
+   * Se a sincronização estiver ativada e o token for amazenado no armazenamento
+   * seguro, o valor deste campo é igual à string vazia.
    */
   balanceSyncToken?: string,
 }
