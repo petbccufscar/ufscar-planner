@@ -150,7 +150,7 @@ function ScreenZero({ setPage }) {
         / Termos de uso.
       </Text>
       <TouchableOpacity
-        onPress={() => Linking.openURL("https://petbcc.ufscar.br/ufscar_planner/politica/")}
+        onPress={() => Linking.openURL("https://github.com/petbccufscar/ufscar-planner/blob/main/PRIVACY.md")}
       >
         <Text
           style={{ ...styles.h3, color: colors.primary }}
