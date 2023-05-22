@@ -49,14 +49,7 @@ module.exports = {
     "function-paren-newline": ["error", "multiline-arguments"],
     "key-spacing": ["error"],
     "keyword-spacing": ["error"],
-    "max-len": [
-      "error",
-      {
-        code: 80,
-        ignoreUrls: true,
-        ignoreRegExpLiterals: true,
-      },
-    ],
+    "max-len": ["error", { code: 80, ignoreStrings: true }],
     "new-parens": ["error"],
     "newline-per-chained-call": ["error"],
     "no-extra-parens": ["error"],

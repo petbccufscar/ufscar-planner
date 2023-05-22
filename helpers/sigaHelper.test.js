@@ -1,4 +1,7 @@
-import { processSigaSubject } from "./sigaHelper";
+import { mapSigaSubject } from "./sigaHelper";
+
+jest.useFakeTimers();
+jest.setSystemTime(new Date("2023-05-22 15:43:19 GMT-0300"));
 
 const SIGA = {
   atividade: "ALGORITMOS E ESTRUTURAS DE DADOS 3",
@@ -13,12 +16,47 @@ const SIGA = {
   ],
 };
 
+const MAPPED = {
+  weekly: true,
+  siga: true,
+  is_subject: true,
+  is_submited: false,
+  details: [
+    {
+      day: 6,
+      datetime_init: "Mon May 22 2023 01:00:19 GMT-0300 (Horário Padrão de Brasília)",
+      datetime_end: "Mon May 22 2023 03:00:19 GMT-0300 (Horário Padrão de Brasília)",
+      local: "sala 530 at-19",
+    },
+  ],
+  name: "ALGORITMOS E ESTRUTURAS DE DADOS 3",
+  subject: null,
+  notification: [],
+  description: "",
+  color: 6,
+  mean: "(p1+p2+p3)/3",
+  frequency: "(aulasDadas - faltas)/aulasDadas",
+  grade: {
+    frequency: {
+      aulasDadas: 1,
+      faltas: 0,
+    },
+    mean: {
+      p1: 0,
+      p2: 0,
+      p3: 0,
+    },
+  },
+  turma: "turma Z",
+  teachers: [],
+};
+
 test("mapeia siga -> siga", () => {
-  expect(processSigaSubject(SIGA)).toStrictEqual(SIGA);
+  expect(mapSigaSubject(SIGA)).toStrictEqual(MAPPED);
 });
 
 test("horários inválidos mapeiam para 0:00 am", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -29,17 +67,17 @@ test("horários inválidos mapeiam para 0:00 am", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        inicio: "0:00 am",
-        fim: "0:01 am",
+        ...MAPPED.details[0],
+        datetime_init: "Mon May 22 2023 00:00:19 GMT-0300 (Horário Padrão de Brasília)",
+        datetime_end: "Mon May 22 2023 00:01:19 GMT-0300 (Horário Padrão de Brasília)",
       },
     ],
   });
 
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -50,19 +88,19 @@ test("horários inválidos mapeiam para 0:00 am", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        inicio: "0:00 am",
-        fim: "0:01 am",
+        ...MAPPED.details[0],
+        datetime_init: "Mon May 22 2023 00:00:19 GMT-0300 (Horário Padrão de Brasília)",
+        datetime_end: "Mon May 22 2023 00:01:19 GMT-0300 (Horário Padrão de Brasília)",
       },
     ],
   });
 });
 
 test("atividade incorreta mapeia para nulo", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       atividade: 3,
@@ -71,7 +109,7 @@ test("atividade incorreta mapeia para nulo", () => {
 });
 
 test("sala inválida mapeia para string vazia", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -82,16 +120,16 @@ test("sala inválida mapeia para string vazia", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        sala: "",
+        ...MAPPED.details[0],
+        local: "",
       },
     ],
   });
 
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -103,18 +141,18 @@ test("sala inválida mapeia para string vazia", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        sala: "",
+        ...MAPPED.details[0],
+        local: "",
       },
     ],
   });
 });
 
 test("dia inválido mapeia para domingo", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -125,16 +163,16 @@ test("dia inválido mapeia para domingo", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        dia: "DOMINGO",
+        ...MAPPED.details[0],
+        day: 0,
       },
     ],
   });
 
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: [
@@ -145,46 +183,46 @@ test("dia inválido mapeia para domingo", () => {
       ],
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [
+    ...MAPPED,
+    details: [
       {
-        ...SIGA.horarios[0],
-        dia: "DOMINGO",
+        ...MAPPED.details[0],
+        day: 0,
       },
     ],
   });
 });
 
 test("turma inválida mapeia para string vazia", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       turma: expect,
     },
   )).toStrictEqual({
-    ...SIGA,
-    turma: "",
+    ...MAPPED,
+    turma: "turma ",
   });
 });
 
 test("horário inválido mapeia para lista vazia", () => {
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: new Error(""),
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [],
+    ...MAPPED,
+    details: [],
   });
 
-  expect(processSigaSubject(
+  expect(mapSigaSubject(
     {
       ...SIGA,
       horarios: undefined,
     },
   )).toStrictEqual({
-    ...SIGA,
-    horarios: [],
+    ...MAPPED,
+    details: [],
   });
 });
