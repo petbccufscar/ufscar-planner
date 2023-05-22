@@ -181,32 +181,36 @@ export async function fetchSigaSubjects(
     Authorization: "Basic " + encodedAuth,
     Accept: "application/json",
   };
-  const response = await fetch(SIGA_URL, { headers });
-  if (response.status == 200) {
-    try {
-      const sigaResponse = await response.json() as SigaResponse;
-      if ("error" in sigaResponse) {
-        if (sigaResponse.status == 401 || sigaResponse.status == 403) {
-          return { ok: false, error: SigaErrorReason.UNAUTHORIZED };
-        } else {
-          return { ok: false, error: SigaErrorReason.UNKNOWN };
-        }
-      } else {
-        const subjects: SubjectDescription[] = [];
-        for (const subject of sigaResponse.data) {
-          const mapped = mapSigaSubject(subject);
-          if (mapped !== null) {
-            subjects.push(mapped);
+  try {
+    const response = await fetch(SIGA_URL, { headers });
+    if (response.status == 200) {
+      try {
+        const sigaResponse = await response.json() as SigaResponse;
+        if ("error" in sigaResponse) {
+          if (sigaResponse.status == 401 || sigaResponse.status == 403) {
+            return { ok: false, error: SigaErrorReason.UNAUTHORIZED };
+          } else {
+            return { ok: false, error: SigaErrorReason.UNKNOWN };
           }
+        } else {
+          const subjects: SubjectDescription[] = [];
+          for (const subject of sigaResponse.data) {
+            const mapped = mapSigaSubject(subject);
+            if (mapped !== null) {
+              subjects.push(mapped);
+            }
+          }
+          return { ok: true, subjects };
         }
-        return { ok: true, subjects };
+      } catch (_jsonError) {
+        return { ok: false, error: SigaErrorReason.UNKNOWN };
       }
-    } catch (_jsonError) {
+    } else if (response.status == 401 || response.status == 403) {
+      return { ok: false, error: SigaErrorReason.UNAUTHORIZED };
+    } else {
       return { ok: false, error: SigaErrorReason.UNKNOWN };
     }
-  } else if (response.status == 401 || response.status == 403) {
-    return { ok: false, error: SigaErrorReason.UNAUTHORIZED };
-  } else {
+  } catch (_) {
     return { ok: false, error: SigaErrorReason.UNKNOWN };
   }
 }

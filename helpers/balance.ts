@@ -96,21 +96,25 @@ export async function tryGetBalanceWithToken(
   token: string,
 ): Promise<number | BalanceErr> {
   const headers = { Authorization: "Basic " + token };
-  const response = await fetch(URL, { headers });
-  if (response.status == 200) {
-    try {
-      const saldo = await response.json() as SaldoResponse;
-      if (saldo.servidorOnline && typeof saldo.saldo === "number") {
-        return saldo.saldo;
-      } else {
+  try {
+    const response = await fetch(URL, { headers });
+    if (response.status == 200) {
+      try {
+        const saldo = await response.json() as SaldoResponse;
+        if (saldo.servidorOnline && typeof saldo.saldo === "number") {
+          return saldo.saldo;
+        } else {
+          return BalanceErr.UNKNOWN;
+        }
+      } catch (_) {
         return BalanceErr.UNKNOWN;
       }
-    } catch (_) {
+    } else if (response.status == 401 || response.status == 403) {
+      return BalanceErr.AUTH_FAILED;
+    } else {
       return BalanceErr.UNKNOWN;
     }
-  } else if (response.status == 401 || response.status == 403) {
-    return BalanceErr.AUTH_FAILED;
-  } else {
+  } catch (_) {
     return BalanceErr.UNKNOWN;
   }
 }

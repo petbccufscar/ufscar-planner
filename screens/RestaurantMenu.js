@@ -61,7 +61,7 @@ export default function Wallet() {
       auxWeekMenu[floorDate(newDate)] = dayMenu;
     }
 
-    auxWeekMenu.notice = await noticeDoRU();
+    try { auxWeekMenu.notice = await noticeDoRU(); } catch (_) { /* empty */ }
 
     setWeekMenu(auxWeekMenu);
     return true;
