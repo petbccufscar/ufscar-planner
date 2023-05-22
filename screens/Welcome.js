@@ -13,16 +13,11 @@ import { updateUser } from "../redux/actions/userActions";
 import { SIGA } from "../helpers/helper";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
-import {
-  removeSIGA,
-} from "../redux/actions/eventActions";
-import { addSigaSubject } from "./dashboardScreens/Siga";
-import {
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { addEvent, removeSIGA } from "../redux/actions/eventActions";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { Buffer } from "buffer";
 import { ActivityIndicator } from "react-native-paper";
+import { SigaErrorReason, fetchSigaSubjects } from "../helpers/sigaHelper";
 
 export default function Welcome() {
   const colors = useTheme().colors;
@@ -248,9 +243,28 @@ function ScreenTwo({ setPage }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const handleError = (error) => {
-    if (error.status != undefined) {
-      if (error.status === 401 || error.status === 403) {
+  async function Login(user, pssw) {
+    setLoading(true);
+    const sigaResult = await fetchSigaSubjects(user, pssw);
+    if (sigaResult.ok) {
+      if (sigaResult.subjects.length == 0) {
+        Toast.show({
+          type: "error",
+          text1:
+            "Aparentemente você não possui nenhum deferimento no Periodo " +
+            "letivo atual, por acaso está de férias?",
+        });
+        setPage(3);
+      } else {
+        dispatch(removeSIGA());
+        for (const subject of sigaResult.subjects) {
+          dispatch(addEvent(subject));
+        }
+        Toast.show({ text1: "Suas matérias foram importadas!" });
+        setPage(3);
+      }
+    } else {
+      if (sigaResult.error == SigaErrorReason.UNAUTHORIZED) {
         Toast.show({
           type: "error",
           text1: "Usuário ou senha Inválidos",
@@ -261,57 +275,6 @@ function ScreenTwo({ setPage }) {
           text1: "Aconteceu um problema na comunicação com o SIGA",
         });
       }
-    }
-  };
-
-  async function Login(user, pssw) {
-    setLoading(true);
-    let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
-    try {
-      const response = await fetch(
-        "https://sistemas.ufscar.br/sagui-api/siga/deferimento",
-        {
-          headers: {
-            Authorization: "Basic " + encodedAuth,
-          },
-        },
-      );
-      let data = await response.json();
-      if (data.status == undefined) {
-        if (data.length == 0) {
-          Toast.show({
-            type: "error",
-            text1:
-              "Aparentemente você não possui nenhum deferimento no Periodo " +
-              "letivo atual, por acaso está de férias?",
-          });
-          setPage(3);
-        } else {
-          const subjects = data.data;
-          try {
-            dispatch(removeSIGA());
-
-            for (let i = 0; i < subjects.length; i++) {
-              addSigaSubject(subjects[i], dispatch);
-            }
-            Toast.show({
-              type: "success",
-              text1: "Suas matérias foram importadas!",
-            });
-            setPage(3);
-          } catch (e) {
-            Toast.show({
-              type: "error",
-              text1: "Aconteceu um problema na comunicação com o SIGA",
-            });
-            console.log(e);
-          }
-        }
-      } else {
-        handleError(data);
-      }
-    } catch (error) {
-      handleError(error);
     }
     setLoading(false);
   }
