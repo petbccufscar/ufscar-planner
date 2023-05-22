@@ -23,9 +23,7 @@ export default function RUSyncScreen() {
   async function login(
     uname: string,
     password: string,
-    _errorHandler: (error: Response) => void, // TODO refatorar isso fora.
     setErrorMessage: (msg: string) => void,
-    // setMessageS: (msg: string) => void, // TODO refatorar isso fora.
   ) {
     const encodedAuth = Buffer.from(uname + ":" + password).toString("base64");
     const balance = await tryGetBalanceWithToken(encodedAuth);

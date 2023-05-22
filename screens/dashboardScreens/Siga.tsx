@@ -97,15 +97,13 @@ export default function SigaScreen() {
   async function Login(
     user: string,
     pssw: string,
-    _errorHandler: (error: Response) => void, // TODO refatorar isso fora.
-    setMessageE: (msg: string) => void,
-    // setMessageS: (msg: string) => void, // TODO refatorar isso fora.
+    setErrorMessage: (msg: string) => void,
   ) {
-    setMessageE("");
+    setErrorMessage("");
     const encodedAuth = Buffer.from(user + ":" + pssw).toString("base64");
     const headers = {
       Authorization: "Basic " + encodedAuth,
-      Accept: "application/json"
+      Accept: "application/json",
     };
     const response = await fetch(SIGA_URL, { headers });
     if (response.status == 200) {
@@ -113,15 +111,15 @@ export default function SigaScreen() {
         const sigaResponse = await response.json() as SigaResponse;
         if ("error" in sigaResponse) {
           if (sigaResponse.status == 401 || sigaResponse.status == 403) {
-            setMessageE("Usuário ou senha inválidos");
+            setErrorMessage("Usuário ou senha inválidos");
           } else {
-            setMessageE("Aconteceu um problema na comunicação com o SIGA");
+            setErrorMessage("Aconteceu um problema na comunicação com o SIGA");
           }
         } else {
           const subjects = sigaResponse.data;
           dispatch(updateSemester(latestDefaultSemester()));
           if (subjects.length == 0) {
-            setMessageE(
+            setErrorMessage(
               "Aparentemente você não possui nenhum deferimento no Periodo " +
               "letivo atual, por acaso está de férias?",
             );
@@ -135,12 +133,12 @@ export default function SigaScreen() {
           }
         }
       } catch (_jsonError) {
-        setMessageE("Aconteceu um problema na comunicação com o SIGA");
+        setErrorMessage("Aconteceu um problema na comunicação com o SIGA");
       }
     } else if (response.status == 401 || response.status == 403) {
-      setMessageE("Usuário ou senha inválidos");
+      setErrorMessage("Usuário ou senha inválidos");
     } else {
-      setMessageE("Aconteceu um problema na comunicação com o SIGA");
+      setErrorMessage("Aconteceu um problema na comunicação com o SIGA");
     }
   }
 

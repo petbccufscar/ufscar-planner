@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Text,
   View,
@@ -17,42 +17,29 @@ import {
 } from "react-native-paper";
 import { ActivityIndicator } from "react-native-paper";
 
-export default function GenericLogin({
-  Authenticate,
-  WarningText,
-  SubmitText,
-  children,
-}) {
-  const [messageE, setMessageE] = useState("");
-  const [messageS, setMessageS] = useState("");
+type GenericLoginProps = {
+  Authenticate: (
+    username: string,
+    password: string,
+    setErrorMessage: (msg: string) => void,
+  ) => Promise<void>,
+  WarningText: string,
+  SubmitText: string,
+  children: ReactNode,
+};
+
+export default function GenericLogin(props: GenericLoginProps) {
   const theme = useTheme();
   const colors = theme.colors;
+  const [errorMessage, setErrorMessage] = useState("");
   const [visible, setVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleError = (error) => {
-    if (error.status != undefined) {
-      if (error.status === 401 || error.status === 403) {
-        setMessageE("Usuário ou senha inválidos");
-        setMessageS("");
-      } else {
-        setMessageE("Aconteceu um problema na comunicação com o SIGA");
-        setMessageS("");
-      }
-    }
-  };
-
-  async function Login(username, password) {
+  async function Login(username: string, password: string) {
     setLoading(true);
-    await Authenticate(
-      username,
-      password,
-      handleError,
-      setMessageE,
-      setMessageS,
-    );
+    await props.Authenticate(username, password, setErrorMessage);
     setLoading(false);
   }
 
@@ -122,9 +109,12 @@ export default function GenericLogin({
         alignItems: "center",
       }}
     >
-      {children}
-      {messageE.length > 0 && <Text style={styles.errorMsg}>{messageE}</Text>}
-      {messageS.length > 0 && <Text style={styles.messageS}>{messageS}</Text>}
+      {props.children}
+      {
+        errorMessage.length > 0 && <Text style={styles.errorMsg}>
+          {errorMessage}
+        </Text>
+      }
 
       <View
         style={{
@@ -206,7 +196,7 @@ export default function GenericLogin({
       >
         {loading && <ActivityIndicator color={colors.onPrimary} />}
         {!loading && <Text style={{ color: colors.onPrimary }}>
-          {SubmitText}
+          {props.SubmitText}
         </Text>}
       </TouchableOpacity>
 
@@ -221,7 +211,7 @@ export default function GenericLogin({
           </Dialog.Title>
           <Dialog.Content>
             <Text style={{ color: colors.onSurfaceVariant }}>
-              {WarningText}
+              {props.WarningText}
             </Text>
           </Dialog.Content>
           <Dialog.Actions>
