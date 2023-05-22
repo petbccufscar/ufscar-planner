@@ -15,7 +15,7 @@ type SigaHorario = {
   dia: WeekdaySiga,
 };
 
-type SigaSubject = {
+export type SigaSubject = {
   atividade: string,
   turma: string,
   horarios: SigaHorario[],

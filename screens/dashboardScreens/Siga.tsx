@@ -9,13 +9,13 @@ import {
 } from "react-native-paper";
 import GenericLogin from "../../components/GenericLogin";
 import {
-  defaultSubject,
   parseTime,
   SIGA,
   weekDaysSIGA,
 } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import {
+  AddEventAction,
   addEvent,
   removeSIGA,
 } from "../../redux/actions/eventActions";
@@ -23,35 +23,70 @@ import Toast from "react-native-toast-message";
 import { Buffer } from "buffer";
 import { updateSemester } from "../../redux/actions/semesterActions";
 import { latestDefaultSemester } from "../../helpers/defaultSemester";
-import { processSigaSubject } from "../../helpers/sigaHelper";
+import { SigaSubject, processSigaSubject } from "../../helpers/sigaHelper";
+import { Dispatch } from "redux";
+import { Detail, SubjectDescription } from "../../redux/types/task";
 
-export const addSigaSubject = (subject, dispatch) => {
-  subject = processSigaSubject(subject);
-  if (subject === null) { return; }
+const SIGA_URL = "https://sistemas.ufscar.br/sagui-api/siga/deferimento";
 
-  let auxdetails = [];
+/** Resposta OK da API de deferimento do Sagui */
+type SigaOk = {
+  data: SigaSubject[],
+}
+
+/** Resposta de Erro da API de deferimento do Sagui */
+type SigaError = {
+  timestamp: number,
+  status: number,
+  error: string,
+  message: string,
+  path: string,
+}
+
+/** Resposta que o siga pode retornar pela API */
+type SigaResponse = SigaOk | SigaError;
+
+export function addSigaSubject(
+  subject: SigaSubject,
+  dispatch: Dispatch<AddEventAction>,
+) {
+  const optSubject = processSigaSubject(subject);
+  if (optSubject === null) { return; }
+  subject = optSubject;
+
+  const auxdetails: Detail[] = [];
   for (let i = 0; i < subject.horarios.length; i++) {
-    const aux = {
+    auxdetails.push({
       datetime_init: parseTime(subject.horarios[i].inicio).toString(),
       datetime_end: parseTime(subject.horarios[i].fim).toString(),
       local: subject.horarios[i].sala || "",
       day: weekDaysSIGA.indexOf(subject.horarios[i].dia),
-    };
-
-    auxdetails.push(aux);
+    });
   }
 
-  const task = {
-    ...defaultSubject,
+  const task: SubjectDescription = {
     siga: true,
     details: [...auxdetails],
     name: subject.atividade,
     color: 6,
     turma: "turma " + subject.turma,
+    weekly: true,
+    is_subject: true,
+    is_submited: false,
+    subject: null,
+    notification: [],
+    description: "",
+    mean: "(p1+p2+p3)/3",
+    frequency: "(aulasDadas - faltas)/aulasDadas",
+    grade: {
+      frequency: { aulasDadas: 1, faltas: 0 },
+      mean: { p1: 0, p2: 0, p3: 0 },
+    },
+    teachers: [],
   };
 
   dispatch(addEvent(task));
-};
+}
 
 export default function SigaScreen() {
   const navigation = useNavigation();
@@ -59,51 +94,53 @@ export default function SigaScreen() {
   const colors = theme.colors;
   const dispatch = useDispatch();
 
-  async function Login(user, pssw, handleError, setMessageE, setMessageS) {
-    setMessageS("");
+  async function Login(
+    user: string,
+    pssw: string,
+    _errorHandler: (error: Response) => void, // TODO refatorar isso fora.
+    setMessageE: (msg: string) => void,
+    // setMessageS: (msg: string) => void, // TODO refatorar isso fora.
+  ) {
     setMessageE("");
-    let encodedAuth = new Buffer(user + ":" + pssw).toString("base64");
-    try {
-      const response = await fetch(
-        "https://sistemas.ufscar.br/sagui-api/siga/deferimento",
-        {
-          headers: {
-            Authorization: "Basic " + encodedAuth,
-          },
-        },
-      );
-      let data = await response.json();
-      dispatch(updateSemester(latestDefaultSemester()));
-      if (data.status == undefined) {
-        if (data.length == 0) {
-          setMessageE(
-            "Aparentemente você não possui nenhum deferimento no Periodo " +
-            "letivo atual, por acaso está de férias?",
-          );
-          setMessageS("");
+    const encodedAuth = Buffer.from(user + ":" + pssw).toString("base64");
+    const headers = {
+      Authorization: "Basic " + encodedAuth,
+      Accept: "application/json"
+    };
+    const response = await fetch(SIGA_URL, { headers });
+    if (response.status == 200) {
+      try {
+        const sigaResponse = await response.json() as SigaResponse;
+        if ("error" in sigaResponse) {
+          if (sigaResponse.status == 401 || sigaResponse.status == 403) {
+            setMessageE("Usuário ou senha inválidos");
+          } else {
+            setMessageE("Aconteceu um problema na comunicação com o SIGA");
+          }
         } else {
-          const subjects = data.data;
-          try {
+          const subjects = sigaResponse.data;
+          dispatch(updateSemester(latestDefaultSemester()));
+          if (subjects.length == 0) {
+            setMessageE(
+              "Aparentemente você não possui nenhum deferimento no Periodo " +
+              "letivo atual, por acaso está de férias?",
+            );
+          } else {
             dispatch(removeSIGA());
             for (let i = 0; i < subjects.length; i++) {
               addSigaSubject(subjects[i], dispatch);
             }
-            Toast.show({
-              type: "success",
-              text1: "Suas matérias foram importadas!",
-            });
+            Toast.show({ text1: "Suas matérias foram importadas!" });
             navigation.goBack();
-          } catch (e) {
-            setMessageE("Aconteceu um problema na comunicação com o SIGA");
-            setMessageS("");
-            console.log(e);
           }
         }
-      } else {
-        handleError(data);
+      } catch (_jsonError) {
+        setMessageE("Aconteceu um problema na comunicação com o SIGA");
       }
-    } catch (error) {
-      handleError(error);
+    } else if (response.status == 401 || response.status == 403) {
+      setMessageE("Usuário ou senha inválidos");
+    } else {
+      setMessageE("Aconteceu um problema na comunicação com o SIGA");
     }
   }
 
