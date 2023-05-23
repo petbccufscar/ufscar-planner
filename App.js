@@ -41,11 +41,17 @@ import {
 import Links from "./screens/dashboardScreens/Links";
 import * as Sentry from "sentry-expo";
 import RuSyncScreen from "./screens/dashboardScreens/RuSyncScreen";
+import Constants from "expo-constants";
+import * as Application from "expo-application";
 
 Sentry.init({
   dsn: "https://c1a9d3d02d424eaa91ee720bd5225f83@o4505104445079552.ingest.sentry.io/4505104464805888",
   enableInExpoDevelopment: false,
   debug: __DEV__,
+  dist: Application.nativeBuildVersion,
+  release: Constants.expoConfig.android.package +
+    "@" + Constants.expoConfig.version +
+    "+" + Constants.expoConfig.android.versionCode.toString(),
 });
 
 if (
