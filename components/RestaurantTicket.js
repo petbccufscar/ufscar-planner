@@ -134,7 +134,9 @@ export default function RestaurantTicket(props) {
     },
   });
 
-  const qtdRefeicoes = Math.floor(user.money / user.meal);
+  const qtdRefeicoes = Math.floor(
+    user.money * 10 * 10  / (user.meal * 10 * 10),
+  );
   const refeicao = qtdRefeicoes == 1 ? "refeição" : "refeições";
   const navigation = useNavigation();
   return (
@@ -230,7 +232,9 @@ export default function RestaurantTicket(props) {
             >Cancelar</Button>
             <Button
               disabled={
-                value.search(/^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/) < 0
+                value.search(
+                  /^\$?\d+(((.\d{3})*(,\d*))|((,\d{3})*(\.\d*)))?$/,
+                ) < 0
               }
               onPress={() => {
                 handleCashChange();
