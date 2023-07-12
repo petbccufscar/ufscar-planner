@@ -8,14 +8,22 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+env:
+  LANG: "pt_BR.UTF-8"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
+    - name: Set locale and timezone
+      run: |
+          sudo locale-gen pt_BR.UTF-8
+          sudo update-locale LANG=pt_BR.UTF-8
+          sudo ln -s -f /usr/share/zoneinfo/Ameria/Sao_Paulo /etc/localtime
     - uses: actions/checkout@v3
+    - uses: szenius/set-timezone@v1.2
+      with:
+        timezoneLinux: "Brazil/East"
     - uses: actions/setup-node@v3
       with:
         node-version: 18
