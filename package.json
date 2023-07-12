@@ -11,6 +11,15 @@
     "upload:prod": "PLANNER_CHANNEL=production node upload.cjs",
     "test": "jest"
   },
+  "jest": {
+    "preset": "jest-expo",
+    "setupFiles": [
+      "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
+    "transform": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/testing/assetTransform.cjs"
+    }
+  },
   "dependencies": {
     "@expo-google-fonts/roboto-condensed": "^0.2.2",
     "@expo/vector-icons": "^13.0.0",
@@ -64,13 +73,13 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.1.6",
-    "@types/jest": "^29.5.1",
+    "@testing-library/react-native": "^12.1.2",
+    "@types/jest": "^29.5.3",
     "@types/react": "^18.0.28",
     "@types/react-native": "^0.71.3",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "axios": "^1.4.0",
-    "babel-jest": "^29.5.0",
     "eslint": "^8.28.0",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-react": "^7.31.11",
@@ -79,6 +88,7 @@
     "jest": "^29.5.0",
     "jest-expo": "^48.0.2",
     "react-native-svg-transformer": "^0.14.3",
+    "react-test-renderer": "^18.2.0",
     "typescript": "^4.9.4"
   },
   "resolutions": {
