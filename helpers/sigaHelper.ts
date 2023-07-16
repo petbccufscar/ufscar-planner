@@ -167,6 +167,16 @@ export type SigaSuccess = {
 export type SigaResult = SigaSuccess | SigaError;
 
 /**
+ * Codifica um usuário e senha para um token de autenticação básica.
+ * @param user - O número UFSCar do aluno.
+ * @param password - A senha do Siga do aluno.
+ * @returns Um token de autenticação básica.
+ */
+export function encodeAuth(user: string, password: string): string {
+  return Buffer.from(user + ":" + password).toString("base64");
+}
+
+/**
  * Obtém as matérias deferidas de um aluno pela API do Sagui.
  * @param user - O número UFSCar do aluno.
  * @param password - A senha do Siga do aluno.
@@ -176,9 +186,8 @@ export async function fetchSigaSubjects(
   user: string,
   password: string,
 ): Promise<SigaResult> {
-  const encodedAuth = Buffer.from(user + ":" + password).toString("base64");
   const headers = {
-    Authorization: "Basic " + encodedAuth,
+    Authorization: "Basic " + encodeAuth(user, password),
     Accept: "application/json",
   };
   try {

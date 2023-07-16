@@ -1,4 +1,4 @@
-import { mapSigaSubject } from "./sigaHelper";
+import { encodeAuth, mapSigaSubject } from "./sigaHelper";
 
 jest.useFakeTimers();
 jest.setSystemTime(new Date("2023-05-22 15:43:19 GMT-0300"));
@@ -225,4 +225,18 @@ test("horário inválido mapeia para lista vazia", () => {
     ...MAPPED,
     details: [],
   });
+});
+
+test("encodeAuth codifica senhas corretamente", () => {
+  expect(encodeAuth("matheus", "ramos")).toBe("bWF0aGV1czpyYW1vcw==");
+  expect(encodeAuth("matheus", "🥺")).toBe("bWF0aGV1czrwn6W6");
+  expect(encodeAuth("matheus", "애플리케이션 최종사용자"))
+    .toBe("bWF0aGV1czrslaDtlIzrpqzsvIDsnbTshZgg7LWc7KKF7IKs7Jqp7J6Q");
+  expect(encodeAuth("matheus", "𐒲")).toBe("bWF0aGV1czrwkJKy");
+  expect(encodeAuth("matheus", "ra:mos")).toBe("bWF0aGV1czpyYTptb3M=");
+  expect(encodeAuth("RAMOS", "♨鳗梥낳⣻ꇉ鹌냬〴ഹ憕๒ණ⬌ꇳ閭"))
+    .toBe(
+      "UkFNT1M64pmo6bOX5qKl64Kz4qO76oeJ6bmM64Os44C04LS55oaV4LmS4Lar4qyM6oez6Z" +
+      "at",
+    );
 });

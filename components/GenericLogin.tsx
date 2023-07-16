@@ -191,6 +191,7 @@ export default function GenericLogin(props: GenericLoginProps) {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
+        testID="loginSubmit"
         style={styles.btn}
         onPress={() => setOpenSigaDialog(true)}
       >
@@ -217,6 +218,7 @@ export default function GenericLogin(props: GenericLoginProps) {
           <Dialog.Actions>
             <Button onPress={() => setOpenSigaDialog(false)}>Não</Button>
             <Button
+              testID="loginDialogConfirm"
               onPress={() => {
                 setOpenSigaDialog(false);
                 Login(username, password);

@@ -4,7 +4,6 @@ import { useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import GenericLogin from "../../components/GenericLogin";
 import Toast from "react-native-toast-message";
-import { Buffer } from "buffer";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { UserState } from "../../redux/types/user";
@@ -13,6 +12,7 @@ import {
   enableBalanceSync,
   tryGetBalanceWithToken,
 } from "../../helpers/balance";
+import { encodeAuth } from "../../helpers/sigaHelper";
 
 export default function RUSyncScreen() {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ export default function RUSyncScreen() {
     password: string,
     setErrorMessage: (msg: string) => void,
   ) {
-    const encodedAuth = Buffer.from(uname + ":" + password).toString("base64");
+    const encodedAuth = encodeAuth(uname, password);
     const balance = await tryGetBalanceWithToken(encodedAuth);
     if (typeof balance === "number") {
       enableBalanceSync({ ...user, money: balance }, encodedAuth, dispatch);
