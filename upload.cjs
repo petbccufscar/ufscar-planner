@@ -5,9 +5,9 @@ const { join, basename } = require("node:path");
 const FormData = require("form-data");
 const axios = require("axios");
 
-const URL = "https://petbcc.ufscar.br/";
-const UPLOAD_URL = URL + "ru_api/updates/v1/upload";
-const MANIFEST_URL = URL + "ru_api/updates/v1/manifest";
+const URL = process.env.URL;
+const UPLOAD_URL = URL + "/ru_api/updates/v1/upload";
+const MANIFEST_URL = URL + "/ru_api/updates/v1/manifest";
 const OUT_DIR = "./dist";
 
 let platform = null;
@@ -58,51 +58,48 @@ async function afterMain() {
   console.log(meta);
 
   const file_meta = meta.fileMetadata[platform];
-  const asset_responses = [];
+  const asset_ids = [];
   for (const asset of file_meta.assets) {
     const filename = basename(asset.path) + "." + asset.ext;
     console.log(`Uploading ${filename}...`);
     const form = new FormData();
     form.append(filename, createReadStream(join(OUT_DIR, asset.path)));
-    asset_responses.push(axios({
+    asset_ids.push((await axios({
       method: "post",
       url: UPLOAD_URL,
       data: form,
       headers: {
         "Authorization": "Bearer " + token,
       },
-    }).catch(() => {
+    }).catch((e) => {
       console.error(`There was an error uploading ${filename}`);
+      console.error(e.toString());
       process.exit(1);
-    }));
+    })).data.id);
   }
 
   const filename = basename(file_meta.bundle).slice(platform.length + 1);
   console.log(`Uploading bundle ${filename}...`);
   const form = new FormData();
   form.append(filename, createReadStream(join(OUT_DIR, file_meta.bundle)));
-  const bundle_response = axios({
+  const bundle_id = (await axios({
     method: "post",
     url: UPLOAD_URL,
     data: form,
     headers: {
       "Authorization": "Bearer " + token,
     },
-  }).catch(() => {
+  }).catch((e) => {
     console.error(`There was an error uploading the bundle ${filename}`);
+    console.error(e.toString());
     process.exit(1);
-  });
-
-  const asset_ids = [];
-  for (const res of asset_responses) {
-    asset_ids.push((await res).data.id);
-  }
+  })).data.id;
 
   const manifest_request = {
     runtimeVersion: "exposdk:" + exp.sdkVersion,
     channel: channel,
     platform: platform,
-    launchAsset: (await bundle_response).data.id,
+    launchAsset: bundle_id,
     assets: asset_ids,
     extra: {
       expoClient: exp,
@@ -117,8 +114,9 @@ async function afterMain() {
     headers: {
       "Authorization": "Bearer " + token,
     },
-  }).catch(() => {
+  }).catch((e) => {
     console.error("There was an error creating the update manifest");
+    console.error(e.toString());
     process.exit(1);
   });
 

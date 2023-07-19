@@ -5,10 +5,10 @@
     "android": "expo start --android",
     "eject": "expo eject",
     "build:dev": "eas build --profile development --local",
-    "build:preview": "EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=preview eas build --profile preview --local",
-    "build:prod": "EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=production eas build --profile production --local",
-    "upload:preview": "PLANNER_CHANNEL=preview node upload.cjs",
-    "upload:prod": "PLANNER_CHANNEL=production node upload.cjs",
+    "build:preview": "rm -rf $(pwd)/build/ && EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=preview PLANNER_MANIFEST_URL=http://10.0.2.2:8000/ru_api/updates/v1/manifest eas build --profile preview --local",
+    "build:prod": "rm -rf $(pwd)/build/ && EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=production PLANNER_MANIFEST_URL=https://petbcc.ufscar.br/ru_api/updates/v1/manifest eas build --profile production --local",
+    "upload:preview": "URL=http://localhost:8000/ PLANNER_CHANNEL=preview node upload.cjs",
+    "upload:prod": "URL=https://petbcc.ufscar.br/ PLANNER_CHANNEL=production node upload.cjs",
     "test": "jest"
   },
   "jest": {
