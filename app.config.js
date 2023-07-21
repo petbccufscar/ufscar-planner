@@ -13,9 +13,16 @@ module.exports = {
     },
     updates: {
       fallbackToCacheTimeout: 0,
-      url: "https://petbcc.ufscar.br/ru_api/updates/v1/manifest",
+      url: process.env.PLANNER_MANIFEST_URL,
       requestHeaders: {
         "ufscar-planner-channel": process.env.PLANNER_CHANNEL,
+      },
+      codeSigningCertificate: process.env.PLANNER_CHANNEL == "preview" ?
+        "./signing/testing.crt" : "./signing/v1prodmiguel.crt",
+      codeSigningMetadata: {
+        alg: "rsa-v1_5-sha256",
+        keyid: process.env.PLANNER_CHANNEL == "preview" ?
+          "testing" : "v1prodmiguel",
       },
     },
     plugins: [

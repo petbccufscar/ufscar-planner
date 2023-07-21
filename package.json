@@ -5,10 +5,10 @@
     "android": "expo start --android",
     "eject": "expo eject",
     "build:dev": "eas build --profile development --local",
-    "build:preview": "EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=preview eas build --profile preview --local",
-    "build:prod": "EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=production eas build --profile production --local",
-    "upload:preview": "PLANNER_CHANNEL=preview node upload.cjs",
-    "upload:prod": "PLANNER_CHANNEL=production node upload.cjs",
+    "build:preview": "rm -rf $(pwd)/build/ && EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=preview PLANNER_MANIFEST_URL=http://10.0.2.2:8000/ru_api/updates/v1/manifest eas build --profile preview --local",
+    "build:prod": "rm -rf $(pwd)/build/ && EAS_LOCAL_BUILD_WORKINGDIR=$(pwd)/build/ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 PLANNER_CHANNEL=production PLANNER_MANIFEST_URL=https://petbcc.ufscar.br/ru_api/updates/v1/manifest eas build --profile production --local",
+    "upload:preview": "URL=http://localhost:8000/ SIGNING_KEY_ID=testing PLANNER_CHANNEL=preview node upload.cjs",
+    "upload:prod": "URL=https://petbcc.ufscar.br/ SIGNING_KEY_ID=v1prodmiguel PLANNER_CHANNEL=production node upload.cjs",
     "test": "jest"
   },
   "jest": {
@@ -80,6 +80,7 @@
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "axios": "^1.4.0",
+    "canonical-json": "^0.0.4",
     "eslint": "^8.28.0",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-react": "^7.31.11",
@@ -87,6 +88,8 @@
     "form-data": "^4.0.0",
     "jest": "^29.5.0",
     "jest-expo": "^48.0.2",
+    "mime": "^3.0.0",
+    "prompt-sync": "^4.2.0",
     "react-native-svg-transformer": "^0.14.3",
     "react-test-renderer": "^18.2.0",
     "typescript": "^4.9.4"
