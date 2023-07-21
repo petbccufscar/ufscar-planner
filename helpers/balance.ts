@@ -10,17 +10,23 @@ import * as SecureStore from "expo-secure-store";
  */
 async function setRuAuthToken(token: string): Promise<boolean> {
   if (!await SecureStore.isAvailableAsync()) { return false; }
-  await SecureStore.setItemAsync("ufscarplanner.user.ruauth", token);
-  return true;
+  try {
+    await SecureStore.setItemAsync("ufscarplanner.user.ruauth", token);
+    return true;
+  } catch (_) {
+    return false;
+  }
 }
 
 /**
  * Apaga o token no SecureStore.
  */
 async function deleteRuAuthToken(): Promise<void> {
-  if (await SecureStore.isAvailableAsync()) {
-    SecureStore.deleteItemAsync("ufscarplanner.user.ruauth");
-  }
+  try {
+    if (await SecureStore.isAvailableAsync()) {
+      SecureStore.deleteItemAsync("ufscarplanner.user.ruauth");
+    }
+  } catch (_) { /* 👺 */ }
 }
 
 /**
@@ -28,8 +34,12 @@ async function deleteRuAuthToken(): Promise<void> {
  * @returns O token extraído, ou nulo se não existir.
  */
 async function getRuAuthToken(): Promise<string | null> {
-  if (!await SecureStore.isAvailableAsync()) { return null; }
-  return await SecureStore.getItemAsync("ufscarplanner.user.ruauth");
+  try {
+    if (!await SecureStore.isAvailableAsync()) { return null; }
+    return await SecureStore.getItemAsync("ufscarplanner.user.ruauth");
+  } catch (_) {
+    return null;
+  }
 }
 
 const URL = "https://sistemas.ufscar.br/sagui-api/integracoes/pwacesso/consultar-saldo";
