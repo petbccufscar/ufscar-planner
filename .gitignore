@@ -7,6 +7,7 @@ npm-debug.*
 *.p8
 *.p12
 *.key
+!signing/testing.key
 *.mobileprovision
 *.orig.*
 web-build/

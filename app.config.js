@@ -17,10 +17,12 @@ module.exports = {
       requestHeaders: {
         "ufscar-planner-channel": process.env.PLANNER_CHANNEL,
       },
-      codeSigningCertificate: "./planner.crt",
+      codeSigningCertificate: process.env.PLANNER_CHANNEL == "preview" ?
+        "./signing/testing.crt" : "./signing/v1prodmiguel.crt",
       codeSigningMetadata: {
         alg: "rsa-v1_5-sha256",
-        keyid: "v1prodmiguel",
+        keyid: process.env.PLANNER_CHANNEL == "preview" ?
+          "testing" : "v1prodmiguel",
       },
     },
     plugins: [
