@@ -1,13 +1,13 @@
 import { Semester } from "../redux/types/semester";
 
 const LAST_SEMESTER: Semester = {
-  init: "2022-11-07T03:02:00",
-  end: "2023-04-08T03:04:00",
+  init: "2023-05-08T03:02:00",
+  end: "2023-09-09T03:04:00",
 };
 
 const LATEST_SEMESTER: Semester = {
-  init: "2023-05-08T03:02:00",
-  end: "2023-09-09T03:04:00",
+  init: "2023-10-02T03:02:00",
+  end: "2024-02-17T03:04:00",
 };
 
 /**
