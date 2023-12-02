@@ -10,39 +10,35 @@ Nesse Readme darei uma visão geral do projeto. Boa sorte.
 
 ```bash
 sudo apt update
-sudo apt install git curl
+sudo apt install ca-certificates git curl gnupg
 ```
 
-2. Instale o NodeJS LTS:
+2. Instale o NodeJS LTS e o Yarn:
 
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt install nodejs
-```
-
-3. Instale o Yarn:
-
-```bash
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update
-sudo apt install yarn
+sudo apt install nodejs yarn
 ```
 
-4. Instale as dependências globais pelo Yarn:
+3. Instale as dependências globais pelo Yarn:
 
 ```bash
 yarn global add eas-cli @expo/ngrok@^4.1.0
 ```
 
-5. Clone o repositório:
+4. Clone o repositório:
 
 ```bash
 git clone https://github.com/petbccufscar/ufscar-planner.git
 cd ufscar-planner
 ```
 
-6. Instale as dependências locais de projeto:
+5. Instale as dependências locais de projeto:
 
 ```bash
 yarn install
@@ -50,11 +46,10 @@ yarn install
 
 ### Desenvolvimento pelo Expo Go ou Build de Desenvolvimento Pronta
 
-1. Apague o ID de projeto do EAS (ele não gosta quando você tem ele lá sem uma
+1. Apague o ID de projeto do EAS no `app.config.js` (ele não gosta quando você tem ele lá sem uma
    conta com acesso ao projeto):
 
 ```diff
-@@ -71,7 +71,6 @@ module.exports = {
      description: "",
      extra: {
        eas: {
@@ -85,10 +80,9 @@ build.
 
 3. Crie um novo projeto no Expo para hospedar a sua versão.
 
-4. Mude a configuração em `app.config.js` para refletir o novo projeto:
+4. Mude a configuração no `app.config.js` para refletir o novo projeto:
 
 ```diff
-@@ -1,8 +1,8 @@
  module.exports = {
    expo: {
      name: "UFSCar Planner",
@@ -99,7 +93,9 @@ build.
      version: "1.5.2",
      orientation: "portrait",
      icon: "./assets/icon.png",
-@@ -71,7 +71,7 @@ module.exports = {
+```
+
+```diff
      description: "",
      extra: {
        eas: {
