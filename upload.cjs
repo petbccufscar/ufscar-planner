@@ -101,10 +101,11 @@ function getManifestAsset(metaEntry, url) {
 function getManifestBundleAsset(path, url) {
   const hasher = createHash("sha256");
   hasher.update(readFileSync(join(OUT_DIR, path)));
+  const re = new RegExp("^" + platform + "\\-([^\\.]+)\\.[^\\.]+$");
   return {
     hash: hasher.digest().toString("base64url"),
-    key: basename(path).slice(platform.length + 1, -".js".length),
-    contentType: "text/javascript",
+    key: re.exec(basename(path))[1],
+    contentType: "application/javascript",
     url,
   };
 }
