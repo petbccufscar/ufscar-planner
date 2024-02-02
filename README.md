@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/petbccufscar/.github/main/profile/icon.png" align="right" />
+
 ## UFSCar Planner
 
 Olá! Seja bem-vindo ao repositório do UFSCar Planner. Este aplicativo foi desenvolvido para auxiliar na organização e planejamento de atividades e materiais na Universidade Federal de São Carlos (UFSCar). Além disso, oferece a conveniência de acessar o menu do Restaurante Universitário da UFSCar. Algumas funcionalidades adicionais incluem a capacidade de simular médias e frequências.
