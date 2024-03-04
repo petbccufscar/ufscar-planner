@@ -1,10 +1,11 @@
+# UFSCar Planner
 <img src="https://raw.githubusercontent.com/petbccufscar/.github/main/profile/icon.png" align="right" />
 
-## UFSCar Planner
+> Aplicativo desenvolvido para os estudantes da USFCar
 
 Olá! Seja bem-vindo ao repositório do UFSCar Planner. Este aplicativo foi desenvolvido para auxiliar na organização e planejamento de atividades e materiais na Universidade Federal de São Carlos (UFSCar). Além disso, oferece a conveniência de acessar o menu do Restaurante Universitário da UFSCar. Algumas funcionalidades adicionais incluem a capacidade de simular médias e frequências.
 
-### Instalação de Dependências
+## Instalação de Dependências
 
 Para começar, siga os passos abaixo para instalar as dependências necessárias:
 
@@ -46,7 +47,7 @@ Para começar, siga os passos abaixo para instalar as dependências necessárias
    yarn install
    ```
 
-### Desenvolvimento com Expo Go ou Build de Desenvolvimento Pronta
+## Desenvolvimento com Expo Go ou Build de Desenvolvimento Pronta
 
 1. Apague o ID de projeto do EAS no `app.config.js` (ele não gosta quando você tem ele lá sem uma conta com acesso ao projeto):
 
@@ -68,7 +69,7 @@ Para começar, siga os passos abaixo para instalar as dependências necessárias
 
 3. Conecte-se ao servidor usando o aplicativo _Expo Go_ para Android, ou utilizando uma build de desenvolvimento.
 
-### Criando Suas Próprias Builds
+## Criando Suas Próprias Builds
 
 Se preferir criar suas próprias builds, siga os passos abaixo:
 
@@ -121,7 +122,7 @@ Se preferir criar suas próprias builds, siga os passos abaixo:
    yarn build:prod
    ```
 
-### Noções Básicas de React Native (Versão Simplificada)
+## Noções Básicas de React Native (Versão Simplificada)
 
 Se você está começando agora com React Native, aqui estão algumas noções básicas:
 
@@ -174,7 +175,7 @@ Para mais detalhes, consulte o arquivo [App.js](App.js) e os diretórios [naviga
 
 - **redux**: Estrutura do Redux, incluindo actions, reducers e a store.
 
-### Principais Funcionalidades e Onde Se Localizam
+## Principais Funcionalidades e Onde Se Localizam
 
 - [Agenda do Planner](components/Agenda.js)
 
@@ -188,7 +189,7 @@ Para mais detalhes, consulte o arquivo [App.js](App.js) e os diretórios [naviga
 - [Fluxo de Boas-vindas](/screens/Welcome.js)
 - [Sincronização com o SIGA](/screens/dashboardScreens/Siga.js)
 
-### FAQ
+## FAQ
 
 - **Por que as notificações não aparecem quando o app está fechado?**
   Isso pode ser devido a configurações de economia de bateria no dispositivo. Verifique as configurações do aplicativo e ajuste as permissões.
@@ -196,7 +197,7 @@ Para mais detalhes, consulte o arquivo [App.js](App.js) e os diretórios [naviga
 - **De onde vêm o cardápio do RU?**
   Inicialmente, tentamos obter os dados do site da UFSCar. Caso o Restaurante Universitário não atualize, utilizamos um servidor que coleta informações de outras fontes. O projeto desse servidor está disponível [aqui](https://github.com/petbccufscar/ru_api). Se as informações estiverem incorretas, pode ser necessário uma atualização no app ou no servidor.
 
-### Contato
+## Contato
 
 Se você tiver alguma dúvida, sugestão ou precisar de suporte, por favor, sinta-se à vontade para entrar em contato conosco:
 
