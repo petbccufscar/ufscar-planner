@@ -1,4 +1,7 @@
-# UFSCar Planner
+# UFSCar Planner • ![Finalizado](https://img.shields.io/badge/Finalizado-blue)
+
+[![React Native](https://img.shields.io/badge/React_Native-0088CC.svg?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
+[![Yarn](https://img.shields.io/badge/Yarn-2C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)](https://yarnpkg.com/)
 <img src="https://raw.githubusercontent.com/petbccufscar/.github/main/profile/icon.png" align="right" />
 
 > Aplicativo desenvolvido para os estudantes da USFCar
