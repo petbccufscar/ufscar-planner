@@ -35,6 +35,7 @@ module.exports = {
           sounds: [],
         },
       ],
+      "expo-secure-store",
     ],
     assetBundlePatterns: [
       "**/*",
@@ -71,7 +72,6 @@ module.exports = {
     description: "",
     extra: {
       eas: {
-        projectId: "5ff4fcf5-520f-4ac6-bc18-dd5d292dca98",
       },
     },
     hooks: {
