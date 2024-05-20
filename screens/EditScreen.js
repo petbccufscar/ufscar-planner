@@ -25,7 +25,8 @@ import {
   Button,
   Dialog,
 } from "react-native-paper";
-import ScrollPicker from "react-native-picker-scrollview";
+// TODO ARRUMAR O SCROLLPICKER
+// import ScrollPicker from "react-native-picker-scrollview";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime } from "../helpers/ExpressionHelper";
@@ -40,7 +41,7 @@ export default function EditScreen({ route, navigation }) {
   const [isSubject] = useState(task.is_subject || false);
   const [weekly, setWeekly] = useState(task.weekly || false);
   const [isSubmited, setIsSubmited] = useState(task.is_submited || false);
-
+  
   //todo
   const [subject, setSubject] = useState(task.subject || null);
   const [color, setColor] = useState(task.color || 0);
@@ -123,7 +124,6 @@ export default function EditScreen({ route, navigation }) {
       }
     }
   };
-
   useEffect(() => {
     navigation.setOptions({
       headerTintColor: colors.onHeaderInactive,
@@ -651,7 +651,7 @@ export default function EditScreen({ route, navigation }) {
     const fun = props.fun || (() => null);
     return (
       <View style={{ height: height * 3, width: width }}>
-        <ScrollPicker
+        {/* <ScrollPicker
           dataSource={list}
           selectedIndex={1}
           onValueChange={(data, selectedIndex) => {
@@ -664,7 +664,7 @@ export default function EditScreen({ route, navigation }) {
           highlightBorderWidth={2}
           activeItemColor={"#222121"}
           itemColor={"#B4B4B4"}
-        />
+        /> */}
       </View>
     );
   }

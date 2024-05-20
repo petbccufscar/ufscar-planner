@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
-// import { ScrollView } from 'react-native-gesture-handler'
 import { Feather } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
