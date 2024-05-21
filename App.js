@@ -4,7 +4,7 @@ import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef } from "react";
 import { AppRegistry, Platform, UIManager, View } from "react-native";
-import { Provider as PaperProvider } from "react-native-paper";
+import { Provider as PaperProvider, Text } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import {
   Provider as ReduxProvider,
@@ -44,21 +44,26 @@ import RuSyncScreen from "./screens/dashboardScreens/RuSyncScreen";
 import Constants from "expo-constants";
 import * as Application from "expo-application";
 
-Sentry.init({
-  dsn: "https://c1a9d3d02d424eaa91ee720bd5225f83@o4505104445079552.ingest.sentry.io/4505104464805888",
-  enableInExpoDevelopment: false,
-  debug: __DEV__,
-  dist: Application.nativeBuildVersion,
-  release: Constants.expoConfig.android.package +
-    "@" + Constants.expoConfig.version +
-    "+" + Constants.expoConfig.android.versionCode.toString(),
-});
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+if (Platform.OS !== "web") {
+  Sentry.init({
+    dsn: "https://c1a9d3d02d424eaa91ee720bd5225f83@o4505104445079552.ingest.sentry.io/4505104464805888",
+    enableInExpoDevelopment: false,
+    debug: __DEV__,
+    dist: Application.nativeBuildVersion,
+    release: Constants.expoConfig.android.package +
+      "@" + Constants.expoConfig.version +
+      "+" + Constants.expoConfig.android.versionCode.toString(),
+  });
+
+  if (
+    Platform.OS === "android"
+  ) {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
 }
 
 const HomeStackRoutes = createStackNavigator();
@@ -131,9 +136,13 @@ function Loader() {
     RobotoCondensed_700Bold,
     RobotoCondensed_700Bold_Italic,
   });
+  
+
   if (!fontsLoaded) {
     return <View style={{ flex: 1, backgroundColor: "#E8243C" }} />;
   }
+
+
   return (
     <>
       <StatusBar style={themeConfig.isDark ? "light" : "dark"} />
@@ -150,7 +159,9 @@ function Loader() {
           >
             <HomeStackRoutes.Screen
               name="Welcome"
-              component={Welcome}
+              component={
+                Welcome
+              }
               options={() => ({
                 headerTitleAlign: "center",
                 headerShown: false,
@@ -162,7 +173,9 @@ function Loader() {
                 options={{
                   title: "\u{200B}",
                 }}
-                component={BottomNavBar}
+                component={
+                  BottomNavBar
+                }
               />
             </HomeStackRoutes.Group>
             <HomeStackRoutes.Screen

@@ -25,7 +25,11 @@ export default function Welcome() {
 
   const styles = StyleSheet.create({
     image: {
+      flex: 1,
       width: "100%",
+      height: "100%",
+      position: "absolute",
+      zIndex: -2,
     },
     imageContainer: {
       flex: 1,
@@ -195,7 +199,6 @@ function ScreenOne({ setPage }) {
       backgroundColor: colors.secondaryContainer,
       alignItems: "center",
       justifyContent: "center",
-      alignSelf: "flex-start",
       borderRadius: 20,
       paddingHorizontal: 20,
       paddingVertical: 10,

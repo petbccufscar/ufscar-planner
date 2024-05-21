@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, Image } from "react-native";
 import mapIconPath from "../assets/icons/maps.png";
+import { Platform } from "react-native";
 
 export const formatDate = (dataFormatar) => {
   const data = new Date(dataFormatar);
@@ -188,5 +189,11 @@ export function SIGA(props) {
       SIGA
   </Text>;
 }
+let localMapIconURI
+if (Platform.OS === "web"){
+  localMapIconURI = mapIconPath;
+} else {
+  localMapIconURI = Image.resolveAssetSource(mapIconPath).uri;
+}
+export const mapIconURI = localMapIconURI;
 
-export const mapIconURI = Image.resolveAssetSource(mapIconPath).uri;

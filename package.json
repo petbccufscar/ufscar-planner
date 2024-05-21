@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/roboto-condensed": "^0.2.2",
+    "@expo/metro-runtime": "~3.2.1",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
@@ -47,6 +48,7 @@
     "lodash.debounce": "^4.0.8",
     "mathjs": "^10.0.0",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.74.1",
     "react-native-bidirectional-infinite-scroll": "^0.3.3",
     "react-native-calendars": "^1.1283.0",
@@ -66,6 +68,7 @@
     "react-native-text-ticker": "^1.14.0",
     "react-native-toast-message": "^2.1.1",
     "react-native-vector-icons": "^10.1.0",
+    "react-native-web": "~0.19.10",
     "react-native-wheel-scrollview-picker": "^2.0.4",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",

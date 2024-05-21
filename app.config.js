@@ -53,6 +53,11 @@ module.exports = {
     },
     web: {
       favicon: "./assets/favicon.png",
+      build: {
+        "babel": {
+          "sourceMaps": true
+        }
+      }
     },
     packagerOpts: {
       sourceExts: [
