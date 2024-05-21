@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Menu, Switch, TextInput, useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";

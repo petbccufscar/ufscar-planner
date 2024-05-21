@@ -12,9 +12,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView as DefaultScrollView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {

@@ -11,7 +11,7 @@ import {
 import KeyboardButton from "./KeyboardButton";
 import ScrollView from "./ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { magic } from "../helpers/ExpressionHelper";
 
 export default function NewSubject({ route, navigation }) {

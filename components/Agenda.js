@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme, ActivityIndicator } from "react-native-paper";
 import {
   floorDate,

@@ -3,10 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Image,
   Linking,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import ScrollView from "../components/ScrollView";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Task } from "../components/EventCards";

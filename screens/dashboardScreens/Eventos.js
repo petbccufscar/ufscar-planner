@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import {
   Text,
   View,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import {

@@ -3,9 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Linking,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";

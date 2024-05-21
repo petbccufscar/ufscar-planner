@@ -5,9 +5,9 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity,
   Linking,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme } from "react-native-paper";
 
 export default function Contato() {

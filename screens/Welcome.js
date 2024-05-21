@@ -5,8 +5,8 @@ import { Image,
   StyleSheet,
   Text,
   View,
-  Linking,
-  TouchableOpacity } from "react-native";
+  Linking } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { TextInput, useTheme } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
 import { updateUser } from "../redux/actions/userActions";
