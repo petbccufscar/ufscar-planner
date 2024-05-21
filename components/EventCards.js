@@ -5,8 +5,8 @@ import {
   StyleSheet,
   Linking,
   Image,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/core";
 import { useSelector, useDispatch } from "react-redux";
 import {

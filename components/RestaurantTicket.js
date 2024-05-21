@@ -1,7 +1,6 @@
 import { MaterialIcons, MaterialCommunityIcons  } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 import { formatReal } from "../helpers/helper";

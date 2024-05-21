@@ -1,8 +1,7 @@
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useTheme } from "react-native-paper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useDispatch, useSelector } from "react-redux";

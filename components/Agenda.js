@@ -3,8 +3,8 @@ import {
   Text,
   View,
   StyleSheet,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme, ActivityIndicator } from "react-native-paper";
 import {
   floorDate,

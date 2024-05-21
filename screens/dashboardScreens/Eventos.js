@@ -3,8 +3,8 @@ import {
   Text,
   View,
   StyleSheet,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import {

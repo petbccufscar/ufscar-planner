@@ -4,8 +4,8 @@ import {
   Text,
   View,
   Linking,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import ScrollView from "./../../components/ScrollView";

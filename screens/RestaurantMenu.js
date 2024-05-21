@@ -5,8 +5,8 @@ import {
   Text,
   View,
   Linking,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Menu from "../components/HomeMenu";
 import { Days } from "../helpers/CalendarHelper";
 import { useNavigation } from "@react-navigation/core";

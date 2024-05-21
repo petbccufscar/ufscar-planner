@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
