@@ -159,6 +159,9 @@ function Loader() {
             <HomeStackRoutes.Group screenOptions={{ headerShown: false }}>
               <HomeStackRoutes.Screen
                 name="BottomNav"
+                options={{
+                  title: "\u{200B}",
+                }}
                 component={BottomNavBar}
               />
             </HomeStackRoutes.Group>
