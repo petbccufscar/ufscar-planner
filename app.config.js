@@ -40,6 +40,7 @@ module.exports = {
       ],
       "expo-secure-store",
       "expo-font",
+      "@react-native-community/datetimepicker",
     ],
     assetBundlePatterns: [
       "**/*",
