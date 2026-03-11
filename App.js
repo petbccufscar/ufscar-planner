@@ -39,7 +39,7 @@ import {
   RobotoCondensed_700Bold_Italic,
 } from "@expo-google-fonts/roboto-condensed";
 import Links from "./screens/dashboardScreens/Links";
-import * as Sentry from "sentry-expo";
+import * as Sentry from "@sentry/react-native";
 import RuSyncScreen from "./screens/dashboardScreens/RuSyncScreen";
 import Constants from "expo-constants";
 import * as Application from "expo-application";
@@ -64,7 +64,7 @@ if (
 const HomeStackRoutes = createStackNavigator();
 
 Notifications.setNotificationHandler({
-  handleNotification: async() => ({
+  handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
@@ -109,7 +109,7 @@ export default function App() {
       </ReduxProvider>
     );
   } catch (error) {
-    Sentry.Native.captureException(error);
+    Sentry.captureException(error);
   }
 }
 

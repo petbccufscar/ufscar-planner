@@ -3,7 +3,7 @@ import * as Notifications from "expo-notifications";
 import { getTime } from "../../helpers/ExpressionHelper";
 import { BaseEventDescription, Detail, Task } from "../types/task";
 import { EventState } from "../types/event";
-import * as Sentry from "sentry-expo";
+import * as Sentry from "@sentry/react-native";
 
 const initialState: EventState = {
   events: [],
@@ -63,7 +63,7 @@ async function loadNotifications(task: Task) {
 
 function cleanLocal(l: string | null): string {
   if (l == null) {
-    Sentry.Native.captureException(
+    Sentry.captureException(
       new Error("Tentou inserir nulo no local do evento >:("),
     );
     return "";
@@ -98,66 +98,66 @@ export const eventReducer = (
 
   let aux;
   switch (action.type) {
-  case ActionType.ADD_EVENT: {
-    aux = {
-      ...state,
-      events: [
-        ...state.events,
-        { ...cleanEvent(action.payload), id: state.nextId },
-      ],
-      nextId: state.nextId + 1,
-    };
-    refazerNotificações(aux);
-    return aux;
-  }
-
-  case ActionType.REMOVE_EVENT:
-    aux = {
-      ...state,
-      events: state.events
-        .filter((event) => event.id !== action.payload.id)
-        .map(
-          (event): Task => event.subject === action.payload.id ?
-            { ...event, subject: null } :
-            event,
-        ),
-    };
-    refazerNotificações(aux);
-    return aux;
-
-  case ActionType.REMOVE_SIGA: {
-    const siga = state.events.filter((event) => event.siga);
-    let events = state.events;
-    for (let i = 0; i < siga.length; i++) {
-      events = events.filter((event) => event.id !== siga[i].id)
-        .map(
-          (event) => event.subject === siga[i].id ?
-            { ...event, subject: null } :
-            event,
-        );
+    case ActionType.ADD_EVENT: {
+      aux = {
+        ...state,
+        events: [
+          ...state.events,
+          { ...cleanEvent(action.payload), id: state.nextId },
+        ],
+        nextId: state.nextId + 1,
+      };
+      refazerNotificações(aux);
+      return aux;
     }
 
-    aux = {
-      ...state,
-      events: events,
-    };
-    refazerNotificações(aux);
-    return aux;
-  }
+    case ActionType.REMOVE_EVENT:
+      aux = {
+        ...state,
+        events: state.events
+          .filter((event) => event.id !== action.payload.id)
+          .map(
+            (event): Task => event.subject === action.payload.id ?
+              { ...event, subject: null } :
+              event,
+          ),
+      };
+      refazerNotificações(aux);
+      return aux;
 
-  case ActionType.UPDATE_EVENT:
-    aux = {
-      ...state,
-      events: state.events.map(
-        (event) => event.id === action.payload.id ?
-          cleanEvent(action.payload) :
-          event,
-      ),
-    };
-    refazerNotificações(aux);
-    return aux;
+    case ActionType.REMOVE_SIGA: {
+      const siga = state.events.filter((event) => event.siga);
+      let events = state.events;
+      for (let i = 0; i < siga.length; i++) {
+        events = events.filter((event) => event.id !== siga[i].id)
+          .map(
+            (event) => event.subject === siga[i].id ?
+              { ...event, subject: null } :
+              event,
+          );
+      }
 
-  default:
-    return state;
+      aux = {
+        ...state,
+        events: events,
+      };
+      refazerNotificações(aux);
+      return aux;
+    }
+
+    case ActionType.UPDATE_EVENT:
+      aux = {
+        ...state,
+        events: state.events.map(
+          (event) => event.id === action.payload.id ?
+            cleanEvent(action.payload) :
+            event,
+        ),
+      };
+      refazerNotificações(aux);
+      return aux;
+
+    default:
+      return state;
   }
 };

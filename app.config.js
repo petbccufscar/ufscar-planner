@@ -26,7 +26,10 @@ module.exports = {
       },
     },
     plugins: [
-      "sentry-expo",
+      ["@sentry/react-native/expo", {
+        organization: "pet-bcc-ufscar",
+        project: "ufscar-planner",
+      }],
       [
         "expo-notifications",
         {
@@ -35,6 +38,8 @@ module.exports = {
           sounds: [],
         },
       ],
+      "expo-secure-store",
+      "expo-font",
     ],
     assetBundlePatterns: [
       "**/*",
@@ -75,15 +80,7 @@ module.exports = {
       },
     },
     hooks: {
-      postPublish: [
-        {
-          file: "sentry-expo/upload-sourcemaps",
-          config: {
-            organization: "pet-bcc-ufscar",
-            project: "ufscar-planner",
-          },
-        },
-      ],
+      postPublish: [],
     },
     runtimeVersion: {
       policy: "sdkVersion",
