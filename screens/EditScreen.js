@@ -25,7 +25,7 @@ import {
   Button,
   Dialog,
 } from "react-native-paper";
-import ScrollPicker from "react-native-picker-scrollview";
+import ScrollPicker from "../components/ScrollPicker";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime } from "../helpers/ExpressionHelper";
@@ -457,7 +457,7 @@ export default function EditScreen({ route, navigation }) {
                     setShowEndPicker(false);
                     setHorarioEndTime(
                       ndate.getTime() < minimum(horarioDate) ?
-                        minimum(horarioDate)                        :
+                        minimum(horarioDate) :
                         ndate,
                     );
                   }}
@@ -721,7 +721,7 @@ export default function EditScreen({ route, navigation }) {
           </View>
           {detail.local.length > 0 &&
             <TouchableOpacity
-              onPress={async() => {
+              onPress={async () => {
                 let place = user.campus + ", UFSCAR, " + detail.local;
 
                 const url =
