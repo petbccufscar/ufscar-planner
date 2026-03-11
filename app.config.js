@@ -3,7 +3,7 @@ module.exports = {
     name: "UFSCar Planner",
     owner: "petbccufscar",
     slug: "ufscar-planner",
-    version: "1.5.4",
+    version: "1.6.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     splash: {
@@ -51,7 +51,7 @@ module.exports = {
         backgroundColor: "#E8243C",
       },
       package: "com.pet.ufscarplanner",
-      versionCode: 18,
+      versionCode: 19,
       permissions: [
         "RECEIVE_BOOT_COMPLETED",
       ],
