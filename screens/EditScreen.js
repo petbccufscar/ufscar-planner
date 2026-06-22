@@ -721,7 +721,7 @@ export default function EditScreen({ route, navigation }) {
           </View>
           {detail.local.length > 0 &&
             <TouchableOpacity
-              onPress={async () => {
+              onPress={async() => {
                 let place = user.campus + ", UFSCAR, " + detail.local;
 
                 const url =

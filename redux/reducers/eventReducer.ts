@@ -98,66 +98,66 @@ export const eventReducer = (
 
   let aux;
   switch (action.type) {
-    case ActionType.ADD_EVENT: {
-      aux = {
-        ...state,
-        events: [
-          ...state.events,
-          { ...cleanEvent(action.payload), id: state.nextId },
-        ],
-        nextId: state.nextId + 1,
-      };
-      refazerNotificações(aux);
-      return aux;
-    }
+  case ActionType.ADD_EVENT: {
+    aux = {
+      ...state,
+      events: [
+        ...state.events,
+        { ...cleanEvent(action.payload), id: state.nextId },
+      ],
+      nextId: state.nextId + 1,
+    };
+    refazerNotificações(aux);
+    return aux;
+  }
 
-    case ActionType.REMOVE_EVENT:
-      aux = {
-        ...state,
-        events: state.events
-          .filter((event) => event.id !== action.payload.id)
-          .map(
-            (event): Task => event.subject === action.payload.id ?
-              { ...event, subject: null } :
-              event,
-          ),
-      };
-      refazerNotificações(aux);
-      return aux;
-
-    case ActionType.REMOVE_SIGA: {
-      const siga = state.events.filter((event) => event.siga);
-      let events = state.events;
-      for (let i = 0; i < siga.length; i++) {
-        events = events.filter((event) => event.id !== siga[i].id)
-          .map(
-            (event) => event.subject === siga[i].id ?
-              { ...event, subject: null } :
-              event,
-          );
-      }
-
-      aux = {
-        ...state,
-        events: events,
-      };
-      refazerNotificações(aux);
-      return aux;
-    }
-
-    case ActionType.UPDATE_EVENT:
-      aux = {
-        ...state,
-        events: state.events.map(
-          (event) => event.id === action.payload.id ?
-            cleanEvent(action.payload) :
+  case ActionType.REMOVE_EVENT:
+    aux = {
+      ...state,
+      events: state.events
+        .filter((event) => event.id !== action.payload.id)
+        .map(
+          (event): Task => event.subject === action.payload.id ?
+            { ...event, subject: null } :
             event,
         ),
-      };
-      refazerNotificações(aux);
-      return aux;
+    };
+    refazerNotificações(aux);
+    return aux;
 
-    default:
-      return state;
+  case ActionType.REMOVE_SIGA: {
+    const siga = state.events.filter((event) => event.siga);
+    let events = state.events;
+    for (let i = 0; i < siga.length; i++) {
+      events = events.filter((event) => event.id !== siga[i].id)
+        .map(
+          (event) => event.subject === siga[i].id ?
+            { ...event, subject: null } :
+            event,
+        );
+    }
+
+    aux = {
+      ...state,
+      events: events,
+    };
+    refazerNotificações(aux);
+    return aux;
+  }
+
+  case ActionType.UPDATE_EVENT:
+    aux = {
+      ...state,
+      events: state.events.map(
+        (event) => event.id === action.payload.id ?
+          cleanEvent(action.payload) :
+          event,
+      ),
+    };
+    refazerNotificações(aux);
+    return aux;
+
+  default:
+    return state;
   }
 };

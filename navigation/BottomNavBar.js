@@ -1,8 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/core";
 import React, { useRef, useEffect, useState } from "react";
 import { Animated, StyleSheet, Text, Pressable, View } from "react-native";
-import { IconButton, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import CalendarNavigator from "./tabs/CalendarNavigator";
 import DashboardNavigator from "./tabs/DashboardNavigator";
 import HomeNavigator from "./tabs/HomeNavigator";
@@ -80,9 +79,9 @@ function CustomTabBar({ state, navigation }) {
                 name={config.icon}
                 size={24}
                 color={
-                  isActive
-                    ? colors.onSecondaryContainer
-                    : colors.onSurface
+                  isActive ?
+                    colors.onSecondaryContainer :
+                    colors.onSurface
                 }
               />
             </View>
@@ -90,9 +89,9 @@ function CustomTabBar({ state, navigation }) {
               style={[
                 styles.label,
                 {
-                  color: isActive
-                    ? colors.onSecondaryContainer
-                    : colors.onSurface,
+                  color: isActive ?
+                    colors.onSecondaryContainer :
+                    colors.onSurface,
                 },
               ]}
             >
@@ -101,7 +100,7 @@ function CustomTabBar({ state, navigation }) {
           </Pressable>
         );
       })}
-      {tabBarWidth > 0 && (
+      {tabBarWidth > 0 &&
         <Animated.View
           style={[
             styles.underline,
@@ -111,14 +110,12 @@ function CustomTabBar({ state, navigation }) {
             },
           ]}
         />
-      )}
+      }
     </View>
   );
 }
 
 export default function MyTabs() {
-  const navigation = useNavigation();
-
   return (
     <Tab.Navigator
       tabBarPosition="bottom"

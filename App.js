@@ -64,7 +64,7 @@ if (
 const HomeStackRoutes = createStackNavigator();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
+  handleNotification: async() => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
