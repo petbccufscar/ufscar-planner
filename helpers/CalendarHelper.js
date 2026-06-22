@@ -65,6 +65,13 @@ export function Days(props) {
       justifyContent: "center",
       alignSelf: "center",
     },
+    pressed: {
+      opacity: 0.7,
+    },
+    selectedDayBackground: {
+      ...StyleSheet.absoluteFillObject,
+      borderRadius: 999,
+    },
   });
 
   return (
@@ -73,7 +80,10 @@ export function Days(props) {
         return (
           <Pressable
             onPress={() => props.setSelectedDay(day.date)}
-            style={styles.dias}
+            style={({ pressed }) => [
+              styles.dias,
+              pressed && styles.pressed,
+            ]}
             key={day.day}
           >
             <Text
@@ -90,15 +100,21 @@ export function Days(props) {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                alignContent: "center",
                 width: width,
                 height: height,
-                borderRadius: 100,
-                backgroundColor: day.today ?
-                  theme.colors.primary :
-                  "transparent",
+                borderRadius: 999,
+                overflow: "hidden",
               }}
             >
+              {day.today &&
+                <View
+                  pointerEvents="none"
+                  style={[
+                    styles.selectedDayBackground,
+                    { backgroundColor: theme.colors.primary },
+                  ]}
+                />
+              }
               <Text
                 style={{
                   color: day.today ?

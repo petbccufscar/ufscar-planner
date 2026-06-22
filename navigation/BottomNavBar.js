@@ -2,6 +2,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, { useRef, useEffect, useState } from "react";
 import { Animated, StyleSheet, Text, Pressable, View } from "react-native";
 import { useTheme } from "react-native-paper";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import CalendarNavigator from "./tabs/CalendarNavigator";
 import DashboardNavigator from "./tabs/DashboardNavigator";
 import HomeNavigator from "./tabs/HomeNavigator";
@@ -23,6 +27,7 @@ const UNDERLINE_WIDTH = 48;
 
 function CustomTabBar({ state, navigation }) {
   const colors = useTheme().colors;
+  const insets = useSafeAreaInsets();
   const [tabBarWidth, setTabBarWidth] = useState(0);
   const translateX = useRef(new Animated.Value(0)).current;
 
@@ -43,7 +48,13 @@ function CustomTabBar({ state, navigation }) {
 
   return (
     <View
-      style={[styles.tabBar, { backgroundColor: colors.surface2 }]}
+      style={[
+        styles.tabBar,
+        {
+          backgroundColor: colors.surface2,
+          paddingBottom: Math.max(insets.bottom, 8),
+        },
+      ]}
       onLayout={(e) => setTabBarWidth(e.nativeEvent.layout.width)}
     >
       {state.routes.map((route, index) => {
@@ -58,23 +69,21 @@ function CustomTabBar({ state, navigation }) {
                 navigation.navigate(route.name);
               }
             }}
-            android_ripple={{
-              color: colors.surfaceVariant,
-              borderless: true,
-            }}
             style={({ pressed }) => [
               styles.tabItem,
               pressed && { opacity: 0.7 },
             ]}
           >
-            <View
-              style={[
-                styles.iconWrapper,
-                isActive && {
-                  backgroundColor: colors.secondaryContainer,
-                },
-              ]}
-            >
+            <View style={styles.iconWrapper}>
+              {isActive &&
+                <View
+                  pointerEvents="none"
+                  style={[
+                    styles.activeIconBackground,
+                    { backgroundColor: colors.secondaryContainer },
+                  ]}
+                />
+              }
               <MaterialIcons
                 name={config.icon}
                 size={24}
@@ -106,6 +115,7 @@ function CustomTabBar({ state, navigation }) {
             styles.underline,
             {
               backgroundColor: colors.primary,
+              bottom: Math.max(insets.bottom, 8),
               transform: [{ translateX }],
             },
           ]}
@@ -117,41 +127,46 @@ function CustomTabBar({ state, navigation }) {
 
 export default function MyTabs() {
   return (
-    <Tab.Navigator
-      tabBarPosition="bottom"
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        swipeEnabled: true,
-      }}
-    >
-      <Tab.Screen
-        name="HomeTab"
-        component={HomeNavigator}
-        options={{ title: "UFSCar Planner" }}
-      />
-      <Tab.Screen
-        name="CalendarTab"
-        component={CalendarNavigator}
-      />
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardNavigator}
-        options={{ title: "UFSCar Planner" }}
-      />
-      <Tab.Screen
-        name="RestaurantTab"
-        component={RestaurantNavigator}
-        options={{ title: "UFSCar Planner" }}
-      />
-    </Tab.Navigator>
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <Tab.Navigator
+        tabBarPosition="bottom"
+        tabBar={(props) => <CustomTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+          swipeEnabled: true,
+        }}
+      >
+        <Tab.Screen
+          name="HomeTab"
+          component={HomeNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+        <Tab.Screen
+          name="CalendarTab"
+          component={CalendarNavigator}
+        />
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+        <Tab.Screen
+          name="RestaurantTab"
+          component={RestaurantNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
   tabBar: {
     flexDirection: "row",
-    paddingBottom: 8,
     paddingTop: 4,
     borderTopWidth: 0,
   },
@@ -164,12 +179,15 @@ const styles = StyleSheet.create({
   },
 
   iconWrapper: {
-    borderRadius: 15,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
+    width: 36,
+    height: 36,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "transparent",
+  },
+
+  activeIconBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 999,
   },
 
   label: {
@@ -179,7 +197,6 @@ const styles = StyleSheet.create({
 
   underline: {
     position: "absolute",
-    bottom: 6,
     left: 0,
     height: 2,
     width: UNDERLINE_WIDTH,
