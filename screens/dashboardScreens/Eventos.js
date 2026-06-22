@@ -20,7 +20,7 @@ import { EventRender } from "../../components/EventCards";
 import { defaultTask } from "../../helpers/helper";
 import { useNavigation } from "@react-navigation/native";
 import ScrollView from "../../components/ScrollView";
-import DropDown from "react-native-paper-dropdown";
+import { Dropdown } from "react-native-paper-dropdown";
 
 export default function SubjectScreen() {
   const items = useSelector((state) => state.events).events;
@@ -63,8 +63,8 @@ export default function SubjectScreen() {
 
   const [crescent, setCrescent] = useState(false);
   const crescentList = [
-    { value: false, label: "Mais recente primeiro" },
-    { value: true, label: "Mais antigo primeiro" },
+    { value: "false", label: "Mais recente primeiro" },
+    { value: "true", label: "Mais antigo primeiro" },
   ];
   if (crescent) {
     events = events.sort((a, b) => {
@@ -78,10 +78,13 @@ export default function SubjectScreen() {
 
   const [subject, setSubject] = useState(null);
   let subjectList = [
-    { value: null, label: "Mostrar tudo" },
+    { value: "all", label: "Mostrar tudo" },
   ];
   for (let i = 0; i < subjects.length; i++) {
-    subjectList.push({ value: subjects[i].id, label: subjects[i].name });
+    subjectList.push({
+      value: subjects[i].id.toString(),
+      label: subjects[i].name,
+    });
   }
 
   if (subject != null) {
@@ -101,9 +104,6 @@ export default function SubjectScreen() {
   const [showFilter, setShowFilter] = useState(false);
   const onChangeSearch = (query) => setSearchQuery(query);
 
-
-  const [dropOrd, setDropOrd] = useState(false);
-  const [dropSub, setDropSub] = useState(false);
 
   return <View style={styles.scroll}>
     <View
@@ -147,31 +147,26 @@ export default function SubjectScreen() {
       >
         <Dialog.Title>Aplique os filtros abaixo</Dialog.Title>
         <Dialog.Content>
-          <DropDown
+          <Dropdown
             label={"Ordenar por"}
             mode={"outlined"}
-            visible={dropOrd}
-            showDropDown={() => setDropOrd(true)}
-            onDismiss={() => setDropOrd(false)}
-            value={crescent}
-            list={crescentList}
-            setValue={setCrescent}
-            theme={theme}
-
+            value={crescent.toString()}
+            options={crescentList}
+            onSelect={(value) => setCrescent(value === "true")}
           />
-          <DropDown
-            label={"Filtrar por matéria"}
-            mode={"outlined"}
-            style={{ marginTop: 10 }}
-            visible={dropSub}
-            showDropDown={() => setDropSub(true)}
-            onDismiss={() => setDropSub(false)}
-            value={subject}
-            list={subjectList}
-            setValue={setSubject}
-            theme={theme}
-
-          />
+          <View style={{ marginTop: 10 }}>
+            <Dropdown
+              label={"Filtrar por matéria"}
+              mode={"outlined"}
+              value={subject == null ? "all" : subject.toString()}
+              options={subjectList}
+              onSelect={(value) => {
+                setSubject(
+                  value == null || value === "all" ? null : Number(value),
+                );
+              }}
+            />
+          </View>
           <View style={{ alignItems: "center", flexDirection: "row" }}>
             <Checkbox
               status={showFisinshed ? "checked" : "unchecked"}

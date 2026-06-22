@@ -3,6 +3,7 @@ module.exports = {
     name: "UFSCar Planner",
     owner: "petbccufscar",
     slug: "ufscar-planner",
+    newArchEnabled: true,
     version: "1.6.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
