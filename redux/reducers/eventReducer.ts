@@ -1,9 +1,13 @@
 import { Action, ActionType } from "../constants/actionType";
-import * as Notifications from "expo-notifications";
 import { getTime } from "../../helpers/ExpressionHelper";
 import { BaseEventDescription, Detail, Task } from "../types/task";
 import { EventState } from "../types/event";
-import * as Sentry from "sentry-expo";
+import * as Sentry from "@sentry/react-native";
+import {
+  cancelAllScheduledNotificationsAsync,
+  getAllScheduledNotificationsAsync,
+  scheduleNotificationAsync,
+} from "../../helpers/notifications";
 
 const initialState: EventState = {
   events: [],
@@ -23,10 +27,10 @@ async function loadNotifications(task: Task) {
         const timeAux = calculateDate(task.details[i], task.notification[j]);
 
         const t = {
+          type: "weekly",
           weekday: timeAux.getDay() + 1,
           hour: timeAux.getHours(),
           minute: timeAux.getMinutes(),
-          repeats: true,
         };
         let auxT = getTime(task.notification[j]);
         if (auxT.length != 0) {
@@ -34,7 +38,7 @@ async function loadNotifications(task: Task) {
         } else {
           auxT = " agora";
         }
-        await Notifications.scheduleNotificationAsync({
+        await scheduleNotificationAsync({
           identifier: "" + task.id + "_" + i + "_" + j,
           content: {
             title: task.name + auxT,
@@ -48,13 +52,16 @@ async function loadNotifications(task: Task) {
       for (let j = 0; j < task.notification.length; j++) {
         const initTime = new Date(task.details[i].datetime_init).getTime();
         const timeAux = new Date(initTime - task.notification[j] * 60000);
-        await Notifications.scheduleNotificationAsync({
+        await scheduleNotificationAsync({
           identifier: "" + task.id + "_" + i + "_" + j,
           content: {
             title: task.name + " em " + getTime(task.notification[j]),
             body: "Em breve",
           },
-          trigger: timeAux,
+          trigger: {
+            type: "date",
+            date: timeAux,
+          },
         });
       }
     }
@@ -63,7 +70,7 @@ async function loadNotifications(task: Task) {
 
 function cleanLocal(l: string | null): string {
   if (l == null) {
-    Sentry.Native.captureException(
+    Sentry.captureException(
       new Error("Tentou inserir nulo no local do evento >:("),
     );
     return "";
@@ -89,11 +96,11 @@ export const eventReducer = (
   action: Action,
 ): EventState => {
   async function refazerNotificações(st: EventState) {
-    await Notifications.cancelAllScheduledNotificationsAsync();
+    await cancelAllScheduledNotificationsAsync();
     for (let i = 0; i < st.events.length; i++) {
       await loadNotifications(st.events[i]);
     }
-    await Notifications.getAllScheduledNotificationsAsync();
+    await getAllScheduledNotificationsAsync();
   }
 
   let aux;

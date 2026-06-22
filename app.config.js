@@ -3,7 +3,8 @@ module.exports = {
     name: "UFSCar Planner",
     owner: "petbccufscar",
     slug: "ufscar-planner",
-    version: "1.5.4",
+    newArchEnabled: true,
+    version: "1.6.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     splash: {
@@ -26,7 +27,10 @@ module.exports = {
       },
     },
     plugins: [
-      "sentry-expo",
+      ["@sentry/react-native/expo", {
+        organization: "pet-bcc-ufscar",
+        project: "ufscar-planner",
+      }],
       [
         "expo-notifications",
         {
@@ -35,6 +39,9 @@ module.exports = {
           sounds: [],
         },
       ],
+      "expo-secure-store",
+      "expo-font",
+      "@react-native-community/datetimepicker",
     ],
     assetBundlePatterns: [
       "**/*",
@@ -45,7 +52,7 @@ module.exports = {
         backgroundColor: "#E8243C",
       },
       package: "com.pet.ufscarplanner",
-      versionCode: 18,
+      versionCode: 19,
       permissions: [
         "RECEIVE_BOOT_COMPLETED",
       ],
@@ -75,15 +82,7 @@ module.exports = {
       },
     },
     hooks: {
-      postPublish: [
-        {
-          file: "sentry-expo/upload-sourcemaps",
-          config: {
-            organization: "pet-bcc-ufscar",
-            project: "ufscar-planner",
-          },
-        },
-      ],
+      postPublish: [],
     },
     runtimeVersion: {
       policy: "sdkVersion",

@@ -33,7 +33,7 @@ import {
 import { Gradient } from "./Gradient";
 import { updateEvent } from "../redux/actions/eventActions";
 import { magic } from "../helpers/ExpressionHelper";
-import DropDown from "react-native-paper-dropdown";
+import { Dropdown } from "react-native-paper-dropdown";
 const mapsSrc = { uri: mapIconURI };
 
 export function Task(props) {
@@ -615,7 +615,6 @@ export function NotaRender(props) {
   const [visible, setVisible] = React.useState(false);
 
   const showDialog = () => setVisible(true);
-  const [dropOrd, setDropOrd] = useState(false);
   const [selected, setSelected] = useState(null);
   let listItems = [];
   let keys = Object.keys(dict);
@@ -699,17 +698,12 @@ export function NotaRender(props) {
               Escolha qual nota você deseja editar, e informe o valor.
             </Dialog.Title>
             <Dialog.Content>
-              <DropDown
+              <Dropdown
                 mode={"flat"}
-                visible={dropOrd}
-                showDropDown={() => setDropOrd(true)}
-                onDismiss={() => setDropOrd(false)}
                 value={selected}
-                list={listItems}
-                setValue={setSelected}
+                options={listItems}
+                onSelect={setSelected}
                 label={"Escolha uma nota"}
-                inputProps={{ style: styles.inputText }}
-                theme={{ colors: { primary: colors.primary } }}
               />
               <TextInput
                 label="Valor"
@@ -871,7 +865,6 @@ export function FreqRender(props) {
   const showDialog = () => setVisible(true);
 
   const hideDialog = () => setVisible(false);
-  const [open, setOpen] = useState(false);
   const freqkeys = Object.keys(task?.grade?.frequency || {});
   const items = [];
   for (let i = 0; i < freqkeys.length; i++) {
@@ -942,17 +935,12 @@ export function FreqRender(props) {
           Escolha os meios de presença dessa matéria:
         </Dialog.Title>
         <Dialog.Content>
-          <DropDown
+          <Dropdown
             label={"Variável"}
             mode={"outlined"}
-            visible={open}
-            showDropDown={() => setOpen(true)}
-            onDismiss={() => setOpen(false)}
             value={dropvalue}
-            list={items}
-            setValue={setDropalue}
-            theme={theme}
-
+            options={items}
+            onSelect={setDropalue}
           />
           <Text style={{ color: colors.onSurface }}>
             {dropvalue != null && dropvalue != undefined ? dropvalue : ""}

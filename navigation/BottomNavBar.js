@@ -1,8 +1,11 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/core";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { IconButton, useTheme } from "react-native-paper";
+import React, { useRef, useEffect, useState } from "react";
+import { Animated, StyleSheet, Text, Pressable, View } from "react-native";
+import { useTheme } from "react-native-paper";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import CalendarNavigator from "./tabs/CalendarNavigator";
 import DashboardNavigator from "./tabs/DashboardNavigator";
 import HomeNavigator from "./tabs/HomeNavigator";
@@ -13,171 +16,190 @@ import {
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function MyTabs() {
-  const navigation = useNavigation();
-  const theme = useTheme();
+const TAB_CONFIG = [
+  { name: "HomeTab", label: "Home", icon: "home" },
+  { name: "CalendarTab", label: "Planner", icon: "menu-book" },
+  { name: "Dashboard", label: "Dashboard", icon: "menu" },
+  { name: "RestaurantTab", label: "Restaurante", icon: "restaurant" },
+];
 
-  return (
-    <Tab.Navigator
-      tabBarPosition='bottom'
-      screenOptions={{
-        keyboardHidesTabBar: true,
-        headerLeft: () =>
-          <IconButton
-            icon={"menu"}
-            size={24}
-            onPress={() => {
-              navigation.openDrawer();
-            }}
-          />
-        ,
+const UNDERLINE_WIDTH = 48;
 
-        tabBarActiveTintColor: theme.colors.onSecondaryContainer,
-        tabBarInactiveTintColor: theme.colors.onSurface,
-        tabBarAndroidRipple: {
-          color: theme.colors.surfaceVariant,
-          borderless: true,
-        },
-
-        tabBarStyle: {
-          backgroundColor: theme.colors.surface2,
-          paddingBottom: 8,
-          shadowColor: "transparent",
-          shadowOpacity: 0.2,
-          borderTopColor: "transparent",
-        },
-
-
-        tabBarLabelStyle: {
-          fontSize: 10,
-          textTransform: "none",
-        },
-
-        tabBarItemStyle: {
-        },
-        tabBarIconStyle: {
-          width: "100%",
-        },
-        tabBarContentContainerStyle: {
-          width: "100%",
-        },
-
-
-      }}>
-      <Tab.Screen
-        name="HomeTab"
-        component={HomeNavigator}
-        options={({ navigation }) => ({
-          title: "UFSCar Planner",
-          tabBarLabel: "Home",
-          headerShown: false,
-          tabBarIcon: ({ color }) =>
-            <TabBarIcon
-              name="home"
-              color={color}
-              active={navigation.getState().index == 0}
-            />,
-        })}
-      />
-      <Tab.Screen
-        name="CalendarTab"
-        component={CalendarNavigator}
-        options={({ navigation }) => ({
-          tabBarLabel: "Planner",
-          headerShown: false,
-          tabBarIcon: ({ color }) =>
-            <TabBarIcon
-              name="menu-book"
-              color={color}
-              active={navigation.getState().index == 1}
-            />,
-        })}
-      />
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardNavigator}
-        options={({ navigation }) => ({
-          title: "UFSCar Planner",
-          headerShown: false,
-          tabBarLabel: "Dashboard",
-          tabBarIcon: ({ color }) =>
-            <TabBarIcon
-              name="menu"
-              color={color}
-              active={navigation.getState().index == 2}
-            />,
-        })}
-      />
-      <Tab.Screen
-        name="RestaurantTab"
-        component={RestaurantNavigator}
-        options={({ navigation }) => ({
-          title: "UFSCar Planner",
-          headerTitleStyle: {},
-          headerShown: false,
-          tabBarLabel: "Restaurante",
-          tabBarIcon: ({ color }) =>
-            <TabBarIcon
-              name="restaurant"
-              color={color}
-              active={navigation.getState().index == 3}
-            />
-          ,
-        })}
-      />
-    </Tab.Navigator>
-  );
-}
-
-function TabBarIcon(props) {
+function CustomTabBar({ state, navigation }) {
   const colors = useTheme().colors;
+  const insets = useSafeAreaInsets();
+  const [tabBarWidth, setTabBarWidth] = useState(0);
+  const translateX = useRef(new Animated.Value(0)).current;
 
-  const selectedStyle = props.active ?
-    { ...styles.active, ...{ backgroundColor: colors.secondaryContainer } } :
-    styles.inactive;
+  const tabCount = state.routes.length;
+  const tabWidth = tabBarWidth / tabCount;
+
+  useEffect(() => {
+    if (tabBarWidth > 0) {
+      const targetX = state.index * tabWidth + (tabWidth - UNDERLINE_WIDTH) / 2;
+      Animated.spring(translateX, {
+        toValue: targetX,
+        useNativeDriver: true,
+        tension: 68,
+        friction: 12,
+      }).start();
+    }
+  }, [state.index, tabBarWidth]);
 
   return (
-    <View style={styles.iconContainer}>
-      <View style={selectedStyle}>
-        <MaterialIcons
-          name={props.name}
-          size={24}
-          color={props.active ? colors.onSecondaryContainer : colors.onSurface}
+    <View
+      style={[
+        styles.tabBar,
+        {
+          backgroundColor: colors.surface2,
+          paddingBottom: Math.max(insets.bottom, 8),
+        },
+      ]}
+      onLayout={(e) => setTabBarWidth(e.nativeEvent.layout.width)}
+    >
+      {state.routes.map((route, index) => {
+        const isActive = state.index === index;
+        const config = TAB_CONFIG.find((t) => t.name === route.name) || {};
+
+        return (
+          <Pressable
+            key={route.key}
+            onPress={() => {
+              if (!isActive) {
+                navigation.navigate(route.name);
+              }
+            }}
+            style={({ pressed }) => [
+              styles.tabItem,
+              pressed && { opacity: 0.7 },
+            ]}
+          >
+            <View style={styles.iconWrapper}>
+              {isActive &&
+                <View
+                  pointerEvents="none"
+                  style={[
+                    styles.activeIconBackground,
+                    { backgroundColor: colors.secondaryContainer },
+                  ]}
+                />
+              }
+              <MaterialIcons
+                name={config.icon}
+                size={24}
+                color={
+                  isActive ?
+                    colors.onSecondaryContainer :
+                    colors.onSurface
+                }
+              />
+            </View>
+            <Text
+              style={[
+                styles.label,
+                {
+                  color: isActive ?
+                    colors.onSecondaryContainer :
+                    colors.onSurface,
+                },
+              ]}
+            >
+              {config.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+      {tabBarWidth > 0 &&
+        <Animated.View
+          style={[
+            styles.underline,
+            {
+              backgroundColor: colors.primary,
+              bottom: Math.max(insets.bottom, 8),
+              transform: [{ translateX }],
+            },
+          ]}
         />
-      </View>
+      }
     </View>
   );
 }
 
+export default function MyTabs() {
+  return (
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <Tab.Navigator
+        tabBarPosition="bottom"
+        tabBar={(props) => <CustomTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+          swipeEnabled: true,
+        }}
+      >
+        <Tab.Screen
+          name="HomeTab"
+          component={HomeNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+        <Tab.Screen
+          name="CalendarTab"
+          component={CalendarNavigator}
+        />
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+        <Tab.Screen
+          name="RestaurantTab"
+          component={RestaurantNavigator}
+          options={{ title: "UFSCar Planner" }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
+  );
+}
+
 const styles = StyleSheet.create({
-  absoluteContainer: {
+  container: {
+    flex: 1,
+  },
+
+  tabBar: {
+    flexDirection: "row",
+    paddingTop: 4,
+    borderTopWidth: 0,
+  },
+
+  tabItem: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 4,
+  },
+
+  iconWrapper: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  activeIconBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 999,
+  },
+
+  label: {
+    fontSize: 10,
+    marginTop: 2,
+  },
+
+  underline: {
     position: "absolute",
-    top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 15,
-    backgroundColor: "transparent",
-  },
-
-  inactive: {
-    backgroundColor: "transparent",
-  },
-
-  active: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 15,
-    paddingHorizontal: 10,
-  },
-
-  iconContainer: {
-    height: "100%",
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+    height: 2,
+    width: UNDERLINE_WIDTH,
+    borderRadius: 1,
   },
 });

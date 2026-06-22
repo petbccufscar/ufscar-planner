@@ -2,6 +2,7 @@ import React, { StyleSheet, View, Text } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import ScrollView from "../components/ScrollView";
 import { useTheme } from "react-native-paper";
+import { AppTheme } from "../theme/Themes";
 
 /**
  * Um aviso sobre o restaurante universitário.
@@ -33,7 +34,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "RestaurantNotice">;
  * Tela que apresenta o conteúdo de um aviso sobre o restaurante universitário.
  */
 export default function RestaurantNotice({ route }: Props) {
-  const theme = useTheme();
+  const theme = useTheme<AppTheme>();
   const { content } = route.params;
 
   const styles = StyleSheet.create({

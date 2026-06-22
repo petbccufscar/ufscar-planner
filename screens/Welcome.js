@@ -8,7 +8,7 @@ import { Image,
   Linking } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TextInput, useTheme } from "react-native-paper";
-import DropDown from "react-native-paper-dropdown";
+import { Dropdown } from "react-native-paper-dropdown";
 import { updateUser } from "../redux/actions/userActions";
 import { SIGA } from "../helpers/helper";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { SigaErrorReason, fetchSigaSubjects } from "../helpers/sigaHelper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Welcome() {
   const colors = useTheme().colors;
@@ -64,7 +65,7 @@ export default function Welcome() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["bottom"]}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
@@ -78,7 +79,7 @@ export default function Welcome() {
         {page == 2 && <ScreenTwo setPage={handlePageChange} />}
         {page == 3 && <ScreenThree setPage={handlePageChange} />}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -435,7 +436,6 @@ function ScreenThree({ setPage }) {
   const theme = useTheme();
   const colors = theme.colors;
   const navigation = useNavigation();
-  const [dropOrd, setDropOrd] = useState(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -538,23 +538,16 @@ function ScreenThree({ setPage }) {
       <Text style={{ color: colors.outline, fontSize: 15 }}>
         Escolha um campus
       </Text>
-      <DropDown
+      <Dropdown
         mode={"flat"}
-        visible={dropOrd}
-        showDropDown={() => setDropOrd(true)}
-        onDismiss={() => setDropOrd(false)}
         value={selected}
-        list={listItems}
-        setValue={setSelected}
-        inputProps={{ style: styles.textInput }}
-        theme={{
-          colors: {
-            primary: colors.primary,
-            onSurface: colors.onSurface,
-            background: colors.surfaceVariant,
-            text: colors.onSurface,
-          },
+        options={listItems}
+        onSelect={(value) => {
+          if (value) {
+            setSelected(value);
+          }
         }}
+        placeholder="Escolha um campus"
       />
 
       <View style={styles.btnPlace}>

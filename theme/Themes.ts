@@ -3,14 +3,30 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
 import {
-  DarkTheme as PaperDarkTheme,
-  DefaultTheme as PaperDefaultTheme,
+  MD3DarkTheme as PaperDarkTheme,
+  MD3LightTheme as PaperDefaultTheme,
+  MD3Theme,
 } from "react-native-paper";
+
+export type AppTheme = MD3Theme & {
+  colors: MD3Theme["colors"] & {
+    surface1: string,
+    surface2: string,
+    surface3: string,
+    dialog: string,
+    surface4: string,
+    surface5: string,
+    headerActive: string,
+    headerInactive: string,
+    onHeaderInactive: string,
+    onHeader: string,
+  },
+};
 
 /**
  * O conjunto de todos os temas claros disponíveis.
  */
-export const CombinedDefaultThemes: ReactNativePaper.Theme[] = [
+export const CombinedDefaultThemes: AppTheme[] = [
   {
     ...PaperDefaultTheme,
     ...NavigationDefaultTheme,
@@ -426,7 +442,7 @@ export const CombinedDefaultThemes: ReactNativePaper.Theme[] = [
 /**
  * O conjunto de todos os temas escuros disponíveis.
  */
-export const CombinedDarkThemes: ReactNativePaper.Theme[] = [
+export const CombinedDarkThemes: AppTheme[] = [
   {
     ...PaperDarkTheme,
     ...NavigationDarkTheme,

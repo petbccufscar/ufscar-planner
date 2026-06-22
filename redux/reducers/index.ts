@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { combineReducers, Reducer } from "redux";
 import { eventReducer } from "./eventReducer";
 import { userReducer } from "./userReducer";
 import { semesterReducer } from "./semesterReducer";
@@ -6,7 +6,7 @@ import { calendarReducer } from "./calendarReducer";
 import { restaurantReducer } from "./restaurantReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  MigrationManifest, PersistedState, persistReducer,
+  MigrationManifest, PersistConfig, PersistedState, persistReducer,
 } from "redux-persist";
 import { themeReducer } from "./themeReducer";
 import { EventState } from "../types/event";
@@ -14,12 +14,15 @@ import { UserState } from "../types/user";
 import { SemesterState } from "../types/semester";
 import { ThemeState } from "../types/theme";
 import { RestaurantState } from "../types/restaurant";
+import { CalendarState } from "../types/calendar";
+import { Action } from "../constants/actionType";
 import createMigrate from "redux-persist/es/createMigrate";
 
 export type RootState = {
   events: EventState,
   user: UserState,
   semester: SemesterState,
+  cards: CalendarState,
   theme: ThemeState,
   restaurant: RestaurantState,
 }
@@ -55,7 +58,7 @@ const migrations: MigrationManifest = {
   0: repair0,
 };
 
-const persistConfig = {
+const persistConfig: PersistConfig<RootState> = {
   version: 0,
   key: "root",
   storage: AsyncStorage,
@@ -72,4 +75,7 @@ const combined = combineReducers({
   restaurant: restaurantReducer,
 });
 
-export const reducers = persistReducer(persistConfig, combined);
+export const reducers = persistReducer<RootState, Action>(
+  persistConfig,
+  combined as unknown as Reducer<RootState, Action>,
+);

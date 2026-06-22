@@ -25,7 +25,7 @@ import {
   Button,
   Dialog,
 } from "react-native-paper";
-import ScrollPicker from "react-native-picker-scrollview";
+import ScrollPicker from "../components/ScrollPicker";
 import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { getTime } from "../helpers/ExpressionHelper";
@@ -418,8 +418,7 @@ export default function EditScreen({ route, navigation }) {
                   textColor={"#000"}
                   isVisible={showPicker}
                   mode={"time"}
-                  value={new Date()}
-                  date={new Date()}
+                  date={horarioDate}
                   onCancel={() => {
                     setShowPicker(false);
                   }}
@@ -428,6 +427,9 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
+                    if (!(date instanceof Date)) {
+                      return;
+                    }
                     if (minimum(date) > horarioEndTime.getTime()) {
                       setDetail({
                         ...detail,
@@ -447,6 +449,7 @@ export default function EditScreen({ route, navigation }) {
                   textColor={"#000"}
                   isVisible={showEndPicker}
                   mode={"time"}
+                  date={horarioEndTime}
                   onCancel={() => {
                     setShowEndPicker(false);
                   }}
@@ -455,9 +458,12 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
+                    if (!(ndate instanceof Date)) {
+                      return;
+                    }
                     setHorarioEndTime(
                       ndate.getTime() < minimum(horarioDate) ?
-                        minimum(horarioDate)                        :
+                        minimum(horarioDate) :
                         ndate,
                     );
                   }}
@@ -502,8 +508,7 @@ export default function EditScreen({ route, navigation }) {
                   textColor={"#000"}
                   isVisible={showPicker}
                   mode={"datetime"}
-                  value={new Date()}
-                  date={new Date()}
+                  date={horarioDate}
                   onCancel={() => {
                     setShowPicker(false);
                   }}
@@ -512,6 +517,9 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(date) => {
                     setShowPicker(false);
+                    if (!(date instanceof Date)) {
+                      return;
+                    }
                     if (minimum(date) > horarioEndTime.getTime()) {
                       setDetail({
                         ...detail,
@@ -531,6 +539,7 @@ export default function EditScreen({ route, navigation }) {
                   textColor={"#000"}
                   isVisible={showEndPicker}
                   mode={"time"}
+                  date={horarioEndTime}
                   onCancel={() => {
                     setShowEndPicker(false);
                   }}
@@ -539,6 +548,9 @@ export default function EditScreen({ route, navigation }) {
                   }}
                   onConfirm={(ndate) => {
                     setShowEndPicker(false);
+                    if (!(ndate instanceof Date)) {
+                      return;
+                    }
                     setHorarioEndTime(
                       ndate.getTime() < minimum(horarioDate) ?
                         minimum(horarioDate) :
@@ -1416,6 +1428,7 @@ export default function EditScreen({ route, navigation }) {
           textColor={"#000"}
           isVisible={openWhenDialog}
           mode={"datetime"}
+          date={whenSubmit ? new Date(whenSubmit) : new Date()}
           onCancel={() => {
             setOpenWhenDialog(false);
           }}
@@ -1424,6 +1437,9 @@ export default function EditScreen({ route, navigation }) {
           }}
           onConfirm={(ndate) => {
             setOpenWhenDialog(false);
+            if (!(ndate instanceof Date)) {
+              return;
+            }
             setWhenSubmit(ndate.toString());
           }}
           cancelTextIOS={"Cancelar"}

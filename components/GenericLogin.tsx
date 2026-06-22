@@ -16,6 +16,7 @@ import {
   Dialog,
 } from "react-native-paper";
 import { ActivityIndicator } from "react-native-paper";
+import { AppTheme } from "../theme/Themes";
 
 type GenericLoginProps = {
   Authenticate: (
@@ -29,7 +30,7 @@ type GenericLoginProps = {
 };
 
 export default function GenericLogin(props: GenericLoginProps) {
-  const theme = useTheme();
+  const theme = useTheme<AppTheme>();
   const colors = theme.colors;
   const [errorMessage, setErrorMessage] = useState("");
   const [visible, setVisible] = useState(false);

@@ -19,14 +19,14 @@ jobs:
       run: |
           sudo locale-gen pt_BR.UTF-8
           sudo update-locale LANG=pt_BR.UTF-8
-          sudo ln -s -f /usr/share/zoneinfo/Ameria/Sao_Paulo /etc/localtime
+          sudo ln -s -f /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
     - uses: actions/checkout@v3
     - uses: szenius/set-timezone@v1.2
       with:
         timezoneLinux: "Brazil/East"
     - uses: actions/setup-node@v3
       with:
-        node-version: 18
-        cache: 'npm'
+        node-version: 20.19.4
+        cache: 'yarn'
     - run: yarn install --frozen-lockfile
     - run: yarn test

@@ -3,6 +3,13 @@ import { encodeAuth, mapSigaSubject } from "./sigaHelper";
 jest.useFakeTimers();
 jest.setSystemTime(new Date("2023-05-22 15:43:19 GMT-0300"));
 
+function dateAt(hours, minutes) {
+  const date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  return date.toString();
+}
+
 const SIGA = {
   atividade: "ALGORITMOS E ESTRUTURAS DE DADOS 3",
   turma: "Z",
@@ -24,8 +31,8 @@ const MAPPED = {
   details: [
     {
       day: 6,
-      datetime_init: "Mon May 22 2023 01:00:19 GMT-0300 (Horário Padrão de Brasília)",
-      datetime_end: "Mon May 22 2023 03:00:19 GMT-0300 (Horário Padrão de Brasília)",
+      datetime_init: dateAt(1, 0),
+      datetime_end: dateAt(3, 0),
       local: "sala 530 at-19",
     },
   ],
@@ -71,8 +78,8 @@ test("horários inválidos mapeiam para 0:00 am", () => {
     details: [
       {
         ...MAPPED.details[0],
-        datetime_init: "Mon May 22 2023 00:00:19 GMT-0300 (Horário Padrão de Brasília)",
-        datetime_end: "Mon May 22 2023 00:01:19 GMT-0300 (Horário Padrão de Brasília)",
+        datetime_init: dateAt(0, 0),
+        datetime_end: dateAt(0, 1),
       },
     ],
   });
@@ -92,8 +99,8 @@ test("horários inválidos mapeiam para 0:00 am", () => {
     details: [
       {
         ...MAPPED.details[0],
-        datetime_init: "Mon May 22 2023 00:00:19 GMT-0300 (Horário Padrão de Brasília)",
-        datetime_end: "Mon May 22 2023 00:01:19 GMT-0300 (Horário Padrão de Brasília)",
+        datetime_init: dateAt(0, 0),
+        datetime_end: dateAt(0, 1),
       },
     ],
   });
