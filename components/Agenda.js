@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
+  Pressable,
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
@@ -70,23 +71,23 @@ function RenderCalendarCell(props) {
     return <View style={{ flex: 1 }}></View>;
   }
 
-  return <TouchableOpacity
-    style={{
-      width: "14.28%",
-      aspectRatio: 1,
-      alignItems: "center",
-      justifyContent: "center",
-    }}
+  return <Pressable
+    style={({ pressed }) => [
+      calendarCellStyles.touchable,
+      pressed && calendarCellStyles.pressed,
+    ]}
     onPress={() => { setSelectedDate(date); setOpen(false); }}
   >
-    <View style={{
-      borderRadius: 30,
-      aspectRatio: 1,
-      backgroundColor: selected ? colors.primary : "transparent",
-      width: "80%",
-      alignContent: "center",
-      justifyContent: "center",
-    }}>
+    <View style={calendarCellStyles.circle}>
+      {selected &&
+        <View
+          pointerEvents="none"
+          style={[
+            calendarCellStyles.selectedBackground,
+            { backgroundColor: colors.primary },
+          ]}
+        />
+      }
       <Text
         style={{
           textAlign: "center",
@@ -113,10 +114,35 @@ function RenderCalendarCell(props) {
           alignSelf: "center",
         }} />
     </View>
-  </TouchableOpacity>;
+  </Pressable>;
 }
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const calendarCellStyles = StyleSheet.create({
+  touchable: {
+    width: "14.28%",
+    aspectRatio: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pressed: {
+    opacity: 0.7,
+  },
+  circle: {
+    width: "80%",
+    aspectRatio: 1,
+    borderRadius: 999,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 999,
+  },
+});
+
+const DISABLED_LOAD_THRESHOLD = -Number.MAX_SAFE_INTEGER;
+const INITIAL_MONTH_RANGE = 3;
 
 function RenderDay(props) {
   const day = props.day || new Date();
@@ -213,62 +239,93 @@ function prevMonth(month) {
   return obj;
 }
 
+function initialMonths(date) {
+  const selectedMonth = {
+    month: date.getMonth(),
+    year: date.getFullYear(),
+  };
+  const months = [selectedMonth];
+  let month = selectedMonth;
+
+  for (let i = 0; i < INITIAL_MONTH_RANGE; i++) {
+    month = prevMonth(month);
+    months.unshift(month);
+  }
+
+  month = selectedMonth;
+  for (let i = 0; i < INITIAL_MONTH_RANGE; i++) {
+    month = nextMonth(month);
+    months.push(month);
+  }
+
+  return months;
+}
+
 export default function Agenda(props) {
   const colors = useTheme().colors;
   const items = props.items;
   const marked = props.marked;
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [open, setOpen] = useState(false);
 
   const [changedByController, setChangedByController] = useState(false);
   const [loadedMonth, setLoadedMonth] = useState(
-    [{ month: selectedDate.getMonth(), year: selectedDate.getFullYear() }],
+    () => initialMonths(selectedDate),
   );
-  const [lastMonth, setLastMonth] = useState(
-    { month: selectedDate.getMonth(), year: selectedDate.getFullYear() },
-  );
-  const [firstMonth, setFirstMonth] = useState(
-    { month: selectedDate.getMonth(), year: selectedDate.getFullYear() },
-  );
+  const [canLoadMonths, setCanLoadMonths] = useState(false);
+  const monthListRef = useRef();
+  const shouldCenterSelectedMonth = useRef(false);
 
   const msetOpen = (value) => {
+    if (value) {
+      setLoadedMonth(initialMonths(selectedDate));
+      shouldCenterSelectedMonth.current = true;
+    }
+    setCanLoadMonths(false);
     setOpen(value);
     setChangedByController(true);
   };
 
 
   const loadAtEnd = async() => {
-    let aux = [];
-    let auxMonth = lastMonth;
-    for (let i = 0; i < 3; i++) {
-      auxMonth = nextMonth(auxMonth);
-      aux.push(auxMonth);
+    if (!canLoadMonths) {
+      return;
     }
-    setLastMonth(auxMonth);
-    // await sleep(20)
-    setLoadedMonth([...loadedMonth, ...aux]);
-    return [];
+
+    setCanLoadMonths(false);
+    setLoadedMonth((months) => {
+      const nextMonths = [];
+      let month = months[months.length - 1];
+
+      for (let i = 0; i < 3; i++) {
+        month = nextMonth(month);
+        nextMonths.push(month);
+      }
+
+      return [...months, ...nextMonths];
+    });
   };
 
   const loadAtStart = async() => {
-    let aux = [];
-    let auxMonth = firstMonth;
-    for (let i = 0; i < 1; i++) {
-      auxMonth = prevMonth(auxMonth);
-      aux = [auxMonth, ...aux];
+    if (!canLoadMonths) {
+      return;
     }
-    setFirstMonth(auxMonth);
-    await sleep(10);
-    setLoadedMonth([...aux, ...loadedMonth]);
-    return [];
+
+    setCanLoadMonths(false);
+    setLoadedMonth((months) => [prevMonth(months[0]), ...months]);
   };
-  if (loadedMonth.length < 2) { loadAtEnd(); }
 
   if (open) {
     return <View style={{ flex: 1, backgroundColor: colors.primaryContainer }}>
       <FlatList
+        ref={monthListRef}
         onStartReached={loadAtStart}
+        onStartReachedThreshold={
+          canLoadMonths ? 10 : DISABLED_LOAD_THRESHOLD
+        }
         data={loadedMonth}
+        initialNumToRender={INITIAL_MONTH_RANGE * 2 + 1}
+        keyExtractor={(item) => `${item.year}-${item.month}`}
         marked={marked}
         HeaderLoadingIndicator={
           () => <ActivityIndicator
@@ -278,6 +335,41 @@ export default function Agenda(props) {
           />
         }
         onEndReached={loadAtEnd}
+        onEndReachedThreshold={
+          canLoadMonths ? 10 : DISABLED_LOAD_THRESHOLD
+        }
+        onContentSizeChange={() => {
+          if (!shouldCenterSelectedMonth.current) {
+            return;
+          }
+
+          const selectedMonthIndex = loadedMonth.findIndex(
+            (item) =>
+              item.month === selectedDate.getMonth() &&
+              item.year === selectedDate.getFullYear(),
+          );
+
+          if (selectedMonthIndex >= 0) {
+            monthListRef.current?.scrollToIndex({
+              index: selectedMonthIndex,
+              animated: false,
+            });
+            shouldCenterSelectedMonth.current = false;
+          }
+        }}
+        onScrollToIndexFailed={({ index, averageItemLength }) => {
+          monthListRef.current?.scrollToOffset({
+            offset: averageItemLength * index,
+            animated: false,
+          });
+          setTimeout(() => {
+            monthListRef.current?.scrollToIndex({
+              index,
+              animated: false,
+            });
+          }, 0);
+        }}
+        onScrollBeginDrag={() => setCanLoadMonths(true)}
         renderItem={
           ({ item }) => <RenderMonthCalendar
             marked={marked}
